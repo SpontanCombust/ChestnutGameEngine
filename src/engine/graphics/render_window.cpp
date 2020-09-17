@@ -4,8 +4,8 @@
 
 namespace engine { namespace graphics {
 
-    CRenderWindow::CRenderWindow( char *title, int height, int width, int y, int x,
-                                Uint32 windowFlags, Uint32 rendererFlags ) 
+    CRenderWindow::CRenderWindow( const char *title, int width, int height, int x, int y,
+                                int windowFlags, int rendererFlags ) 
     {
         m_window = SDL_CreateWindow( title, x, y, width, height, windowFlags );
 
@@ -27,15 +27,10 @@ namespace engine { namespace graphics {
         m_width = width;
     }
 
-    void CRenderWindow::close() 
+    CRenderWindow::~CRenderWindow() 
     {
         SDL_DestroyRenderer( m_renderer );
         SDL_DestroyWindow( m_window );
-    }
-
-    CRenderWindow::~CRenderWindow() 
-    {
-        close();
     }
 
     int CRenderWindow::getWindowHeight() 

@@ -13,9 +13,8 @@ namespace engine { namespace graphics {
         int m_height;
     public:
         CRenderWindow() = delete;
-        CRenderWindow( char *title, int height, int width, int y = 0, int x = 0,
-                            Uint32 windowFlags = 0, Uint32 rendererFlags = 0 );
-        void close();
+        CRenderWindow( const char *title, int width, int height, int x = 0, int y = 0,
+                            int windowFlags = 0, int rendererFlags = 0 );
         ~CRenderWindow();
         int getWindowHeight();
         int getWindowWidth();
