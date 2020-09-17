@@ -1,8 +1,8 @@
-#include "engine/engine.hpp"
+#include "engine/main/engine.hpp"
 
 namespace engine
 {
-    bool CEngine::InitSDL() 
+    bool CEngine::initSDL() 
     {
         bool retcode = true;
         int flags;
@@ -26,17 +26,17 @@ namespace engine
         return retcode;
     }
     
-    void CEngine::DeinitSDL() 
+    void CEngine::deinitSDL() 
     {
         IMG_Quit();
         SDL_Quit();
     }
 
-    bool CEngine::Create( int winWidth, int winHeight )
+    bool CEngine::create( int winWidth, int winHeight )
     {
         bool retcode = true;
 
-        retcode = InitSDL();
+        retcode = initSDL();
 
         if( retcode )
         {
@@ -48,45 +48,32 @@ namespace engine
                                                             m_windowFlags,
                                                             m_rendererFlags );
             retcode &= (m_renderWindow != nullptr);
-            retcode &= OnUserCreate();
+            retcode &= onUserCreate();
         }
 
         return retcode;
     }
 
-    void CEngine::Start()
+    void CEngine::start()
     {
         m_wasStarted = true;
-        StartInternal();
+        enterGameLoop();
     }
 
-    bool CEngine::Update()
+    bool CEngine::update()
     {
         return true;
     }
 
-    void CEngine::StartInternal()
-    {
-        // PLACEHOLDER; TO BE CHANGED LATER
-        while( m_isRunning )
-        {
-            OnUserUpdate();
-            Update();
-
-            SDL_Delay(3000);
-            m_isRunning = false;
-        }
-    }
-
-    void CEngine::Close()
+    void CEngine::close()
     {
         if( m_wasStarted )
         {
-            OnUserClose();
+            onUserClose();
 
             delete m_renderWindow;
 
-            DeinitSDL();
+            deinitSDL();
         }
         m_wasStarted = false;
     }
@@ -94,11 +81,11 @@ namespace engine
     CEngine::~CEngine()
     {
         if( m_wasStarted )
-            Close();
+            close();
     }
 
-    bool CEngine::OnUserCreate() { return true; }
-    bool CEngine::OnUserUpdate() { return true; }
-    void CEngine::OnUserClose() {}
+    bool CEngine::onUserCreate() { return true; }
+    bool CEngine::onUserUpdate() { return true; }
+    void CEngine::onUserClose() {}
 
 } // namespace engine

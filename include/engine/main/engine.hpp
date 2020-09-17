@@ -26,20 +26,20 @@ namespace engine
         graphics::CRenderWindow *m_renderWindow;
 
     public:
-        bool Create( int winWidth, int winHeight );
-        void Start();
-        void Close();
+        bool create( int winWidth, int winHeight );
+        void start();
+        void close();
 
-        virtual bool OnUserCreate();
-        virtual bool OnUserUpdate();
-        virtual void OnUserClose();
+        virtual bool onUserCreate();
+        virtual bool onUserUpdate();
+        virtual void onUserClose();
         virtual ~CEngine();
     
     protected:
-        bool InitSDL();
-        void DeinitSDL();
-        void StartInternal();
-        bool Update();
+        bool initSDL();
+        void deinitSDL();
+        bool update();
+        void enterGameLoop();
     };
     
 } // namespace engine
