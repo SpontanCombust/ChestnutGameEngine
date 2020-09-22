@@ -1,11 +1,10 @@
-#pragma once
-
-#include "entity.hpp"
+#ifndef __CHESTNUT_COMPONENT_H__
+#define __CHESTNUT_COMPONENT_H__
 
 #include <string>
 
-namespace engine { namespace ecs {
-
+namespace chestnut
+{
     class CComponent
     {
     protected:
@@ -17,4 +16,6 @@ namespace engine { namespace ecs {
         inline virtual const std::string getType() { return getTypeStatic(); };
     };
 
-} /*namespace ecs*/ } // namespace engine 
+} // namespace chestnut 
+
+#endif // __CHESTNUT_COMPONENT_H__
