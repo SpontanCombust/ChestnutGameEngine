@@ -1,16 +1,13 @@
-#pragma once
+#ifndef __CHESTNUT_ENTITY_H__
+#define __CHESTNUT_ENTITY_H__
 
 #include "component.hpp"
-
-#pragma once
 
 #include <string>
 #include <unordered_map>
 
-namespace engine { namespace ecs {
-    
-    class CComponent; // forward declaration
-
+namespace chestnut
+{    
     class CEntity
     {
     protected:
@@ -26,4 +23,6 @@ namespace engine { namespace ecs {
         CComponent *getComponent( const std::string componentType );
     };
 
-} /*namespace ecs*/ } // namespace engine 
+} // namespace chestnut 
+
+#endif // __CHESTNUT_ENTITY_H__
