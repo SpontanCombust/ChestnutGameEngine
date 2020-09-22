@@ -1,13 +1,15 @@
 #include "engine/graphics/texture.hpp"
 
+#include "engine/app/render_window.hpp"
+
 #define DEF_FORMAT SDL_PIXELFORMAT_RGBA8888
 #define DEF_ACCESS SDL_TEXTUREACCESS_TARGET
 
 namespace chestnut 
 {
-    CTexture::CTexture( int w, int h, SDL_Renderer *renderer ) 
+    CTexture::CTexture( int w, int h ) 
     {
-        m_sdlTexture = SDL_CreateTexture( renderer, DEF_FORMAT, DEF_ACCESS, w, h );
+        m_sdlTexture = SDL_CreateTexture( CRenderWindow::getSDLRenderer(), DEF_FORMAT, DEF_ACCESS, w, h );
         m_isResourceInstance = false;
 
         m_srcRect = { 0, 0, w, h };
@@ -64,9 +66,9 @@ namespace chestnut
         m_flip = flip;
     }
 
-    void CTexture::render( SDL_Renderer *r, float x, float y ) 
+    void CTexture::render( float x, float y ) 
     {
-        SDL_RenderCopyExF( r, m_sdlTexture, &m_srcRect, &m_dstRect, m_angleDeg, &m_rotPoint, m_flip );
+        SDL_RenderCopyExF( CRenderWindow::getSDLRenderer(), m_sdlTexture, &m_srcRect, &m_dstRect, m_angleDeg, &m_rotPoint, m_flip );
     }
 
 } // namespace chestnut

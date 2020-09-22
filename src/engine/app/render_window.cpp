@@ -4,6 +4,8 @@
 
 namespace chestnut
 {
+    SDL_Renderer* CRenderWindow::sm_renderer = nullptr;
+
     CRenderWindow::CRenderWindow( const char *title, int width, int height, int x, int y,
                                 int windowFlags, int rendererFlags ) 
     {
@@ -15,9 +17,9 @@ namespace chestnut
             LOG( SDL_GetError() );
         }
 
-        m_renderer = SDL_CreateRenderer( m_window, -1, rendererFlags );
+        sm_renderer = SDL_CreateRenderer( m_window, -1, rendererFlags );
 
-        if( m_renderer == NULL )
+        if( sm_renderer == NULL )
         {
             LOG( "Failed to create renderer. Error: " );
             LOG( SDL_GetError() );
@@ -29,7 +31,7 @@ namespace chestnut
 
     CRenderWindow::~CRenderWindow() 
     {
-        SDL_DestroyRenderer( m_renderer );
+        SDL_DestroyRenderer( sm_renderer );
         SDL_DestroyWindow( m_window );
     }
 
@@ -41,6 +43,11 @@ namespace chestnut
     int CRenderWindow::getWindowWidth() 
     {
         return m_width;
+    }
+
+    SDL_Renderer* CRenderWindow::getSDLRenderer() 
+    {
+        return sm_renderer;
     }
 
 } // namespace chestnut

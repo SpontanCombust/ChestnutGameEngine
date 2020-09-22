@@ -23,7 +23,7 @@ namespace chestnut
         SDL_RendererFlip m_flip;
 
     public:
-        CTexture( int w, int h, SDL_Renderer *renderer );
+        CTexture( int w, int h );
         CTexture( const CTextureResource *textureResource );
         ~CTexture();
 
@@ -33,7 +33,7 @@ namespace chestnut
         void setRotationPoint( float rx, float ry );
         void setFlip( SDL_RendererFlip flip );
 
-        void render( SDL_Renderer *r, float x, float y );
+        void render( float x, float y );
     };   
 
 } // namespace chestnut

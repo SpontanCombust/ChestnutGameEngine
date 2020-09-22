@@ -9,9 +9,10 @@ namespace chestnut
     {
     private:
         SDL_Window *m_window;
-        SDL_Renderer *m_renderer;
+        static SDL_Renderer *sm_renderer;
         int m_width;
         int m_height;
+
     public:
         CRenderWindow() = delete;
         CRenderWindow( const char *title, int width, int height, int x = 0, int y = 0,
@@ -19,6 +20,8 @@ namespace chestnut
         ~CRenderWindow();
         int getWindowHeight();
         int getWindowWidth();
+
+        static SDL_Renderer *getSDLRenderer();
     };
 
 } // namespace chestnut

@@ -19,10 +19,10 @@ namespace chestnut
         SDL_Texture *m_sdlTexture;
 
     public:
-        CTextureResource( const std::string path, SDL_Renderer *renderer ); //TODO get rid of the renderer argument
+        CTextureResource( const std::string path );
         ~CTextureResource();
 
-        void loadFromFile( const std::string path, SDL_Renderer *renderer );
+        void loadFromFile( const std::string path );
         Vector2i getSize() const;
 
         CTexture getTextureInstance() const;

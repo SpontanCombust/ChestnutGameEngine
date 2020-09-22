@@ -11,7 +11,7 @@
 
 namespace chestnut
 {
-    class CChestnutGameEngine // TODO come up with a name for the engine
+    class CChestnutGameEngine
     {
     protected:
         // To be changed by inherited class +++
@@ -22,11 +22,14 @@ namespace chestnut
         int m_rendererFlags = SDL_RENDERER_ACCELERATED;
         // ---
 
-        bool m_wasStarted = false;
+        bool m_wasStarted;
         bool m_isRunning;
         CRenderWindow *m_renderWindow;
 
+
     public:
+        CChestnutGameEngine();
+
         bool create( int winWidth, int winHeight );
         void start();
         void close();
@@ -35,7 +38,7 @@ namespace chestnut
         virtual bool onUserUpdate();
         virtual void onUserClose();
         virtual ~CChestnutGameEngine();
-    
+
     protected:
         bool initSDL();
         void deinitSDL();

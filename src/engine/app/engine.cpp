@@ -2,6 +2,12 @@
 
 namespace chestnut
 {
+    CChestnutGameEngine::CChestnutGameEngine()
+    : m_wasStarted( false ), m_isRunning( false ), m_renderWindow( nullptr )
+    {
+
+    }
+
     bool CChestnutGameEngine::initSDL() 
     {
         bool retcode = true;
@@ -47,7 +53,7 @@ namespace chestnut
                                                             m_windowStartPosY,
                                                             m_windowFlags,
                                                             m_rendererFlags );
-            retcode &= (m_renderWindow != nullptr);
+
             retcode &= onUserCreate();
         }
 
@@ -67,6 +73,7 @@ namespace chestnut
 
     void CChestnutGameEngine::enterGameLoop()
     {
+        m_isRunning = true;
         // PLACEHOLDER; TO BE CHANGED LATER
         while( m_isRunning )
         {
@@ -93,8 +100,7 @@ namespace chestnut
 
     CChestnutGameEngine::~CChestnutGameEngine()
     {
-        if( m_wasStarted )
-            close();
+        close();
     }
 
     bool CChestnutGameEngine::onUserCreate() { return true; }

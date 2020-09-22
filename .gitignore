@@ -1,0 +1,4 @@
+.vscode/
+bin/
+BombermanReworked.code-workspace
+src/main.cpp
