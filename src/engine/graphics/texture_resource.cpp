@@ -2,8 +2,8 @@
 
 #include "engine/debug/debug.hpp"
 
-namespace engine { namespace graphics {
-
+namespace chestnut 
+{
     CTextureResource::CTextureResource( const std::string path, SDL_Renderer *renderer ) 
     {
         loadFromFile( path, renderer );
@@ -39,9 +39,9 @@ namespace engine { namespace graphics {
         }
     }
 
-    vector::Vector2i CTextureResource::getSize() const
+    Vector2i CTextureResource::getSize() const
     {
-        vector::Vector2i size;
+        Vector2i size;
         SDL_QueryTexture( m_sdlTexture, NULL, NULL, &size.x, &size.y );
         return size;
     }
@@ -51,4 +51,4 @@ namespace engine { namespace graphics {
         return CTexture(this);
     }
     
-}}
+} // namespace chestnut

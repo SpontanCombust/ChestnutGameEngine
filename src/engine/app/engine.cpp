@@ -1,8 +1,8 @@
 #include "engine/app/engine.hpp"
 
-namespace engine
+namespace chestnut
 {
-    bool CEngine::initSDL() 
+    bool CChestnutGameEngine::initSDL() 
     {
         bool retcode = true;
         int flags;
@@ -26,13 +26,13 @@ namespace engine
         return retcode;
     }
     
-    void CEngine::deinitSDL() 
+    void CChestnutGameEngine::deinitSDL() 
     {
         IMG_Quit();
         SDL_Quit();
     }
 
-    bool CEngine::create( int winWidth, int winHeight )
+    bool CChestnutGameEngine::create( int winWidth, int winHeight )
     {
         bool retcode = true;
 
@@ -40,7 +40,7 @@ namespace engine
 
         if( retcode )
         {
-            m_renderWindow = new graphics::CRenderWindow( m_appTitle.c_str(),
+            m_renderWindow = new CRenderWindow( m_appTitle.c_str(),
                                                             winWidth,
                                                             winHeight,
                                                             m_windowStartPosX,
@@ -54,18 +54,18 @@ namespace engine
         return retcode;
     }
 
-    void CEngine::start()
+    void CChestnutGameEngine::start()
     {
         m_wasStarted = true;
         enterGameLoop();
     }
 
-    bool CEngine::update()
+    bool CChestnutGameEngine::update()
     {
         return true;
     }
 
-    void CEngine::enterGameLoop()
+    void CChestnutGameEngine::enterGameLoop()
     {
         // PLACEHOLDER; TO BE CHANGED LATER
         while( m_isRunning )
@@ -78,7 +78,7 @@ namespace engine
         }
     }
 
-    void CEngine::close()
+    void CChestnutGameEngine::close()
     {
         if( m_wasStarted )
         {
@@ -91,14 +91,14 @@ namespace engine
         m_wasStarted = false;
     }
 
-    CEngine::~CEngine()
+    CChestnutGameEngine::~CChestnutGameEngine()
     {
         if( m_wasStarted )
             close();
     }
 
-    bool CEngine::onUserCreate() { return true; }
-    bool CEngine::onUserUpdate() { return true; }
-    void CEngine::onUserClose() {}
+    bool CChestnutGameEngine::onUserCreate() { return true; }
+    bool CChestnutGameEngine::onUserUpdate() { return true; }
+    void CChestnutGameEngine::onUserClose() {}
 
-} // namespace engine
+} // namespace chestnut

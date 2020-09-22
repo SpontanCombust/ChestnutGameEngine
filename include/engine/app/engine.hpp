@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __CHESTNUT_ENGINE_H__
+#define __CHESTNUT_ENGINE_H__
 
 #include "engine/debug/debug.hpp"
 #include "render_window.hpp"
@@ -8,9 +9,9 @@
 
 #include <string>
 
-namespace engine
+namespace chestnut
 {
-    class CEngine // TODO come up with a name for the engine
+    class CChestnutGameEngine // TODO come up with a name for the engine
     {
     protected:
         // To be changed by inherited class +++
@@ -23,7 +24,7 @@ namespace engine
 
         bool m_wasStarted = false;
         bool m_isRunning;
-        graphics::CRenderWindow *m_renderWindow;
+        CRenderWindow *m_renderWindow;
 
     public:
         bool create( int winWidth, int winHeight );
@@ -33,7 +34,7 @@ namespace engine
         virtual bool onUserCreate();
         virtual bool onUserUpdate();
         virtual void onUserClose();
-        virtual ~CEngine();
+        virtual ~CChestnutGameEngine();
     
     protected:
         bool initSDL();
@@ -42,4 +43,6 @@ namespace engine
         void enterGameLoop();
     };
     
-} // namespace engine
+} // namespace chestnut
+
+#endif // __CHESTNUT_ENGINE_H__

@@ -1,8 +1,9 @@
-#pragma once
+#ifndef __CHESTNUT_VECTOR_H__
+#define __CHESTNUT_VECTOR_H__
 
 #include <string>
 
-namespace vector
+namespace chestnut
 {
     template< typename T >
     struct Vector2
@@ -79,4 +80,6 @@ namespace vector
     typedef Vector2<float> Vector2f;
     typedef Vector2<int> Vector2i;
 
-} // namespace vector
+} // namespace chestnut
+
+#endif // __CHESTNUT_VECTOR_H__

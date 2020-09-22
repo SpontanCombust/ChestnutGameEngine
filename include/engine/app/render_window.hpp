@@ -1,9 +1,10 @@
-#pragma once
+#ifndef __CHESTNUT_RENDER_WINDOW_H__
+#define __CHESTNUT_RENDER_WINDOW_H__
 
 #include <SDL2/SDL.h>
 
-namespace engine { namespace graphics {
-
+namespace chestnut
+{
     class CRenderWindow
     {
     private:
@@ -19,4 +20,7 @@ namespace engine { namespace graphics {
         int getWindowHeight();
         int getWindowWidth();
     };
-}}
+
+} // namespace chestnut
+
+#endif // __CHESTNUT_RENDER_WINDOW_H__

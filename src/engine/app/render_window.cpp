@@ -2,8 +2,8 @@
 
 #include "engine/debug/debug.hpp"
 
-namespace engine { namespace graphics {
-
+namespace chestnut
+{
     CRenderWindow::CRenderWindow( const char *title, int width, int height, int x, int y,
                                 int windowFlags, int rendererFlags ) 
     {
@@ -43,4 +43,4 @@ namespace engine { namespace graphics {
         return m_width;
     }
 
-}}
+} // namespace chestnut
