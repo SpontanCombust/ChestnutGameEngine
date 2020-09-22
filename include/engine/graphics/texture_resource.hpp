@@ -1,11 +1,11 @@
 #pragma once
 
+#include "texture.hpp"
+#include "engine/core/vector.hpp"
+
 #include <SDL2/SDL_image.h>
 
 #include <string>
-
-#include "core/vector.hpp"
-#include "texture.hpp"
 
 namespace engine { namespace graphics {
 

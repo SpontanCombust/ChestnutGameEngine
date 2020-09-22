@@ -1,7 +1,9 @@
 #pragma once
 
-#include "core/vector.hpp"
 #include "texture_resource.hpp"
+#include "engine/core/vector.hpp"
+
+#include <SDL_image.h>
 
 namespace engine { namespace graphics {
 

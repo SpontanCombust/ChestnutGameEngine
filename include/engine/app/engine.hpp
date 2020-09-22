@@ -1,7 +1,7 @@
 #pragma once
 
-#include "engine/graphics/render_window.hpp"
 #include "engine/debug/debug.hpp"
+#include "render_window.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

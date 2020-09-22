@@ -1,4 +1,4 @@
-#include "engine/main/engine.hpp"
+#include "engine/app/engine.hpp"
 
 namespace engine
 {
@@ -63,6 +63,19 @@ namespace engine
     bool CEngine::update()
     {
         return true;
+    }
+
+    void CEngine::enterGameLoop()
+    {
+        // PLACEHOLDER; TO BE CHANGED LATER
+        while( m_isRunning )
+        {
+            onUserUpdate();
+            update();
+
+            SDL_Delay(3000);
+            m_isRunning = false;
+        }
     }
 
     void CEngine::close()
