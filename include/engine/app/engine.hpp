@@ -1,16 +1,17 @@
-#pragma once
+#ifndef __CHESTNUT_ENGINE_H__
+#define __CHESTNUT_ENGINE_H__
 
-#include "engine/graphics/render_window.hpp"
 #include "engine/debug/debug.hpp"
+#include "render_window.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 #include <string>
 
-namespace engine
+namespace chestnut
 {
-    class CEngine // TODO come up with a name for the engine
+    class CChestnutGameEngine
     {
     protected:
         // To be changed by inherited class +++
@@ -21,11 +22,14 @@ namespace engine
         int m_rendererFlags = SDL_RENDERER_ACCELERATED;
         // ---
 
-        bool m_wasStarted = false;
+        bool m_wasStarted;
         bool m_isRunning;
-        graphics::CRenderWindow *m_renderWindow;
+        CRenderWindow *m_renderWindow;
+
 
     public:
+        CChestnutGameEngine();
+
         bool create( int winWidth, int winHeight );
         void start();
         void close();
@@ -33,8 +37,8 @@ namespace engine
         virtual bool onUserCreate();
         virtual bool onUserUpdate();
         virtual void onUserClose();
-        virtual ~CEngine();
-    
+        virtual ~CChestnutGameEngine();
+
     protected:
         bool initSDL();
         void deinitSDL();
@@ -42,4 +46,6 @@ namespace engine
         void enterGameLoop();
     };
     
-} // namespace engine
+} // namespace chestnut
+
+#endif // __CHESTNUT_ENGINE_H__

@@ -1,12 +1,13 @@
 #include "engine/graphics/texture_resource.hpp"
 
 #include "engine/debug/debug.hpp"
+#include "engine/app/render_window.hpp"
 
-namespace engine { namespace graphics {
-
-    CTextureResource::CTextureResource( const std::string path, SDL_Renderer *renderer ) 
+namespace chestnut 
+{
+    CTextureResource::CTextureResource( const std::string path ) 
     {
-        loadFromFile( path, renderer );
+        loadFromFile( path );
     }
 
     CTextureResource::~CTextureResource()
@@ -15,7 +16,7 @@ namespace engine { namespace graphics {
         m_sdlTexture = nullptr;
     }
 
-    void CTextureResource::loadFromFile( const std::string path, SDL_Renderer *renderer ) 
+    void CTextureResource::loadFromFile( const std::string path ) 
     {
         if( m_sdlTexture != nullptr )
             SDL_DestroyTexture( m_sdlTexture );
@@ -29,7 +30,7 @@ namespace engine { namespace graphics {
         }
         else
         {
-            m_sdlTexture = SDL_CreateTextureFromSurface( renderer, loadedSurf );
+            m_sdlTexture = SDL_CreateTextureFromSurface( CRenderWindow::getSDLRenderer(), loadedSurf );
             if( m_sdlTexture == nullptr )
             {
                 LOG( "Failed to create texture from " + path );
@@ -39,9 +40,9 @@ namespace engine { namespace graphics {
         }
     }
 
-    vector::Vector2i CTextureResource::getSize() const
+    Vector2i CTextureResource::getSize() const
     {
-        vector::Vector2i size;
+        Vector2i size;
         SDL_QueryTexture( m_sdlTexture, NULL, NULL, &size.x, &size.y );
         return size;
     }
@@ -51,4 +52,4 @@ namespace engine { namespace graphics {
         return CTexture(this);
     }
     
-}}
+} // namespace chestnut

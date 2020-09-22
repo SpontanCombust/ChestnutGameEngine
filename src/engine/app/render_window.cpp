@@ -1,8 +1,10 @@
-#include "engine/graphics/render_window.hpp"
+#include "engine/app/render_window.hpp"
 
 #include "engine/debug/debug.hpp"
 
-namespace engine { namespace graphics {
+namespace chestnut
+{
+    SDL_Renderer* CRenderWindow::sm_renderer = nullptr;
 
     CRenderWindow::CRenderWindow( const char *title, int width, int height, int x, int y,
                                 int windowFlags, int rendererFlags ) 
@@ -15,9 +17,9 @@ namespace engine { namespace graphics {
             LOG( SDL_GetError() );
         }
 
-        m_renderer = SDL_CreateRenderer( m_window, -1, rendererFlags );
+        sm_renderer = SDL_CreateRenderer( m_window, -1, rendererFlags );
 
-        if( m_renderer == NULL )
+        if( sm_renderer == NULL )
         {
             LOG( "Failed to create renderer. Error: " );
             LOG( SDL_GetError() );
@@ -29,7 +31,7 @@ namespace engine { namespace graphics {
 
     CRenderWindow::~CRenderWindow() 
     {
-        SDL_DestroyRenderer( m_renderer );
+        SDL_DestroyRenderer( sm_renderer );
         SDL_DestroyWindow( m_window );
     }
 
@@ -43,4 +45,9 @@ namespace engine { namespace graphics {
         return m_width;
     }
 
-}}
+    SDL_Renderer* CRenderWindow::getSDLRenderer() 
+    {
+        return sm_renderer;
+    }
+
+} // namespace chestnut
