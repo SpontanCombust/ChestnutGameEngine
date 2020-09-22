@@ -2,8 +2,8 @@
 
 #include "engine/debug/debug.hpp"
 
-namespace engine { namespace ecs {
-
+namespace chestnut
+{
     void CComponent::setParentGUID( const uint64_t guid ) 
     {
         m_parentGUID = guid;
@@ -19,4 +19,4 @@ namespace engine { namespace ecs {
         return "";
     }
 
-} /*namespace ecs*/ } // namespace engine 
+} // namespace chestnut 

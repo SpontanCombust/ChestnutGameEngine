@@ -1,8 +1,8 @@
-#include "core/vector.hpp"
+#include "engine/core/vector.hpp"
 
 #include <cmath>
 
-namespace vector
+namespace chestnut
 {
     template< typename T >
     T Vector2<T>::getMagnitude() const
@@ -178,4 +178,5 @@ namespace vector
     {
         return "[ " + std::to_string(x) + ", " + std::to_string(y) + " ]";
     }
-}
+
+} // namespace chestnut
