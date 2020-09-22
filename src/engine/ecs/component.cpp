@@ -4,20 +4,14 @@
 
 namespace engine { namespace ecs {
 
-    void CComponent::setParentEntity(CEntity *entity) 
+    void CComponent::setParentGUID( const uint64_t guid ) 
     {
-        if( m_entity != nullptr )
-            LOG( "Component already has parent entity!" );
-
-        m_entity = entity;
+        m_parentGUID = guid;
     }
-
-    CEntity* CComponent::getParentEntity() 
+    
+    uint64_t CComponent::getParentGUID() const
     {
-        if( m_entity == nullptr )
-            LOG( "Component has no parent entity!" );
-
-        return m_entity;
+        return m_parentGUID;
     }
 
     const std::string CComponent::getTypeStatic()

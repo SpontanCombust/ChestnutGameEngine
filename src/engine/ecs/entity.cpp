@@ -4,14 +4,14 @@
 
 namespace engine { namespace ecs {
 
-    void CEntity::setID( uint32_t id )
+    void CEntity::setGUID( uint64_t guid )
     {
-        m_id = id;
+        m_GUID = guid;
     }
 
-    uint32_t CEntity::getID() const
+    uint64_t CEntity::getGUID() const
     {
-        return m_id;
+        return m_GUID;
     }
 
     bool CEntity::addComponent( CComponent *component ) 
@@ -22,7 +22,7 @@ namespace engine { namespace ecs {
         std::string compType = component->getType();
         if( m_components.find(compType) != m_components.end() )
         {
-            LOG( "Entity " + to_string(m_id) + " already has component: " + compType );
+            LOG( "Entity " + to_string(m_GUID) + " already has component: " + compType );
             return false;
         }
         
@@ -30,24 +30,6 @@ namespace engine { namespace ecs {
         return true;
     }
 
-    bool CEntity::removeComponent( const std::string componentType ) 
-    {
-        int retcode;
-        retcode = m_components.erase( componentType );
-
-        if( retcode < 1 )
-        {
-            LOG( "No components of type " + componentType + " to be removed from entity " + to_string(m_id) );
-            return false;
-        }
-        return true;
-    }
-    
-    void CEntity::removeAllComponents() 
-    {
-        m_components.clear();
-    }
-    
     bool CEntity::hasComponent( const std::string componentType ) const
     {
         return ( m_components.find( componentType ) != m_components.end() );

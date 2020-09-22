@@ -6,15 +6,13 @@
 
 namespace engine { namespace ecs {
 
-    class CEntity; // forward declaration
-
     class CComponent
     {
     protected:
-        CEntity *m_entity;
+        uint64_t m_parentGUID; //TODO implement uuid distribution
     public:
-        void setParentEntity( CEntity *entity );
-        CEntity *getParentEntity();
+        void setParentGUID( const uint64_t guid );
+        uint64_t getParentGUID() const;
         static const std::string getTypeStatic();
         inline virtual const std::string getType() { return getTypeStatic(); };
     };
