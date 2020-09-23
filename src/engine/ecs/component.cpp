@@ -4,17 +4,7 @@
 
 namespace chestnut
 {
-    void CComponent::setParentGUID( const uint64_t guid ) 
-    {
-        m_parentGUID = guid;
-    }
-    
-    uint64_t CComponent::getParentGUID() const
-    {
-        return m_parentGUID;
-    }
-
-    const std::string CComponent::getTypeStatic()
+    const std::string SComponent::getTypeStatic()
     {
         return "";
     }

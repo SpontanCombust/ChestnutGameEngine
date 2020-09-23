@@ -5,13 +5,10 @@
 
 namespace chestnut
 {
-    class CComponent
+    struct SComponent
     {
-    protected:
-        uint64_t m_parentGUID; //TODO implement uuid distribution
-    public:
-        void setParentGUID( const uint64_t guid );
-        uint64_t getParentGUID() const;
+        uint64_t parentGUID; //TODO implement uuid distribution
+
         static const std::string getTypeStatic();
         inline virtual const std::string getType() { return getTypeStatic(); };
     };
