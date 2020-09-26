@@ -19,7 +19,7 @@ namespace chestnut
         if( component == nullptr )
             return false;
 
-        std::string compType = component->getType();
+        std::string compType = component->getTypeString();
         if( m_components.find(compType) != m_components.end() )
         {
             LOG( "Entity " + to_string(m_GUID) + " already has component: " + compType );

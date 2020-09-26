@@ -4,7 +4,7 @@
 
 namespace chestnut
 {
-    const std::string SComponent::getTypeStatic()
+    const std::string SComponent::getTypeStringStatic()
     {
         return "";
     }

@@ -8,7 +8,13 @@ namespace chestnut
 
     }
 
-    const std::string STransformComponent::getTypeStatic()
+    STransformComponent::STransformComponent(Vector2f _position, Vector2f _rotation, Vector2f _scale)
+    : position( _position ), rotation( _rotation ), scale( _scale )
+    {
+
+    }
+
+    const std::string STransformComponent::getTypeStringStatic()
     {
         return "transform";
     }

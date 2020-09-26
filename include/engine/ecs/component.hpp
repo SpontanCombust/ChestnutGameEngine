@@ -9,8 +9,8 @@ namespace chestnut
     {
         uint64_t parentGUID; //TODO implement uuid distribution
 
-        static const std::string getTypeStatic();
-        inline virtual const std::string getType() { return getTypeStatic(); };
+        static const std::string getTypeStringStatic();
+        inline virtual const std::string getTypeString() { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 

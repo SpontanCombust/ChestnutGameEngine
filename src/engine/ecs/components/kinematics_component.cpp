@@ -8,7 +8,13 @@ namespace chestnut
 
     }
 
-    const std::string SKinematicsComponent::getTypeStatic()
+    SKinematicsComponent::SKinematicsComponent( Vector2f _velocity, Vector2f _acceleration ) 
+    : velocity( _velocity ), acceleration( _acceleration )
+    {
+
+    }
+
+    const std::string SKinematicsComponent::getTypeStringStatic()
     {
         return "kinematics";
     }
