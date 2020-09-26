@@ -51,5 +51,10 @@ namespace chestnut
     {
         return CTexture(this);
     }
+
+    CTexture* CTextureResource::getTextureInstancePtr() const
+    {
+        return new CTexture(this);
+    }
     
 } // namespace chestnut
