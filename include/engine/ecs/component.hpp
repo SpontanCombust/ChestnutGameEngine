@@ -3,14 +3,17 @@
 
 #include <string>
 
+#define GUID_UNREGISTERED 0
+
 namespace chestnut
 {
-    struct SComponent
+    struct IComponent
     {
-        uint64_t parentGUID; //TODO implement uuid distribution
+        uint64_t parentGUID;
 
-        static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() { return getTypeStringStatic(); };
+        IComponent() : parentGUID( GUID_UNREGISTERED ) {}
+
+        inline virtual const std::string getTypeString() = 0;
     };
 
 } // namespace chestnut 

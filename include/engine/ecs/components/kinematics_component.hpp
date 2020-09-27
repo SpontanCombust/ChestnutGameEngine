@@ -6,7 +6,7 @@
 
 namespace chestnut
 {
-    struct SKinematicsComponent : SComponent
+    struct SKinematicsComponent : IComponent
     {
         Vector2f velocity;
         Vector2f acceleration;
@@ -15,7 +15,7 @@ namespace chestnut
         SKinematicsComponent( Vector2f _velocity, Vector2f _acceleration );
 
         static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() { return getTypeStringStatic(); };
+        inline virtual const std::string getTypeString() override { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 

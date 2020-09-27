@@ -14,7 +14,7 @@ namespace chestnut
         return m_GUID;
     }
 
-    bool CEntity::addComponent( SComponent *component ) 
+    bool CEntity::addComponent( IComponent *component ) 
     {
         if( component == nullptr )
             return false;
@@ -35,7 +35,7 @@ namespace chestnut
         return ( m_components.find( componentType ) != m_components.end() );
     }
     
-    SComponent* CEntity::getComponent( const std::string componentType ) 
+    IComponent* CEntity::getComponent( const std::string componentType ) 
     {
         if( hasComponent( componentType ) )
             return m_components[componentType];

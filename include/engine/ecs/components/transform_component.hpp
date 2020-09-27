@@ -6,7 +6,7 @@
 
 namespace chestnut
 {
-    struct STransformComponent : SComponent
+    struct STransformComponent : IComponent
     {
         Vector2f position;
         Vector2f rotation;
@@ -16,7 +16,7 @@ namespace chestnut
         STransformComponent( Vector2f _position, Vector2f _rotation, Vector2f _scale );
 
         static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() { return getTypeStringStatic(); };
+        inline virtual const std::string getTypeString() override { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 

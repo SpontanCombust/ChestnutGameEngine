@@ -12,15 +12,17 @@ namespace chestnut
     {
     protected:
         uint64_t m_GUID;
-        std::unordered_map< std::string, SComponent* > m_components;
+        std::unordered_map< std::string, IComponent* > m_components;
 
     public:
+        CEntity() : m_GUID( GUID_UNREGISTERED ) {}
+
         void setGUID( uint64_t guid );
         uint64_t getGUID() const;
 
-        bool addComponent( SComponent *component );
+        bool addComponent( IComponent *component );
         bool hasComponent( const std::string componentType ) const;
-        SComponent *getComponent( const std::string componentType );
+        IComponent *getComponent( const std::string componentType );
     };
 
 } // namespace chestnut 

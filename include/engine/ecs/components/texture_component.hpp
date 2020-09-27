@@ -6,7 +6,7 @@
 
 namespace chestnut
 {
-    struct STextureComponent : SComponent
+    struct STextureComponent : IComponent
     {
         CTexture *texture;
 
@@ -14,7 +14,7 @@ namespace chestnut
         STextureComponent( CTexture *textureInstance );
 
         static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() { return getTypeStringStatic(); };
+        inline virtual const std::string getTypeString() override { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 
