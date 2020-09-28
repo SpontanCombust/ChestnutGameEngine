@@ -1,7 +1,5 @@
 #include "engine/ecs/component_database.hpp"
 
-#include "engine/debug/debug.hpp"
-
 namespace chestnut
 {    
     bool CComponentDatabase::hasComponentType( std::string compTypeStr ) const
@@ -74,27 +72,6 @@ namespace chestnut
     void CComponentDatabase::clearComponents() 
     {
         m_componentMaps.clear();
-    }
-
-    template< typename T, typename std::enable_if< std::is_base_of< IComponent, T >::value >::type* >
-    bool CComponentDatabase::fillComponentMapOfType( std::unordered_map< uint64_t, T* >& outCompMapRef, std::string compTypeStr ) const
-    {
-        if( !hasComponentType( compTypeStr ) )
-            return false;
-
-        auto compMap = m_componentMaps.at( compTypeStr );
-        for( const auto &pair : compMap )
-        {
-            if( T *derivedComp = dynamic_cast<T*>( pair.second ) )
-                outCompMapRef[pair.first] = derivedComp;
-            else
-            {
-                LOG( "Provided typename and component type string are incompatible!" );
-                return false;
-            }
-        }
-
-        return true;
     }
 
 } // namespace chestnut
