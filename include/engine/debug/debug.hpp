@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+#define DEBUG_MODE
+
 namespace chestnut
 {
     #ifdef DEBUG_MODE
