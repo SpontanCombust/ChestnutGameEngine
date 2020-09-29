@@ -30,9 +30,16 @@ namespace chestnut
 
         T multiplyByVecDot( const Vector2<T>& other ) const;
 
-        std::string to_string();
+        template< typename U >
+        operator Vector2<U>() const;
     };
 
+    template< typename T >
+    template< typename U >
+    Vector2<T>::operator Vector2<U>() const
+    {
+        return { static_cast<U>(x), static_cast<U>(y) };
+    }
 
     template< typename T >
     Vector2<T> vec2GetNormalized( const Vector2<T>& v );
@@ -78,7 +85,10 @@ namespace chestnut
 
     // predefined vectors //
     typedef Vector2<float> Vector2f;
+    std::string vector2fToString( Vector2f v );
+
     typedef Vector2<int> Vector2i;
+    std::string vector2iToString( Vector2i v );
 
 } // namespace chestnut
 

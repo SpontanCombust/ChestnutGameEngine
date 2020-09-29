@@ -173,10 +173,14 @@ namespace chestnut
 
 
 
-    template<typename T>
-    std::string Vector2<T>::to_string() 
+    std::string vector2fToString( Vector2f v ) 
     {
-        return "[ " + std::to_string(x) + ", " + std::to_string(y) + " ]";
+        return "[ " + std::to_string(v.x) + ", " + std::to_string(v.y) + " ]";
+    }
+
+    std::string vector2iToString( Vector2i v ) 
+    {
+        return "[ " + std::to_string(v.x) + ", " + std::to_string(v.y) + " ]";
     }
 
 } // namespace chestnut
