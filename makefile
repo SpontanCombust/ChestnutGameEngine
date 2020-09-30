@@ -22,7 +22,7 @@ WINDOWS_DEPENDENCIES_INSTALL=
 
 # -------------------------------------------------------------------------------
 TARGET_COMPILER=g++
-OPT_FLAGS_DEBUG=-Wall -g
+OPT_FLAGS_DEBUG=-Wall -g -DCHESTNUT_DEBUG
 OPT_FLAGS_RELEASE=-O2
 # -------------------------------------------------------------------------------
 LINUX_EXEC_PATH=bin/linux

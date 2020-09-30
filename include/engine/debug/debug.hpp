@@ -3,16 +3,10 @@
 
 #include <iostream>
 
-#define DEBUG_MODE
-
-namespace chestnut
-{
-    #ifdef DEBUG_MODE
-        #define LOG(s) ( std::cout << __FILE__ << " (" << __LINE__ << ") : " << s << std::endl )
-    #else
-        #define LOG(s)
-    #endif
-    
-} // namespace chestnut
+#ifdef CHESTNUT_DEBUG
+    #define LOG(s) ( std::cout << __FILE__ << " (" << __LINE__ << ") : " << s << std::endl )
+#else
+    #define LOG(s)
+#endif
 
 #endif // __CHESTNUT_DEBUG_H__
