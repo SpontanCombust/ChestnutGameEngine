@@ -4,3 +4,4 @@ BombermanReworked.code-workspace
 src/main.cpp
 test.cpp
 test
+_media_test/
