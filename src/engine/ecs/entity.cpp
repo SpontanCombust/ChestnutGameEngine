@@ -4,11 +4,6 @@
 
 namespace chestnut
 {
-    void CEntity::setGUID( uint64_t guid )
-    {
-        m_GUID = guid;
-    }
-
     uint64_t CEntity::getGUID() const
     {
         return m_GUID;
@@ -41,6 +36,19 @@ namespace chestnut
             return m_components[componentType];
         else
             return nullptr;    
+    }
+
+    const std::vector< std::string > CEntity::getComponentTypes() const
+    {
+        std::vector< std::string > types;
+        std::string type;
+        for( const auto &pair : m_components )
+        {
+            type = pair.first;
+            types.push_back( type );
+        }
+
+        return types;
     }
 
 } // namespace chestnut 
