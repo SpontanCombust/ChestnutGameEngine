@@ -3,17 +3,18 @@
 
 #include <string>
 
+#define GUID_UNREGISTERED 0
+
 namespace chestnut
 {
-    class CComponent
+    struct IComponent
     {
-    protected:
-        uint64_t m_parentGUID; //TODO implement uuid distribution
-    public:
-        void setParentGUID( const uint64_t guid );
-        uint64_t getParentGUID() const;
-        static const std::string getTypeStatic();
-        inline virtual const std::string getType() { return getTypeStatic(); };
+        uint64_t parentGUID;
+
+        IComponent() : parentGUID( GUID_UNREGISTERED ) {}
+        virtual ~IComponent() {}
+
+        inline virtual const std::string getTypeString() = 0;
     };
 
 } // namespace chestnut 

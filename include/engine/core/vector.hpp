@@ -30,37 +30,44 @@ namespace chestnut
 
         T multiplyByVecDot( const Vector2<T>& other ) const;
 
-        std::string to_string();
+        template< typename U >
+        operator Vector2<U>() const;
     };
 
+    template< typename T >
+    template< typename U >
+    Vector2<T>::operator Vector2<U>() const
+    {
+        return { static_cast<U>(x), static_cast<U>(y) };
+    }
 
     template< typename T >
-    Vector2<T> getNormalized( const Vector2<T>& v );
+    Vector2<T> vec2GetNormalized( const Vector2<T>& v );
 
 
     template< typename T >
-    Vector2<T> getNegated( const Vector2<T>& v );
+    Vector2<T> vec2GetNegated( const Vector2<T>& v );
 
     template< typename T >
     Vector2<T> operator-( const Vector2<T>& v );
 
 
     template< typename T >
-    Vector2<T> getSum( const Vector2<T>& v1, const Vector2<T>& v2 );
+    Vector2<T> vec2GetSum( const Vector2<T>& v1, const Vector2<T>& v2 );
 
     template< typename T >
     Vector2<T> operator+( const Vector2<T>& v1, const Vector2<T>& v2 );
 
 
     template< typename T >
-    Vector2<T> getDifference( const Vector2<T>& v1, const Vector2<T>& v2 );
+    Vector2<T> vec2GetDifference( const Vector2<T>& v1, const Vector2<T>& v2 );
 
     template< typename T >
     Vector2<T> operator-( const Vector2<T>& v1, const Vector2<T>& v2 );
 
 
     template< typename T >
-    Vector2<T> getScaled( const Vector2<T>& v, T s );
+    Vector2<T> vec2GetScaled( const Vector2<T>& v, T s );
 
     template< typename T >
     Vector2<T> operator*( T s, const Vector2<T>& v );
@@ -70,7 +77,7 @@ namespace chestnut
 
 
     template< typename T >
-    T getDotProduct( const Vector2<T>& v1, const Vector2<T>& v2 );
+    T vec2GetDotProduct( const Vector2<T>& v1, const Vector2<T>& v2 );
 
     template< typename T >
     T operator*( Vector2<T> v1, Vector2<T> v2 ) = delete; // forbidden due to ambiguity between dot and cross product
@@ -78,7 +85,10 @@ namespace chestnut
 
     // predefined vectors //
     typedef Vector2<float> Vector2f;
+    std::string vector2fToString( Vector2f v );
+
     typedef Vector2<int> Vector2i;
+    std::string vector2iToString( Vector2i v );
 
 } // namespace chestnut
 

@@ -24,7 +24,7 @@ namespace chestnut
     }
 
     template< typename T >
-    Vector2<T> getNormalized( const Vector2<T>& v ) 
+    Vector2<T> vec2GetNormalized( const Vector2<T>& v ) 
     {
         Vector2<T> vCopy = v;
         vCopy.normalize();
@@ -41,7 +41,7 @@ namespace chestnut
     }
 
     template< typename T >
-    Vector2<T> getNegated( const Vector2<T>& v ) 
+    Vector2<T> vec2GetNegated( const Vector2<T>& v ) 
     {
         Vector2<T> vCopy = v;
         vCopy.negate();
@@ -72,7 +72,7 @@ namespace chestnut
     }
 
     template< typename T >
-    Vector2<T> getSum( const Vector2<T>& v1, const Vector2<T>& v2 ) 
+    Vector2<T> vec2GetSum( const Vector2<T>& v1, const Vector2<T>& v2 ) 
     {
         Vector2<T> v1Copy = v1;
         v1Copy.add(v2);
@@ -103,7 +103,7 @@ namespace chestnut
     }
 
     template< typename T >
-    Vector2<T> getDifference( const Vector2<T>& v1, const Vector2<T>& v2 ) 
+    Vector2<T> vec2GetDifference( const Vector2<T>& v1, const Vector2<T>& v2 ) 
     {
         Vector2<T> v1Copy = v1;
         v1Copy.subtract(v2);
@@ -134,7 +134,7 @@ namespace chestnut
     }
 
     template< typename T >
-    Vector2<T> getScaled( const Vector2<T>& v, T s ) 
+    Vector2<T> vec2GetScaled( const Vector2<T>& v, T s ) 
     {
         Vector2<T> vCopy = v;
         vCopy.multiplyByScalar(s);
@@ -166,17 +166,21 @@ namespace chestnut
     }
 
     template< typename T >
-    T getDotProduct( const Vector2<T>& v1, const Vector2<T>& v2 ) 
+    T vec2GetDotProduct( const Vector2<T>& v1, const Vector2<T>& v2 ) 
     {
         return v1.multiplyByVecDot(v2);
     }
 
 
 
-    template<typename T>
-    std::string Vector2<T>::to_string() 
+    std::string vector2fToString( Vector2f v ) 
     {
-        return "[ " + std::to_string(x) + ", " + std::to_string(y) + " ]";
+        return "[ " + std::to_string(v.x) + ", " + std::to_string(v.y) + " ]";
+    }
+
+    std::string vector2iToString( Vector2i v ) 
+    {
+        return "[ " + std::to_string(v.x) + ", " + std::to_string(v.y) + " ]";
     }
 
 } // namespace chestnut

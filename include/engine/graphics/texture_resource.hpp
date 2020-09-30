@@ -26,6 +26,7 @@ namespace chestnut
         Vector2i getSize() const;
 
         CTexture getTextureInstance() const;
+        CTexture *getTextureInstancePtr() const;
     };
 
 } // namespace chestnut

@@ -3,9 +3,16 @@
 namespace chestnut
 {
     CChestnutGameEngine::CChestnutGameEngine()
-    : m_wasStarted( false ), m_isRunning( false ), m_renderWindow( nullptr )
     {
+        m_wasStarted = false;
+        m_isRunning = false;
+        m_renderWindow = nullptr;
 
+        m_appTitle = "App";
+        m_windowStartPosX = 0;
+        m_windowStartPosY = 0;
+        m_windowFlags = SDL_WINDOW_SHOWN;
+        m_rendererFlags = SDL_RENDERER_ACCELERATED;
     }
 
     bool CChestnutGameEngine::initSDL() 
@@ -68,13 +75,14 @@ namespace chestnut
 
     bool CChestnutGameEngine::update()
     {
+        m_ECS.onTick();
         return true;
     }
 
     void CChestnutGameEngine::enterGameLoop()
     {
         m_isRunning = true;
-        // PLACEHOLDER; TO BE CHANGED LATER
+        // XXX PLACEHOLDER; TO BE CHANGED LATER
         while( m_isRunning )
         {
             onUserUpdate();

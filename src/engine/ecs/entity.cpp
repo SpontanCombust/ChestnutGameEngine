@@ -4,25 +4,20 @@
 
 namespace chestnut
 {
-    void CEntity::setGUID( uint64_t guid )
-    {
-        m_GUID = guid;
-    }
-
     uint64_t CEntity::getGUID() const
     {
         return m_GUID;
     }
 
-    bool CEntity::addComponent( CComponent *component ) 
+    bool CEntity::addComponent( IComponent *component ) 
     {
         if( component == nullptr )
             return false;
 
-        std::string compType = component->getType();
+        std::string compType = component->getTypeString();
         if( m_components.find(compType) != m_components.end() )
         {
-            LOG( "Entity " + to_string(m_GUID) + " already has component: " + compType );
+            LOG( "Entity " + std::to_string(m_GUID) + " already has component: " + compType );
             return false;
         }
         
@@ -35,12 +30,25 @@ namespace chestnut
         return ( m_components.find( componentType ) != m_components.end() );
     }
     
-    CComponent* CEntity::getComponent( const std::string componentType ) 
+    IComponent* CEntity::getComponent( const std::string componentType ) 
     {
         if( hasComponent( componentType ) )
             return m_components[componentType];
         else
             return nullptr;    
+    }
+
+    const std::vector< std::string > CEntity::getComponentTypes() const
+    {
+        std::vector< std::string > types;
+        std::string type;
+        for( const auto &pair : m_components )
+        {
+            type = pair.first;
+            types.push_back( type );
+        }
+
+        return types;
     }
 
 } // namespace chestnut 

@@ -4,23 +4,30 @@
 #include "component.hpp"
 
 #include <string>
+#include <vector>
 #include <unordered_map>
 
 namespace chestnut
 {    
     class CEntity
     {
+    private:
+        friend class CChestnutECS;
+
     protected:
         uint64_t m_GUID;
-        std::unordered_map< std::string, CComponent* > m_components;
+        std::unordered_map< std::string, IComponent* > m_components;
 
     public:
-        void setGUID( uint64_t guid );
+        CEntity() : m_GUID( GUID_UNREGISTERED ) {}
+
         uint64_t getGUID() const;
 
-        bool addComponent( CComponent *component );
+        bool addComponent( IComponent *component );
         bool hasComponent( const std::string componentType ) const;
-        CComponent *getComponent( const std::string componentType );
+        IComponent *getComponent( const std::string componentType );
+
+        const std::vector< std::string > getComponentTypes() const;
     };
 
 } // namespace chestnut 
