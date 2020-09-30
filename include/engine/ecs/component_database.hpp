@@ -7,7 +7,7 @@
 #include <unordered_map>
 
 namespace chestnut
-{   //TODO class testing
+{   
     class CComponentDatabase
     {
     private:
@@ -33,10 +33,16 @@ namespace chestnut
             return false;
 
         auto compMap = m_componentMaps.at( compTypeStr );
+        uint64_t guid;
+        IComponent *component;
+
         for( const auto &pair : compMap )
         {
-            if( T *derivedComp = dynamic_cast<T*>( pair.second ) )
-                outCompMapRef[pair.first] = derivedComp;
+            guid = pair.first;
+            component = pair.second;
+
+            if( T *derivedComp = dynamic_cast<T*>( component ) )
+                outCompMapRef[guid] = derivedComp;
             else
             {
                 LOG( "Provided typename and component type string are incompatible!" );

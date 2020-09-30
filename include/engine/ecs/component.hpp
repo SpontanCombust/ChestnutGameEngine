@@ -12,6 +12,7 @@ namespace chestnut
         uint64_t parentGUID;
 
         IComponent() : parentGUID( GUID_UNREGISTERED ) {}
+        virtual ~IComponent() {}
 
         inline virtual const std::string getTypeString() = 0;
     };
