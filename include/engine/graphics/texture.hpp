@@ -28,12 +28,21 @@ namespace chestnut
         ~CTexture();
 
         void setClippingRect( int x, int y, int w, int h );
+        void setClippingRect( Vector2i position, Vector2i dimensions );
+        void setPosition( float x, float y );
+        void setPosition( Vector2f position );
         void setScale( float sx, float sy );
+        void setScale( Vector2f scale );
+        void setDimensionsDirectly( float w, float h );
+        void setDimensionsDirectly( Vector2f dimensions );
         void setRotation( float angleDeg );
+        void setRotation( Vector2f rotation );
         void setRotationPoint( float rx, float ry );
+        void setRotationPoint( Vector2f rotPoint );
         void setFlip( SDL_RendererFlip flip );
 
-        void render( float x, float y );
+        void draw() const;
+        void draw( float x, float y ) const;
     };   
 
 } // namespace chestnut
