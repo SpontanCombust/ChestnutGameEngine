@@ -15,7 +15,7 @@ namespace chestnut
         virtual ~IComponentSystem() {}
         virtual bool needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes ) = 0;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) = 0;
-        virtual void manageCurrentComponents() = 0;
+        virtual void update() = 0;
     };
     
 } // namespace chestnut

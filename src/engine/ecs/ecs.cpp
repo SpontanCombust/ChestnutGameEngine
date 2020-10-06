@@ -19,11 +19,11 @@ namespace chestnut
         m_componentSystems.clear();
     }
     
-    void CChestnutECS::onTick() 
+    void CChestnutECS::update() 
     {
         for( IComponentSystem *cs : m_componentSystems )
         {
-            cs->manageCurrentComponents();
+            cs->update();
         }
     }
     

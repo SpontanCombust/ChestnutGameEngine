@@ -25,7 +25,7 @@ namespace chestnut
         CChestnutECS();
         ~CChestnutECS();
 
-        void onTick();
+        void update();
 
         bool registerEntity( CEntity *entity, bool generateGUID = true );
         bool pullComponentsFromEntity( CEntity *entity );

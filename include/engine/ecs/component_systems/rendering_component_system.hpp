@@ -16,7 +16,7 @@ namespace chestnut
     public:
         virtual bool needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes ) override;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) override;
-        virtual void manageCurrentComponents() override;
+        virtual void update() override;
 
     private:
         void transformTextures();

@@ -24,7 +24,7 @@ namespace chestnut
         dbRef.fillComponentMapOfType( m_textureCompMap );
     }
     
-    void CRenderingComponentSystem::manageCurrentComponents() 
+    void CRenderingComponentSystem::update() 
     {
         SDL_RenderClear( CRenderWindow::getSDLRenderer() );
 
