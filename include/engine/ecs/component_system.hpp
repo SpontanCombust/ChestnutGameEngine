@@ -1,8 +1,8 @@
 #ifndef __CHESTNUT_COMPONENT_SYSTEM_H__
 #define __CHESTNUT_COMPONENT_SYSTEM_H__
 
-#include "component_database.hpp"
 #include "component.hpp"
+#include "component_database.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -13,7 +13,7 @@ namespace chestnut
     {
     public:
         virtual ~IComponentSystem() {}
-        virtual bool needsComponents( const std::vector< std::string > compTypeStrings ) = 0;
+        virtual bool needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes ) = 0;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) = 0;
         virtual void manageCurrentComponents() = 0;
     };

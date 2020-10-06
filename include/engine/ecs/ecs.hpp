@@ -19,7 +19,7 @@ namespace chestnut
         CComponentDatabase m_componentDB;
         std::vector< IComponentSystem* > m_componentSystems;
 
-        std::vector< uint64_t > m_registeredGUIDs;
+        std::vector< guid_t > m_registeredGUIDs;
 
     public:
         CChestnutECS();
@@ -35,22 +35,22 @@ namespace chestnut
 
     private:
         bool isEntityRegistered( CEntity *entity );
-        void feedComponentSystemsIfNeeded( std::vector< std::string >& updatedCompTypes );
+        void feedComponentSystemsIfNeeded( std::vector< std::type_index >& updatedCompTypes );
 
     private:
         struct SRandomGUIDGenerator
         {
             std::random_device ranDev;
             std::default_random_engine generator;
-            std::uniform_int_distribution< uint64_t > distribution;
+            std::uniform_int_distribution< guid_t > distribution;
 
             SRandomGUIDGenerator()
             {
                 generator = std::default_random_engine( ranDev() );
-                distribution = std::uniform_int_distribution< uint64_t>( 1, 0xFFFFFFFFFFFFFFFF );
+                distribution = std::uniform_int_distribution< guid_t >( 1, 0xFFFFFFFFFFFFFFFF );
             }
 
-            uint64_t generate() { return distribution( generator ); }
+            guid_t generate() { return distribution( generator ); }
 
         } guidGenerator;
 

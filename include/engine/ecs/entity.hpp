@@ -3,9 +3,9 @@
 
 #include "component.hpp"
 
-#include <string>
 #include <vector>
 #include <unordered_map>
+#include <typeindex>
 
 namespace chestnut
 {    
@@ -15,20 +15,42 @@ namespace chestnut
         friend class CChestnutECS;
 
     protected:
-        uint64_t m_GUID;
-        std::unordered_map< std::string, IComponent* > m_components;
+        guid_t m_GUID;
+        std::unordered_map< std::type_index, IComponent* > m_components;
 
     public:
         CEntity() : m_GUID( GUID_UNREGISTERED ) {}
 
-        uint64_t getGUID() const;
+        guid_t getGUID() const;
 
         bool addComponent( IComponent *component );
-        bool hasComponent( const std::string componentType ) const;
-        IComponent *getComponent( const std::string componentType );
 
-        const std::vector< std::string > getComponentTypes() const;
+        template< typename T >
+        bool hasComponent() const;
+
+        template< typename T >
+        IComponent *getComponent();
+
+        const std::vector< std::type_index > getComponentTypeIndexes() const;
     };
+
+    template< typename T >
+    bool CEntity::hasComponent() const
+    {
+        std::type_index tindex = std::type_index( typeid(T) );
+        return ( m_components.find( tindex ) != m_components.end() );    
+    }
+    
+    template<typename T>
+    IComponent* CEntity::getComponent() 
+    {
+        std::type_index tindex = std::type_index( typeid(T) );
+        if( hasComponent<T>() )
+            return m_components[tindex];
+        else
+            return nullptr;
+    }
+    
 
 } // namespace chestnut 
 

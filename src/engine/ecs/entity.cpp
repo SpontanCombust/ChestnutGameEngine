@@ -4,7 +4,7 @@
 
 namespace chestnut
 {
-    uint64_t CEntity::getGUID() const
+    guid_t CEntity::getGUID() const
     {
         return m_GUID;
     }
@@ -14,41 +14,28 @@ namespace chestnut
         if( component == nullptr )
             return false;
 
-        std::string compType = component->getTypeString();
-        if( m_components.find(compType) != m_components.end() )
+        std::type_index tindex = std::type_index( typeid( *component ) );
+        if( m_components.find(tindex) != m_components.end() )
         {
-            LOG( "Entity " + std::to_string(m_GUID) + " already has component: " + compType );
+            LOG( "Entity " + std::to_string(m_GUID) + " already has component: " << typeid(*component).name() );
             return false;
         }
         
-        m_components[compType] = component;
+        m_components[tindex] = component;
         return true;
     }
 
-    bool CEntity::hasComponent( const std::string componentType ) const
+    const std::vector< std::type_index > CEntity::getComponentTypeIndexes() const
     {
-        return ( m_components.find( componentType ) != m_components.end() );
-    }
-    
-    IComponent* CEntity::getComponent( const std::string componentType ) 
-    {
-        if( hasComponent( componentType ) )
-            return m_components[componentType];
-        else
-            return nullptr;    
-    }
-
-    const std::vector< std::string > CEntity::getComponentTypes() const
-    {
-        std::vector< std::string > types;
-        std::string type;
+        std::vector< std::type_index > indexes;
+        std::type_index tindex = std::type_index( typeid(IComponent) );
         for( const auto &pair : m_components )
         {
-            type = pair.first;
-            types.push_back( type );
+            tindex = pair.first;
+            indexes.push_back( tindex );
         }
 
-        return types;
+        return indexes;
     }
 
 } // namespace chestnut 

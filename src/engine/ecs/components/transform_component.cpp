@@ -14,9 +14,4 @@ namespace chestnut
 
     }
 
-    const std::string STransformComponent::getTypeStringStatic()
-    {
-        return "transform";
-    }
-
 } // namespace chestnut

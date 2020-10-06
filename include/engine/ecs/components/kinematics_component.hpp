@@ -13,9 +13,6 @@ namespace chestnut
 
         SKinematicsComponent();
         SKinematicsComponent( Vector2f _velocity, Vector2f _acceleration );
-
-        static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() override { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 

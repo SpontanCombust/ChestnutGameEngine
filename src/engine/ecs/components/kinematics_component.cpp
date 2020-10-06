@@ -14,9 +14,4 @@ namespace chestnut
 
     }
 
-    const std::string SKinematicsComponent::getTypeStringStatic()
-    {
-        return "kinematics";
-    }
-    
 } // namespace chestnut

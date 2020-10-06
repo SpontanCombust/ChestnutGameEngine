@@ -12,9 +12,6 @@ namespace chestnut
 
         STextureComponent() = delete;
         STextureComponent( CTexture *textureInstance );
-
-        static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() override { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 
