@@ -75,7 +75,7 @@ namespace chestnut
 
     bool CChestnutGameEngine::update()
     {
-        m_ECS.onTick();
+        m_ECS.update();
         return true;
     }
 

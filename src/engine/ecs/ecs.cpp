@@ -19,11 +19,11 @@ namespace chestnut
         m_componentSystems.clear();
     }
     
-    void CChestnutECS::onTick() 
+    void CChestnutECS::update() 
     {
         for( IComponentSystem *cs : m_componentSystems )
         {
-            cs->manageCurrentComponents();
+            cs->update();
         }
     }
     
@@ -32,7 +32,7 @@ namespace chestnut
         if( isEntityRegistered( entity ) )
             return false;
 
-        uint64_t guid;
+        guid_t guid;
         if( generateGUID )
         {
             guid = guidGenerator.generate();
@@ -71,8 +71,8 @@ namespace chestnut
                     return false;
             }
 
-            std::vector< std::string > compTypes = entity->getComponentTypes();
-            feedComponentSystemsIfNeeded( compTypes );
+            std::vector< std::type_index > tindexes = entity->getComponentTypeIndexes();
+            feedComponentSystemsIfNeeded( tindexes );
         }
 
         return true;
@@ -101,11 +101,11 @@ namespace chestnut
         return std::count( m_registeredGUIDs.begin(), m_registeredGUIDs.end(), entity->getGUID() );
     }
 
-    void CChestnutECS::feedComponentSystemsIfNeeded( std::vector< std::string >& updatedCompTypes ) 
+    void CChestnutECS::feedComponentSystemsIfNeeded( std::vector< std::type_index >& updatedCompTypes ) 
     {
         for( IComponentSystem *cs : m_componentSystems )
         {
-            if( cs->needsComponents( updatedCompTypes ) )
+            if( cs->needsAnyOfComponents( updatedCompTypes ) )
                 cs->fetchComponents( m_componentDB );
         }
     }

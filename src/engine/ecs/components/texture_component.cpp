@@ -8,9 +8,4 @@ namespace chestnut
 
     }
 
-    const std::string STextureComponent::getTypeStringStatic()
-    {
-        return "texture";
-    }
-
 } // namespace chestnut

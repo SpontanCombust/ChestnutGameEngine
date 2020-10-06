@@ -5,35 +5,132 @@
 #include "engine/debug/debug.hpp"
 
 #include <unordered_map>
+#include <typeindex>
 
 namespace chestnut
 {   
     class CComponentDatabase
     {
     private:
-        std::unordered_map< std::string, std::unordered_map< uint64_t, IComponent* > > m_componentMaps;
+        std::unordered_map< std::type_index, std::unordered_map< guid_t, IComponent* > > m_componentMaps;
 
     public:
-        bool hasComponentType( std::string compTypeStr ) const;
-        bool hasComponent( std::string compTypeStr, uint64_t guid ) const;
-        bool pushComponent( IComponent *component );
-        IComponent *getComponent( std::string compTypeStr, uint64_t guid );
-        IComponent *pullComponent( std::string compTypeStr, uint64_t guid );
-        void eraseComponent( std::string compTypeStr, uint64_t guid );
+        template< typename T >
+        bool hasComponentType() const;
+
+        template< typename T >
+        bool hasComponent( guid_t guid ) const;
+
+        template< typename T >
+        bool pushComponent( T *component );
+
+        template< typename T >
+        IComponent *getComponent( guid_t guid );
+
+        template< typename T >
+        IComponent *pullComponent( guid_t guid );
+
+        template< typename T >
+        void eraseComponent( guid_t guid );
+
         void clearComponents();
 
-        template< typename T, typename std::enable_if< std::is_base_of< IComponent, T >::value >::type* = nullptr >
-        bool fillComponentMapOfType( std::unordered_map< uint64_t, T* >& outCompMapRef, std::string compTypeStr ) const;
+        template< typename T >
+        bool fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const;
     };
 
-    template< typename T, typename std::enable_if< std::is_base_of< IComponent, T >::value >::type* >
-    bool CComponentDatabase::fillComponentMapOfType( std::unordered_map< uint64_t, T* >& outCompMapRef, std::string compTypeStr ) const
+    template< typename T >
+    bool CComponentDatabase::hasComponentType() const
     {
-        if( !hasComponentType( compTypeStr ) )
+        if( m_componentMaps.find( std::type_index( typeid(T) ) ) != m_componentMaps.end() )
+            return true;
+        return false;   
+    }
+    
+    template< typename T >
+    bool CComponentDatabase::hasComponent( guid_t guid ) const
+    {
+        if( !hasComponentType<T>() )
             return false;
 
-        auto compMap = m_componentMaps.at( compTypeStr );
-        uint64_t guid;
+        auto& compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        if( compMap.find( guid ) != compMap.end() )
+            return true;
+        return false;
+    }
+    
+    template< typename T >
+    bool CComponentDatabase::pushComponent( T *component ) 
+    {
+        if( component == nullptr )
+            return false;
+            
+        if( IComponent *typedComp = dynamic_cast<IComponent*>( component ) )
+        {
+            std::type_index tindex = std::type_index( typeid( *typedComp ) );
+            guid_t guid = typedComp->parentGUID;
+
+            if( guid == GUID_UNREGISTERED )
+                return false;
+            else if( hasComponent<T>( guid ) )
+                return false;
+
+            m_componentMaps[tindex][guid] = typedComp;
+        }
+        else
+        {
+            LOG( "Component typecasting failed!" );
+            return false;
+        }
+        
+        return true;
+    }
+    
+    template< typename T >
+    IComponent* CComponentDatabase::getComponent( guid_t guid ) 
+    {
+        if( !hasComponent<T>( guid ) )
+            return nullptr;
+
+        IComponent* component = m_componentMaps[std::type_index( typeid(T) )][guid];
+        
+        return component;
+    }
+    
+    template< typename T >
+    IComponent* CComponentDatabase::pullComponent( guid_t guid ) 
+    {
+        if( !hasComponent<T>( guid ) )
+            return nullptr;
+
+        std::type_index tindex = std::type_index( typeid(T) );
+        IComponent* component = m_componentMaps[tindex][guid];
+        m_componentMaps[tindex].erase( guid );
+
+        return component;
+    }
+    
+    template< typename T >
+    void CComponentDatabase::eraseComponent( guid_t guid ) 
+    {
+        if( !hasComponent<T>( guid ) )
+            return;
+
+        std::type_index tindex = std::type_index( typeid(T) );
+        m_componentMaps[tindex].erase( guid );
+
+        if( m_componentMaps[tindex].empty() )
+            m_componentMaps.erase( tindex );
+    }
+    
+    template< typename T >
+    bool CComponentDatabase::fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const
+    {
+        if( !hasComponentType<T>() )
+            return false;
+
+        auto compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        guid_t guid;
         IComponent *component;
 
         for( const auto &pair : compMap )
@@ -42,7 +139,7 @@ namespace chestnut
             component = pair.second;
 
             if( T *derivedComp = dynamic_cast<T*>( component ) )
-                outCompMapRef[guid] = derivedComp;
+                compMapRef[guid] = derivedComp;
             else
             {
                 LOG( "Provided typename and component type string are incompatible!" );

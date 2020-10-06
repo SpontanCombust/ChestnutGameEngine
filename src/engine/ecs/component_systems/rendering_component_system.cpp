@@ -7,37 +7,37 @@
 
 namespace chestnut
 {
-    bool CRenderingComponentSystem::needsComponents( const std::vector< std::string > compTypeStrings )
+    bool CRenderingComponentSystem::needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes )
     {
-        return std::any_of( compTypeStrings.begin(), compTypeStrings.end(),
-            []( std::string s )
+        return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
+            []( std::type_index tindex )
             { 
-                return s == STransformComponent::getTypeStringStatic()
-                    || s == STextureComponent::getTypeStringStatic();
+                return tindex == std::type_index( typeid(STransformComponent) )
+                    || tindex == std::type_index( typeid(STextureComponent) );
             }
         );
     }
     
     void CRenderingComponentSystem::fetchComponents( const CComponentDatabase& dbRef )
     {
-        dbRef.fillComponentMapOfType( m_transformCompMap, STransformComponent::getTypeStringStatic() );
-        dbRef.fillComponentMapOfType( m_textureCompMap, STextureComponent::getTypeStringStatic() );
+        dbRef.fillComponentMapOfType( m_transformCompMap );
+        dbRef.fillComponentMapOfType( m_textureCompMap );
     }
     
-    void CRenderingComponentSystem::manageCurrentComponents() 
+    void CRenderingComponentSystem::update() 
     {
         SDL_RenderClear( CRenderWindow::getSDLRenderer() );
 
         transformTextures();
         drawTextures();
 
-        SDL_RenderPresent( CRenderWindow::getSDLRenderer() ); //??? again, static rendering functions?
+        SDL_RenderPresent( CRenderWindow::getSDLRenderer() ); //??? Replace with static drawing function?
     }
 
 
     void CRenderingComponentSystem::transformTextures() 
     {
-        uint64_t guid;
+        guid_t guid;
         STransformComponent *transformComp;
         STextureComponent *textureComp;
         for( auto &pair : m_transformCompMap )
@@ -63,7 +63,7 @@ namespace chestnut
             textureComp = pair.second;
             if( textureComp != nullptr )
             {
-                textureComp->texture->draw(); //??? Replace with static drawing function?
+                textureComp->texture->draw(); //TODO disallow texture object to render by itself
             }
         }
     }

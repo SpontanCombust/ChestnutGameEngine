@@ -1,20 +1,15 @@
 #ifndef __CHESTNUT_COMPONENT_H__
 #define __CHESTNUT_COMPONENT_H__
 
-#include <string>
-
-#define GUID_UNREGISTERED 0
+#include "ecs_utils.hpp"
 
 namespace chestnut
 {
     struct IComponent
     {
-        uint64_t parentGUID;
-
+        guid_t parentGUID;
         IComponent() : parentGUID( GUID_UNREGISTERED ) {}
-        virtual ~IComponent() {}
-
-        inline virtual const std::string getTypeString() = 0;
+        virtual ~IComponent() {};
     };
 
 } // namespace chestnut 

@@ -14,9 +14,6 @@ namespace chestnut
 
         STransformComponent();
         STransformComponent( Vector2f _position, Vector2f _rotation, Vector2f _scale );
-
-        static const std::string getTypeStringStatic();
-        inline virtual const std::string getTypeString() override { return getTypeStringStatic(); };
     };
 
 } // namespace chestnut 

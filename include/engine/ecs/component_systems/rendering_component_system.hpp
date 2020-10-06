@@ -10,13 +10,13 @@ namespace chestnut
     class CRenderingComponentSystem : public IComponentSystem
     {
     private:
-        std::unordered_map< uint64_t, STransformComponent* > m_transformCompMap;
-        std::unordered_map< uint64_t, STextureComponent* > m_textureCompMap;
+        std::unordered_map< guid_t, STransformComponent* > m_transformCompMap;
+        std::unordered_map< guid_t, STextureComponent* > m_textureCompMap;
 
     public:
-        virtual bool needsComponents( const std::vector< std::string > compTypeStrings ) override;
+        virtual bool needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes ) override;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) override;
-        virtual void manageCurrentComponents() override;
+        virtual void update() override;
 
     private:
         void transformTextures();
