@@ -2,6 +2,7 @@
 #define __CHESTNUT_CHESTNUT_H__
 
 #include "engine/core/vector.hpp"
+#include "engine/core/timer.hpp"
 #include "engine/core/angles.hpp"
 
 #include "engine/debug/debug.hpp"

@@ -2,40 +2,53 @@
 
 namespace chestnut
 {
+    CTimer::CTimer( uint32_t interval, bool isRepeating )
+    : m_alarmInterval( interval ), m_isRepeating( isRepeating )
+    {
+        reset( true );
+        m_wasStarted = false;
+    }
+
     void CTimer::reset( bool init )
     {
         if( !init )
         {
-            m_startTicks = SDL_GetTicks();
-            m_currentTicks = m_startTicks;
+            m_startTick = SDL_GetTicks();
+            m_currentTick = m_startTick;
         }
-        m_lastAlarmTicks = 0;
+        m_lastAlarmTick = 0;
+        m_lastPauseTick = 0;
+        m_pausedTicks = 0;
+
         m_isPaused = false;
         m_isAlarmOnCurrentTick = false;
     }
 
     void CTimer::start()
     {
-        m_startTicks = SDL_GetTicks();
-        m_currentTicks = m_startTicks;
-        m_wasStarted = true;
+        if( !m_wasStarted )
+        {
+            m_startTick = SDL_GetTicks();
+            m_currentTick = m_startTick;
+            m_wasStarted = true;
+        }
     }
 
-    CTimer::CTimer( uint32_t interval, bool isRepeating )
+    void CTimer::pause() 
     {
-        reset( true );
-        m_alarmInterval = interval;
-        m_isRepeating = isRepeating;
+        m_isPaused = true;
+        m_lastPauseTick = SDL_GetTicks();
+    }
+
+    void CTimer::unpause() 
+    {
+        m_isPaused = false;
+        m_pausedTicks += SDL_GetTicks() - m_lastPauseTick;
     }
 
     uint32_t CTimer::getCurrentTicks() 
     {
-        return m_currentTicks;
-    }
-
-    void CTimer::setPaused( bool paused ) 
-    {
-        m_isPaused = paused;
+        return m_currentTick;
     }
 
     bool CTimer::isPaused() 
@@ -51,14 +64,13 @@ namespace chestnut
     // returns whether alarm activates on current tick
     bool CTimer::update() 
     {
-        if( m_wasStarted && !m_isPaused && ( m_isRepeating || ( !m_isRepeating && m_lastAlarmTicks == 0 ) ) )
+        if( m_wasStarted && !m_isPaused && ( m_isRepeating || ( !m_isRepeating && m_lastAlarmTick == 0 ) ) )
         {
-            m_currentTicks = SDL_GetTicks() - m_startTicks;
-            uint32_t timeSinceAlarm = m_currentTicks - m_lastAlarmTicks;
+            m_currentTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
+            uint32_t timeSinceAlarm = m_currentTick - m_lastAlarmTick;
             if( timeSinceAlarm >= m_alarmInterval )
             {
-                //??? might need tweaking. To the average of last and latest possible alarm tick?
-                m_lastAlarmTicks += m_alarmInterval * ( timeSinceAlarm / m_alarmInterval );
+                m_lastAlarmTick = m_currentTick;
                 m_isAlarmOnCurrentTick = true;
             }
             else

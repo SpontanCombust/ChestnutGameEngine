@@ -9,25 +9,45 @@ namespace chestnut
 {
     class CTimer
     {
-        uint32_t m_startTicks;
-        uint32_t m_lastAlarmTicks;
-        uint32_t m_currentTicks;
-        uint32_t m_alarmInterval;
+        // inner state vars //
+
+        // tick when timer was started
+        uint32_t m_startTick;
+        // tick since timer started minus paused ticks (current internal tick)
+        uint32_t m_currentTick;
+        // tick when last time alarm was activated
+        uint32_t m_lastAlarmTick;
+        // tick when timer was last time paused
+        uint32_t m_lastPauseTick;
+        // amount of ticks while the timer was paused
+        uint32_t m_pausedTicks;
+
         bool m_wasStarted;
-        bool m_isRepeating;
         bool m_isPaused;
         bool m_isAlarmOnCurrentTick;
 
+
+        // user defined, constant properties //
+
+        // timer alarm interval in ms
+        const uint32_t m_alarmInterval;
+        // whether alarm should be raised multiple times
+        const bool m_isRepeating;
+
     public:
+        // alarmInterval in ms
+        CTimer( uint32_t alarmInterval, bool isRepeating = false );
+
         void reset( bool init = false );
         void start();
+        void pause();
+        void unpause();
 
-        CTimer( uint32_t alarmInterval, bool isRepeating = false );
-        
         uint32_t getCurrentTicks();
-        void setPaused( bool paused );
+
         bool isPaused();
         bool isAlarmOnCurrentTick();
+
         bool update();
     };
     
