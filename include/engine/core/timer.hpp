@@ -29,6 +29,8 @@ namespace chestnut
 
         // user defined, constant properties //
 
+        // ID given to a timer
+        const int m_timerID;
         // timer alarm interval in ms
         const uint32_t m_alarmInterval;
         // whether alarm should be raised multiple times
@@ -36,7 +38,9 @@ namespace chestnut
 
     public:
         // alarmInterval in ms
-        CTimer( uint32_t alarmInterval, bool isRepeating = false );
+        CTimer( int id, uint32_t alarmInterval, bool isRepeating = false );
+
+        int getID();
 
         void reset( bool init = false );
         void start();

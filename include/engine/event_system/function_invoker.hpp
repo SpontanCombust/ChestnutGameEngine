@@ -22,13 +22,15 @@ namespace chestnut
     
 
     template< typename EventType >
-    class CFunctionInvoker : IFunctionInvoker
+    class CFunctionInvoker : public IFunctionInvoker
     {
     private:
         event_function ( *m_func )( EventType* );
 
     public:
         void bind( event_function ( *func )( EventType* ) );
+    
+    protected:
         void invoke_internal( SEvent *event ) override;
     };
 
@@ -47,7 +49,7 @@ namespace chestnut
 
 
     template< typename T, typename EventType >
-    class CMemberFunctionInvoker : IFunctionInvoker
+    class CMemberFunctionInvoker : public IFunctionInvoker
     {
     private:
         T *m_objPtr;
@@ -55,6 +57,8 @@ namespace chestnut
 
     public:
         void bind( T *objPtr, event_function ( T::*membFunc )( EventType* ) );
+    
+    protected:
         void invoke_internal( SEvent* event ) override;
     };
 

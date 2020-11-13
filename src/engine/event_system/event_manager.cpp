@@ -47,7 +47,7 @@ namespace chestnut
     bool CEventManager::delegateEvent( SEvent *event ) 
     {
         const char* evName = event->getName();
-        std::type_index tindex = std::type_index( typeid( event ) );
+        std::type_index tindex = std::type_index( typeid( *event ) );
         if( m_listenersMap.find( tindex ) != m_listenersMap.end() )
         {
             std::vector< IFunctionInvoker* > *typedListeners = m_listenersMap[ tindex ];
@@ -81,11 +81,16 @@ namespace chestnut
             m_eventQueue.pop();
             // if event ptr hasn't been deleted along the way
             if( delegateEvent( event ) )
+                // free after it has been passed to all event functions
                 delete event;
         }
         // finally pop the null event
         m_eventQueue.pop();
     }
 
+    void CEventManager::update( float deltaTime )
+    {
+        delegateEvents();
+    }
 
 } // namespace chestnut

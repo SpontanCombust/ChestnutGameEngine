@@ -2,11 +2,16 @@
 
 namespace chestnut
 {
-    CTimer::CTimer( uint32_t interval, bool isRepeating )
-    : m_alarmInterval( interval ), m_isRepeating( isRepeating )
+    CTimer::CTimer( int id, uint32_t interval, bool isRepeating )
+    : m_timerID(id), m_alarmInterval( interval ), m_isRepeating( isRepeating )
     {
         reset( true );
         m_wasStarted = false;
+    }
+
+    int CTimer::getID()
+    {
+        return m_timerID;
     }
 
     void CTimer::reset( bool init )

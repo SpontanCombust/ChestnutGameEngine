@@ -48,7 +48,10 @@ namespace chestnut
         std::vector< IFunctionInvoker* > *typedListeners;
         typedListeners = m_listenersMap[ std::type_index( typeid( EventType ) ) ];
         if( !typedListeners )
+        {
             typedListeners = new std::vector< IFunctionInvoker* >;
+            m_listenersMap[ std::type_index( typeid( EventType ) ) ] = typedListeners;
+        }
 
         CFunctionInvoker<EventType> *invoker = new CFunctionInvoker<EventType>();
         invoker->bind( func );
@@ -68,7 +71,10 @@ namespace chestnut
         std::vector< IFunctionInvoker* > *typedListeners;
         typedListeners = m_listenersMap[ std::type_index( typeid( EventType ) ) ];
         if( !typedListeners )
+        {
             typedListeners = new std::vector< IFunctionInvoker* >;
+            m_listenersMap[ std::type_index( typeid( EventType ) ) ] = typedListeners;
+        }
 
         CMemberFunctionInvoker<T, EventType> *invoker = new CMemberFunctionInvoker<T, EventType>();
         invoker->bind( objPtr, membFunc );

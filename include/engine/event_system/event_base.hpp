@@ -14,48 +14,6 @@ namespace chestnut
         virtual ~SEvent() {}
     };
 
-    // struct SBaseEventData
-    // {
-    //     std::string eventName;
-    //     bool wasHandled;
-    // };
-    
-    // struct STimerEventData : SBaseEventData
-    // {
-    //     uint32_t deltaTime;
-    //     bool isRepeating;
-    // };
-
-    // enum class EButtonInputContext { PRESSED, RELEASED };
-    // struct SKeyboardInputEventData : SBaseEventData
-    // {
-    //     SDL_Keycode key;
-    //     EButtonInputContext inputContext;
-    // };
-
-
-
-    // enum class EEventDataType
-    // {
-    //     BASE,
-    //     TIMER,
-    //     INPUT_KEYBOARD
-    // };
-
-    // union UEventData
-    // {
-    //     SBaseEventData base;
-    //     STimerEventData timer;
-    // };
-
-
-
-    // struct SEvent
-    // {
-    //     EEventDataType type;
-    //     UEventData data;
-    // };
-
 } // namespace chestnut
 
 
