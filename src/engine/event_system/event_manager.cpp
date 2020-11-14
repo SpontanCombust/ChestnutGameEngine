@@ -71,26 +71,27 @@ namespace chestnut
 
     void CEventManager::delegateEvents() 
     {
-        // null to signal end of the queue on the current tick
-        m_eventQueue.push( nullptr );
-
         SEvent *event;
-        // do until come across null separator
-        while( ( event = m_eventQueue.front() ) != nullptr )
+        while( !m_eventQueue.empty() )
         {
+            event = m_eventQueue.front();
             m_eventQueue.pop();
             // if event ptr hasn't been deleted along the way
             if( delegateEvent( event ) )
                 // free after it has been passed to all event functions
                 delete event;
         }
-        // finally pop the null event
-        m_eventQueue.pop();
     }
 
     void CEventManager::update( float deltaTime )
     {
         delegateEvents();
+    }
+
+    CEventManager::~CEventManager() 
+    {
+        clearEventQueue();
+        clearListeners();        
     }
 
 } // namespace chestnut

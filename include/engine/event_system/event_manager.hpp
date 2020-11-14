@@ -18,17 +18,26 @@ namespace chestnut
         std::queue< SEvent* > m_eventQueue;
 
     public:
+        // returns id of the listener
         template< typename EventType >
-        void registerListener( event_function ( *func )( EventType* ) );
+        size_t registerListener( event_function ( *func )( const EventType* ) );
 
+        // returns id of the listener
         template< typename T, typename EventType >
-        void registerListener( T *objPtr, event_function ( T::*membFunc )( EventType* ) );
+        size_t registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) );
+
+
+        template< typename EventType >
+        void unregisterListenerByID( size_t ID );
+
 
         void raiseEvent( SEvent *event );
 
         void clearListeners();
 
         void update( float deltaTime );
+
+        ~CEventManager();
 
     private:
         void clearEventQueue();
@@ -37,12 +46,12 @@ namespace chestnut
     };
 
     template< typename EventType >
-    void CEventManager::registerListener( event_function( *func )( EventType* ) ) 
+    size_t CEventManager::registerListener( event_function( *func )( const EventType* ) ) 
     {
         if( !func )
         {
             LOG_CHANNEL( "EVENT_MANAGER", "Attempt to register a null function ptr!" );
-            return;
+            return 0;
         }
 
         std::vector< IFunctionInvoker* > *typedListeners;
@@ -54,18 +63,23 @@ namespace chestnut
         }
 
         CFunctionInvoker<EventType> *invoker = new CFunctionInvoker<EventType>();
-        invoker->bind( func );
+
+        size_t id = (size_t)func;
+        invoker->bind( func, id );
 
         typedListeners->push_back( invoker );
+
+        return id;
     }
     
+
     template< typename T, typename EventType >
-    void CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( EventType* ) ) 
+    size_t CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) ) 
     {
         if( !objPtr || !membFunc )
         {
             LOG_CHANNEL( "EVENT_MANAGER", "Attempt to register a null object or member function ptr!" );
-            return;
+            return 0;
         }
 
         std::vector< IFunctionInvoker* > *typedListeners;
@@ -77,9 +91,33 @@ namespace chestnut
         }
 
         CMemberFunctionInvoker<T, EventType> *invoker = new CMemberFunctionInvoker<T, EventType>();
-        invoker->bind( objPtr, membFunc );
+
+        // This may produce collisions
+        size_t id = (size_t)objPtr + (size_t)&membFunc; 
+        invoker->bind( objPtr, membFunc, id );
 
         typedListeners->push_back( invoker );
+
+        return id;
+    }
+    
+
+    template< typename EventType >
+    void CEventManager::unregisterListenerByID( size_t id ) 
+    {
+        std::vector< IFunctionInvoker* > *typedListeners;
+        typedListeners = m_listenersMap[ std::type_index( typeid( EventType ) ) ];
+        if( !typedListeners )
+            return;
+
+        for( auto it = typedListeners->begin(); it != typedListeners->end(); ++it )
+        {
+            if( (*it)->getID() == id )
+            {
+                typedListeners->erase( it );
+                break;
+            }
+        }
     }
 
 } // namespace chestnut

@@ -7,16 +7,14 @@ namespace chestnut
 {
     class IFunctionInvoker
     {
-    public:
-        void invoke( SEvent *event )
-        {
-            invoke_internal( event );
-        }
-
-        virtual ~IFunctionInvoker() {}
-
     protected:
-        virtual void invoke_internal( SEvent *event ) = 0;
+        size_t m_ID;
+
+    public:
+        size_t getID() { return m_ID; }
+
+        virtual void invoke( SEvent *event ) {}
+        virtual ~IFunctionInvoker() {}
     };
     
     
@@ -25,27 +23,26 @@ namespace chestnut
     class CFunctionInvoker : public IFunctionInvoker
     {
     private:
-        event_function ( *m_func )( EventType* );
+        event_function ( *m_func )( const EventType* );
 
     public:
-        void bind( event_function ( *func )( EventType* ) );
-    
-    protected:
-        void invoke_internal( SEvent *event ) override;
+        void bind( event_function ( *func )( const EventType* ), size_t id );
+        void invoke( SEvent *event ) override;
     };
 
     template< typename EventType >
-    void CFunctionInvoker<EventType>::bind( event_function( *func )( EventType* ) ) 
+    void CFunctionInvoker<EventType>::bind( event_function( *func )( const EventType* ), size_t id ) 
     {
         m_func = func;
+        m_ID = id;
     }
     
     template< typename EventType >
-    void CFunctionInvoker<EventType>::invoke_internal( SEvent *event ) 
+    void CFunctionInvoker<EventType>::invoke( SEvent *event ) 
     {
         ( *m_func )( dynamic_cast< EventType* >( event ) );
     }
-    
+
 
 
     template< typename T, typename EventType >
@@ -53,24 +50,23 @@ namespace chestnut
     {
     private:
         T *m_objPtr;
-        event_function ( T::*m_membFunc )( EventType* );
+        event_function ( T::*m_membFunc )( const EventType* );
 
     public:
-        void bind( T *objPtr, event_function ( T::*membFunc )( EventType* ) );
-    
-    protected:
-        void invoke_internal( SEvent* event ) override;
+        void bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ), size_t id );
+        void invoke( SEvent* event ) override;
     };
 
     template< typename T, typename EventType >
-    void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( EventType* ) )
+    void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ), size_t id )
     {
         m_objPtr = objPtr;
         m_membFunc = membFunc;
+        m_ID = id;
     }
 
     template< typename T, typename EventType >
-    void CMemberFunctionInvoker<T,EventType>::invoke_internal( SEvent* event )
+    void CMemberFunctionInvoker<T,EventType>::invoke( SEvent* event )
     {
         ( m_objPtr->*m_membFunc )( dynamic_cast< EventType* >( event ) );
     }
