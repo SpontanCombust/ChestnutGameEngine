@@ -20,15 +20,15 @@ namespace chestnut
     class CFunctionInvoker : public IFunctionInvoker
     {
     private:
-        event_function ( *m_func )( const EventType* );
+        event_function ( *m_func )( const EventType& );
 
     public:
-        void bind( event_function ( *func )( const EventType* ) );
+        void bind( event_function ( *func )( const EventType& ) );
         void invoke( SEvent *event ) override;
     };
 
     template< typename EventType >
-    void CFunctionInvoker<EventType>::bind( event_function( *func )( const EventType* ) ) 
+    void CFunctionInvoker<EventType>::bind( event_function( *func )( const EventType& ) ) 
     {
         m_func = func;
     }
@@ -36,7 +36,7 @@ namespace chestnut
     template< typename EventType >
     void CFunctionInvoker<EventType>::invoke( SEvent *event ) 
     {
-        ( *m_func )( dynamic_cast< EventType* >( event ) );
+        ( *m_func )( *dynamic_cast< EventType* >( event ) );
     }
 
 
@@ -46,15 +46,15 @@ namespace chestnut
     {
     private:
         T *m_objPtr;
-        event_function ( T::*m_membFunc )( const EventType* );
+        event_function ( T::*m_membFunc )( const EventType& );
 
     public:
-        void bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ) );
+        void bind( T *objPtr, event_function ( T::*membFunc )( const EventType& ) );
         void invoke( SEvent* event ) override;
     };
 
     template< typename T, typename EventType >
-    void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ) )
+    void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( const EventType& ) )
     {
         m_objPtr = objPtr;
         m_membFunc = membFunc;
@@ -63,7 +63,7 @@ namespace chestnut
     template< typename T, typename EventType >
     void CMemberFunctionInvoker<T,EventType>::invoke( SEvent* event )
     {
-        ( m_objPtr->*m_membFunc )( dynamic_cast< EventType* >( event ) );
+        ( m_objPtr->*m_membFunc )( *dynamic_cast< EventType* >( event ) );
     }
 
 } // namespace chestnut

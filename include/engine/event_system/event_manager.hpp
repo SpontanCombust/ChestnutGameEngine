@@ -30,11 +30,11 @@ namespace chestnut
     public:
         // returns id of the listener
         template< typename EventType >
-        int registerListener( event_function ( *func )( const EventType* ) );
+        int registerListener( event_function ( *func )( const EventType& ) );
 
         // returns id of the listener
         template< typename T, typename EventType >
-        int registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) );
+        int registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType& ) );
 
 
         template< typename EventType >
@@ -42,7 +42,7 @@ namespace chestnut
 
 
         template< typename EventType >
-        void constrainListenerByID( int id, std::function< bool( const EventType* ) > constraintFunctor );
+        void constrainListenerByID( int id, std::function< bool( const EventType& ) > constraintFunctor );
 
 
         void raiseEvent( SEvent *event );
@@ -55,12 +55,12 @@ namespace chestnut
 
     private:
         void clearEventQueue();
-        bool delegateEvent( SEvent *event );
+        void delegateEvent( SEvent *event );
         void delegateEvents();
     };
 
     template< typename EventType >
-    int CEventManager::registerListener( event_function( *func )( const EventType* ) ) 
+    int CEventManager::registerListener( event_function( *func )( const EventType& ) ) 
     {
         if( !func )
         {
@@ -84,7 +84,7 @@ namespace chestnut
     
 
     template< typename T, typename EventType >
-    int CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) ) 
+    int CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType& ) ) 
     {
         if( !objPtr || !membFunc )
         {
@@ -117,13 +117,9 @@ namespace chestnut
         SEventListener &listener = m_IDToListenerMap[ id ];
 
         delete listener.functionInvoker;
-        listener.functionInvoker = nullptr;
 
         if( listener.constraint )
-        {
             delete listener.constraint;
-            listener.constraint = nullptr;
-        }
 
         m_IDToListenerMap.erase( id );
 
@@ -142,19 +138,24 @@ namespace chestnut
 
 
     template< typename EventType >
-    void CEventManager::constrainListenerByID( int id, std::function< bool( const EventType* ) > constraintFunctor )
+    void CEventManager::constrainListenerByID( int id, std::function< bool( const EventType& ) > constraintFunctor )
     {
         // if listener even exists
         if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
             return;
 
+        CEventConstraint<EventType> *constraint;
         if( m_IDToListenerMap[ id ].constraint )
-            delete ( m_IDToListenerMap[ id ].constraint );
-
-        SEventConstraint<EventType> *constraint = new SEventConstraint<EventType>();
-        constraint->eventVerificationFunctor = constraintFunctor;
-
-        m_IDToListenerMap[ id ].constraint = constraint;
+        {
+            constraint = dynamic_cast< CEventConstraint<EventType>* >( m_IDToListenerMap[ id ].constraint );
+            constraint->set( constraintFunctor );
+        }
+        else
+        {
+            constraint = new CEventConstraint<EventType>();
+            constraint->set( constraintFunctor );
+            m_IDToListenerMap[ id ].constraint = constraint;
+        }
     }
 
 } // namespace chestnut

@@ -1,6 +1,8 @@
 #ifndef __CHESTNUT_EVENT_BASE_H__
 #define __CHESTNUT_EVENT_BASE_H__
 
+#include <string>
+
 namespace chestnut
 {
     using event_function = void;
@@ -9,8 +11,7 @@ namespace chestnut
     {
         // put here whathever you want in child struct
 
-        // provide overriden name for debugging
-        virtual const char* getName() { return "SEvent"; }
+        virtual const std::string getName() { return "Event"; }
         virtual ~SEvent() {}
     };
 

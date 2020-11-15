@@ -34,25 +34,22 @@ namespace chestnut
         while( !m_eventQueue.empty() )
         {
             SEvent *event = m_eventQueue.front();
+            m_eventQueue.pop();
             delete event;
             event = nullptr;
-
-            m_eventQueue.pop();
         }
     }
     
-    bool CEventManager::delegateEvent( SEvent *event ) 
+    void CEventManager::delegateEvent( SEvent *event ) 
     {
-        const char* evName = event->getName();
         std::type_index tindex = std::type_index( typeid( *event ) );
         if( m_eventTypeToIDListMap.find( tindex ) != m_eventTypeToIDListMap.end() )
         {
             std::list< int > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
-            SEventListener listener;
-            for( int id : typedIDList )
+            for( const int &id : typedIDList )
             {
-                listener = m_IDToListenerMap[ id ];
+                SEventListener &listener = m_IDToListenerMap[ id ];
 
                 if( listener.constraint )
                 {
@@ -61,18 +58,8 @@ namespace chestnut
                 }
                 else
                     listener.functionInvoker->invoke( event );
-
-                // if event function illegaly freed the pointer
-                if( !event )
-                {
-                    LOG_CHANNEL( "EVENT_MANAGER", "(" << evName << ") " << " ptr illegally deleted by event function!" );
-                    return false;
-                }
             }
-
-            return true;
         }
-        return false;
     }
 
     void CEventManager::delegateEvents() 
@@ -82,10 +69,9 @@ namespace chestnut
         {
             event = m_eventQueue.front();
             m_eventQueue.pop();
-            // if event ptr hasn't been deleted along the way
-            if( delegateEvent( event ) )
-                // free after it has been passed to all event functions
-                delete event;
+            delegateEvent( event );
+            delete event;
+            event = nullptr;
         }
     }
 

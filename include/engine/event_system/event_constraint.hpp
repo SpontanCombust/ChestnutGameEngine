@@ -7,24 +7,35 @@
 
 namespace chestnut
 {
-    struct IEventConstraint
+    class IEventConstraint
     {
+    public:
         virtual bool verify( SEvent* ) { return false; }
         virtual ~IEventConstraint() {}
     };
 
 
     template< typename EventType >
-    struct SEventConstraint : IEventConstraint
+    class CEventConstraint : public IEventConstraint
     {
-        std::function< bool( const EventType* ) > eventVerificationFunctor;
+    private:
+        std::function< bool( const EventType& ) > m_eventConstraintFunctor;
+
+    public:
+        void set( std::function< bool( const EventType& ) > eventConstraintFunctor );
         bool verify( SEvent *event ) override;
     };
 
     template< typename EventType >
-    bool SEventConstraint<EventType>::verify( SEvent *event )
+    void CEventConstraint<EventType>::set( std::function< bool( const EventType& ) > eventConstraintFunctor ) 
     {
-        return eventVerificationFunctor( dynamic_cast<EventType*>( event ) );
+        m_eventConstraintFunctor = eventConstraintFunctor;
+    }
+
+    template< typename EventType >
+    bool CEventConstraint<EventType>::verify( SEvent *event )
+    {
+        return m_eventConstraintFunctor( *dynamic_cast<EventType*>( event ) );
     }
 
 } // namespace chestnut
