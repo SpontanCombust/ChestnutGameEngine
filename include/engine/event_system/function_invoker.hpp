@@ -3,16 +3,13 @@
 
 #include "event_base.hpp"
 
+#include <cstddef>
+
 namespace chestnut
 {
     class IFunctionInvoker
     {
-    protected:
-        size_t m_ID;
-
     public:
-        size_t getID() { return m_ID; }
-
         virtual void invoke( SEvent *event ) {}
         virtual ~IFunctionInvoker() {}
     };
@@ -26,15 +23,14 @@ namespace chestnut
         event_function ( *m_func )( const EventType* );
 
     public:
-        void bind( event_function ( *func )( const EventType* ), size_t id );
+        void bind( event_function ( *func )( const EventType* ) );
         void invoke( SEvent *event ) override;
     };
 
     template< typename EventType >
-    void CFunctionInvoker<EventType>::bind( event_function( *func )( const EventType* ), size_t id ) 
+    void CFunctionInvoker<EventType>::bind( event_function( *func )( const EventType* ) ) 
     {
         m_func = func;
-        m_ID = id;
     }
     
     template< typename EventType >
@@ -53,16 +49,15 @@ namespace chestnut
         event_function ( T::*m_membFunc )( const EventType* );
 
     public:
-        void bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ), size_t id );
+        void bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ) );
         void invoke( SEvent* event ) override;
     };
 
     template< typename T, typename EventType >
-    void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ), size_t id )
+    void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( const EventType* ) )
     {
         m_objPtr = objPtr;
         m_membFunc = membFunc;
-        m_ID = id;
     }
 
     template< typename T, typename EventType >

@@ -2,33 +2,47 @@
 #define __CHESTNUT_EVENT_MANAGER_H__
 
 #include "function_invoker.hpp"
+#include "event_constraint.hpp"
 #include "engine/debug/debug.hpp"
 
+#include <list>
 #include <typeindex>
 #include <unordered_map>
 #include <queue>
-#include <vector>
 
 namespace chestnut
 {
+    struct SEventListener 
+    { 
+        IFunctionInvoker *functionInvoker;
+        IEventConstraint *constraint;
+    };
+
     class CEventManager
     {
-    protected:
-        std::unordered_map< std::type_index, std::vector< IFunctionInvoker* >* > m_listenersMap;
+    private:
+        int m_idCounter = 0;
+
+        std::unordered_map< std::type_index, std::list< int > > m_eventTypeToIDListMap;
+        std::unordered_map< int, SEventListener > m_IDToListenerMap;
         std::queue< SEvent* > m_eventQueue;
 
     public:
         // returns id of the listener
         template< typename EventType >
-        size_t registerListener( event_function ( *func )( const EventType* ) );
+        int registerListener( event_function ( *func )( const EventType* ) );
 
         // returns id of the listener
         template< typename T, typename EventType >
-        size_t registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) );
+        int registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) );
 
 
         template< typename EventType >
-        void unregisterListenerByID( size_t ID );
+        void unregisterListenerByID( int ID );
+
+
+        template< typename EventType >
+        void constrainListenerByID( int id, std::function< bool( const EventType* ) > constraintFunctor );
 
 
         void raiseEvent( SEvent *event );
@@ -46,7 +60,7 @@ namespace chestnut
     };
 
     template< typename EventType >
-    size_t CEventManager::registerListener( event_function( *func )( const EventType* ) ) 
+    int CEventManager::registerListener( event_function( *func )( const EventType* ) ) 
     {
         if( !func )
         {
@@ -54,27 +68,23 @@ namespace chestnut
             return 0;
         }
 
-        std::vector< IFunctionInvoker* > *typedListeners;
-        typedListeners = m_listenersMap[ std::type_index( typeid( EventType ) ) ];
-        if( !typedListeners )
-        {
-            typedListeners = new std::vector< IFunctionInvoker* >;
-            m_listenersMap[ std::type_index( typeid( EventType ) ) ] = typedListeners;
-        }
+        m_idCounter++;
+
+        SEventListener &listener = m_IDToListenerMap[ m_idCounter ];
 
         CFunctionInvoker<EventType> *invoker = new CFunctionInvoker<EventType>();
+        invoker->bind( func );
 
-        size_t id = (size_t)func;
-        invoker->bind( func, id );
+        listener.functionInvoker = invoker;
 
-        typedListeners->push_back( invoker );
-
-        return id;
+        m_eventTypeToIDListMap[ std::type_index( typeid( EventType ) ) ].push_back( m_idCounter );
+        
+        return m_idCounter;
     }
     
 
     template< typename T, typename EventType >
-    size_t CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) ) 
+    int CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType* ) ) 
     {
         if( !objPtr || !membFunc )
         {
@@ -82,42 +92,69 @@ namespace chestnut
             return 0;
         }
 
-        std::vector< IFunctionInvoker* > *typedListeners;
-        typedListeners = m_listenersMap[ std::type_index( typeid( EventType ) ) ];
-        if( !typedListeners )
-        {
-            typedListeners = new std::vector< IFunctionInvoker* >;
-            m_listenersMap[ std::type_index( typeid( EventType ) ) ] = typedListeners;
-        }
+        m_idCounter++;
 
+        SEventListener &listener = m_IDToListenerMap[ m_idCounter ];
+        
         CMemberFunctionInvoker<T, EventType> *invoker = new CMemberFunctionInvoker<T, EventType>();
+        invoker->bind( objPtr, membFunc );
 
-        // This may produce collisions
-        size_t id = (size_t)objPtr + (size_t)&membFunc; 
-        invoker->bind( objPtr, membFunc, id );
+        listener.functionInvoker = invoker;
 
-        typedListeners->push_back( invoker );
+        m_eventTypeToIDListMap[ std::type_index( typeid( EventType ) ) ].push_back( m_idCounter );
 
-        return id;
+        return m_idCounter;
     }
     
 
     template< typename EventType >
-    void CEventManager::unregisterListenerByID( size_t id ) 
+    void CEventManager::unregisterListenerByID( int id ) 
     {
-        std::vector< IFunctionInvoker* > *typedListeners;
-        typedListeners = m_listenersMap[ std::type_index( typeid( EventType ) ) ];
-        if( !typedListeners )
+        // if listener even exists
+        if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
             return;
 
-        for( auto it = typedListeners->begin(); it != typedListeners->end(); ++it )
+        SEventListener &listener = m_IDToListenerMap[ id ];
+
+        delete listener.functionInvoker;
+        listener.functionInvoker = nullptr;
+
+        if( listener.constraint )
         {
-            if( (*it)->getID() == id )
+            delete listener.constraint;
+            listener.constraint = nullptr;
+        }
+
+        m_IDToListenerMap.erase( id );
+
+
+        std::list< int > &typedIDList = m_eventTypeToIDListMap[ std::type_index( typeid( EventType ) ) ];
+
+        for( auto it = typedIDList.begin(); it != typedIDList.end(); ++it )
+        {
+            if( *it == id )
             {
-                typedListeners->erase( it );
+                typedIDList.erase( it );
                 break;
             }
         }
+    }
+
+
+    template< typename EventType >
+    void CEventManager::constrainListenerByID( int id, std::function< bool( const EventType* ) > constraintFunctor )
+    {
+        // if listener even exists
+        if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
+            return;
+
+        if( m_IDToListenerMap[ id ].constraint )
+            delete ( m_IDToListenerMap[ id ].constraint );
+
+        SEventConstraint<EventType> *constraint = new SEventConstraint<EventType>();
+        constraint->eventVerificationFunctor = constraintFunctor;
+
+        m_IDToListenerMap[ id ].constraint = constraint;
     }
 
 } // namespace chestnut

@@ -15,21 +15,18 @@ namespace chestnut
     
     void CEventManager::clearListeners() 
     {
-        for( auto &pair : m_listenersMap )
+        for( auto &pair : m_IDToListenerMap )
         {
-            std::vector< IFunctionInvoker* > *typedListeners = pair.second;
+            SEventListener listener = pair.second;
 
-            for( IFunctionInvoker *listener : ( *typedListeners ) )
-            {
-                delete listener;
-                listener = nullptr;
-            }
-            typedListeners->clear();
+            delete listener.functionInvoker;
 
-            delete typedListeners;
-            typedListeners = nullptr;
+            if( listener.constraint )
+                delete listener.constraint;
         }
-        m_listenersMap.clear();
+        m_IDToListenerMap.clear();
+
+        m_eventTypeToIDListMap.clear();
     }
     
     void CEventManager::clearEventQueue() 
@@ -48,13 +45,22 @@ namespace chestnut
     {
         const char* evName = event->getName();
         std::type_index tindex = std::type_index( typeid( *event ) );
-        if( m_listenersMap.find( tindex ) != m_listenersMap.end() )
+        if( m_eventTypeToIDListMap.find( tindex ) != m_eventTypeToIDListMap.end() )
         {
-            std::vector< IFunctionInvoker* > *typedListeners = m_listenersMap[ tindex ];
+            std::list< int > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
-            for( IFunctionInvoker *listener : ( *typedListeners ) )
+            SEventListener listener;
+            for( int id : typedIDList )
             {
-                listener->invoke( event );
+                listener = m_IDToListenerMap[ id ];
+
+                if( listener.constraint )
+                {
+                    if( listener.constraint->verify( event ) )
+                        listener.functionInvoker->invoke( event );
+                }
+                else
+                    listener.functionInvoker->invoke( event );
 
                 // if event function illegaly freed the pointer
                 if( !event )
@@ -85,7 +91,8 @@ namespace chestnut
 
     void CEventManager::update( float deltaTime )
     {
-        delegateEvents();
+        if( !m_eventQueue.empty() )
+            delegateEvents();
     }
 
     CEventManager::~CEventManager() 
