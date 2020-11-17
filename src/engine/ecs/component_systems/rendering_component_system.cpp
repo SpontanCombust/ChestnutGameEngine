@@ -7,13 +7,13 @@
 
 namespace chestnut
 {
-    bool CRenderingComponentSystem::needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes )
+    bool CRenderingComponentSystem::needsAnyOfComponents( const std::forward_list< std::type_index >& compTypeIndexes )
     {
         return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
             []( std::type_index tindex )
             { 
-                return tindex == std::type_index( typeid(STransformComponent) )
-                    || tindex == std::type_index( typeid(STextureComponent) );
+                return tindex == std::type_index( typeid( STransformComponent ) )
+                    || tindex == std::type_index( typeid( STextureComponent ) );
             }
         );
     }
@@ -24,7 +24,7 @@ namespace chestnut
         dbRef.fillComponentMapOfType( m_textureCompMap );
     }
     
-    void CRenderingComponentSystem::update() 
+    void CRenderingComponentSystem::update( float deltaTime ) 
     {
         SDL_RenderClear( CRenderWindow::getSDLRenderer() );
 

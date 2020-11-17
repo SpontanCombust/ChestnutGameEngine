@@ -14,9 +14,9 @@ namespace chestnut
         std::unordered_map< guid_t, STextureComponent* > m_textureCompMap;
 
     public:
-        virtual bool needsAnyOfComponents( const std::vector< std::type_index > compTypeIndexes ) override;
+        virtual bool needsAnyOfComponents( const std::forward_list< std::type_index >& compTypeIndexes ) override;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) override;
-        virtual void update() override;
+        virtual void update( float deltaTime ) override;
 
     private:
         void transformTextures();

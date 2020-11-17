@@ -2,8 +2,14 @@
 
 namespace chestnut
 {
+    STextureComponent::STextureComponent()
+    : texture( nullptr )
+    {
+
+    }
+
     STextureComponent::STextureComponent( CTexture *textureInstance )
-    : texture(textureInstance)
+    : texture( textureInstance )
     {
 
     }

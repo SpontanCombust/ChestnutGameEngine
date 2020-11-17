@@ -1,9 +1,9 @@
-#ifndef __CHESTNUT_ENGINE_H__
-#define __CHESTNUT_ENGINE_H__
+#ifndef __CHESTNUT_APPLICATION_H__
+#define __CHESTNUT_APPLICATION_H__
 
 #include "render_window.hpp"
+#include "world.hpp"
 #include "engine/debug/debug.hpp"
-#include "engine/ecs/ecs.hpp"
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -12,7 +12,7 @@
 
 namespace chestnut
 {
-    class CChestnutGameEngine
+    class CChestnutApplication
     {
     protected:
         // To be changed by inherited class
@@ -23,14 +23,15 @@ namespace chestnut
         int m_rendererFlags;
         //
 
-        CRenderWindow *m_renderWindow;
-        CChestnutECS m_ECS;
-
         bool m_wasStarted;
         bool m_isRunning;
 
+        CRenderWindow *m_renderWindow;
+
+        CChestnutWorld theWorld;
+
     public:
-        CChestnutGameEngine();
+        CChestnutApplication();
 
         bool create( int winWidth, int winHeight );
         void start();
@@ -39,7 +40,7 @@ namespace chestnut
         virtual bool onUserCreate();
         virtual bool onUserUpdate();
         virtual void onUserClose();
-        virtual ~CChestnutGameEngine();
+        virtual ~CChestnutApplication();
 
     protected:
         bool initSDL();
@@ -50,4 +51,4 @@ namespace chestnut
     
 } // namespace chestnut
 
-#endif // __CHESTNUT_ENGINE_H__
+#endif // __CHESTNUT_APPLICATION_H__
