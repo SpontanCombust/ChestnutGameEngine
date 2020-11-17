@@ -29,7 +29,7 @@ namespace chestnut
         if( v.y >= 0.f )
             return atan2( v.y, v.x );
         else
-            return 2 * CHESTNUT_PI - atan2( v.y, v.x );
+            return 2 * CHESTNUT_PI + atan2( v.y, v.x );
     }
 
     inline float angleBetweenUnitVectors2f( Vector2f v1, Vector2f v2 )
