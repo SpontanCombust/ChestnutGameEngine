@@ -3,7 +3,7 @@
 namespace chestnut
 {
     STransformComponent::STransformComponent()
-    : position( {0, 0} ), rotation( {0, 1} ), scale( {1, 1} )
+    : position( {0, 0} ), rotation( {1, 0} ), scale( {1, 1} )
     {
 
     }

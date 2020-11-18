@@ -16,135 +16,125 @@ namespace chestnut
 
     public:
         template< typename T >
-        bool hasComponentType() const;
+        bool hasComponentsType() const;
 
         template< typename T >
         bool hasComponent( guid_t guid ) const;
 
-        template< typename T >
-        bool pushComponent( T *component );
+        bool pushComponent( IComponent *component );
 
         template< typename T >
-        IComponent *getComponent( guid_t guid );
+        IComponent *getComponent( guid_t guid ) const;
 
         template< typename T >
-        IComponent *pullComponent( guid_t guid );
+        T *getComponentCasted( guid_t guid ) const;
 
         template< typename T >
-        void eraseComponent( guid_t guid );
+        bool eraseComponent( guid_t guid, bool shouldDelete = true );
+
+        bool eraseComponents( guid_t guid, bool shouldDelete = true );
 
         void clearComponents();
+
 
         template< typename T >
         bool fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const;
     };
 
     template< typename T >
-    bool CComponentDatabase::hasComponentType() const
+    bool CComponentDatabase::hasComponentsType() const
     {
         if( m_componentMaps.find( std::type_index( typeid(T) ) ) != m_componentMaps.end() )
-            return true;
-        return false;   
-    }
-    
-    template< typename T >
-    bool CComponentDatabase::hasComponent( guid_t guid ) const
-    {
-        if( !hasComponentType<T>() )
-            return false;
-
-        auto& compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
-        if( compMap.find( guid ) != compMap.end() )
             return true;
         return false;
     }
     
     template< typename T >
-    bool CComponentDatabase::pushComponent( T *component ) 
+    bool CComponentDatabase::hasComponent( guid_t guid ) const
     {
-        if( component == nullptr )
+        if( !hasComponentsType<T>() )
             return false;
-            
-        if( IComponent *typedComp = dynamic_cast<IComponent*>( component ) )
-        {
-            std::type_index tindex = std::type_index( typeid( *typedComp ) );
-            guid_t guid = typedComp->parentGUID;
 
-            if( guid == GUID_UNREGISTERED )
-                return false;
-            else if( hasComponent<T>( guid ) )
-                return false;
-
-            m_componentMaps[tindex][guid] = typedComp;
-        }
-        else
-        {
-            LOG( "Component typecasting failed!" );
-            return false;
-        }
-        
-        return true;
+        auto& typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        if( typedCompMap.find( guid ) != typedCompMap.end() )
+            return true;
+        return false;
     }
     
     template< typename T >
-    IComponent* CComponentDatabase::getComponent( guid_t guid ) 
+    IComponent *CComponentDatabase::getComponent( guid_t guid ) const
     {
-        if( !hasComponent<T>( guid ) )
+        if( !hasComponentsType<T>() )
             return nullptr;
 
-        IComponent* component = m_componentMaps[std::type_index( typeid(T) )][guid];
-        
-        return component;
+        auto& typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        for( auto& pair : typedCompMap )
+        {
+            guid_t &pair_guid = pair.first;
+            IComponent *pair_component = pair.second;
+
+            if( pair_guid == guid )
+                return pair_component;
+        }
+        return nullptr;
     }
-    
+
     template< typename T >
-    IComponent* CComponentDatabase::pullComponent( guid_t guid ) 
+    T *CComponentDatabase::getComponentCasted( guid_t guid ) const
     {
-        if( !hasComponent<T>( guid ) )
+        if( !hasComponentsType<T>() )
             return nullptr;
 
-        std::type_index tindex = std::type_index( typeid(T) );
-        IComponent* component = m_componentMaps[tindex][guid];
-        m_componentMaps[tindex].erase( guid );
+        auto& compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        guid_t pair_guid;
+        IComponent *pair_component;
+        for( auto& pair : compMap )
+        {
+            pair_guid = pair.first;
+            pair_component = pair.second;
 
-        return component;
+            if( pair_guid == guid )
+                return dynamic_cast<T*>( pair_component );
+        }
+        return nullptr;
     }
     
     template< typename T >
-    void CComponentDatabase::eraseComponent( guid_t guid ) 
+    bool CComponentDatabase::eraseComponent( guid_t guid, bool shouldDelete ) 
     {
         if( !hasComponent<T>( guid ) )
-            return;
+            return false;
 
         std::type_index tindex = std::type_index( typeid(T) );
+        
+        if( shouldDelete )
+        {
+            IComponent *component = m_componentMaps[tindex][guid];
+            delete component;
+            component = nullptr;
+        }
         m_componentMaps[tindex].erase( guid );
 
         if( m_componentMaps[tindex].empty() )
             m_componentMaps.erase( tindex );
+
+        return true;
     }
     
     template< typename T >
     bool CComponentDatabase::fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const
     {
-        if( !hasComponentType<T>() )
+        if( !hasComponentsType<T>() )
             return false;
 
-        auto compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
-        guid_t guid;
-        IComponent *component;
-
-        for( const auto &pair : compMap )
+        auto typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        for( const auto &pair : typedCompMap )
         {
-            guid = pair.first;
-            component = pair.second;
+            const guid_t &guid = pair.first;
+            IComponent *component = pair.second;
 
-            if( T *derivedComp = dynamic_cast<T*>( component ) )
-                compMapRef[guid] = derivedComp;
-            else
-            {
-                LOG( "Provided typename and component type string are incompatible!" );
-                return false;
-            }
+            T *typedComp = dynamic_cast<T*>( component );
+            compMapRef[guid] = typedComp;
         }
 
         return true;

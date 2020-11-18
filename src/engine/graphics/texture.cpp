@@ -2,6 +2,7 @@
 
 #include "engine/app/render_window.hpp"
 #include "engine/core/angles.hpp"
+#include "engine/debug/debug.hpp"
 
 #define DEF_FORMAT SDL_PIXELFORMAT_RGBA8888
 #define DEF_ACCESS SDL_TEXTUREACCESS_TARGET
@@ -15,7 +16,7 @@ namespace chestnut
 
         m_srcRect = { 0, 0, w, h };
         m_dstRect = { 0.f, 0.f, (float)w, (float)h };
-        m_rotPoint = { (float)w / 2.f, (float)h / 2.f };
+        m_rotPoint = { 0.f, 0.f };
         m_angleDeg = 0.f;
         m_flip = SDL_FLIP_NONE;
     }
@@ -28,7 +29,7 @@ namespace chestnut
         Vector2i size = texture->getSize();
         m_srcRect = { 0, 0, size.x, size.y };
         m_dstRect = { 0.f, 0.f, (float)size.x, (float)size.y };
-        m_rotPoint = { (float)size.x / 2.f, (float)size.y / 2.f };
+        m_rotPoint = { 0.f, 0.f };
         m_angleDeg = 0.f;
         m_flip = SDL_FLIP_NONE;
     }
@@ -94,8 +95,8 @@ namespace chestnut
     }
 
     void CTexture::setRotation( Vector2f rotation ) 
-    {   //TODO Remember it's based on tradicional cartesian system (rotating clockwise = angle decreases), so it has to be adapted for SDL
-        m_angleDeg = radiansToDegrees( -unitVector2fToAngle( rotation ) );
+    {   //TODO Remember it's based on traditional cartesian system (rotating clockwise = angle decreases), so it has to be adapted for SDL
+        m_angleDeg = -radiansToDegrees( unitVector2fToAngle( rotation ) );
     }
 
     void CTexture::setRotationPoint( float rx, float ry ) 
@@ -107,7 +108,12 @@ namespace chestnut
     {
         m_rotPoint = { rotPoint.x, rotPoint.y };
     }
-  
+
+    void CTexture::setRotationPointToCenter() 
+    {
+        m_rotPoint = { m_dstRect.x / 2.f, m_dstRect.y / 2.f };
+    }
+
     void CTexture::setFlip( SDL_RendererFlip flip ) 
     {
         m_flip = flip;

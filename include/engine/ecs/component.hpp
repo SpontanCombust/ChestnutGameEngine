@@ -5,6 +5,7 @@
 
 namespace chestnut
 {
+    // Every component needs to have a default no-parameters constructor
     struct IComponent
     {
         guid_t parentGUID;

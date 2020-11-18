@@ -39,6 +39,7 @@ namespace chestnut
         void setRotation( Vector2f rotation );
         void setRotationPoint( float rx, float ry );
         void setRotationPoint( Vector2f rotPoint );
+        void setRotationPointToCenter();
         void setFlip( SDL_RendererFlip flip );
 
         void draw() const;
