@@ -1,2 +1,0 @@
-*.cmake linguist-vendored=false
-cmake/* linguist-vendored=false
