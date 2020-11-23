@@ -8,8 +8,6 @@
 
 namespace chestnut
 {
-    class CTextureResource; //forward declaration
-
     class CTexture
     {
     private:

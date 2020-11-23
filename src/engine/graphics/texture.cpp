@@ -23,7 +23,7 @@ namespace chestnut
 
     CTexture::CTexture( const CTextureResource *texture ) 
     {
-        m_sdlTexture = texture->m_sdlTexture;
+        m_sdlTexture = texture->getSDLTexturePtr();
         m_isResourceInstance = true;
 
         Vector2i size = texture->getSize();

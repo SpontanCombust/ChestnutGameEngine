@@ -47,14 +47,9 @@ namespace chestnut
         return size;
     }
 
-    CTexture CTextureResource::getTextureInstance() const
+    SDL_Texture* CTextureResource::getSDLTexturePtr() const
     {
-        return CTexture(this);
-    }
-
-    CTexture* CTextureResource::getTextureInstancePtr() const
-    {
-        return new CTexture(this);
+        return m_sdlTexture;
     }
     
 } // namespace chestnut
