@@ -19,5 +19,6 @@
 #include "engine/maths/angles.hpp"
 
 #include "engine/misc/timer.hpp"
+#include "engine/misc/interval_timer.hpp"
 
 #endif // __CHESTNUT_CHESTNUT_H__

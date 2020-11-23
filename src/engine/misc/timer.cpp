@@ -2,8 +2,8 @@
 
 namespace chestnut
 {
-    CTimer::CTimer( int id, uint32_t interval, bool isRepeating )
-    : m_timerID(id), m_alarmInterval( interval ), m_isRepeating( isRepeating )
+    CTimer::CTimer( int id )
+    : m_timerID(id)
     {
         reset( true );
         m_wasStarted = false;
@@ -19,14 +19,12 @@ namespace chestnut
         if( !init )
         {
             m_startTick = SDL_GetTicks();
-            m_currentTick = m_startTick;
+            m_currentTick = m_lastTick = m_startTick;
         }
-        m_lastAlarmTick = 0;
         m_lastPauseTick = 0;
         m_pausedTicks = 0;
 
         m_isPaused = false;
-        m_isAlarmOnCurrentTick = false;
     }
 
     void CTimer::start()
@@ -34,7 +32,7 @@ namespace chestnut
         if( !m_wasStarted )
         {
             m_startTick = SDL_GetTicks();
-            m_currentTick = m_startTick;
+            m_currentTick = m_lastTick = m_startTick;
             m_wasStarted = true;
         }
     }
@@ -51,39 +49,36 @@ namespace chestnut
         m_pausedTicks += SDL_GetTicks() - m_lastPauseTick;
     }
 
-    uint32_t CTimer::getCurrentTicks() 
-    {
-        return m_currentTick;
-    }
-
     bool CTimer::isPaused() 
     {
         return m_isPaused;
     }
 
-    bool CTimer::isAlarmOnCurrentTick()
+    uint32_t CTimer::getCurrentTicks() 
     {
-        return m_isAlarmOnCurrentTick;
+        return m_currentTick;
     }
 
-    // returns whether alarm activates on current tick
+    uint32_t CTimer::getDeltaTime() 
+    {
+        return m_currentTick - m_lastTick;
+    }
+
+    double CTimer::getAvgUpdatesPerSec() 
+    {
+        if( m_currentTick > 0 )
+            return  (double)m_updateCount / (double)m_currentTick * 1000.f;
+        return 0;
+    }
+
     bool CTimer::update() 
     {
-        if( m_wasStarted && !m_isPaused && ( m_isRepeating || ( !m_isRepeating && m_lastAlarmTick == 0 ) ) )
+        if( m_wasStarted && !m_isPaused )
         {
+            m_lastTick = m_currentTick;
             m_currentTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
-            uint32_t timeSinceAlarm = m_currentTick - m_lastAlarmTick;
-            if( timeSinceAlarm >= m_alarmInterval )
-            {
-                m_lastAlarmTick = m_currentTick;
-                m_isAlarmOnCurrentTick = true;
-            }
-            else
-            {
-                m_isAlarmOnCurrentTick = false;
-            }
-
-            return m_isAlarmOnCurrentTick;
+            m_updateCount++;
+            return true;
         }
         
         return false;
