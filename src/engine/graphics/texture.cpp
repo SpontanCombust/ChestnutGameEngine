@@ -1,6 +1,6 @@
 #include "engine/graphics/texture.hpp"
 
-#include "engine/core/angles.hpp"
+#include "engine/maths/angles.hpp"
 #include "engine/debug/debug.hpp"
 #include "engine/graphics/renderer.hpp"
 

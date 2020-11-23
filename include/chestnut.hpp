@@ -1,9 +1,10 @@
 #ifndef __CHESTNUT_CHESTNUT_H__
 #define __CHESTNUT_CHESTNUT_H__
 
-#include "engine/core/vector.hpp"
-#include "engine/core/timer.hpp"
-#include "engine/core/angles.hpp"
+#include "engine/main/app/render_window.hpp"
+#include "engine/main/app/application.hpp"
+
+#include "engine/main/game/world.hpp"
 
 #include "engine/debug/debug.hpp"
 
@@ -14,8 +15,9 @@
 
 #include "engine/event_system/event_system.hpp"
 
-#include "engine/app/world.hpp"
-#include "engine/app/render_window.hpp"
-#include "engine/app/application.hpp"
+#include "engine/maths/vector.hpp"
+#include "engine/maths/angles.hpp"
+
+#include "engine/misc/timer.hpp"
 
 #endif // __CHESTNUT_CHESTNUT_H__

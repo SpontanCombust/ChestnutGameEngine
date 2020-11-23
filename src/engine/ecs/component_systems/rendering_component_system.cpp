@@ -1,6 +1,6 @@
 #include "engine/ecs/component_systems/rendering_component_system.hpp"
 
-#include "engine/core/angles.hpp"
+#include "engine/maths/angles.hpp"
 #include "engine/graphics/renderer.hpp"
 
 #include <algorithm>

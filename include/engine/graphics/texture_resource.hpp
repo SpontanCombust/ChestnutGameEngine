@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_TEXTURE_RESOURCE_H__
 #define __CHESTNUT_TEXTURE_RESOURCE_H__
 
-#include "engine/core/vector.hpp"
+#include "engine/maths/vector.hpp"
 
 #include <SDL2/SDL_image.h>
 

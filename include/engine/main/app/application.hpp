@@ -2,7 +2,7 @@
 #define __CHESTNUT_APPLICATION_H__
 
 #include "render_window.hpp"
-#include "world.hpp"
+#include "engine/main/game/world.hpp"
 #include "engine/debug/debug.hpp"
 
 #include <SDL2/SDL.h>

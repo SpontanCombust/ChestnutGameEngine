@@ -2,7 +2,7 @@
 #define __CHESTNUT_TEXTURE_H__
 
 #include "texture_resource.hpp"
-#include "engine/core/vector.hpp"
+#include "engine/maths/vector.hpp"
 
 #include <SDL_image.h>
 
