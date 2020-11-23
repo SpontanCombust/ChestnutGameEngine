@@ -1,7 +1,7 @@
 #include "engine/ecs/component_systems/rendering_component_system.hpp"
 
 #include "engine/core/angles.hpp"
-#include "engine/app/render_window.hpp"
+#include "engine/graphics/renderer.hpp"
 
 #include <algorithm>
 
@@ -26,12 +26,12 @@ namespace chestnut
     
     void CRenderingComponentSystem::update( float deltaTime ) 
     {
-        SDL_RenderClear( CRenderWindow::getSDLRenderer() );
+        CRenderer::renderClear();
 
         transformTextures();
         drawTextures();
 
-        SDL_RenderPresent( CRenderWindow::getSDLRenderer() ); //??? Replace with static drawing function?
+        CRenderer::renderPresent();
     }
 
 
@@ -63,7 +63,7 @@ namespace chestnut
             textureComp = pair.second;
             if( textureComp != nullptr )
             {
-                textureComp->texture.draw(); //TODO disallow texture object to render by itself
+                CRenderer::renderTexture( textureComp->texture );
             }
         }
     }

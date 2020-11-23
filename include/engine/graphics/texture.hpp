@@ -21,6 +21,7 @@ namespace chestnut
         SDL_RendererFlip m_flip;
 
     public:
+        CTexture();
         CTexture( int w, int h );
         CTexture( const CTextureResource *textureResource );
         ~CTexture();
@@ -40,8 +41,13 @@ namespace chestnut
         void setRotationPointToCenter();
         void setFlip( SDL_RendererFlip flip );
 
-        void draw() const;
-        void draw( float x, float y ) const;
+        const SDL_Rect& getSDLSrcRect() const;
+        const SDL_FRect& getSDLDstRect() const;
+        const float& getSDLAngle() const;
+        const SDL_FPoint& getSDLRotPoint() const;
+        const SDL_RendererFlip& getSDLFlip() const;
+
+        SDL_Texture *getSDLTexturePtr() const;
     };   
 
 } // namespace chestnut

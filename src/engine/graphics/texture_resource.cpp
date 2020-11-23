@@ -1,7 +1,7 @@
 #include "engine/graphics/texture_resource.hpp"
 
 #include "engine/debug/debug.hpp"
-#include "engine/app/render_window.hpp"
+#include "engine/graphics/renderer.hpp"
 
 namespace chestnut 
 {
@@ -30,7 +30,7 @@ namespace chestnut
         }
         else
         {
-            m_sdlTexture = SDL_CreateTextureFromSurface( CRenderWindow::getSDLRenderer(), loadedSurf );
+            m_sdlTexture = SDL_CreateTextureFromSurface( CRenderer::getSDLRenderer(), loadedSurf );
             if( m_sdlTexture == nullptr )
             {
                 LOG( "Failed to create texture from " + path );

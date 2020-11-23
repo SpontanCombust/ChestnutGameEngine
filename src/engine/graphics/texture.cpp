@@ -1,17 +1,30 @@
 #include "engine/graphics/texture.hpp"
 
-#include "engine/app/render_window.hpp"
 #include "engine/core/angles.hpp"
 #include "engine/debug/debug.hpp"
+#include "engine/graphics/renderer.hpp"
 
 #define DEF_FORMAT SDL_PIXELFORMAT_RGBA8888
 #define DEF_ACCESS SDL_TEXTUREACCESS_TARGET
 
 namespace chestnut 
 {
+
+    CTexture::CTexture() 
+    {
+        m_sdlTexture = nullptr;
+        m_isResourceInstance = false;
+
+        m_srcRect = { 0, 0, 0, 0 };
+        m_dstRect = { 0.f, 0.f, 0, 0 };
+        m_rotPoint = { 0.f, 0.f };
+        m_angleDeg = 0.f;
+        m_flip = SDL_FLIP_NONE;
+    }
+
     CTexture::CTexture( int w, int h ) 
     {
-        m_sdlTexture = SDL_CreateTexture( CRenderWindow::getSDLRenderer(), DEF_FORMAT, DEF_ACCESS, w, h );
+        m_sdlTexture = SDL_CreateTexture( CRenderer::getSDLRenderer(), DEF_FORMAT, DEF_ACCESS, w, h );
         m_isResourceInstance = false;
 
         m_srcRect = { 0, 0, w, h };
@@ -119,15 +132,34 @@ namespace chestnut
         m_flip = flip;
     }
 
-    void CTexture::draw() const
+    const SDL_Rect& CTexture::getSDLSrcRect() const
     {
-        SDL_RenderCopyExF( CRenderWindow::getSDLRenderer(), m_sdlTexture, &m_srcRect, &m_dstRect, m_angleDeg, &m_rotPoint, m_flip );
+        return m_srcRect;
     }
 
-    void CTexture::draw( float x, float y ) const
+    const SDL_FRect& CTexture::getSDLDstRect() const
     {
-        SDL_FRect dstRect = { x, y, m_dstRect.w, m_dstRect.h };
-        SDL_RenderCopyExF( CRenderWindow::getSDLRenderer(), m_sdlTexture, &m_srcRect, &dstRect, m_angleDeg, &m_rotPoint, m_flip );
+        return m_dstRect;
+    }
+
+    const float& CTexture::getSDLAngle() const
+    {
+        return m_angleDeg;
+    }
+
+    const SDL_FPoint& CTexture::getSDLRotPoint() const
+    {
+        return m_rotPoint;
+    }
+
+    const SDL_RendererFlip& CTexture::getSDLFlip() const
+    {
+        return m_flip;
+    }
+
+    SDL_Texture* CTexture::getSDLTexturePtr() const
+    {
+        return m_sdlTexture;
     }
 
 } // namespace chestnut

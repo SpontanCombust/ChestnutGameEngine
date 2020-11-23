@@ -3,7 +3,6 @@
 namespace chestnut
 {
     STextureComponent::STextureComponent()
-    : texture( nullptr )
     {
 
     }

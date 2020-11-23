@@ -1,11 +1,10 @@
 #include "engine/app/render_window.hpp"
 
 #include "engine/debug/debug.hpp"
+#include "engine/graphics/renderer.hpp"
 
 namespace chestnut
 {
-    SDL_Renderer* CRenderWindow::sm_renderer = nullptr;
-
     CRenderWindow::CRenderWindow( const char *title, int width, int height, int x, int y,
                                 int windowFlags, int rendererFlags ) 
     {
@@ -17,13 +16,15 @@ namespace chestnut
             LOG( SDL_GetError() );
         }
 
-        sm_renderer = SDL_CreateRenderer( m_window, -1, rendererFlags );
+        m_renderer = SDL_CreateRenderer( m_window, -1, rendererFlags );
 
-        if( sm_renderer == NULL )
+        if( m_renderer == NULL )
         {
             LOG( "Failed to create renderer. Error: " );
             LOG( SDL_GetError() );
         }
+
+        CRenderer::setSDLRenderer( m_renderer );
 
         m_height = height;
         m_width = width;
@@ -31,7 +32,7 @@ namespace chestnut
 
     CRenderWindow::~CRenderWindow() 
     {
-        SDL_DestroyRenderer( sm_renderer );
+        SDL_DestroyRenderer( m_renderer );
         SDL_DestroyWindow( m_window );
     }
 
@@ -43,11 +44,6 @@ namespace chestnut
     int CRenderWindow::getWindowWidth() 
     {
         return m_width;
-    }
-
-    SDL_Renderer* CRenderWindow::getSDLRenderer() 
-    {
-        return sm_renderer;
     }
 
 } // namespace chestnut
