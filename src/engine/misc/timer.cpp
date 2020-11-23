@@ -67,7 +67,7 @@ namespace chestnut
     double CTimer::getAvgUpdatesPerSec() 
     {
         if( m_currentTick > 0 )
-            return  (double)m_updateCount / (double)m_currentTick * 1000.f;
+            return (double)m_updateCount / (double)( m_currentTick / 1000.f );
         return 0;
     }
 
