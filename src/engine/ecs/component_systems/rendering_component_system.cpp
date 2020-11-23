@@ -48,9 +48,9 @@ namespace chestnut
             textureComp = m_textureCompMap[guid];
             if( textureComp != nullptr )
             {
-                textureComp->texture->setPosition( transformComp->position );
-                textureComp->texture->setRotation( transformComp->rotation );
-                textureComp->texture->setScale( transformComp->scale );
+                textureComp->texture.setPosition( transformComp->position );
+                textureComp->texture.setRotation( transformComp->rotation );
+                textureComp->texture.setScale( transformComp->scale );
             }
         }
     }
@@ -63,7 +63,7 @@ namespace chestnut
             textureComp = pair.second;
             if( textureComp != nullptr )
             {
-                textureComp->texture->draw(); //TODO disallow texture object to render by itself
+                textureComp->texture.draw(); //TODO disallow texture object to render by itself
             }
         }
     }

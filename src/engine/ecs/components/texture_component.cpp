@@ -8,7 +8,7 @@ namespace chestnut
 
     }
 
-    STextureComponent::STextureComponent( CTexture *textureInstance )
+    STextureComponent::STextureComponent( CTexture textureInstance )
     : texture( textureInstance )
     {
 
