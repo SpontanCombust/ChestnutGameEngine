@@ -2,20 +2,20 @@
 
 namespace chestnut
 {
-    CChestnutApplication::CChestnutApplication()
+    CApplication::CApplication()
     {
-        m_wasStarted = false;
-        m_isRunning = false;
         m_renderWindow = nullptr;
 
         m_appTitle = "App";
-        m_windowStartPosX = 0;
-        m_windowStartPosY = 0;
+        m_windowWidth = 600;
+        m_windowHeight = 400;
+        m_windowPosX = 400;
+        m_windowPosY = 200;
         m_windowFlags = SDL_WINDOW_SHOWN;
         m_rendererFlags = SDL_RENDERER_ACCELERATED;
     }
 
-    bool CChestnutApplication::initSDL() 
+    bool CApplication::initLibraries() 
     {
         bool retcode = true;
         int flags;
@@ -39,80 +39,39 @@ namespace chestnut
         return retcode;
     }
     
-    void CChestnutApplication::deinitSDL() 
+    void CApplication::deinitLibraries() 
     {
         IMG_Quit();
         SDL_Quit();
     }
 
-    bool CChestnutApplication::create( int winWidth, int winHeight )
+    void CApplication::init()
     {
-        bool retcode = true;
+        if( !initLibraries() )
+            LOG( "Failed to load libraries!" );
 
-        retcode = initSDL();
+        m_renderWindow = new CRenderWindow( m_appTitle.c_str(),
+                                            m_windowWidth,
+                                            m_windowHeight,
+                                            m_windowPosX,
+                                            m_windowPosY,
+                                            m_windowFlags,
+                                            m_rendererFlags 
+                                            );
 
-        if( retcode )
-        {
-            m_renderWindow = new CRenderWindow( m_appTitle.c_str(),
-                                                            winWidth,
-                                                            winHeight,
-                                                            m_windowStartPosX,
-                                                            m_windowStartPosY,
-                                                            m_windowFlags,
-                                                            m_rendererFlags );
-
-            retcode &= onUserCreate();
-        }
-
-        return retcode;
+        if( !m_renderWindow )
+            LOG( "Failed to create a render window!" );
     }
 
-    void CChestnutApplication::start()
+    void CApplication::start()
     {
-        m_wasStarted = true;
-        enterGameLoop();
+        
     }
 
-    bool CChestnutApplication::update()
+    void CApplication::deinit()
     {
-        theWorld.update(1); //TODO delta time
-        return true;
+        delete m_renderWindow;
+        deinitLibraries();
     }
-
-    void CChestnutApplication::enterGameLoop()
-    {
-        m_isRunning = true;
-        //TODO PLACEHOLDER; TO BE CHANGED LATER
-        while( m_isRunning )
-        {
-            onUserUpdate();
-            update();
-
-            if( SDL_GetTicks() > 5000 )
-                m_isRunning = false;
-        }
-    }
-
-    void CChestnutApplication::close()
-    {
-        if( m_wasStarted )
-        {
-            onUserClose();
-
-            delete m_renderWindow;
-
-            deinitSDL();
-        }
-        m_wasStarted = false;
-    }
-
-    CChestnutApplication::~CChestnutApplication()
-    {
-        close();
-    }
-
-    bool CChestnutApplication::onUserCreate() { return true; }
-    bool CChestnutApplication::onUserUpdate() { return true; }
-    void CChestnutApplication::onUserClose() {}
 
 } // namespace chestnut

@@ -4,6 +4,7 @@
 #include "engine/main/app/render_window.hpp"
 #include "engine/main/app/application.hpp"
 
+#include "engine/main/game/game.hpp"
 #include "engine/main/game/world.hpp"
 
 #include "engine/debug/debug.hpp"

@@ -12,43 +12,48 @@
 
 namespace chestnut
 {
-    class CChestnutApplication
+    class CApplication
     {
     protected:
         // To be changed by inherited class
         std::string m_appTitle;
-        int m_windowStartPosX;
-        int m_windowStartPosY;
+        int m_windowPosX;
+        int m_windowPosY;
+        int m_windowWidth;
+        int m_windowHeight;
         int m_windowFlags;
         int m_rendererFlags;
         //
 
-        bool m_wasStarted;
-        bool m_isRunning;
-
         CRenderWindow *m_renderWindow;
 
-        CChestnutWorld theWorld;
-
     public:
-        CChestnutApplication();
+        CApplication();
 
-        bool create( int winWidth, int winHeight );
-        void start();
-        void close();
+        virtual void init();
+        virtual void start();
+        virtual void deinit();
 
-        virtual bool onUserCreate();
-        virtual bool onUserUpdate();
-        virtual void onUserClose();
-        virtual ~CChestnutApplication();
+        virtual ~CApplication() {}
 
     protected:
-        bool initSDL();
-        void deinitSDL();
-        bool update();
-        void enterGameLoop();
+        bool initLibraries();
+        void deinitLibraries();
     };
-    
+
+
+#define CHESTNUT_IMPLEMENT_APP( APP ) \
+        int main(int argc, char const *argv[])  \
+        {                                       \
+            APP app;                            \
+                                                \
+            app.init();                         \
+            app.start();                        \
+            app.deinit();                       \
+                                                \
+            return 0;                           \
+        }                                       \
+
 } // namespace chestnut
 
 #endif // __CHESTNUT_APPLICATION_H__
