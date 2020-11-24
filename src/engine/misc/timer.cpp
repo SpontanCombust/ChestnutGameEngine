@@ -59,15 +59,15 @@ namespace chestnut
         return m_currentTick;
     }
 
-    uint32_t CTimer::getDeltaTime() 
+    float CTimer::getDeltaTime() 
     {
-        return m_currentTick - m_lastTick;
+        return (float)( m_currentTick - m_lastTick ) / 1000.f;
     }
 
-    double CTimer::getAvgUpdatesPerSec() 
+    float CTimer::getAvgUpdatesPerSec() 
     {
         if( m_currentTick > 0 )
-            return (double)m_updateCount / (double)( m_currentTick / 1000.f );
+            return (float)m_updateCount / (float)( m_currentTick / 1000.f );
         return 0;
     }
 

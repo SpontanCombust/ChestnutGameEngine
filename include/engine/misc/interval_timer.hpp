@@ -21,14 +21,14 @@ namespace chestnut
 
         // user defined, constant properties //
 
-        // timer alarm interval in ms
-        const uint32_t m_alarmInterval;
+        // timer alarm interval in seconds
+        const float m_alarmInterval;
         // whether alarm should be raised multiple times
         const bool m_isRepeating;
 
     public:
         // alarmInterval in ms
-        CIntervalTimer( int id, uint32_t alarmInterval, bool isRepeating = false );
+        CIntervalTimer( int id, float alarmInterval, bool isRepeating = false );
 
         virtual void reset( bool init = false ) override;
 

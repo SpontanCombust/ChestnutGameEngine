@@ -47,10 +47,14 @@ namespace chestnut
         bool isPaused();
 
         uint32_t getCurrentTicks();
-        uint32_t getDeltaTime();
-        double getAvgUpdatesPerSec();
+        // return time between updated in seconds
+        float getDeltaTime();
+        // return average number of updates per second
+        float getAvgUpdatesPerSec();
 
         virtual bool update();
+
+        virtual ~CTimer() {}
     };
     
 } // namespace chestnut

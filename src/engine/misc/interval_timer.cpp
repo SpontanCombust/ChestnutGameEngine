@@ -2,7 +2,7 @@
 
 namespace chestnut
 {
-    CIntervalTimer::CIntervalTimer( int id, uint32_t interval, bool isRepeating )
+    CIntervalTimer::CIntervalTimer( int id, float interval, bool isRepeating )
     :   CTimer( id ), m_alarmInterval( interval ), m_isRepeating( isRepeating )
     {
         reset( true );
@@ -28,7 +28,7 @@ namespace chestnut
             m_lastTick = m_currentTick;
             m_currentTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
             uint32_t timeSinceAlarm = m_currentTick - m_lastAlarmTick;
-            if( timeSinceAlarm >= m_alarmInterval )
+            if( timeSinceAlarm >= ( m_alarmInterval * 1000 ) )
             {
                 m_lastAlarmTick = m_currentTick;
                 m_isAlarmOnCurrentTick = true;
