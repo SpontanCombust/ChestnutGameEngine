@@ -47,7 +47,7 @@ namespace chestnut
         bool isPaused();
 
         uint32_t getCurrentTicks();
-        // return time between updated in seconds
+        // return time between current and previous successful updates in seconds
         float getDeltaTime();
         // return average number of updates per second
         float getAvgUpdatesPerSec();

@@ -21,6 +21,7 @@ namespace chestnut
             m_startTick = SDL_GetTicks();
             m_currentTick = m_lastTick = m_startTick;
         }
+        m_updateCount = 0;
         m_lastPauseTick = 0;
         m_pausedTicks = 0;
 
@@ -67,7 +68,7 @@ namespace chestnut
     float CTimer::getAvgUpdatesPerSec() 
     {
         if( m_currentTick > 0 )
-            return (float)m_updateCount / (float)( m_currentTick / 1000.f );
+            return (float)m_updateCount / (float)m_currentTick * 1000.f;
         return 0;
     }
 

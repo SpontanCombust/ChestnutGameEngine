@@ -11,35 +11,36 @@ namespace chestnut
     void CIntervalTimer::reset( bool init )
     {
         super::reset( init );
-        m_lastAlarmTick = 0;
-        m_isAlarmOnCurrentTick = false;
+        m_isAlarmOnCurrentUpdate = false;
     }
 
     bool CIntervalTimer::isAlarmOnCurrentTick()
     {
-        return m_isAlarmOnCurrentTick;
+        if( m_isPaused )
+            return false;
+        return m_isAlarmOnCurrentUpdate;
     }
 
-    // returns whether alarm activates on current tick
+    // returns whether alarm activates on current tick i.e. if the update is successful
     bool CIntervalTimer::update() 
     {
-        if( m_wasStarted && !m_isPaused && ( m_isRepeating || ( !m_isRepeating && m_lastAlarmTick == 0 ) ) )
+        if( m_wasStarted && !m_isPaused && ( m_isRepeating || ( !m_isRepeating && m_currentTick == m_startTick ) ) )
         {
-            m_lastTick = m_currentTick;
-            m_currentTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
-            uint32_t timeSinceAlarm = m_currentTick - m_lastAlarmTick;
+            uint32_t currentTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
+            uint32_t timeSinceAlarm = currentTick - m_currentTick;
             if( timeSinceAlarm >= ( m_alarmInterval * 1000 ) )
             {
-                m_lastAlarmTick = m_currentTick;
-                m_isAlarmOnCurrentTick = true;
+                m_lastTick = m_currentTick;
+                m_currentTick = currentTick;
+                m_isAlarmOnCurrentUpdate = true;
+                m_updateCount++;
             }
             else
             {
-                m_isAlarmOnCurrentTick = false;
+                m_isAlarmOnCurrentUpdate = false;
             }
 
-            m_updateCount++;
-            return m_isAlarmOnCurrentTick;
+            return m_isAlarmOnCurrentUpdate;
         }
         
         return false;

@@ -13,10 +13,8 @@ namespace chestnut
     protected:
         // inner state vars //
 
-        // tick when last time alarm was activated
-        uint32_t m_lastAlarmTick;
-
-        bool m_isAlarmOnCurrentTick;
+        // if current update is successful and timer reached its interval moment
+        bool m_isAlarmOnCurrentUpdate;
 
 
         // user defined, constant properties //
@@ -27,12 +25,12 @@ namespace chestnut
         const bool m_isRepeating;
 
     public:
-        // alarmInterval in ms
+        // alarmInterval in seconds
         CIntervalTimer( int id, float alarmInterval, bool isRepeating = false );
 
-        virtual void reset( bool init = false ) override;
+        void reset( bool init = false ) override;
 
-        virtual bool update() override;
+        bool update() override;
 
         bool isAlarmOnCurrentTick();
     };
