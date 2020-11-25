@@ -1,8 +1,8 @@
 .vscode/
 bin/
 build/
-BombermanReworked.code-workspace
-src/main.cpp
+ChestnutGameEngine.code-workspace
+main.cpp
 test.cpp
 test
 _media_test/
