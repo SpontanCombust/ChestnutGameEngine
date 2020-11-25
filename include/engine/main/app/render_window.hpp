@@ -5,23 +5,24 @@
 
 namespace chestnut
 {
-    class CRenderWindow
+    class CWindow
     {
     private:
         SDL_Window *m_window;
-        static SDL_Renderer *sm_renderer;
+        SDL_Renderer *m_renderer;
         int m_width;
         int m_height;
 
     public:
-        CRenderWindow() = delete;
-        CRenderWindow( const char *title, int width, int height, int x = 0, int y = 0,
+        CWindow() = delete;
+        CWindow( const char *title, int width, int height, int x = 0, int y = 0,
                             int windowFlags = 0, int rendererFlags = 0 );
-        ~CRenderWindow();
+        ~CWindow();
         int getWindowHeight();
         int getWindowWidth();
 
-        static SDL_Renderer *getSDLRenderer();
+        void setWindowRendererAsGlobalRenderer();
+        SDL_Renderer *getSDLRenderer();
     };
 
 } // namespace chestnut

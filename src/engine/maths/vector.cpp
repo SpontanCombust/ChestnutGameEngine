@@ -1,4 +1,4 @@
-#include "engine/core/vector.hpp"
+#include "engine/maths/vector.hpp"
 
 #include <cmath>
 

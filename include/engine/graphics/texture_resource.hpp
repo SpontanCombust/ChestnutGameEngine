@@ -1,8 +1,7 @@
 #ifndef __CHESTNUT_TEXTURE_RESOURCE_H__
 #define __CHESTNUT_TEXTURE_RESOURCE_H__
 
-#include "texture.hpp"
-#include "engine/core/vector.hpp"
+#include "engine/maths/vector.hpp"
 
 #include <SDL2/SDL_image.h>
 
@@ -10,12 +9,9 @@
 
 namespace chestnut 
 {
-    class CTexture; //forward declaration
-
     class CTextureResource
     {
     private:
-        friend class CTexture;
         SDL_Texture *m_sdlTexture;
 
     public:
@@ -25,8 +21,7 @@ namespace chestnut
         void loadFromFile( const std::string path );
         Vector2i getSize() const;
 
-        CTexture getTextureInstance() const;
-        CTexture *getTextureInstancePtr() const;
+        SDL_Texture *getSDLTexturePtr() const;
     };
 
 } // namespace chestnut

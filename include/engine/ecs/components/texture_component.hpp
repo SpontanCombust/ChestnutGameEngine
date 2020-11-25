@@ -9,11 +9,11 @@ namespace chestnut
     //TODO add some properties describing how the texture should be anchored to the entity (offset, rot center etc.)
     struct STextureComponent : IComponent
     {
-        CTexture *texture;
+        CTexture texture;
 
         //TODO create "missing texture" for default constructor ASAP
         STextureComponent();
-        STextureComponent( CTexture *textureInstance );
+        STextureComponent( CTexture textureInstance );
     };
 
 } // namespace chestnut 

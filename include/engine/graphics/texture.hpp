@@ -2,14 +2,12 @@
 #define __CHESTNUT_TEXTURE_H__
 
 #include "texture_resource.hpp"
-#include "engine/core/vector.hpp"
+#include "engine/maths/vector.hpp"
 
 #include <SDL_image.h>
 
 namespace chestnut
 {
-    class CTextureResource; //forward declaration
-
     class CTexture
     {
     private:
@@ -23,6 +21,7 @@ namespace chestnut
         SDL_RendererFlip m_flip;
 
     public:
+        CTexture();
         CTexture( int w, int h );
         CTexture( const CTextureResource *textureResource );
         ~CTexture();
@@ -42,8 +41,13 @@ namespace chestnut
         void setRotationPointToCenter();
         void setFlip( SDL_RendererFlip flip );
 
-        void draw() const;
-        void draw( float x, float y ) const;
+        const SDL_Rect& getSDLSrcRect() const;
+        const SDL_FRect& getSDLDstRect() const;
+        const float& getSDLAngle() const;
+        const SDL_FPoint& getSDLRotPoint() const;
+        const SDL_RendererFlip& getSDLFlip() const;
+
+        SDL_Texture *getSDLTexturePtr() const;
     };   
 
 } // namespace chestnut
