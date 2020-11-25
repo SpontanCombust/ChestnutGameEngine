@@ -2,15 +2,19 @@
 #define __CHESTNUT_GAME_H__
 
 #include "world.hpp"
-#include "../app/render_window.hpp"
+#include "../app/application.hpp"
 #include "engine/misc/interval_timer.hpp"
 
 namespace chestnut
 {
-    class CChestnutGame
+    class CChestnutGame : public CApplication
     {
+    private:
+        typedef CApplication super;
+
+        bool m_enableVsync;
+
     protected:
-        CWindow *m_parentWindow;
         CTimer *m_gameTimer;
 
         bool m_isRunning;
@@ -18,17 +22,15 @@ namespace chestnut
 
     
     public:
-        CChestnutGame( CWindow *parentWindow );
+        CChestnutGame( bool enableVsync );
 
         CChestnutWorld theWorld;
 
-        virtual bool onCreate();
-        virtual bool onStart();
-        virtual bool onUpdate( float deltaTime );
-        virtual bool onSuspend();
-        virtual bool onEnd();
-
-        virtual ~CChestnutGame() {}
+        virtual bool onCreate() override;
+        virtual void onStart() override;
+        virtual void onUpdate( float deltaTime );
+        virtual void onSuspend();
+        virtual void onEnd() override;
     };
     
 } // namespace chestnut

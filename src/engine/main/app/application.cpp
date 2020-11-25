@@ -15,7 +15,18 @@ namespace chestnut
         m_rendererFlags = SDL_RENDERER_ACCELERATED;
     }
 
-    bool CApplication::initLibraries() 
+    void CApplication::setWindowParams( std::string title, int x, int y, int w, int h, int sdlWinFlags, int sdlRendererFlags ) 
+    {
+        m_appTitle = title;
+        m_windowPosX = x;
+        m_windowPosY = y;
+        m_windowWidth = w;
+        m_windowHeight = h;
+        m_windowFlags = sdlWinFlags;
+        m_rendererFlags = sdlRendererFlags;
+    }
+
+    bool CApplication::initSDL() 
     {
         bool retcode = true;
         int flags;
@@ -39,16 +50,19 @@ namespace chestnut
         return retcode;
     }
     
-    void CApplication::deinitLibraries() 
+    void CApplication::deinitSDL() 
     {
         IMG_Quit();
         SDL_Quit();
     }
 
-    void CApplication::init()
+    bool CApplication::onCreate()
     {
-        if( !initLibraries() )
+        if( !initSDL() )
+        {
             LOG( "Failed to load libraries!" );
+            return false;
+        }
 
         m_appWindow = new CWindow( m_appTitle.c_str(),
                                             m_windowWidth,
@@ -63,17 +77,18 @@ namespace chestnut
             LOG( "Failed to create a window!" );
 
         m_appWindow->setWindowRendererAsGlobalRenderer();
+        return true;
     }
 
-    void CApplication::start()
+    void CApplication::onStart()
     {
         
     }
 
-    void CApplication::deinit()
+    void CApplication::onEnd()
     {
         delete m_appWindow;
-        deinitLibraries();
+        deinitSDL();
     }
 
 } // namespace chestnut

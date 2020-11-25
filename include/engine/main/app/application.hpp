@@ -14,8 +14,7 @@ namespace chestnut
 {
     class CApplication
     {
-    protected:
-        // To be changed by inherited class
+    private:
         std::string m_appTitle;
         int m_windowPosX;
         int m_windowPosY;
@@ -23,22 +22,23 @@ namespace chestnut
         int m_windowHeight;
         int m_windowFlags;
         int m_rendererFlags;
-        //
 
+    protected:
         CWindow *m_appWindow;
+        void setWindowParams( std::string title, int x, int y, int w, int h, int sdlWinFlags = SDL_WINDOW_SHOWN, int sdlRendererFlags = SDL_RENDERER_ACCELERATED );
 
     public:
         CApplication();
 
-        virtual void init();
-        virtual void start();
-        virtual void deinit();
+        virtual bool onCreate();
+        virtual void onStart();
+        virtual void onEnd();
 
         virtual ~CApplication() {}
 
     protected:
-        bool initLibraries();
-        void deinitLibraries();
+        bool initSDL();
+        void deinitSDL();
     };
 
 
@@ -47,9 +47,11 @@ namespace chestnut
         {                                       \
             APP app;                            \
                                                 \
-            app.init();                         \
-            app.start();                        \
-            app.deinit();                       \
+            if( app.onCreate() )                \
+            {                                   \
+                app.onStart();                  \
+                app.onEnd();                    \
+            }                                   \
                                                 \
             return 0;                           \
         }                                       \

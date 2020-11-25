@@ -2,54 +2,58 @@
 
 namespace chestnut
 {    
-    CChestnutGame::CChestnutGame( CWindow *parentWindow ) 
+    CChestnutGame::CChestnutGame( bool enableVsync ) 
     {
-        m_parentWindow = parentWindow;
-
+        m_enableVsync = enableVsync;
         m_isRunning = false;
         m_isSuspended = true;
     }
 
     bool CChestnutGame::onCreate() 
     {
-        m_gameTimer = new CIntervalTimer(0, 1/60.f, true );
-        return true;
+        bool valid = super::onCreate();
+
+        if( m_enableVsync )
+            m_gameTimer = new CIntervalTimer(0, 1/60.f, true );
+        else
+            m_gameTimer = new CTimer(0);
+
+        return valid;
     }
 
-    bool CChestnutGame::onStart() 
+    void CChestnutGame::onStart() 
     {
+        super::onStart();
+
         m_isRunning = true;
         m_isSuspended = false;
         
         m_gameTimer->start();
         while( m_isRunning && !m_isSuspended )
         {
-            m_gameTimer->update();
-            onUpdate( m_gameTimer->getDeltaTime() );
+            if( m_gameTimer->update() )
+                onUpdate( m_gameTimer->getDeltaTime() );
 
             //!TEMPORARY
             if( SDL_GetTicks() > 5000 )
                 m_isRunning = false;
         }
-        return true;
     }
 
-    bool CChestnutGame::onUpdate( float deltaTime ) 
+    void CChestnutGame::onUpdate( float deltaTime ) 
     {
         theWorld.update( deltaTime );
-        return true;
     }
 
-    bool CChestnutGame::onSuspend() 
+    void CChestnutGame::onSuspend() 
     {
         m_isSuspended = true;
-        return true;
     }
 
-    bool CChestnutGame::onEnd() 
+    void CChestnutGame::onEnd() 
     {
         delete m_gameTimer;
-        return true;
+        super::onEnd();
     }
 
 } // namespace chestnut
