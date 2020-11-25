@@ -5,7 +5,7 @@
 
 namespace chestnut
 {
-    CRenderWindow::CRenderWindow( const char *title, int width, int height, int x, int y,
+    CWindow::CWindow( const char *title, int width, int height, int x, int y,
                                 int windowFlags, int rendererFlags ) 
     {
         m_window = SDL_CreateWindow( title, x, y, width, height, windowFlags );
@@ -24,26 +24,35 @@ namespace chestnut
             LOG( SDL_GetError() );
         }
 
-        CRenderer::setSDLRenderer( m_renderer );
-
         m_height = height;
         m_width = width;
     }
 
-    CRenderWindow::~CRenderWindow() 
+    CWindow::~CWindow() 
     {
         SDL_DestroyRenderer( m_renderer );
         SDL_DestroyWindow( m_window );
     }
 
-    int CRenderWindow::getWindowHeight() 
+    int CWindow::getWindowHeight() 
     {
         return m_height;
     }
 
-    int CRenderWindow::getWindowWidth() 
+    int CWindow::getWindowWidth() 
     {
         return m_width;
+    }
+
+
+    void CWindow::setWindowRendererAsGlobalRenderer() 
+    {
+        CRenderer::setSDLRenderer( m_renderer );
+    }
+
+    SDL_Renderer* CWindow::getSDLRenderer() 
+    {
+        return m_renderer;
     }
 
 } // namespace chestnut

@@ -2,9 +2,9 @@
 
 namespace chestnut
 {    
-    CChestnutGame::CChestnutGame( CRenderWindow *renderWindow ) 
+    CChestnutGame::CChestnutGame( CWindow *parentWindow ) 
     {
-        m_parentRenderWindow = renderWindow;
+        m_parentWindow = parentWindow;
 
         m_isRunning = false;
         m_isSuspended = true;

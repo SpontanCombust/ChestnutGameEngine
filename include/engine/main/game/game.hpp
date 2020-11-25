@@ -10,7 +10,7 @@ namespace chestnut
     class CChestnutGame
     {
     protected:
-        CRenderWindow *m_parentRenderWindow;
+        CWindow *m_parentWindow;
         CTimer *m_gameTimer;
 
         bool m_isRunning;
@@ -18,7 +18,7 @@ namespace chestnut
 
     
     public:
-        CChestnutGame( CRenderWindow *renderWindow );
+        CChestnutGame( CWindow *parentWindow );
 
         CChestnutWorld theWorld;
 

@@ -25,7 +25,7 @@ namespace chestnut
         int m_rendererFlags;
         //
 
-        CRenderWindow *m_renderWindow;
+        CWindow *m_appWindow;
 
     public:
         CApplication();

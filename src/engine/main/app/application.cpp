@@ -4,7 +4,7 @@ namespace chestnut
 {
     CApplication::CApplication()
     {
-        m_renderWindow = nullptr;
+        m_appWindow = nullptr;
 
         m_appTitle = "App";
         m_windowWidth = 600;
@@ -50,7 +50,7 @@ namespace chestnut
         if( !initLibraries() )
             LOG( "Failed to load libraries!" );
 
-        m_renderWindow = new CRenderWindow( m_appTitle.c_str(),
+        m_appWindow = new CWindow( m_appTitle.c_str(),
                                             m_windowWidth,
                                             m_windowHeight,
                                             m_windowPosX,
@@ -59,8 +59,10 @@ namespace chestnut
                                             m_rendererFlags 
                                             );
 
-        if( !m_renderWindow )
-            LOG( "Failed to create a render window!" );
+        if( !m_appWindow )
+            LOG( "Failed to create a window!" );
+
+        m_appWindow->setWindowRendererAsGlobalRenderer();
     }
 
     void CApplication::start()
@@ -70,7 +72,7 @@ namespace chestnut
 
     void CApplication::deinit()
     {
-        delete m_renderWindow;
+        delete m_appWindow;
         deinitLibraries();
     }
 
