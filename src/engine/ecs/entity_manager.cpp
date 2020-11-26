@@ -1,13 +1,14 @@
-#include "engine/main/game/world.hpp"
+#include "engine/ecs/entity_manager.hpp"
 
 namespace chestnut
 {
-    CChestnutWorld::CChestnutWorld() 
+    CEntityManager::CEntityManager( CEventManager& eventManagerRef )
+    : m_eventManagerRef( eventManagerRef )
     {
         m_componentSystemList.push_front( new CRenderingComponentSystem() );
     }
 
-    CChestnutWorld::~CChestnutWorld() 
+    CEntityManager::~CEntityManager() 
     {
         m_componentDB.clearComponents();
 
@@ -18,33 +19,28 @@ namespace chestnut
         }
         m_componentSystemList.clear();
 
-        m_eventManager.clearListeners();
+        m_eventManagerRef.clearListeners();
     }
 
-    guid_t CChestnutWorld::createEntity() 
+    guid_t CEntityManager::createEntity() 
     {
         //TODO will need some better system for this
         return ++m_guidCounter;
     }
 
-    bool CChestnutWorld::destroyEntity( guid_t guid ) 
+    bool CEntityManager::destroyEntity( guid_t guid ) 
     {
         return m_componentDB.eraseComponents( guid, true );
     }
 
-    const CComponentDatabase& CChestnutWorld::getComponentDatabase() const
+    const CComponentDatabase& CEntityManager::getComponentDatabase() const
     {
         return m_componentDB;
     }
 
-    CEventManager& CChestnutWorld::getEventManager() 
+    void CEntityManager::update( float deltaTime ) 
     {
-        return m_eventManager;
-    }
-
-    void CChestnutWorld::update( float deltaTime ) 
-    {
-        m_eventManager.update( deltaTime );
+        m_eventManagerRef.update( deltaTime );
 
         for( IComponentSystem *cs : m_componentSystemList )
         {

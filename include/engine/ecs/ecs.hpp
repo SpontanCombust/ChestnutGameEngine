@@ -8,5 +8,6 @@
 #include "component_system.hpp"
 #include "components/components.hpp"
 #include "component_systems/component_systems.hpp"
+#include "entity_manager.hpp"
 
 #endif // __CHESTNUT_ECS_H__

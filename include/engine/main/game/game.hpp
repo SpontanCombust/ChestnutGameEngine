@@ -1,8 +1,9 @@
 #ifndef __CHESTNUT_GAME_H__
 #define __CHESTNUT_GAME_H__
 
-#include "world.hpp"
 #include "../app/application.hpp"
+#include "engine/event_system/event_system.hpp"
+#include "engine/ecs/entity_manager.hpp"
 #include "engine/misc/interval_timer.hpp"
 
 namespace chestnut
@@ -12,7 +13,7 @@ namespace chestnut
     private:
         typedef CApplication super;
 
-        bool m_enableVsync;
+        bool m_lockFramerate;
 
     protected:
         CTimer *m_gameTimer;
@@ -22,9 +23,10 @@ namespace chestnut
 
     
     public:
-        CChestnutGame( bool enableVsync );
+        CChestnutGame( bool lockFramerate );
 
-        CChestnutWorld theWorld;
+        CEntityManager theWorld;
+        CEventManager theEventManager;
 
         virtual bool onCreate() override;
         virtual void onStart() override;

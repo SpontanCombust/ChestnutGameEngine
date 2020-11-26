@@ -1,14 +1,18 @@
-#ifndef __CHESTNUT_WORLD_H__
-#define __CHESTNUT_WORLD_H__
+#ifndef __CHESTNUT_ENTITY_MANAGER_H__
+#define __CHESTNUT_ENTITY_MANAGER_H__
 
-#include "engine/ecs/ecs.hpp"
+#include "ecs_utils.hpp"
+#include "component.hpp"
+#include "components/components.hpp"
+#include "component_system.hpp"
+#include "component_systems/component_systems.hpp"
 #include "engine/event_system/event_system.hpp"
 
 #include <forward_list>
 
 namespace chestnut
 {
-    class CChestnutWorld
+    class CEntityManager
     {
     private:
         guid_t m_guidCounter = 0;
@@ -16,11 +20,11 @@ namespace chestnut
 
         CComponentDatabase m_componentDB;
         std::forward_list< IComponentSystem* > m_componentSystemList;
-        CEventManager m_eventManager;
+        CEventManager& m_eventManagerRef;
 
     public:
-        CChestnutWorld();
-        ~CChestnutWorld();
+        CEntityManager( CEventManager& eventManagerRef );
+        ~CEntityManager();
 
         guid_t createEntity();
 
@@ -35,13 +39,11 @@ namespace chestnut
         // reaturns a read-only reference to the database
         const CComponentDatabase& getComponentDatabase() const;
 
-        CEventManager& getEventManager();
-
         void update( float deltaTime );
     };
 
     template< typename T >
-    T* CChestnutWorld::createComponent( guid_t guid ) 
+    T* CEntityManager::createComponent( guid_t guid ) 
     {
         if( m_componentDB.hasComponent<T>( guid ) )
             return m_componentDB.getComponentCasted<T>( guid );
@@ -56,11 +58,11 @@ namespace chestnut
     }
     
     template<typename T>
-    T* CChestnutWorld::getComponent( guid_t guid )
+    T* CEntityManager::getComponent( guid_t guid )
     {
         return m_componentDB.getComponentCasted<T>( guid );
     }
     
 } // namespace chestnut
 
-#endif // __CHESTNUT_WORLD_H__
+#endif // __CHESTNUT_ENTITY_MANAGER_H__

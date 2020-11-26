@@ -2,9 +2,10 @@
 
 namespace chestnut
 {    
-    CChestnutGame::CChestnutGame( bool enableVsync ) 
+    CChestnutGame::CChestnutGame( bool lockFramerate )
+    : theWorld( theEventManager )
     {
-        m_enableVsync = enableVsync;
+        m_lockFramerate = lockFramerate;
         m_isRunning = false;
         m_isSuspended = true;
     }
@@ -13,7 +14,7 @@ namespace chestnut
     {
         bool valid = super::onCreate();
 
-        if( m_enableVsync )
+        if( m_lockFramerate )
             m_gameTimer = new CIntervalTimer(0, 1/60.f, true );
         else
             m_gameTimer = new CTimer(0);
