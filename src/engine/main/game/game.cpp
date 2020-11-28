@@ -3,7 +3,7 @@
 namespace chestnut
 {    
     CChestnutGame::CChestnutGame( bool lockFramerate )
-    : theWorld( theEventManager )
+    : theEntityManager( theEventManager )
     {
         m_lockFramerate = lockFramerate;
         m_isRunning = false;
@@ -43,7 +43,7 @@ namespace chestnut
 
     void CChestnutGame::onUpdate( float deltaTime ) 
     {
-        theWorld.update( deltaTime );
+        theEntityManager.update( deltaTime );
     }
 
     void CChestnutGame::onSuspend() 

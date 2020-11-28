@@ -25,7 +25,7 @@ namespace chestnut
     public:
         CChestnutGame( bool lockFramerate );
 
-        CEntityManager theWorld;
+        CEntityManager theEntityManager;
         CEventManager theEventManager;
 
         virtual bool onCreate() override;

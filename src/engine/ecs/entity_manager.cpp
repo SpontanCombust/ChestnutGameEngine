@@ -5,7 +5,7 @@ namespace chestnut
     CEntityManager::CEntityManager( CEventManager& eventManagerRef )
     : m_eventManagerRef( eventManagerRef )
     {
-        m_componentSystemList.push_front( new CRenderingComponentSystem() );
+
     }
 
     CEntityManager::~CEntityManager() 
@@ -53,6 +53,36 @@ namespace chestnut
             }
         }
         m_typesOfNewComponents.clear();
+    }
+
+    std::list< IComponentSystem* >::iterator CEntityManager::findSpotForComponentSystem( unsigned int priority ) 
+    {   
+        switch( priority )
+        {
+            // automatically point to the beginning of the list
+            case ComponentSystemPriority::HIGHEST:
+                return m_componentSystemList.begin();
+
+            // automatically point to the end of the list
+            case ComponentSystemPriority::LOWEST:
+                return m_componentSystemList.end();
+
+            default:
+            {
+                auto it = m_componentSystemList.begin();
+                for(; it != m_componentSystemList.end(); ++it )
+                {
+                    if( (*it)->getPriority() > priority )
+                        break;
+                }
+                return it;
+            }
+        }
+    }
+
+    void CEntityManager::createNativeComponentSystems() 
+    {
+        createComponentSystem< CRenderingComponentSystem >( ComponentSystemPriority::LOWEST );
     }
 
 } // namespace chestnut
