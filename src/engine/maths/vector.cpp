@@ -1,7 +1,5 @@
 #include "engine/maths/vector.hpp"
 
-#include <cmath>
-
 namespace chestnut
 {
     std::string vector2fToString( Vector2f v ) 

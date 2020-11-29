@@ -8,17 +8,27 @@
 
 namespace chestnut
 {
+    enum class ETextureFlip { NONE, HORIZONTAL, VERTICAL };
+
     class CTexture
     {
     private:
         SDL_Texture *m_sdlTexture;
         bool m_isResourceInstance;
 
-        SDL_Rect m_srcRect;
-        SDL_FRect m_dstRect;
-        float m_angleDeg;
-        SDL_FPoint m_rotPoint;
-        SDL_RendererFlip m_flip;
+        Vector2i m_clippingRectPos;
+        Vector2i m_clippingRectSize;
+
+        Vector2f m_position;
+
+        Vector2f m_size;
+        // positive angle = rotation counter clockwise, just as with cartesian system
+        float m_rotationRad;
+        /*  values normally in a range <0;1> - tells in which point regardless of scale should be the rotation pivot
+            examples: [0.5, 0.5] means center of a texture, [0.0, 0.0] means upper left corner etc. */
+        Vector2<double> m_rotationPoint;
+
+        ETextureFlip m_flip;
 
     public:
         CTexture();
@@ -28,24 +38,33 @@ namespace chestnut
 
         void setClippingRect( int x, int y, int w, int h );
         void setClippingRect( Vector2i position, Vector2i dimensions );
+        const Vector2i& getClippingRectPos() const;
+        const Vector2i& getClippingRectSize() const;
+
         void setPosition( float x, float y );
         void setPosition( Vector2f position );
+        const Vector2f& getPosition() const;
+
         void setScale( float sx, float sy );
         void setScale( Vector2f scale );
-        void setDimensionsDirectly( float w, float h );
-        void setDimensionsDirectly( Vector2f dimensions );
-        void setRotation( float angleDeg );
-        void setRotation( Vector2f rotation );
-        void setRotationPoint( float rx, float ry );
-        void setRotationPoint( Vector2f rotPoint );
-        void setRotationPointToCenter();
-        void setFlip( SDL_RendererFlip flip );
+        const Vector2f getScale() const;
 
-        const SDL_Rect& getSDLSrcRect() const;
-        const SDL_FRect& getSDLDstRect() const;
-        const float& getSDLAngle() const;
-        const SDL_FPoint& getSDLRotPoint() const;
-        const SDL_RendererFlip& getSDLFlip() const;
+        void setSizeDirectly( float w, float h );
+        void setSizeDirectly( Vector2f size );
+        const Vector2f& getSize() const;
+
+        void setRotation( float angleRad );
+        void setRotation( Vector2f rotationVec );
+        const float& getRotationRad() const;
+        const Vector2f getRotationVec() const;
+
+        void setRotationPoint( double rx, double ry );
+        void setRotationPoint( Vector2<double> rotPoint );
+        void setRotationPointToCenter();
+        const Vector2<double>& getRotationPoint() const;
+
+        void setFlip( ETextureFlip flip );
+        const ETextureFlip& getFlip() const;
 
         SDL_Texture *getSDLTexturePtr() const;
     };   

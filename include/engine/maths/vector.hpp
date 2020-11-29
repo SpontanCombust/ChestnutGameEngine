@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_VECTOR_H__
 #define __CHESTNUT_VECTOR_H__
 
+#include <cmath>
 #include <string>
 
 namespace chestnut

@@ -15,11 +15,13 @@ namespace chestnut
         m_sdlTexture = nullptr;
         m_isResourceInstance = false;
 
-        m_srcRect = { 0, 0, 0, 0 };
-        m_dstRect = { 0.f, 0.f, 0, 0 };
-        m_rotPoint = { 0.f, 0.f };
-        m_angleDeg = 0.f;
-        m_flip = SDL_FLIP_NONE;
+        m_clippingRectPos = { 0, 0 };
+        m_clippingRectSize = { 0, 0 };
+        m_position = { 0.f, 0.f };
+        m_size = { 0.f, 0.f };
+        m_rotationRad = 0.f;
+        m_rotationPoint = { 0.f, 0.f };
+        m_flip = ETextureFlip::NONE;
     }
 
     CTexture::CTexture( int w, int h ) 
@@ -27,11 +29,13 @@ namespace chestnut
         m_sdlTexture = SDL_CreateTexture( CRenderer::getSDLRenderer(), DEF_FORMAT, DEF_ACCESS, w, h );
         m_isResourceInstance = false;
 
-        m_srcRect = { 0, 0, w, h };
-        m_dstRect = { 0.f, 0.f, (float)w, (float)h };
-        m_rotPoint = { 0.f, 0.f };
-        m_angleDeg = 0.f;
-        m_flip = SDL_FLIP_NONE;
+        m_clippingRectPos = { 0, 0 };
+        m_clippingRectSize = { w, h };
+        m_position = { 0.f, 0.f };
+        m_size = { (float)w, (float)h };
+        m_rotationRad = 0.f;
+        m_rotationPoint = { 0.5f, 0.5f };
+        m_flip = ETextureFlip::NONE;
     }
 
     CTexture::CTexture( const CTextureResource *texture ) 
@@ -39,12 +43,13 @@ namespace chestnut
         m_sdlTexture = texture->getSDLTexturePtr();
         m_isResourceInstance = true;
 
-        Vector2i size = texture->getSize();
-        m_srcRect = { 0, 0, size.x, size.y };
-        m_dstRect = { 0.f, 0.f, (float)size.x, (float)size.y };
-        m_rotPoint = { 0.f, 0.f };
-        m_angleDeg = 0.f;
-        m_flip = SDL_FLIP_NONE;
+        m_clippingRectPos = { 0, 0 };
+        m_clippingRectSize = texture->getSize();
+        m_position = { 0.f, 0.f };
+        m_size = texture->getSize();
+        m_rotationRad = 0.f;
+        m_rotationPoint = { 0.5f, 0.5f };
+        m_flip = ETextureFlip::NONE;
     }
     
     CTexture::~CTexture()
@@ -58,101 +63,129 @@ namespace chestnut
 
     void CTexture::setClippingRect( int x, int y, int w, int h ) 
     {
-        m_srcRect = { x, y, w, h };
+        m_clippingRectPos = { x, y };
+        m_clippingRectSize = { w, h };
     }
 
     void CTexture::setClippingRect( Vector2i position, Vector2i dimensions ) 
     {
-        m_srcRect = { position.x, position.y, dimensions.x, dimensions.y };
+        m_clippingRectPos = position;
+        m_clippingRectSize = dimensions;
+    }
+    
+    const Vector2i& CTexture::getClippingRectPos() const 
+    {
+        return m_clippingRectPos;
+    }
+
+    const Vector2i& CTexture::getClippingRectSize() const
+    {
+        return m_clippingRectSize;
     }
 
     void CTexture::setPosition( float x, float y ) 
     {
-        m_dstRect.x = x;
-        m_dstRect.y = y;
+        m_position = { x, y };
     }
 
     void CTexture::setPosition( Vector2f position ) 
     {
-        m_dstRect.x = position.x;
-        m_dstRect.y = position.y;
+        m_position = position;
+    }
+
+    const Vector2f& CTexture::getPosition() const
+    {
+        return m_position;
     }
 
     void CTexture::setScale( float sx, float sy ) 
     {
-        m_dstRect.w = m_srcRect.w * sx;
-        m_dstRect.h = m_srcRect.h * sy;
+        m_size = 
+        { 
+            sx * m_clippingRectSize.x,
+            sy * m_clippingRectSize.y 
+        };
     }
 
     void CTexture::setScale( Vector2f scale ) 
     {
-        m_dstRect.w = m_srcRect.w * scale.x;
-        m_dstRect.h = m_srcRect.h * scale.y;
+        m_size = 
+        { 
+            scale.x * m_clippingRectSize.x,
+            scale.y * m_clippingRectSize.y 
+        };
     }
 
-    void CTexture::setDimensionsDirectly( float w, float h ) 
+    const Vector2f CTexture::getScale() const
     {
-        m_dstRect.w = w;
-        m_dstRect.h = h;
+        return Vector2f( 
+            m_size.x / m_clippingRectSize.x,
+            m_size.y / m_clippingRectSize.y
+        );
     }
 
-    void CTexture::setDimensionsDirectly( Vector2f dimensions ) 
+    void CTexture::setSizeDirectly( float w, float h ) 
     {
-        m_dstRect.w = dimensions.x;
-        m_dstRect.h = dimensions.y;
+        m_size = { w, h };
     }
 
-    void CTexture::setRotation( float angleDeg ) 
+    void CTexture::setSizeDirectly( Vector2f size ) 
     {
-        m_angleDeg = angleDeg;
+        m_size = { size.x, size.y };
     }
 
-    void CTexture::setRotation( Vector2f rotation ) 
-    {   //TODO Remember it's based on traditional cartesian system (rotating clockwise = angle decreases), so it has to be adapted for SDL
-        m_angleDeg = -radiansToDegrees( unitVector2fToAngle( rotation ) );
-    }
-
-    void CTexture::setRotationPoint( float rx, float ry ) 
+    const Vector2f& CTexture::getSize() const 
     {
-        m_rotPoint = { rx, ry };
+        return m_size;
     }
 
-    void CTexture::setRotationPoint( Vector2f rotPoint ) 
+    void CTexture::setRotation( float angleRad ) 
     {
-        m_rotPoint = { rotPoint.x, rotPoint.y };
+        m_rotationRad = angleRad;
+    }
+
+    void CTexture::setRotation( Vector2f rotationVec ) 
+    {
+        // 0 radians is equivalent to vector [1;0]
+        m_rotationRad = unitVector2fToAngle( vec2GetNormalized( rotationVec ) );
+    }
+    
+    const float& CTexture::getRotationRad() const
+    {
+        return m_rotationRad;
+    }
+
+    const Vector2f CTexture::getRotationVec() const
+    {
+        return angleToUnitVector2f( m_rotationRad );
+    }
+
+    void CTexture::setRotationPoint( double rx, double ry ) 
+    {
+        m_rotationPoint = { rx, ry };
+    }
+
+    void CTexture::setRotationPoint( Vector2<double> rotPoint ) 
+    {
+        m_rotationPoint = rotPoint;
     }
 
     void CTexture::setRotationPointToCenter() 
     {
-        m_rotPoint = { m_dstRect.x / 2.f, m_dstRect.y / 2.f };
+        m_rotationPoint = { 0.5f, 0.5f };
     }
 
-    void CTexture::setFlip( SDL_RendererFlip flip ) 
+    const Vector2<double>& CTexture::getRotationPoint() const
+    {
+        return m_rotationPoint;
+    }
+
+    void CTexture::setFlip( ETextureFlip flip ) 
     {
         m_flip = flip;
     }
 
-    const SDL_Rect& CTexture::getSDLSrcRect() const
-    {
-        return m_srcRect;
-    }
-
-    const SDL_FRect& CTexture::getSDLDstRect() const
-    {
-        return m_dstRect;
-    }
-
-    const float& CTexture::getSDLAngle() const
-    {
-        return m_angleDeg;
-    }
-
-    const SDL_FPoint& CTexture::getSDLRotPoint() const
-    {
-        return m_rotPoint;
-    }
-
-    const SDL_RendererFlip& CTexture::getSDLFlip() const
+    const ETextureFlip& CTexture::getFlip() const
     {
         return m_flip;
     }
