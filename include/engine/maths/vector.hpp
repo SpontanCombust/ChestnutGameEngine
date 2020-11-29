@@ -216,7 +216,7 @@ namespace chestnut
     typedef Vector2<int> Vector2i;
     typedef Vector2<double> Vector2lf;
 
-    #define VEC_TO_STR( v ) "[ " + std::to_string( v.x ) + ", " + std::to_string( v.y ) + " ]"
+    #define VEC_TO_STR( v ) ( "[ " + std::to_string( v.x ) + ", " + std::to_string( v.y ) + " ]" )
 
 } // namespace chestnut
 
