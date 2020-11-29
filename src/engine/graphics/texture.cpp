@@ -165,7 +165,7 @@ namespace chestnut
         m_rotationPoint = { rx, ry };
     }
 
-    void CTexture::setRotationPoint( Vector2<double> rotPoint ) 
+    void CTexture::setRotationPoint( Vector2lf rotPoint ) 
     {
         m_rotationPoint = rotPoint;
     }
@@ -175,7 +175,7 @@ namespace chestnut
         m_rotationPoint = { 0.5f, 0.5f };
     }
 
-    const Vector2<double>& CTexture::getRotationPoint() const
+    const Vector2lf& CTexture::getRotationPoint() const
     {
         return m_rotationPoint;
     }

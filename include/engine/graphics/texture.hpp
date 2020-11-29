@@ -26,7 +26,7 @@ namespace chestnut
         float m_rotationRad;
         /*  values normally in a range <0;1> - tells in which point regardless of scale should be the rotation pivot
             examples: [0.5, 0.5] means center of a texture, [0.0, 0.0] means upper left corner etc. */
-        Vector2<double> m_rotationPoint;
+        Vector2lf m_rotationPoint;
 
         ETextureFlip m_flip;
 
@@ -59,9 +59,9 @@ namespace chestnut
         const Vector2f getRotationVec() const;
 
         void setRotationPoint( double rx, double ry );
-        void setRotationPoint( Vector2<double> rotPoint );
+        void setRotationPoint( Vector2lf rotPoint );
         void setRotationPointToCenter();
-        const Vector2<double>& getRotationPoint() const;
+        const Vector2lf& getRotationPoint() const;
 
         void setFlip( ETextureFlip flip );
         const ETextureFlip& getFlip() const;

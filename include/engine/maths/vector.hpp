@@ -213,10 +213,10 @@ namespace chestnut
 
     // predefined vectors //
     typedef Vector2<float> Vector2f;
-    std::string vector2fToString( Vector2f v );
-
     typedef Vector2<int> Vector2i;
-    std::string vector2iToString( Vector2i v );
+    typedef Vector2<double> Vector2lf;
+
+    #define VEC_TO_STR( v ) "[ " + std::to_string( v.x ) + ", " + std::to_string( v.y ) + " ]"
 
 } // namespace chestnut
 
