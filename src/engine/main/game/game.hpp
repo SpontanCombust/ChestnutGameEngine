@@ -2,7 +2,7 @@
 #define __CHESTNUT_GAME_H__
 
 #include "../app/application.hpp"
-#include "engine/event_system/event_system.hpp"
+#include "engine/event_system/event_manager.hpp"
 #include "engine/ecs/entity_manager.hpp"
 #include "engine/misc/interval_timer.hpp"
 

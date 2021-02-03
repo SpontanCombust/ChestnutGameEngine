@@ -6,7 +6,7 @@
 #include "components/components.hpp"
 #include "component_system.hpp"
 #include "component_systems/component_systems.hpp"
-#include "engine/event_system/event_system.hpp"
+#include "engine/event_system/event_manager.hpp"
 
 #include <algorithm>
 #include <list>
