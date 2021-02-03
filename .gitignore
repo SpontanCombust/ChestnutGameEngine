@@ -1,8 +1,6 @@
-.vscode/
-bin/
-build/
-ChestnutGameEngine.code-workspace
+bin
+build
 main.cpp
 test.cpp
 test
-_media_test/
+_media_test
