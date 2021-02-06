@@ -36,9 +36,8 @@ namespace chestnut
 
         void clearComponents();
 
-
         template< typename T >
-        bool fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const;
+        std::unordered_map< guid_t, T* > getComponentMapOfType() const;
     };
 
     template< typename T >
@@ -122,22 +121,27 @@ namespace chestnut
     }
     
     template< typename T >
-    bool CComponentDatabase::fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const
+    std::unordered_map< guid_t, T* > CComponentDatabase::getComponentMapOfType() const
     {
-        if( !hasComponentsType<T>() )
-            return false;
+        std::unordered_map< guid_t, IComponent* > typedCompMap;
+        std::unordered_map< guid_t, T* > typedCastedCompMap;
 
-        auto typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        // if has no components of that type, return empty map
+        if( !hasComponentsType<T>() )
+        {
+            return typedCastedCompMap;
+        }
+
+        typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
         for( const auto &pair : typedCompMap )
         {
             const guid_t &guid = pair.first;
             IComponent *component = pair.second;
 
-            T *typedComp = dynamic_cast<T*>( component );
-            compMapRef[guid] = typedComp;
+            typedCastedCompMap[guid] = dynamic_cast<T*>( component );
         }
 
-        return true;
+        return typedCastedCompMap;
     }
 
 } // namespace chestnut

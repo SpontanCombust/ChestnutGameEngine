@@ -6,6 +6,8 @@
 #include "engine/ecs/entity_manager.hpp"
 #include "engine/misc/interval_timer.hpp"
 
+#include <list>
+
 namespace chestnut
 {
     class CChestnutGame : public CApplication
@@ -16,6 +18,8 @@ namespace chestnut
         bool m_lockFramerate;
 
     protected:
+        std::list< IComponentSystem* > m_componentSystemList;
+
         CTimer *m_gameTimer;
 
         bool m_isRunning;

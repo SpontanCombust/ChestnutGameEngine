@@ -7,7 +7,7 @@
 
 namespace chestnut
 {
-    bool CRenderingComponentSystem::needsAnyOfComponents( const std::forward_list< std::type_index >& compTypeIndexes )
+    bool CRenderingComponentSystem::needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes )
     {
         return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
             []( std::type_index tindex )
@@ -20,8 +20,8 @@ namespace chestnut
     
     void CRenderingComponentSystem::fetchComponents( const CComponentDatabase& dbRef )
     {
-        dbRef.fillComponentMapOfType( m_transformCompMap );
-        dbRef.fillComponentMapOfType( m_textureCompMap );
+        m_transformCompMap = dbRef.getComponentMapOfType< STransformComponent >();
+        m_textureCompMap = dbRef.getComponentMapOfType< STextureComponent >();
     }
     
     void CRenderingComponentSystem::update( float deltaTime ) 

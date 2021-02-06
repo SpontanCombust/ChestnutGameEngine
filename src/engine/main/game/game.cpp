@@ -19,6 +19,8 @@ namespace chestnut
         else
             m_gameTimer = new CTimer(0);
 
+        m_componentSystemList.push_back( new CRenderingComponentSystem() );
+
         return valid;
     }
 
@@ -43,7 +45,23 @@ namespace chestnut
 
     void CChestnutGame::onUpdate( float deltaTime ) 
     {
-        theEntityManager.update( deltaTime );
+        // updating event manager
+        theEventManager.update( deltaTime );
+
+        // updating component systems
+        std::list< std::type_index > recentComponents = theEntityManager.getTypesOfRecentComponents();
+        for( IComponentSystem *cs : m_componentSystemList )
+        {
+            cs->update( deltaTime );
+
+            if( !recentComponents.empty() )
+            {
+                if( cs->needsAnyOfComponents( recentComponents ) )
+                    cs->fetchComponents( theEntityManager.getComponentDatabase() );
+            }
+
+            theEntityManager.clearTypesOfRecentComponents();
+        }
     }
 
     void CChestnutGame::onSuspend() 
@@ -54,6 +72,17 @@ namespace chestnut
     void CChestnutGame::onEnd() 
     {
         delete m_gameTimer;
+
+        for( IComponentSystem *cs : m_componentSystemList )
+        {
+            delete cs;
+        }
+        m_componentSystemList.clear();
+
+        theEventManager.clearListeners();
+        
+        theEntityManager.destroyAllEntities();
+
         super::onEnd();
     }
 
