@@ -14,9 +14,9 @@ namespace chestnut
         bool valid = super::onCreate();
 
         if( m_lockFramerate )
-            m_gameTimer = new CLockedTimer(0, 1/60.f, true );
+            m_gameUpdateTimer = new CLockedTimer(0, 1/60.f, true );
         else
-            m_gameTimer = new CTimer(0);
+            m_gameUpdateTimer = new CTimer(0);
 
         m_componentSystemList.push_back( new CRenderingComponentSystem() );
 
@@ -30,11 +30,11 @@ namespace chestnut
         m_isRunning = true;
         m_isSuspended = false;
         
-        m_gameTimer->start();
+        m_gameUpdateTimer->start();
         while( m_isRunning && !m_isSuspended )
         {
-            if( m_gameTimer->update() )
-                onUpdate( m_gameTimer->getDeltaTime() );
+            if( m_gameUpdateTimer->update() )
+                onUpdate( m_gameUpdateTimer->getDeltaTime() );
 
             //!TEMPORARY
             if( SDL_GetTicks() > 5000 )
@@ -70,7 +70,7 @@ namespace chestnut
 
     void CChestnutGame::onEnd() 
     {
-        delete m_gameTimer;
+        delete m_gameUpdateTimer;
 
         for( IComponentSystem *cs : m_componentSystemList )
         {

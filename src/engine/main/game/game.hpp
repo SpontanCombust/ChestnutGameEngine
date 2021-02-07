@@ -24,7 +24,7 @@ namespace chestnut
     protected:
         CComponentSystemList m_componentSystemList;
 
-        CTimer *m_gameTimer;
+        CTimer *m_gameUpdateTimer;
 
         bool m_isRunning;
         bool m_isSuspended;
