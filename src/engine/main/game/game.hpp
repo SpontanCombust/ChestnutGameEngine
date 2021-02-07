@@ -11,6 +11,9 @@
 
 namespace chestnut
 {
+    using CComponentSystemList = std::list< IComponentSystem* >;
+
+
     class CChestnutGame : public CApplication
     {
     private:
@@ -19,7 +22,7 @@ namespace chestnut
         bool m_lockFramerate;
 
     protected:
-        std::list< IComponentSystem* > m_componentSystemList;
+        CComponentSystemList m_componentSystemList;
 
         CTimer *m_gameTimer;
 
