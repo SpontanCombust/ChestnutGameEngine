@@ -55,14 +55,26 @@ namespace chestnut
         return m_isPaused;
     }
 
-    uint32_t CTimer::getCurrentTicks() 
+    uint32_t CTimer::getCurrentTimeInMiliseconds() 
     {
         return m_currentTick;
     }
 
+    float CTimer::getCurrentTimeInSeconds() 
+    {
+        return (float)m_currentTick / 1000.f;
+    }
+
     float CTimer::getDeltaTime() 
     {
-        return (float)( m_currentTick - m_lastTick ) / 1000.f;
+        uint32_t dt = m_currentTick - m_lastTick;
+
+        if( dt == 0 )
+        {
+            return 0.000f;
+        }
+
+        return (float)dt / 1000.f;
     }
 
     float CTimer::getAvgUpdatesPerSec() 
@@ -72,8 +84,13 @@ namespace chestnut
         return 0;
     }
 
-    bool CTimer::update() 
+    bool CTimer::update( bool shouldStartIfDidntAlready ) 
     {
+        if( shouldStartIfDidntAlready )
+        {
+            start();
+        }
+
         if( m_wasStarted && !m_isPaused )
         {
             m_lastTick = m_currentTick;

@@ -41,18 +41,24 @@ namespace chestnut
 
         virtual void reset( bool init = false );
         virtual void start();
+        
         void pause();
         void unpause();
 
         bool isPaused();
 
-        uint32_t getCurrentTicks();
-        // return time between current and previous successful updates in seconds
+        // get number of miliseconds since timer start
+        uint32_t getCurrentTimeInMiliseconds();
+        // get number of seconds since timer start
+        float getCurrentTimeInSeconds();
+        /* return time between current and previous successful updates in seconds
+         * Note that with update rate greater than 1000 per second it will return 0 most of the time due to timer precision limitation */
         float getDeltaTime();
         // return average number of updates per second
         float getAvgUpdatesPerSec();
 
-        virtual bool update();
+        // returns true if was started and isn't paused
+        virtual bool update( bool shouldStartIfDidntAlready = true );
 
         virtual ~CTimer() {}
     };

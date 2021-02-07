@@ -15,7 +15,7 @@ namespace chestnut
         bool valid = super::onCreate();
 
         if( m_lockFramerate )
-            m_gameTimer = new CIntervalTimer(0, 1/60.f, true );
+            m_gameTimer = new CLockedTimer(0, 1/60.f, true );
         else
             m_gameTimer = new CTimer(0);
 

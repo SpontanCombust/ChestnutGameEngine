@@ -4,7 +4,7 @@
 #include "../app/application.hpp"
 #include "engine/event_system/event_manager.hpp"
 #include "engine/ecs/entity_manager.hpp"
-#include "engine/misc/interval_timer.hpp"
+#include "engine/misc/locked_timer.hpp"
 
 #include <list>
 
