@@ -1,4 +1,4 @@
-#include "engine/ecs/component_systems/rendering_component_system.hpp"
+#include "rendering_component_system.hpp"
 
 #include "engine/maths/angles.hpp"
 #include "engine/graphics/renderer.hpp"

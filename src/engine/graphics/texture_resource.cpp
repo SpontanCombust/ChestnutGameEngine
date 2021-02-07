@@ -1,4 +1,4 @@
-#include "engine/graphics/texture_resource.hpp"
+#include "texture_resource.hpp"
 
 #include "engine/debug/debug.hpp"
 #include "engine/graphics/renderer.hpp"

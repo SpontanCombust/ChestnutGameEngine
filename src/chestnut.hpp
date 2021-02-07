@@ -13,12 +13,13 @@
 #include "engine/event_system/event_constraint.hpp"
 #include "engine/event_system/event_manager.hpp"
 
-
-#include "engine/main/game/game.hpp"
-
 #include "engine/graphics/renderer.hpp"
 #include "engine/graphics/texture.hpp"
 #include "engine/graphics/texture_resource.hpp"
+
+#include "engine/main/app/render_window.hpp"
+#include "engine/main/app/application.hpp"
+#include "engine/main/game/game.hpp"
 
 #include "engine/maths/angles.hpp"
 #include "engine/maths/vector.hpp"

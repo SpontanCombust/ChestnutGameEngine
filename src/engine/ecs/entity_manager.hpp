@@ -2,11 +2,8 @@
 #define __CHESTNUT_ENTITY_MANAGER_H__
 
 #include "ecs_utils.hpp"
-#include "component.hpp"
 #include "components/components.hpp"
-#include "component_system.hpp"
-#include "component_systems/component_systems.hpp"
-#include "engine/event_system/event_manager.hpp"
+#include "component_database.hpp"
 
 #include <algorithm>
 #include <list>
@@ -22,7 +19,7 @@ namespace chestnut
         CComponentDatabase m_componentDB;
 
     public:
-        CEntityManager( CEventManager& eventManagerRef );
+        CEntityManager();
         ~CEntityManager();
 
         guid_t createEntity();

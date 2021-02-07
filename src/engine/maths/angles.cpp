@@ -1,4 +1,4 @@
-#include "engine/maths/angles.hpp"
+#include "angles.hpp"
 
 namespace chestnut
 {

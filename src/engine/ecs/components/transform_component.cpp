@@ -1,4 +1,4 @@
-#include "engine/ecs/components/transform_component.hpp"
+#include "transform_component.hpp"
 
 namespace chestnut
 {

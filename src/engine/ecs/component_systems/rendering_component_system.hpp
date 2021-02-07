@@ -1,9 +1,9 @@
 #ifndef __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
 #define __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
 
-#include "engine/ecs/component_system.hpp"
-#include "engine/ecs/components/transform_component.hpp"
-#include "engine/ecs/components/texture_component.hpp"
+#include "../component_system.hpp"
+#include "../components/transform_component.hpp"
+#include "../components/texture_component.hpp"
 
 namespace chestnut
 {

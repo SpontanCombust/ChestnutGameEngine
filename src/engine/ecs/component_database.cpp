@@ -1,4 +1,4 @@
-#include "engine/ecs/component_database.hpp"
+#include "component_database.hpp"
 
 namespace chestnut
 {   

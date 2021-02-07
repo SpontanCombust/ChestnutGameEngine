@@ -1,8 +1,8 @@
-#include "engine/graphics/texture.hpp"
+#include "texture.hpp"
 
 #include "engine/maths/angles.hpp"
 #include "engine/debug/debug.hpp"
-#include "engine/graphics/renderer.hpp"
+#include "renderer.hpp"
 
 #define DEF_FORMAT SDL_PIXELFORMAT_RGBA8888
 #define DEF_ACCESS SDL_TEXTUREACCESS_TARGET

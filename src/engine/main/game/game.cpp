@@ -1,9 +1,8 @@
-#include "engine/main/game/game.hpp"
+#include "game.hpp"
 
 namespace chestnut
 {    
     CChestnutGame::CChestnutGame( bool lockFramerate )
-    : theEntityManager( theEventManager )
     {
         m_lockFramerate = lockFramerate;
         m_isRunning = false;

@@ -1,8 +1,8 @@
-#include "engine/ecs/entity_manager.hpp"
+#include "entity_manager.hpp"
 
 namespace chestnut
 {
-    CEntityManager::CEntityManager( CEventManager& eventManagerRef )
+    CEntityManager::CEntityManager()
     {
 
     }
@@ -41,22 +41,5 @@ namespace chestnut
     {
         m_typesOfRecentComponents.clear();
     }
-
-    // void CEntityManager::update( float deltaTime ) 
-    // {
-    //     m_eventManagerRef.update( deltaTime );
-
-    //     for( IComponentSystem *cs : m_componentSystemList )
-    //     {
-    //         cs->update( deltaTime );
-
-    //         if( !m_typesOfNewComponents.empty() )
-    //         {
-    //             if( cs->needsAnyOfComponents( m_typesOfNewComponents ) )
-    //                 cs->fetchComponents( m_componentDB );
-    //         }
-    //     }
-    //     m_typesOfNewComponents.clear();
-    // }
 
 } // namespace chestnut

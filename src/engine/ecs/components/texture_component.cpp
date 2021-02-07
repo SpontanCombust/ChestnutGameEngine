@@ -1,4 +1,4 @@
-#include "engine/ecs/components/texture_component.hpp"
+#include "texture_component.hpp"
 
 namespace chestnut
 {
