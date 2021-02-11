@@ -3,19 +3,22 @@
 
 #include "event_base.hpp"
 
-#include <cstddef>
-
 namespace chestnut
 {
+    // An interface class meant to be derived from and house an event function pointer to be invoked at some point
     class IFunctionInvoker
     {
+    protected:
+        bool m_wasBound;
+
     public:
+        IFunctionInvoker();
         virtual void invoke( SEvent *event ) {}
         virtual ~IFunctionInvoker() {}
     };
-    
-    
 
+
+    // Class housing an event function pointer that will be invoked at some point
     template< typename EventType >
     class CFunctionInvoker : public IFunctionInvoker
     {
@@ -23,24 +26,31 @@ namespace chestnut
         event_function ( *m_func )( const EventType& );
 
     public:
+        // Sets invoker's function pointer
         void bind( event_function ( *func )( const EventType& ) );
+        // Invokes stored function pointer if it was bound
         void invoke( SEvent *event ) override;
     };
 
     template< typename EventType >
     void CFunctionInvoker<EventType>::bind( event_function( *func )( const EventType& ) ) 
     {
+        m_wasBound = true;
         m_func = func;
     }
     
     template< typename EventType >
     void CFunctionInvoker<EventType>::invoke( SEvent *event ) 
     {
-        ( *m_func )( *dynamic_cast< EventType* >( event ) );
+        if( m_wasBound )
+        {
+            ( *m_func )( *dynamic_cast< EventType* >( event ) );
+        }
     }
 
 
 
+    // Class housing an event member function pointer that will be invoked at some point
     template< typename T, typename EventType >
     class CMemberFunctionInvoker : public IFunctionInvoker
     {
@@ -49,13 +59,16 @@ namespace chestnut
         event_function ( T::*m_membFunc )( const EventType& );
 
     public:
+        // Sets invoker's member function pointer
         void bind( T *objPtr, event_function ( T::*membFunc )( const EventType& ) );
+        // Invokes stored member function pointer if it was bound
         void invoke( SEvent* event ) override;
     };
 
     template< typename T, typename EventType >
     void CMemberFunctionInvoker<T,EventType>::bind( T *objPtr, event_function ( T::*membFunc )( const EventType& ) )
     {
+        m_wasBound = true;
         m_objPtr = objPtr;
         m_membFunc = membFunc;
     }
@@ -63,7 +76,10 @@ namespace chestnut
     template< typename T, typename EventType >
     void CMemberFunctionInvoker<T,EventType>::invoke( SEvent* event )
     {
-        ( m_objPtr->*m_membFunc )( *dynamic_cast< EventType* >( event ) );
+        if( m_wasBound )
+        {
+            ( m_objPtr->*m_membFunc )( *dynamic_cast< EventType* >( event ) );
+        }
     }
 
 } // namespace chestnut
