@@ -2,6 +2,7 @@
 
 #include "engine/maths/angles.hpp"
 #include "engine/graphics/renderer.hpp"
+#include "engine/misc/utils.hpp"
 
 #include <algorithm>
 
@@ -12,8 +13,8 @@ namespace chestnut
         return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
             []( std::type_index tindex )
             { 
-                return tindex == std::type_index( typeid( STransformComponent ) )
-                    || tindex == std::type_index( typeid( STextureComponent ) );
+                return tindex == TINDEX( STransformComponent )
+                    || tindex == TINDEX( STextureComponent );
             }
         );
     }

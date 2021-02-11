@@ -12,7 +12,7 @@ namespace chestnut
             return false;
         }
             
-        std::type_index tindex = std::type_index( typeid( *component ) );
+        std::type_index tindex = TINDEX( *component );
         guid_t guid = component->parentGUID;
 
         auto& typedCompMap = m_componentMaps[ tindex ];

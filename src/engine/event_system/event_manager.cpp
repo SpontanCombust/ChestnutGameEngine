@@ -42,7 +42,7 @@ namespace chestnut
     
     void CEventManager::delegateEvent( SEvent *event ) 
     {
-        std::type_index tindex = std::type_index( typeid( *event ) );
+        std::type_index tindex = TINDEX( *event );
         if( m_eventTypeToIDListMap.find( tindex ) != m_eventTypeToIDListMap.end() )
         {
             std::list< int > &typedIDList = m_eventTypeToIDListMap[ tindex ];

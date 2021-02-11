@@ -3,6 +3,7 @@
 
 #include "component.hpp"
 #include "engine/debug/debug.hpp"
+#include "engine/misc/utils.hpp"
 
 #include <unordered_map>
 #include <typeindex>
@@ -43,7 +44,7 @@ namespace chestnut
     template< typename T >
     bool CComponentDatabase::hasComponentsType() const
     {
-        if( m_componentMaps.find( std::type_index( typeid(T) ) ) != m_componentMaps.end() )
+        if( m_componentMaps.find( TINDEX(T) ) != m_componentMaps.end() )
             return true;
         return false;
     }
@@ -54,7 +55,7 @@ namespace chestnut
         if( !hasComponentsType<T>() )
             return false;
 
-        auto& typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        auto& typedCompMap = m_componentMaps.at( TINDEX(T) );
         if( typedCompMap.find( guid ) != typedCompMap.end() )
             return true;
         return false;
@@ -66,7 +67,7 @@ namespace chestnut
         if( !hasComponentsType<T>() )
             return nullptr;
 
-        auto& typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        auto& typedCompMap = m_componentMaps.at( TINDEX(T) );
         for( auto& pair : typedCompMap )
         {
             guid_t &pair_guid = pair.first;
@@ -84,7 +85,7 @@ namespace chestnut
         if( !hasComponentsType<T>() )
             return nullptr;
 
-        auto& compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        auto& compMap = m_componentMaps.at( TINDEX(T) );
         guid_t pair_guid;
         IComponent *pair_component;
         for( auto& pair : compMap )
@@ -104,7 +105,7 @@ namespace chestnut
         if( !hasComponent<T>( guid ) )
             return false;
 
-        std::type_index tindex = std::type_index( typeid(T) );
+        std::type_index tindex = TINDEX(T);
         
         if( shouldDelete )
         {
@@ -132,7 +133,7 @@ namespace chestnut
             return typedCastedCompMap;
         }
 
-        typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        typedCompMap = m_componentMaps.at( TINDEX(T) );
         for( const auto &pair : typedCompMap )
         {
             const guid_t &guid = pair.first;

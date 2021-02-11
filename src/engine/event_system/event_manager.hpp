@@ -4,6 +4,7 @@
 #include "function_invoker.hpp"
 #include "event_constraint.hpp"
 #include "engine/debug/debug.hpp"
+#include "engine/misc/utils.hpp"
 
 #include <list>
 #include <typeindex>
@@ -77,7 +78,7 @@ namespace chestnut
 
         listener.functionInvoker = invoker;
 
-        m_eventTypeToIDListMap[ std::type_index( typeid( EventType ) ) ].push_back( m_idCounter );
+        m_eventTypeToIDListMap[ TINDEX( EventType ) ].push_back( m_idCounter );
         
         return m_idCounter;
     }
@@ -101,7 +102,7 @@ namespace chestnut
 
         listener.functionInvoker = invoker;
 
-        m_eventTypeToIDListMap[ std::type_index( typeid( EventType ) ) ].push_back( m_idCounter );
+        m_eventTypeToIDListMap[ TINDEX( EventType ) ].push_back( m_idCounter );
 
         return m_idCounter;
     }
@@ -124,7 +125,7 @@ namespace chestnut
         m_IDToListenerMap.erase( id );
 
 
-        std::list< int > &typedIDList = m_eventTypeToIDListMap[ std::type_index( typeid( EventType ) ) ];
+        std::list< int > &typedIDList = m_eventTypeToIDListMap[ TINDEX( EventType ) ];
 
         for( auto it = typedIDList.begin(); it != typedIDList.end(); ++it )
         {

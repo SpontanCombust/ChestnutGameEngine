@@ -4,6 +4,7 @@
 #include "ecs_utils.hpp"
 #include "components/components.hpp"
 #include "component_database.hpp"
+#include "engine/misc/utils.hpp"
 
 #include <algorithm>
 #include <list>
@@ -49,7 +50,7 @@ namespace chestnut
             T *component = new T();
             component->parentGUID = guid;
             m_componentDB.pushComponent( component );
-            m_typesOfRecentComponents.push_front( std::type_index( typeid( T ) ) );
+            m_typesOfRecentComponents.push_front( TINDEX(T) );
             return component;
         }
     }
