@@ -45,9 +45,9 @@ namespace chestnut
         std::type_index tindex = TINDEX( *event );
         if( m_eventTypeToIDListMap.find( tindex ) != m_eventTypeToIDListMap.end() )
         {
-            std::list< int > &typedIDList = m_eventTypeToIDListMap[ tindex ];
+            std::list< evlistener_id_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
-            for( const int &id : typedIDList )
+            for( const evlistener_id_t &id : typedIDList )
             {
                 SEventListener &listener = m_IDToListenerMap[ id ];
 

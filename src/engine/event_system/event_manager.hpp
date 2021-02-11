@@ -19,13 +19,15 @@ namespace chestnut
         IEventConstraint *constraint;
     };
 
+    using evlistener_id_t = unsigned int;
+
     class CEventManager
     {
     private:
-        int m_idCounter = 0;
+        evlistener_id_t m_idCounter = 0;
 
-        std::unordered_map< std::type_index, std::list< int > > m_eventTypeToIDListMap;
-        std::unordered_map< int, SEventListener > m_IDToListenerMap;
+        std::unordered_map< std::type_index, std::list< evlistener_id_t > > m_eventTypeToIDListMap;
+        std::unordered_map< evlistener_id_t, SEventListener > m_IDToListenerMap;
         std::queue< SEvent* > m_eventQueue;
 
     public:
@@ -39,11 +41,11 @@ namespace chestnut
 
 
         template< typename EventType >
-        void unregisterListenerByID( int ID );
+        void unregisterListenerByID( evlistener_id_t ID );
 
 
         template< typename EventType >
-        void constrainListenerByID( int id, std::function< bool( const EventType& ) > constraintFunctor );
+        void constrainListenerByID( evlistener_id_t id, std::function< bool( const EventType& ) > constraintFunctor );
 
 
         void raiseEvent( SEvent *event );
@@ -109,7 +111,7 @@ namespace chestnut
     
 
     template< typename EventType >
-    void CEventManager::unregisterListenerByID( int id ) 
+    void CEventManager::unregisterListenerByID( evlistener_id_t id ) 
     {
         // if listener even exists
         if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
@@ -125,7 +127,7 @@ namespace chestnut
         m_IDToListenerMap.erase( id );
 
 
-        std::list< int > &typedIDList = m_eventTypeToIDListMap[ TINDEX( EventType ) ];
+        std::list< evlistener_id_t > &typedIDList = m_eventTypeToIDListMap[ TINDEX( EventType ) ];
 
         for( auto it = typedIDList.begin(); it != typedIDList.end(); ++it )
         {
@@ -139,7 +141,7 @@ namespace chestnut
 
 
     template< typename EventType >
-    void CEventManager::constrainListenerByID( int id, std::function< bool( const EventType& ) > constraintFunctor )
+    void CEventManager::constrainListenerByID( evlistener_id_t id, std::function< bool( const EventType& ) > constraintFunctor )
     {
         // if listener even exists
         if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
