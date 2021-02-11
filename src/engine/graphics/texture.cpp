@@ -21,7 +21,7 @@ namespace chestnut
         m_size = { 0.f, 0.f };
         m_rotationRad = 0.f;
         m_rotationPoint = { 0.f, 0.f };
-        m_flip = ETextureFlip::NONE;
+        m_flip = SDL_FLIP_NONE;
     }
 
     CTexture::CTexture( int w, int h ) 
@@ -35,7 +35,7 @@ namespace chestnut
         m_size = { (float)w, (float)h };
         m_rotationRad = 0.f;
         m_rotationPoint = { 0.5f, 0.5f };
-        m_flip = ETextureFlip::NONE;
+        m_flip = SDL_FLIP_NONE;
     }
 
     CTexture::CTexture( const CTextureResource *texture ) 
@@ -49,7 +49,7 @@ namespace chestnut
         m_size = texture->getSize();
         m_rotationRad = 0.f;
         m_rotationPoint = { 0.5f, 0.5f };
-        m_flip = ETextureFlip::NONE;
+        m_flip = SDL_FLIP_NONE;
     }
     
     CTexture::~CTexture()
@@ -180,12 +180,12 @@ namespace chestnut
         return m_rotationPoint;
     }
 
-    void CTexture::setFlip( ETextureFlip flip ) 
+    void CTexture::setFlip( SDL_RendererFlip flip ) 
     {
         m_flip = flip;
     }
 
-    const ETextureFlip& CTexture::getFlip() const
+    const SDL_RendererFlip& CTexture::getFlip() const
     {
         return m_flip;
     }

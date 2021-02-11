@@ -1,6 +1,7 @@
 #include "renderer.hpp"
 
 #include "engine/maths/angles.hpp"
+#include "engine/misc/utils.hpp"
 
 namespace chestnut
 {
@@ -19,6 +20,11 @@ namespace chestnut
 
     void CRenderer::renderTexture( const CTexture& texture ) 
     {
+        if( !texture.getSDLTexturePtr() )
+        {
+            throw ChestnutException( "A texture with nullptr to SDL_Texture can't be rendered!" );
+        }
+
         SDL_Rect srcRect;
         SDL_FRect dstRect;
         double angle;
@@ -50,12 +56,7 @@ namespace chestnut
             (float)( texture.getRotationPoint().y * texture.getSize().y )
         };
 
-        if( texture.getFlip() == ETextureFlip::HORIZONTAL )
-            flip = SDL_FLIP_HORIZONTAL;
-        else if( texture.getFlip() == ETextureFlip::VERTICAL )
-            flip = SDL_FLIP_VERTICAL;
-        else
-            flip = SDL_FLIP_NONE;
+        flip = texture.getFlip();
 
         SDL_RenderCopyExF( m_sdlRenderer,
                             texture.getSDLTexturePtr(),

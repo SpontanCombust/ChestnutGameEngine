@@ -8,8 +8,6 @@
 
 namespace chestnut
 {
-    enum class ETextureFlip { NONE, HORIZONTAL, VERTICAL };
-
     class CTexture
     {
     private:
@@ -28,7 +26,7 @@ namespace chestnut
             examples: [0.5, 0.5] means center of a texture, [0.0, 0.0] means upper left corner etc. */
         Vector2lf m_rotationPoint;
 
-        ETextureFlip m_flip;
+        SDL_RendererFlip m_flip;
 
     public:
         CTexture();
@@ -63,8 +61,8 @@ namespace chestnut
         void setRotationPointToCenter();
         const Vector2lf& getRotationPoint() const;
 
-        void setFlip( ETextureFlip flip );
-        const ETextureFlip& getFlip() const;
+        void setFlip( SDL_RendererFlip flip );
+        const SDL_RendererFlip& getFlip() const;
 
         SDL_Texture *getSDLTexturePtr() const;
     };   

@@ -22,13 +22,12 @@ namespace chestnut
         template< typename T >
         bool hasComponent( guid_t guid ) const;
 
-        bool pushComponent( IComponent *component );
+        // Throws an exception if the component is invalid 
+        void pushComponent( IComponent *component );
 
+        // Throws an exception if doesn't find the component
         template< typename T >
-        IComponent *getComponent( guid_t guid ) const;
-
-        template< typename T >
-        T *getComponentCasted( guid_t guid ) const;
+        T& getComponent( guid_t guid ) const;
 
         template< typename T >
         bool eraseComponent( guid_t guid, bool shouldDelete = true );
@@ -62,41 +61,38 @@ namespace chestnut
     }
     
     template< typename T >
-    IComponent *CComponentDatabase::getComponent( guid_t guid ) const
+    T& CComponentDatabase::getComponent( guid_t guid ) const
     {
         if( !hasComponentsType<T>() )
-            return nullptr;
+        {
+            throw ChestnutException( "No component with that type found!" );
+        }
 
         auto& typedCompMap = m_componentMaps.at( TINDEX(T) );
-        for( auto& pair : typedCompMap )
-        {
-            guid_t &pair_guid = pair.first;
-            IComponent *pair_component = pair.second;
 
-            if( pair_guid == guid )
-                return pair_component;
-        }
-        return nullptr;
-    }
-
-    template< typename T >
-    T *CComponentDatabase::getComponentCasted( guid_t guid ) const
-    {
-        if( !hasComponentsType<T>() )
-            return nullptr;
-
-        auto& compMap = m_componentMaps.at( TINDEX(T) );
+        bool found = false;
         guid_t pair_guid;
         IComponent *pair_component;
-        for( auto& pair : compMap )
+        for( auto& pair : typedCompMap )
         {
             pair_guid = pair.first;
             pair_component = pair.second;
 
             if( pair_guid == guid )
-                return dynamic_cast<T*>( pair_component );
+            {
+                found = true;
+                break;
+            }
         }
-        return nullptr;
+
+        if( found )
+        {
+            return *dynamic_cast<T*>( pair_component );
+        }
+        else
+        {
+            throw ChestnutException( "No component with that type and GUID found!" );
+        }
     }
     
     template< typename T >
