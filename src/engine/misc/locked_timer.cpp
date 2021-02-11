@@ -2,10 +2,20 @@
 
 namespace chestnut
 {
-    CLockedTimer::CLockedTimer( int id, float interval, bool isRepeating )
+    CLockedTimer::CLockedTimer( timer_id_t id, float interval, bool isRepeating )
     :   CTimer( id ), m_updateIntervalInSeconds( interval ), m_isRepeating( isRepeating )
     {
         reset( true );
+    }
+
+    float CLockedTimer::getUpdateIntervalInSeconds() 
+    {
+        return m_updateIntervalInSeconds;
+    }
+
+    bool CLockedTimer::getIsRepeating() 
+    {
+        return m_isRepeating;
     }
 
     bool CLockedTimer::update( bool shouldStartIfDidntAlready ) 

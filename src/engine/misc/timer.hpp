@@ -7,6 +7,8 @@
 
 namespace chestnut
 {
+    using timer_id_t = unsigned int;
+
     class CTimer
     {
     protected:
@@ -32,12 +34,12 @@ namespace chestnut
         // user defined, constant properties //
 
         // ID given to a timer
-        const int m_timerID;
+        const timer_id_t m_timerID;
 
     public:
-        CTimer( int id );
+        CTimer( timer_id_t id );
 
-        int getID();
+        timer_id_t getID();
 
         virtual void reset( bool init = false );
         virtual void start();

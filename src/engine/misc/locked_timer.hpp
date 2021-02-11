@@ -20,7 +20,10 @@ namespace chestnut
         const bool m_isRepeating;
 
     public:
-        CLockedTimer( int id, float updateIntervalInSeconds, bool isRepeating = false );
+        CLockedTimer( timer_id_t id, float updateIntervalInSeconds, bool isRepeating = false );
+
+        float getUpdateIntervalInSeconds();
+        bool getIsRepeating();
 
         /* returns true if: 
          * was started

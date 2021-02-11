@@ -2,14 +2,14 @@
 
 namespace chestnut
 {
-    CTimer::CTimer( int id )
+    CTimer::CTimer( timer_id_t id )
     : m_timerID(id)
     {
         reset( true );
         m_wasStarted = false;
     }
 
-    int CTimer::getID()
+    timer_id_t CTimer::getID()
     {
         return m_timerID;
     }
