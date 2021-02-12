@@ -3,6 +3,9 @@
 
 #include "../app/application.hpp"
 #include "engine/event_system/event_manager.hpp"
+#include "engine/event_system/input_manager.hpp"
+#include "engine/event_system/events/events.hpp"
+#include "engine/ecs/components/components.hpp"
 #include "engine/ecs/entity_manager.hpp"
 #include "engine/ecs/systems/systems.hpp"
 #include "engine/misc/locked_timer.hpp"
@@ -25,6 +28,7 @@ namespace chestnut
         bool m_isSuspended;
 
 
+        CSDLEventDispatchSystem *m_sdlEventDispatchSystem;
         CRenderingComponentSystem *m_renderingSystem;
 
         std::list< ISystem* > m_systemList;
@@ -32,13 +36,15 @@ namespace chestnut
 
         CEntityManager m_entityManager;
         CEventManager m_eventManager;
+        CInputManager m_inputManager;
 
-    
+
     public:
         CChestnutGame( bool lockFramerate );
 
         CEntityManager& getEntityManager();
         CEventManager& getEventManager();
+        CInputManager& getInputManager();
 
         bool onCreate() override;
         void onStart() override;
@@ -46,6 +52,14 @@ namespace chestnut
         
         virtual void onUpdate( float deltaTime );
         virtual void onSuspend();
+
+        event_function onQuitEvent( const SMiscSDLEvent& event );
+
+
+    private:
+        eventListener_id_t m_quitListenerID;
+        void registerQuitEvent();
+        void unregisterQuitEvent();
     };
     
 } // namespace chestnut

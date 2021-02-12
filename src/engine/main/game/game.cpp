@@ -3,6 +3,7 @@
 namespace chestnut
 {    
     CChestnutGame::CChestnutGame( bool lockFramerate )
+    : m_inputManager( &m_eventManager )
     {
         m_lockFramerate = lockFramerate;
         m_isRunning = false;
@@ -19,12 +20,15 @@ namespace chestnut
             m_gameUpdateTimer = new CTimer(0);
 
 
+        m_sdlEventDispatchSystem = new CSDLEventDispatchSystem( &m_eventManager );
         m_renderingSystem = new CRenderingComponentSystem();
 
+        m_systemList.push_back( m_sdlEventDispatchSystem );
         m_systemList.push_back( m_renderingSystem );
 
         m_componentSystemList.push_back( m_renderingSystem );
 
+        registerQuitEvent();
 
         return valid;
     }
@@ -37,14 +41,10 @@ namespace chestnut
         m_isSuspended = false;
         
         m_gameUpdateTimer->start();
-        while( m_isRunning && !m_isSuspended )
+        while( m_isRunning )
         {
             if( m_gameUpdateTimer->update() )
                 onUpdate( m_gameUpdateTimer->getDeltaTime() );
-
-            //!TEMPORARY
-            if( SDL_GetTicks() > 5000 )
-                m_isRunning = false;
         }
     }
 
@@ -91,6 +91,7 @@ namespace chestnut
         }
         m_componentSystemList.clear();
 
+        unregisterQuitEvent();
         m_eventManager.clearListeners();
         
         m_entityManager.destroyAllEntities();
@@ -106,6 +107,34 @@ namespace chestnut
     CEventManager& CChestnutGame::getEventManager() 
     {
         return m_eventManager;
+    }
+
+    CInputManager& CChestnutGame::getInputManager() 
+    {
+        return m_inputManager;
+    }
+
+
+    event_function CChestnutGame::onQuitEvent( const SMiscSDLEvent& event ) 
+    {
+        m_isRunning = false;
+    }
+
+    void CChestnutGame::registerQuitEvent() 
+    {
+        m_quitListenerID = m_eventManager.registerListener( this, &CChestnutGame::onQuitEvent );
+
+        m_eventManager.constrainListenerByID< SMiscSDLEvent >( m_quitListenerID,
+            []( const SMiscSDLEvent& event ) -> bool
+            {
+                return event.sdlEvent.type == SDL_QUIT;
+            }
+        );
+    }
+
+    void CChestnutGame::unregisterQuitEvent() 
+    {
+        m_eventManager.unregisterListenerByID< SMiscSDLEvent >( m_quitListenerID );
     }
 
 } // namespace chestnut
