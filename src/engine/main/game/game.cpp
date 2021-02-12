@@ -51,7 +51,7 @@ namespace chestnut
     void CChestnutGame::onUpdate( float deltaTime ) 
     {
         // updating event manager
-        theEventManager.update( deltaTime );
+        m_eventManager.update( deltaTime );
 
         // updating systems
         for( ISystem *system : m_systemList )
@@ -60,16 +60,16 @@ namespace chestnut
         }
 
         // fetching new components to component systems
-        std::list< std::type_index > recentComponents = theEntityManager.getTypesOfRecentComponents();
+        std::list< std::type_index > recentComponents = m_entityManager.getTypesOfRecentComponents();
         for( IComponentSystem *cs : m_componentSystemList )
         {
             if( !recentComponents.empty() )
             {
                 if( cs->needsAnyOfComponents( recentComponents ) )
-                    cs->fetchComponents( theEntityManager.getComponentDatabase() );
+                    cs->fetchComponents( m_entityManager.getComponentDatabase() );
             }
 
-            theEntityManager.clearTypesOfRecentComponents();
+            m_entityManager.clearTypesOfRecentComponents();
         }
 
         // drawing the frame
@@ -91,11 +91,21 @@ namespace chestnut
         }
         m_componentSystemList.clear();
 
-        theEventManager.clearListeners();
+        m_eventManager.clearListeners();
         
-        theEntityManager.destroyAllEntities();
+        m_entityManager.destroyAllEntities();
 
         super::onEnd();
+    }
+
+    CEntityManager& CChestnutGame::getEntityManager() 
+    {
+        return m_entityManager;
+    }
+
+    CEventManager& CChestnutGame::getEventManager() 
+    {
+        return m_eventManager;
     }
 
 } // namespace chestnut

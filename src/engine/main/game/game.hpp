@@ -19,23 +19,26 @@ namespace chestnut
         bool m_lockFramerate;
 
     protected:
-        CRenderingComponentSystem *m_renderingSystem;
-
-        std::list< ISystem* > m_systemList;
-        std::list< IComponentSystem* > m_componentSystemList;
-
-
         CTimer *m_gameUpdateTimer;
 
         bool m_isRunning;
         bool m_isSuspended;
 
+
+        CRenderingComponentSystem *m_renderingSystem;
+
+        std::list< ISystem* > m_systemList;
+        std::list< IComponentSystem* > m_componentSystemList;
+
+        CEntityManager m_entityManager;
+        CEventManager m_eventManager;
+
     
     public:
         CChestnutGame( bool lockFramerate );
 
-        CEntityManager theEntityManager;
-        CEventManager theEventManager;
+        CEntityManager& getEntityManager();
+        CEventManager& getEventManager();
 
         bool onCreate() override;
         void onStart() override;
