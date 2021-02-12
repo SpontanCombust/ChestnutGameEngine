@@ -16,6 +16,7 @@ namespace chestnut
         static void setSDLRenderer( SDL_Renderer *renderer );
         static SDL_Renderer *getSDLRenderer();
 
+        // Throws an exception if pointer to SDL_Texture in texture is null
         static void renderTexture( const CTexture& texture );
 
         static void renderPresent();

@@ -3,9 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${default}",
-                "${workspaceFolder}/include",
-                "${workspaceFolder}/src"
+                "${workspaceFolder}/src",
+                "/usr/include/SDL2/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

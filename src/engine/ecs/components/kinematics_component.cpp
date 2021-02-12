@@ -1,4 +1,4 @@
-#include "engine/ecs/components/kinematics_component.hpp"
+#include "kinematics_component.hpp"
 
 namespace chestnut
 {

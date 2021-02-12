@@ -1,8 +1,0 @@
-#include "engine/ecs/ecs_utils.hpp"
-#include "engine/ecs/component.hpp"
-#include "engine/ecs/entity.hpp"
-#include "engine/ecs/component_database.hpp"
-#include "engine/ecs/component_system.hpp"
-#include "engine/ecs/components/components.hpp"
-#include "engine/ecs/component_systems/component_systems.hpp"
-#include "engine/ecs/entity_manager.hpp"

@@ -1,39 +1,43 @@
-#include "engine/ecs/component_systems/rendering_component_system.hpp"
+#include "rendering_component_system.hpp"
 
 #include "engine/maths/angles.hpp"
 #include "engine/graphics/renderer.hpp"
+#include "engine/misc/utils.hpp"
 
 #include <algorithm>
 
 namespace chestnut
 {
-    bool CRenderingComponentSystem::needsAnyOfComponents( const std::forward_list< std::type_index >& compTypeIndexes )
+    bool CRenderingComponentSystem::needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes )
     {
         return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
             []( std::type_index tindex )
             { 
-                return tindex == std::type_index( typeid( STransformComponent ) )
-                    || tindex == std::type_index( typeid( STextureComponent ) );
+                return tindex == TINDEX( STransformComponent )
+                    || tindex == TINDEX( STextureComponent );
             }
         );
     }
     
     void CRenderingComponentSystem::fetchComponents( const CComponentDatabase& dbRef )
     {
-        dbRef.fillComponentMapOfType( m_transformCompMap );
-        dbRef.fillComponentMapOfType( m_textureCompMap );
+        m_transformCompMap = dbRef.getComponentMapOfType< STransformComponent >();
+        m_textureCompMap = dbRef.getComponentMapOfType< STextureComponent >();
     }
     
     void CRenderingComponentSystem::update( float deltaTime ) 
     {
-        CRenderer::renderClear();
-
         transformTextures();
+    }
+
+    void CRenderingComponentSystem::draw() const
+    {
+        CRenderer::renderClear();
+        
         drawTextures();
 
         CRenderer::renderPresent();
     }
-
 
     void CRenderingComponentSystem::transformTextures() 
     {

@@ -1,30 +1,29 @@
-#include "engine/ecs/component_database.hpp"
+#include "component_database.hpp"
 
 namespace chestnut
 {   
-    bool CComponentDatabase::pushComponent( IComponent *component ) 
+    void CComponentDatabase::pushComponent( IComponent *component ) 
     {
         if( !component )
-            return false;
+        {
+            throw ChestnutException( "Can't push null component to database!" );
+        }
         else if( component->parentGUID == GUID_UNREGISTERED )
         {
-            LOG_CHANNEL( "COMPONENT_DB", "Given component has unregistered GUID!" );
-            return false;
+            throw ChestnutException( "Can't push component with unregistered parent GUID to database!" );
         }
             
-        std::type_index tindex = std::type_index( typeid( *component ) );
+        std::type_index tindex = TINDEX( *component );
         guid_t guid = component->parentGUID;
 
         auto& typedCompMap = m_componentMaps[ tindex ];
         if( typedCompMap.find( guid ) != typedCompMap.end() )
         {
-            LOG_CHANNEL( "COMPONENT_DB", "Database already has component of that type and GUID!" );
-            return false;
+            throw ChestnutException( "Entity can have only one copy of component of given type!" );
         }
         else
         {
             m_componentMaps[ tindex ][ guid ] = component;
-            return true;
         }
     }
     

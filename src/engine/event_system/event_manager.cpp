@@ -1,4 +1,4 @@
-#include "engine/event_system/event_manager.hpp"
+#include "event_manager.hpp"
 
 namespace chestnut
 {
@@ -15,6 +15,7 @@ namespace chestnut
     
     void CEventManager::clearListeners() 
     {
+        // For every listener, free the memory from the invoker and constraint
         for( auto &pair : m_IDToListenerMap )
         {
             SEventListener listener = pair.second;
@@ -24,6 +25,9 @@ namespace chestnut
             if( listener.constraint )
                 delete listener.constraint;
         }
+
+        // Clear maps from IDs and listener objects
+
         m_IDToListenerMap.clear();
 
         m_eventTypeToIDListMap.clear();
@@ -42,22 +46,30 @@ namespace chestnut
     
     void CEventManager::delegateEvent( SEvent *event ) 
     {
-        std::type_index tindex = std::type_index( typeid( *event ) );
+        // Find the type of the event
+        std::type_index tindex = TINDEX( *event );
+        // Check if there are listeners with that type
         if( m_eventTypeToIDListMap.find( tindex ) != m_eventTypeToIDListMap.end() )
         {
-            std::list< int > &typedIDList = m_eventTypeToIDListMap[ tindex ];
+            // Get list of listener IDs for that event type
+            std::list< eventListener_id_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
-            for( const int &id : typedIDList )
+            // Iterate over every ID in the list
+            for( const eventListener_id_t &id : typedIDList )
             {
+                // Get the specific listener
                 SEventListener &listener = m_IDToListenerMap[ id ];
 
                 if( listener.constraint )
                 {
-                    if( listener.constraint->verify( event ) )
-                        listener.functionInvoker->invoke( event );
+                    // If event doesn't fit constraint's demands, move onto next listener
+                    if( !listener.constraint->verify( event ) )
+                    {
+                        continue;
+                    }
                 }
-                else
-                    listener.functionInvoker->invoke( event );
+                
+                listener.functionInvoker->invoke( event );
             }
         }
     }

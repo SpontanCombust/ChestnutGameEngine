@@ -7,6 +7,8 @@
 
 namespace chestnut
 {
+    using timer_id_t = unsigned int;
+
     class CTimer
     {
     protected:
@@ -32,27 +34,33 @@ namespace chestnut
         // user defined, constant properties //
 
         // ID given to a timer
-        const int m_timerID;
+        const timer_id_t m_timerID;
 
     public:
-        CTimer( int id );
+        CTimer( timer_id_t id );
 
-        int getID();
+        timer_id_t getID();
 
         virtual void reset( bool init = false );
         virtual void start();
+        
         void pause();
         void unpause();
 
         bool isPaused();
 
-        uint32_t getCurrentTicks();
-        // return time between current and previous successful updates in seconds
+        // get number of miliseconds since timer start
+        uint32_t getCurrentTimeInMiliseconds();
+        // get number of seconds since timer start
+        float getCurrentTimeInSeconds();
+        /* return time between current and previous successful updates in seconds
+         * Note that with update rate greater than 1000 per second it will return 0 most of the time due to timer precision limitation */
         float getDeltaTime();
         // return average number of updates per second
         float getAvgUpdatesPerSec();
 
-        virtual bool update();
+        // returns true if was started and isn't paused
+        virtual bool update( bool shouldStartIfDidntAlready = true );
 
         virtual ~CTimer() {}
     };

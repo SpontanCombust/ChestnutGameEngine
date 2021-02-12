@@ -3,6 +3,7 @@
 
 #include "component.hpp"
 #include "engine/debug/debug.hpp"
+#include "engine/misc/utils.hpp"
 
 #include <unordered_map>
 #include <typeindex>
@@ -21,13 +22,12 @@ namespace chestnut
         template< typename T >
         bool hasComponent( guid_t guid ) const;
 
-        bool pushComponent( IComponent *component );
+        // Throws an exception if the component is invalid 
+        void pushComponent( IComponent *component );
 
+        // Throws an exception if doesn't find the component
         template< typename T >
-        IComponent *getComponent( guid_t guid ) const;
-
-        template< typename T >
-        T *getComponentCasted( guid_t guid ) const;
+        T& getComponent( guid_t guid ) const;
 
         template< typename T >
         bool eraseComponent( guid_t guid, bool shouldDelete = true );
@@ -36,15 +36,14 @@ namespace chestnut
 
         void clearComponents();
 
-
         template< typename T >
-        bool fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const;
+        std::unordered_map< guid_t, T* > getComponentMapOfType() const;
     };
 
     template< typename T >
     bool CComponentDatabase::hasComponentsType() const
     {
-        if( m_componentMaps.find( std::type_index( typeid(T) ) ) != m_componentMaps.end() )
+        if( m_componentMaps.find( TINDEX(T) ) != m_componentMaps.end() )
             return true;
         return false;
     }
@@ -55,48 +54,45 @@ namespace chestnut
         if( !hasComponentsType<T>() )
             return false;
 
-        auto& typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        auto& typedCompMap = m_componentMaps.at( TINDEX(T) );
         if( typedCompMap.find( guid ) != typedCompMap.end() )
             return true;
         return false;
     }
     
     template< typename T >
-    IComponent *CComponentDatabase::getComponent( guid_t guid ) const
+    T& CComponentDatabase::getComponent( guid_t guid ) const
     {
         if( !hasComponentsType<T>() )
-            return nullptr;
-
-        auto& typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
-        for( auto& pair : typedCompMap )
         {
-            guid_t &pair_guid = pair.first;
-            IComponent *pair_component = pair.second;
-
-            if( pair_guid == guid )
-                return pair_component;
+            throw ChestnutException( "No component with that type found!" );
         }
-        return nullptr;
-    }
 
-    template< typename T >
-    T *CComponentDatabase::getComponentCasted( guid_t guid ) const
-    {
-        if( !hasComponentsType<T>() )
-            return nullptr;
+        auto& typedCompMap = m_componentMaps.at( TINDEX(T) );
 
-        auto& compMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        bool found = false;
         guid_t pair_guid;
         IComponent *pair_component;
-        for( auto& pair : compMap )
+        for( auto& pair : typedCompMap )
         {
             pair_guid = pair.first;
             pair_component = pair.second;
 
             if( pair_guid == guid )
-                return dynamic_cast<T*>( pair_component );
+            {
+                found = true;
+                break;
+            }
         }
-        return nullptr;
+
+        if( found )
+        {
+            return *dynamic_cast<T*>( pair_component );
+        }
+        else
+        {
+            throw ChestnutException( "No component with that type and GUID found!" );
+        }
     }
     
     template< typename T >
@@ -105,7 +101,7 @@ namespace chestnut
         if( !hasComponent<T>( guid ) )
             return false;
 
-        std::type_index tindex = std::type_index( typeid(T) );
+        std::type_index tindex = TINDEX(T);
         
         if( shouldDelete )
         {
@@ -122,22 +118,27 @@ namespace chestnut
     }
     
     template< typename T >
-    bool CComponentDatabase::fillComponentMapOfType( std::unordered_map< guid_t, T* >& compMapRef ) const
+    std::unordered_map< guid_t, T* > CComponentDatabase::getComponentMapOfType() const
     {
-        if( !hasComponentsType<T>() )
-            return false;
+        std::unordered_map< guid_t, IComponent* > typedCompMap;
+        std::unordered_map< guid_t, T* > typedCastedCompMap;
 
-        auto typedCompMap = m_componentMaps.at( std::type_index( typeid(T) ) );
+        // if has no components of that type, return empty map
+        if( !hasComponentsType<T>() )
+        {
+            return typedCastedCompMap;
+        }
+
+        typedCompMap = m_componentMaps.at( TINDEX(T) );
         for( const auto &pair : typedCompMap )
         {
             const guid_t &guid = pair.first;
             IComponent *component = pair.second;
 
-            T *typedComp = dynamic_cast<T*>( component );
-            compMapRef[guid] = typedComp;
+            typedCastedCompMap[guid] = dynamic_cast<T*>( component );
         }
 
-        return true;
+        return typedCastedCompMap;
     }
 
 } // namespace chestnut

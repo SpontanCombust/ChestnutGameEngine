@@ -4,7 +4,10 @@
 #include "../app/application.hpp"
 #include "engine/event_system/event_manager.hpp"
 #include "engine/ecs/entity_manager.hpp"
-#include "engine/misc/interval_timer.hpp"
+#include "engine/ecs/systems/systems.hpp"
+#include "engine/misc/locked_timer.hpp"
+
+#include <list>
 
 namespace chestnut
 {
@@ -16,23 +19,33 @@ namespace chestnut
         bool m_lockFramerate;
 
     protected:
-        CTimer *m_gameTimer;
+        CTimer *m_gameUpdateTimer;
 
         bool m_isRunning;
         bool m_isSuspended;
+
+
+        CRenderingComponentSystem *m_renderingSystem;
+
+        std::list< ISystem* > m_systemList;
+        std::list< IComponentSystem* > m_componentSystemList;
+
+        CEntityManager m_entityManager;
+        CEventManager m_eventManager;
 
     
     public:
         CChestnutGame( bool lockFramerate );
 
-        CEntityManager theEntityManager;
-        CEventManager theEventManager;
+        CEntityManager& getEntityManager();
+        CEventManager& getEventManager();
 
-        virtual bool onCreate() override;
-        virtual void onStart() override;
+        bool onCreate() override;
+        void onStart() override;
+        void onEnd() override;
+        
         virtual void onUpdate( float deltaTime );
         virtual void onSuspend();
-        virtual void onEnd() override;
     };
     
 } // namespace chestnut

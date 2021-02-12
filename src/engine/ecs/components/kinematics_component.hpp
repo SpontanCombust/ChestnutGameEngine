@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_KINEMATICS_COMPONENT_H__
 #define __CHESTNUT_KINEMATICS_COMPONENT_H__
 
-#include "engine/ecs/component.hpp"
+#include "../component.hpp"
 #include "engine/maths/vector.hpp"
 
 namespace chestnut
