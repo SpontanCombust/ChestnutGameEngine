@@ -27,14 +27,17 @@ namespace chestnut
     
     void CRenderingComponentSystem::update( float deltaTime ) 
     {
-        CRenderer::renderClear();
-
         transformTextures();
+    }
+
+    void CRenderingComponentSystem::draw() const
+    {
+        CRenderer::renderClear();
+        
         drawTextures();
 
         CRenderer::renderPresent();
     }
-
 
     void CRenderingComponentSystem::transformTextures() 
     {

@@ -18,7 +18,13 @@ namespace chestnut
         else
             m_gameUpdateTimer = new CTimer(0);
 
-        m_componentSystemList.push_back( new CRenderingComponentSystem() );
+
+        m_renderingSystem = new CRenderingComponentSystem();
+
+        m_systemList.push_back( m_renderingSystem );
+
+        m_componentSystemList.push_back( m_renderingSystem );
+
 
         return valid;
     }
@@ -47,12 +53,16 @@ namespace chestnut
         // updating event manager
         theEventManager.update( deltaTime );
 
-        // updating component systems
+        // updating systems
+        for( ISystem *system : m_systemList )
+        {
+            system->update( deltaTime );
+        }
+
+        // fetching new components to component systems
         std::list< std::type_index > recentComponents = theEntityManager.getTypesOfRecentComponents();
         for( IComponentSystem *cs : m_componentSystemList )
         {
-            cs->update( deltaTime );
-
             if( !recentComponents.empty() )
             {
                 if( cs->needsAnyOfComponents( recentComponents ) )
@@ -61,6 +71,9 @@ namespace chestnut
 
             theEntityManager.clearTypesOfRecentComponents();
         }
+
+        // drawing the frame
+        m_renderingSystem->draw();
     }
 
     void CChestnutGame::onSuspend() 

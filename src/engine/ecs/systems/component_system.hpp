@@ -1,19 +1,19 @@
 #ifndef __CHESTNUT_COMPONENT_SYSTEM_H__
 #define __CHESTNUT_COMPONENT_SYSTEM_H__
 
-#include "component_database.hpp"
+#include "../system.hpp"
+#include "../component_database.hpp"
 
 #include <list>
 
 namespace chestnut
 {
-    class IComponentSystem
+    class IComponentSystem : public ISystem
     {
     public:
-        virtual ~IComponentSystem() {}
         virtual bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) = 0;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) = 0;
-        virtual void update( float deltaTime ) = 0;
+        ~IComponentSystem() {}
     };
     
 } // namespace chestnut

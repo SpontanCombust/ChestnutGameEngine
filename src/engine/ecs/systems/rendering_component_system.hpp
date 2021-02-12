@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
 #define __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
 
-#include "../component_system.hpp"
+#include "component_system.hpp"
 #include "../components/transform_component.hpp"
 #include "../components/texture_component.hpp"
 
@@ -14,9 +14,10 @@ namespace chestnut
         std::unordered_map< guid_t, STextureComponent* > m_textureCompMap;
 
     public:
-        virtual bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;
-        virtual void fetchComponents( const CComponentDatabase& dbRef ) override;
-        virtual void update( float deltaTime ) override;
+        bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;
+        void fetchComponents( const CComponentDatabase& dbRef ) override;
+        void update( float deltaTime ) override;
+        void draw() const;
 
     private:
         void transformTextures();
