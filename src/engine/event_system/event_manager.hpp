@@ -16,8 +16,11 @@ namespace chestnut
     // Struct containing function invoker and its (optional) constraint
     struct SEventListener 
     { 
+        std::type_index eventTindex;
         IFunctionInvoker *functionInvoker;
         IEventConstraint *constraint;
+
+        SEventListener();
     };
 
     using eventListener_id_t = unsigned int;
@@ -86,6 +89,9 @@ namespace chestnut
         // Initializes the new listener in ID-to-listener map
         SEventListener &listener = m_IDToListenerMap[ m_idCounter ];
 
+        // assign type index to maintain coherence when setting constraint
+        listener.eventTindex = TINDEX( EventType );
+
         // Creates function invoker based on function in the parameter
         CFunctionInvoker<EventType> *invoker = new CFunctionInvoker<EventType>();
         invoker->bind( func );
@@ -116,6 +122,9 @@ namespace chestnut
         // Initializes the new listener in ID-to-listener map
         SEventListener &listener = m_IDToListenerMap[ m_idCounter ];
         
+        // assign type index to maintain coherence when setting constraint
+        listener.eventTindex = TINDEX( EventType );
+
         // Creates member function invoker based on function in the parameter
         CMemberFunctionInvoker<T, EventType> *invoker = new CMemberFunctionInvoker<T, EventType>();
         invoker->bind( objPtr, membFunc );
@@ -183,23 +192,26 @@ namespace chestnut
         SEventListener &listener = m_IDToListenerMap[ id ];
 
         // Checks if the given constraint is for the same event type as the function invoker
-        if( TINDEX( listener.functionInvoker ) != TINDEX( EventType ) )
+        if( listener.eventTindex != TINDEX( EventType ) )
         {
             LOG_CHANNEL( "EVENT_MANAGER", "Event constraint incompatable with the listener!" );
             return;
         }
 
-        // If constraint hasn't been set earlier, make a new one
-        if( !listener.constraint )
-        {
-            listener.constraint = new CEventConstraint<EventType>();
-        }
-
         // Retrieve the constraint
-        CEventConstraint<EventType> *constraint = listener.constraint;
+        CEventConstraint<EventType> *constraint = new CEventConstraint<EventType>();
+
+        // If constraint has been set earlier, delete it
+        if( listener.constraint )
+        {
+            delete listener.constraint;
+        }
 
         // Set the functor for the constraint
         constraint->set( constraintFunctor );
+
+        // assign new constraint
+        listener.constraint = constraint;
     }
 
 } // namespace chestnut

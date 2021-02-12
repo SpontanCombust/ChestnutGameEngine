@@ -2,6 +2,14 @@
 
 namespace chestnut
 {
+    SEventListener::SEventListener() 
+    : eventTindex( TINDEX( void ) )
+    {
+        functionInvoker = nullptr;
+        constraint = nullptr;
+    }
+
+
     void CEventManager::raiseEvent( SEvent *event ) 
     {
         if( !event )
