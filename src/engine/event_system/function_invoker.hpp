@@ -13,7 +13,7 @@ namespace chestnut
 
     public:
         IFunctionInvoker();
-        virtual void invoke( SEvent *event ) {}
+        virtual void invoke( SEvent *event ) = 0;
         virtual ~IFunctionInvoker() {}
     };
 

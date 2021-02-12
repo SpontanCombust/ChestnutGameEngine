@@ -15,7 +15,7 @@ namespace chestnut
 
     public:
         IEventConstraint();
-        virtual bool verify( SEvent* ) { return false; }
+        virtual bool verify( SEvent* ) = 0;
         virtual ~IEventConstraint() {}
         
     };
