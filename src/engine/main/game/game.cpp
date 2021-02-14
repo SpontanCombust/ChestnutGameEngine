@@ -51,7 +51,7 @@ namespace chestnut
     void CChestnutGame::onUpdate( float deltaTime ) 
     {
         // updating event manager
-        m_eventManager.update( deltaTime );
+        m_eventManager.delegateEvents();
 
         // updating systems
         for( ISystem *system : m_systemList )

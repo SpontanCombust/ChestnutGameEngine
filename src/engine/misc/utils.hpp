@@ -8,6 +8,8 @@ namespace chestnut
 {
     #define TINDEX(T) ( std::type_index( typeid( T ) ) )
 
+    #define TINDEX_NAME(T) ( std::type_index( typeid( T ) ).name() )
+
     struct ChestnutException : std::exception
     {
         const std::string msg;
