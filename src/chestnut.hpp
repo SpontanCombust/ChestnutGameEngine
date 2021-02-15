@@ -11,7 +11,10 @@
 #include "engine/event_system/event_base.hpp"
 #include "engine/event_system/function_invoker.hpp"
 #include "engine/event_system/event_constraint.hpp"
+#include "engine/event_system/event_listener.hpp"
 #include "engine/event_system/event_manager.hpp"
+#include "engine/event_system/events/events.hpp"
+#include "engine/event_system/event_helpers/event_constraint_functor_creators.hpp"
 
 #include "engine/graphics/renderer.hpp"
 #include "engine/graphics/texture.hpp"
