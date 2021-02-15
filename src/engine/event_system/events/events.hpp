@@ -1,2 +1,5 @@
-#include "keyboard_event.hpp"
 #include "misc_sdl_event.hpp"
+#include "keyboard_event.hpp"
+#include "mouse_button_event.hpp"
+#include "mouse_motion_event.hpp"
+#include "mouse_wheel_event.hpp"

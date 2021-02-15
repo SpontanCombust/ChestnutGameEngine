@@ -3,7 +3,6 @@
 
 #include "../app/application.hpp"
 #include "engine/event_system/event_manager.hpp"
-#include "engine/event_system/input_manager.hpp"
 #include "engine/event_system/events/events.hpp"
 #include "engine/ecs/components/components.hpp"
 #include "engine/ecs/entity_manager.hpp"
@@ -36,7 +35,6 @@ namespace chestnut
 
         CEntityManager m_entityManager;
         CEventManager m_eventManager;
-        CInputManager m_inputManager;
 
 
     public:
@@ -44,7 +42,8 @@ namespace chestnut
 
         CEntityManager& getEntityManager();
         CEventManager& getEventManager();
-        CInputManager& getInputManager();
+
+        float getGameTimeInSeconds();
 
         bool onCreate() override;
         void onStart() override;

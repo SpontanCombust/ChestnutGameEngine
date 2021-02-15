@@ -3,7 +3,6 @@
 namespace chestnut
 {    
     CChestnutGame::CChestnutGame( bool lockFramerate )
-    : m_inputManager( &m_eventManager )
     {
         m_lockFramerate = lockFramerate;
         m_isRunning = false;
@@ -109,9 +108,9 @@ namespace chestnut
         return m_eventManager;
     }
 
-    CInputManager& CChestnutGame::getInputManager() 
+    float CChestnutGame::getGameTimeInSeconds() 
     {
-        return m_inputManager;
+        return m_gameUpdateTimer->getCurrentTimeInSeconds();
     }
 
 

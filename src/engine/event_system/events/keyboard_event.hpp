@@ -10,7 +10,7 @@ namespace chestnut
     struct SKeyboardEvent : SEvent
     {
         bool isPressed;
-        SDL_Keycode keycode;
+        SDL_Keycode button;
         uint16_t modifiers;
 
         const std::string getName() override { return "KeyboardEvent"; }
