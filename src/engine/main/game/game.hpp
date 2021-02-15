@@ -31,7 +31,9 @@ namespace chestnut
         CRenderingComponentSystem *m_renderingSystem;
 
         std::list< ISystem* > m_systemList;
-        std::list< IComponentSystem* > m_componentSystemList;
+        std::list< IComponentDrivenSystem* > m_componentDrivenSystemList;
+        std::list< IEventDrivenSystem* > m_eventDrivenSystemList;
+
 
         CEntityManager m_entityManager;
         CEventManager m_eventManager;

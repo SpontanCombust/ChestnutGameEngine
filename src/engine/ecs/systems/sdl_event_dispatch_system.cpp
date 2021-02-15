@@ -3,10 +3,21 @@
 #include "engine/event_system/events/events.hpp"
 
 namespace chestnut
-{    
-    CSDLEventDispatchSystem::CSDLEventDispatchSystem(CEventManager *eventManagerPtr) 
+{      
+    bool CSDLEventDispatchSystem::needsToRaiseEvents() 
     {
-        m_eventManagerPtr = eventManagerPtr;
+        return !m_localEventQueue.empty();
+    }
+
+    void CSDLEventDispatchSystem::raiseEvents( CEventManager& eventManagerRef ) 
+    {
+        SEvent *event;
+        while( !m_localEventQueue.empty() )
+        {
+            event = m_localEventQueue.front();
+            m_localEventQueue.pop();
+            eventManagerRef.raiseEvent( event );
+        }
     }
 
     void CSDLEventDispatchSystem::update( float deltaTime ) 
@@ -24,7 +35,7 @@ namespace chestnut
                     keyboardEvent->isPressed = ( sdlEvent.key.type == SDL_KEYDOWN ) ? true : false;
                     keyboardEvent->button = sdlEvent.key.keysym.sym;
                     keyboardEvent->modifiers = sdlEvent.key.keysym.mod;
-                    m_eventManagerPtr->raiseEvent( keyboardEvent );
+                    m_localEventQueue.push( keyboardEvent );
                 }
                     break;
 
@@ -36,7 +47,7 @@ namespace chestnut
                     mouseBtnEvent->button = sdlEvent.button.button;
                     mouseBtnEvent->clickPos = Vector2i( sdlEvent.button.x, sdlEvent.button.y );
                     mouseBtnEvent->clicksNum = sdlEvent.button.clicks;
-                    m_eventManagerPtr->raiseEvent( mouseBtnEvent );
+                    m_localEventQueue.push( mouseBtnEvent );
                 }
 
                 case SDL_MOUSEWHEEL:
@@ -50,7 +61,7 @@ namespace chestnut
 
                     SMouseWheelEvent *mouseWheelEvent = new SMouseWheelEvent();
                     mouseWheelEvent->scrollAmount = Vector2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
-                    m_eventManagerPtr->raiseEvent( mouseWheelEvent );
+                    m_localEventQueue.push( mouseWheelEvent );
                 }
 
                 case SDL_MOUSEMOTION:
@@ -64,14 +75,14 @@ namespace chestnut
                     SMouseMotionEvent *mouseMotionEvent = new SMouseMotionEvent();
                     mouseMotionEvent->pos = Vector2i( sdlEvent.motion.x, sdlEvent.motion.y );
                     mouseMotionEvent->motion = Vector2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
-                    m_eventManagerPtr->raiseEvent( mouseMotionEvent );
+                    m_localEventQueue.push( mouseMotionEvent );
                 }
 
                 default:
                 {
                     SMiscSDLEvent *miscEvent = new SMiscSDLEvent();
                     miscEvent->sdlEvent = sdlEvent;
-                    m_eventManagerPtr->raiseEvent( miscEvent );
+                    m_localEventQueue.push( miscEvent );
                 }
             }
         }

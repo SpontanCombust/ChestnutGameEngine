@@ -1,18 +1,16 @@
 #ifndef __CHESTNUT_SDL_EVENT_DISPATCH_SYSTEM_H__
 #define __CHESTNUT_SDL_EVENT_DISPATCH_SYSTEM_H__
 
-#include "../system.hpp"
+#include "event_driven_system.hpp"
 #include "engine/event_system/event_manager.hpp"
 
 namespace chestnut
 {
-    class CSDLEventDispatchSystem : public ISystem
+    class CSDLEventDispatchSystem : public IEventDrivenSystem
     {
-    private:
-        CEventManager *m_eventManagerPtr;
-
     public:
-        CSDLEventDispatchSystem( CEventManager *eventManagerPtr );
+        bool needsToRaiseEvents() override;
+        void raiseEvents( CEventManager& eventManagerRef ) override;
         void update( float deltaTime ) override;   
     };
 

@@ -8,12 +8,12 @@
 
 namespace chestnut
 {
-    class IComponentSystem : public ISystem
+    class IComponentDrivenSystem : public ISystem
     {
     public:
         virtual bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) = 0;
         virtual void fetchComponents( const CComponentDatabase& dbRef ) = 0;
-        ~IComponentSystem() {}
+        ~IComponentDrivenSystem() {}
     };
     
 } // namespace chestnut

@@ -19,13 +19,15 @@ namespace chestnut
             m_gameUpdateTimer = new CTimer(0);
 
 
-        m_sdlEventDispatchSystem = new CSDLEventDispatchSystem( &m_eventManager );
+        m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
         m_renderingSystem = new CRenderingComponentSystem();
 
         m_systemList.push_back( m_sdlEventDispatchSystem );
         m_systemList.push_back( m_renderingSystem );
 
-        m_componentSystemList.push_back( m_renderingSystem );
+        m_componentDrivenSystemList.push_back( m_renderingSystem );
+
+        m_eventDrivenSystemList.push_back( m_sdlEventDispatchSystem );
 
         registerQuitEvent();
 
@@ -60,7 +62,7 @@ namespace chestnut
 
         // fetching new components to component systems
         std::list< std::type_index > recentComponents = m_entityManager.getTypesOfRecentComponents();
-        for( IComponentSystem *cs : m_componentSystemList )
+        for( IComponentDrivenSystem *cs : m_componentDrivenSystemList )
         {
             if( !recentComponents.empty() )
             {
@@ -69,6 +71,14 @@ namespace chestnut
             }
 
             m_entityManager.clearTypesOfRecentComponents();
+        }
+
+        for( IEventDrivenSystem *es : m_eventDrivenSystemList )
+        {
+            if( es->needsToRaiseEvents() )
+            {
+                es->raiseEvents( m_eventManager );
+            }
         }
 
         // drawing the frame
@@ -84,11 +94,11 @@ namespace chestnut
     {
         delete m_gameUpdateTimer;
 
-        for( IComponentSystem *cs : m_componentSystemList )
+        for( IComponentDrivenSystem *cs : m_componentDrivenSystemList )
         {
             delete cs;
         }
-        m_componentSystemList.clear();
+        m_componentDrivenSystemList.clear();
 
         unregisterQuitEvent();
         m_eventManager.clearListeners();
