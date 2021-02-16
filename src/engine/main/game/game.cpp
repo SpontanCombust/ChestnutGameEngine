@@ -73,7 +73,7 @@ namespace chestnut
             m_entityManager.clearTypesOfRecentComponents();
         }
 
-        for( IEventRaisingSystem *ers : m_eventRaisingSystemsList )
+        for( CEventRaisingSystem *ers : m_eventRaisingSystemsList )
         {
             if( ers->needsToRaiseEvents() )
             {

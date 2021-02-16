@@ -32,7 +32,7 @@ namespace chestnut
 
         std::list< IUpdatableSystem* > m_updatableSystemsList;
         std::list< IComponentFetchingSystem* > m_componentFetchingSystemsList;
-        std::list< IEventRaisingSystem* > m_eventRaisingSystemsList;
+        std::list< CEventRaisingSystem* > m_eventRaisingSystemsList;
 
 
         CEntityManager m_entityManager;

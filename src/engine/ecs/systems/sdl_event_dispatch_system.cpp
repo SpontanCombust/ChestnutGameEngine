@@ -4,22 +4,6 @@
 
 namespace chestnut
 {      
-    bool CSDLEventDispatchSystem::needsToRaiseEvents() 
-    {
-        return !m_localEventQueue.empty();
-    }
-
-    void CSDLEventDispatchSystem::raiseEvents( CEventManager& eventManagerRef ) 
-    {
-        SEvent *event;
-        while( !m_localEventQueue.empty() )
-        {
-            event = m_localEventQueue.front();
-            m_localEventQueue.pop();
-            eventManagerRef.raiseEvent( event );
-        }
-    }
-
     void CSDLEventDispatchSystem::update( float deltaTime ) 
     {
         SDL_Event sdlEvent;
