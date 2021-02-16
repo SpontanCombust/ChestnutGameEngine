@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
-#define __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
+#ifndef __CHESTNUT_RENDERING_SYSTEM_H__
+#define __CHESTNUT_RENDERING_SYSTEM_H__
 
 #include "../system_interfaces/updatable_system.hpp"
 #include "../system_interfaces/component_fetching_system.hpp"
@@ -8,7 +8,7 @@
 
 namespace chestnut
 {
-    class CRenderingComponentSystem : public IUpdatableSystem, public IComponentFetchingSystem
+    class CRenderingSystem : public IUpdatableSystem, public IComponentFetchingSystem
     {
     private:
         std::unordered_map< guid_t, STransformComponent* > m_transformCompMap;
@@ -27,4 +27,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_RENDERING_COMPONENT_SYSTEM_H__
+#endif // __CHESTNUT_RENDERING_SYSTEM_H__

@@ -20,7 +20,7 @@ namespace chestnut
 
 
         m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
-        m_renderingSystem = new CRenderingComponentSystem();
+        m_renderingSystem = new CRenderingSystem();
 
         m_updatableSystemsList.push_back( m_sdlEventDispatchSystem );
         m_updatableSystemsList.push_back( m_renderingSystem );

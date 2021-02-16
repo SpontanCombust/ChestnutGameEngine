@@ -28,7 +28,7 @@ namespace chestnut
 
 
         CSDLEventDispatchSystem *m_sdlEventDispatchSystem;
-        CRenderingComponentSystem *m_renderingSystem;
+        CRenderingSystem *m_renderingSystem;
 
         std::list< IUpdatableSystem* > m_updatableSystemsList;
         std::list< IComponentFetchingSystem* > m_componentFetchingSystemsList;

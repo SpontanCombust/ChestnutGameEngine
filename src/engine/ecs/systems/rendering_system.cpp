@@ -1,4 +1,4 @@
-#include "rendering_component_system.hpp"
+#include "rendering_system.hpp"
 
 #include "engine/maths/angles.hpp"
 #include "engine/graphics/renderer.hpp"
@@ -8,7 +8,7 @@
 
 namespace chestnut
 {
-    bool CRenderingComponentSystem::needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes )
+    bool CRenderingSystem::needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes )
     {
         return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
             []( std::type_index tindex )
@@ -19,18 +19,18 @@ namespace chestnut
         );
     }
     
-    void CRenderingComponentSystem::fetchComponents( const CComponentDatabase& dbRef )
+    void CRenderingSystem::fetchComponents( const CComponentDatabase& dbRef )
     {
         m_transformCompMap = dbRef.getComponentMapOfType< STransformComponent >();
         m_textureCompMap = dbRef.getComponentMapOfType< STextureComponent >();
     }
     
-    void CRenderingComponentSystem::update( float deltaTime ) 
+    void CRenderingSystem::update( float deltaTime ) 
     {
         transformTextures();
     }
 
-    void CRenderingComponentSystem::draw() const
+    void CRenderingSystem::draw() const
     {
         CRenderer::renderClear();
         
@@ -39,7 +39,7 @@ namespace chestnut
         CRenderer::renderPresent();
     }
 
-    void CRenderingComponentSystem::transformTextures() 
+    void CRenderingSystem::transformTextures() 
     {
         guid_t guid;
         STransformComponent *transformComp;
@@ -98,7 +98,7 @@ namespace chestnut
         }
     }
 
-    void CRenderingComponentSystem::drawTextures() const
+    void CRenderingSystem::drawTextures() const
     {
         STextureComponent *textureComp;
         for( const auto &pair : m_textureCompMap )
