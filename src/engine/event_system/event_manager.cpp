@@ -2,6 +2,60 @@
 
 namespace chestnut
 {
+
+    eventListener_id_t CEventManager::registerListener( SEventListener& listener ) 
+    {
+        // Creates new ID for the listener
+        m_idCounter++;
+
+        // Copies listener to ID-to-listener map under its designated ID
+        m_IDToListenerMap[ m_idCounter ] = listener;
+
+        // Adds new listener ID to type-to-IDs map
+        m_eventTypeToIDListMap[ listener.eventTindex ].push_back( m_idCounter );
+        
+        // Returns ID of the new listener
+        return m_idCounter;
+    }
+
+    void CEventManager::unregisterListenerByID( eventListener_id_t id, std::type_index tindex ) 
+    {
+        // Checks if listener even exists
+        if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
+        {
+            LOG_CHANNEL( "EVENT_MANAGER", "No listener with ID " << id << " exists!" );
+            return;
+        }
+
+        // Retrieves the listener from ID-to-listener map
+        SEventListener &listener = m_IDToListenerMap[ id ];
+
+        destroyEventListener( listener );
+
+        // Erases listener from ID-to-listener map
+        m_IDToListenerMap.erase( id );
+
+        // Gets the refernce to the list of IDs of listeners for the event type
+        std::list< eventListener_id_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
+
+        // Searches the list for the ID of unregistered listener and erases it
+        bool found = false;
+        for( auto it = typedIDList.begin(); it != typedIDList.end(); ++it )
+        {
+            if( *it == id )
+            {
+                typedIDList.erase( it );
+                found = true;
+                break;
+            }
+        }
+
+        if( !found )
+        {
+            LOG_CHANNEL( "EVENT_MANAGER", "No listener with ID " << id << " and type " << tindex.name() << " exists!" );
+        }
+    }
+
     void CEventManager::raiseEvent( SEvent *event ) 
     {
         if( !event )
@@ -20,10 +74,7 @@ namespace chestnut
         {
             SEventListener listener = pair.second;
 
-            delete listener.functionInvoker;
-
-            if( listener.constraint )
-                delete listener.constraint;
+            destroyEventListener( listener );
         }
 
         // Clear maps from IDs and listener objects
@@ -39,6 +90,7 @@ namespace chestnut
         {
             SEvent *event = m_eventQueue.front();
             m_eventQueue.pop();
+            
             delete event;
             event = nullptr;
         }
@@ -82,15 +134,10 @@ namespace chestnut
             event = m_eventQueue.front();
             m_eventQueue.pop();
             delegateEvent( event );
+            
             delete event;
             event = nullptr;
         }
-    }
-
-    void CEventManager::update( float deltaTime )
-    {
-        if( !m_eventQueue.empty() )
-            delegateEvents();
     }
 
     CEventManager::~CEventManager() 

@@ -19,12 +19,17 @@ namespace chestnut
             m_gameUpdateTimer = new CTimer(0);
 
 
+        m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
         m_renderingSystem = new CRenderingComponentSystem();
 
-        m_systemList.push_back( m_renderingSystem );
+        m_updatableSystemsList.push_back( m_sdlEventDispatchSystem );
+        m_updatableSystemsList.push_back( m_renderingSystem );
 
-        m_componentSystemList.push_back( m_renderingSystem );
+        m_componentFetchingSystemsList.push_back( m_renderingSystem );
 
+        m_eventRaisingSystemsList.push_back( m_sdlEventDispatchSystem );
+
+        registerQuitEvent();
 
         return valid;
     }
@@ -37,39 +42,43 @@ namespace chestnut
         m_isSuspended = false;
         
         m_gameUpdateTimer->start();
-        while( m_isRunning && !m_isSuspended )
+        while( m_isRunning )
         {
             if( m_gameUpdateTimer->update() )
                 onUpdate( m_gameUpdateTimer->getDeltaTime() );
-
-            //!TEMPORARY
-            if( SDL_GetTicks() > 5000 )
-                m_isRunning = false;
         }
     }
 
     void CChestnutGame::onUpdate( float deltaTime ) 
     {
         // updating event manager
-        m_eventManager.update( deltaTime );
+        m_eventManager.delegateEvents();
 
         // updating systems
-        for( ISystem *system : m_systemList )
+        for( IUpdatableSystem *us : m_updatableSystemsList )
         {
-            system->update( deltaTime );
+            us->update( deltaTime );
         }
 
         // fetching new components to component systems
         std::list< std::type_index > recentComponents = m_entityManager.getTypesOfRecentComponents();
-        for( IComponentSystem *cs : m_componentSystemList )
+        for( IComponentFetchingSystem *cfs : m_componentFetchingSystemsList )
         {
             if( !recentComponents.empty() )
             {
-                if( cs->needsAnyOfComponents( recentComponents ) )
-                    cs->fetchComponents( m_entityManager.getComponentDatabase() );
+                if( cfs->needsAnyOfComponents( recentComponents ) )
+                    cfs->fetchComponents( m_entityManager.getComponentDatabase() );
             }
 
             m_entityManager.clearTypesOfRecentComponents();
+        }
+
+        for( IEventRaisingSystem *ers : m_eventRaisingSystemsList )
+        {
+            if( ers->needsToRaiseEvents() )
+            {
+                ers->raiseEvents( m_eventManager );
+            }
         }
 
         // drawing the frame
@@ -85,12 +94,14 @@ namespace chestnut
     {
         delete m_gameUpdateTimer;
 
-        for( IComponentSystem *cs : m_componentSystemList )
-        {
-            delete cs;
-        }
-        m_componentSystemList.clear();
+        delete m_renderingSystem;
+        delete m_sdlEventDispatchSystem;
 
+        m_updatableSystemsList.clear();
+        m_componentFetchingSystemsList.clear();
+        m_eventRaisingSystemsList.clear();
+
+        unregisterQuitEvent();
         m_eventManager.clearListeners();
         
         m_entityManager.destroyAllEntities();
@@ -106,6 +117,34 @@ namespace chestnut
     CEventManager& CChestnutGame::getEventManager() 
     {
         return m_eventManager;
+    }
+
+    float CChestnutGame::getGameTimeInSeconds() 
+    {
+        return m_gameUpdateTimer->getCurrentTimeInSeconds();
+    }
+
+
+    event_function CChestnutGame::onQuitEvent( const SMiscSDLEvent& event ) 
+    {
+        m_isRunning = false;
+    }
+
+    void CChestnutGame::registerQuitEvent() 
+    {
+        m_quitListenerID = m_eventManager.registerListener( this, &CChestnutGame::onQuitEvent );
+
+        m_eventManager.constrainListenerByID< SMiscSDLEvent >( m_quitListenerID,
+            []( const SMiscSDLEvent& event ) -> bool
+            {
+                return event.sdlEvent.type == SDL_QUIT;
+            }
+        );
+    }
+
+    void CChestnutGame::unregisterQuitEvent() 
+    {
+        m_eventManager.unregisterListenerByID< SMiscSDLEvent >( m_quitListenerID );
     }
 
 } // namespace chestnut
