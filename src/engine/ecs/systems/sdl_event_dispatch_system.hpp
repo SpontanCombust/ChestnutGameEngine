@@ -5,10 +5,15 @@
 #include "../system_interfaces/event_raising_system.hpp"
 #include "engine/event_system/event_manager.hpp"
 
+#include <queue>
+
 namespace chestnut
 {
     class CSDLEventDispatchSystem : public IUpdatableSystem, public IEventRaisingSystem
     {
+    private:
+        std::queue< SEvent* > m_localEventQueue;
+
     public:
         bool needsToRaiseEvents() override;
         void raiseEvents( CEventManager& eventManagerRef ) override;
