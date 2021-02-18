@@ -4,6 +4,7 @@
 #include "engine/event_system/event_manager.hpp"
 
 #include <list>
+#include <utility>
 
 namespace chestnut
 {
@@ -11,10 +12,11 @@ namespace chestnut
     {
     protected:
         std::list< SEventListener > m_listenersToBeRegistered;
+        std::list< std::pair< eventListener_id_t, std::type_index > > m_listenersToBeUnregisteredDataPairs;
 
     public:
-        virtual bool needsToRegisterListeners();
-        virtual void registerListeners( CEventManager& eventManagerRef );
+        virtual bool needsToManageListeners();
+        virtual void manageListeners( CEventManager& eventManagerRef );
 
         virtual ~CListenerRegisteringSystem() {}
     };
