@@ -19,7 +19,7 @@ namespace chestnut
         if( !init )
         {
             m_startTick = SDL_GetTicks();
-            m_currentTick = m_lastTick = m_startTick;
+            m_currentRelativeTick = m_lastRelativeTick = 0;
         }
         m_updateCount = 0;
         m_lastPauseTick = 0;
@@ -33,7 +33,7 @@ namespace chestnut
         if( !m_wasStarted )
         {
             m_startTick = SDL_GetTicks();
-            m_currentTick = m_lastTick = m_startTick;
+            m_currentRelativeTick = m_lastRelativeTick = 0;
             m_wasStarted = true;
         }
     }
@@ -57,17 +57,17 @@ namespace chestnut
 
     uint32_t CTimer::getCurrentTimeInMiliseconds() 
     {
-        return m_currentTick;
+        return m_currentRelativeTick;
     }
 
     float CTimer::getCurrentTimeInSeconds() 
     {
-        return (float)m_currentTick / 1000.f;
+        return (float)m_currentRelativeTick / 1000.f;
     }
 
     float CTimer::getDeltaTime() 
     {
-        uint32_t dt = m_currentTick - m_lastTick;
+        uint32_t dt = m_currentRelativeTick - m_lastRelativeTick;
 
         if( dt == 0 )
         {
@@ -79,22 +79,22 @@ namespace chestnut
 
     float CTimer::getAvgUpdatesPerSec() 
     {
-        if( m_currentTick > 0 )
-            return (float)m_updateCount / (float)m_currentTick * 1000.f;
+        if( m_currentRelativeTick > 0 )
+            return (float)m_updateCount / (float)m_currentRelativeTick * 1000.f;
         return 0;
     }
 
     bool CTimer::update( bool shouldStartIfDidntAlready ) 
     {
-        if( shouldStartIfDidntAlready )
+        if( shouldStartIfDidntAlready && !m_wasStarted )
         {
             start();
         }
 
         if( m_wasStarted && !m_isPaused )
         {
-            m_lastTick = m_currentTick;
-            m_currentTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
+            m_lastRelativeTick = m_currentRelativeTick;
+            m_currentRelativeTick = SDL_GetTicks() - m_startTick - m_pausedTicks;
             m_updateCount++;
             return true;
         }

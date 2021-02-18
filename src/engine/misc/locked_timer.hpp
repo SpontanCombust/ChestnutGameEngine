@@ -8,9 +8,6 @@ namespace chestnut
     // a timer that has a locked update rate per second
     class CLockedTimer : public CTimer
     {
-    private:
-        typedef CTimer super;
-
     protected:
         // user defined, constant properties //
 

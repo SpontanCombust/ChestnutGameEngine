@@ -16,13 +16,13 @@ namespace chestnut
 
         // the number of updated made on the timer
         uint64_t m_updateCount;
-        // tick when timer was started
+        // SDL tick when timer was started
         uint32_t m_startTick;
         // tick since timer started minus paused ticks (current internal tick)
-        uint32_t m_currentTick;
-        // tick from the previous update
-        uint32_t m_lastTick;
-        // tick when timer was last time paused
+        uint32_t m_currentRelativeTick;
+        // tick since timer started minus paused ticks from the previous update
+        uint32_t m_lastRelativeTick;
+        // SDL tick when timer was last time paused
         uint32_t m_lastPauseTick;
         // amount of ticks while the timer was paused
         uint32_t m_pausedTicks;
