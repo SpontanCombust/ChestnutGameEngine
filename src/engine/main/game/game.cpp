@@ -20,14 +20,18 @@ namespace chestnut
 
 
         m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
+        m_timerSystem = new CTimerSystem();
         m_renderingSystem = new CRenderingSystem();
 
         m_updatableSystemsList.push_back( m_sdlEventDispatchSystem );
+        m_updatableSystemsList.push_back( m_timerSystem );
         m_updatableSystemsList.push_back( m_renderingSystem );
 
+        m_componentFetchingSystemsList.push_back( m_timerSystem );
         m_componentFetchingSystemsList.push_back( m_renderingSystem );
 
         m_eventRaisingSystemsList.push_back( m_sdlEventDispatchSystem );
+        m_eventRaisingSystemsList.push_back( m_timerSystem );
 
         registerQuitEvent();
 
@@ -95,6 +99,7 @@ namespace chestnut
         delete m_gameUpdateTimer;
 
         delete m_renderingSystem;
+        delete m_timerSystem;
         delete m_sdlEventDispatchSystem;
 
         m_updatableSystemsList.clear();
@@ -123,6 +128,7 @@ namespace chestnut
     {
         return m_gameUpdateTimer->getCurrentTimeInSeconds();
     }
+
 
 
     event_function CChestnutGame::onQuitEvent( const SMiscSDLEvent& event ) 

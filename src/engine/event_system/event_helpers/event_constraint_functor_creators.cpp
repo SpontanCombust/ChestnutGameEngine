@@ -57,4 +57,17 @@ namespace chestnut
         };
     }
 
+    std::function< bool( const STimerEvent& ) > getTimerEventConstraintFunctor( timer_id_t timerID )
+    {
+        return [=]( const STimerEvent& event ) -> bool
+        {
+            if( event.timerID == timerID )
+            {
+                return true;
+            }
+
+            return false;
+        };
+    }
+
 } // namespace chestnut

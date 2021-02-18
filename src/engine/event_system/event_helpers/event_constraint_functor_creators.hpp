@@ -13,6 +13,8 @@ namespace chestnut
 
     std::function< bool( const SMouseWheelEvent& ) > getMouseWheelEventConstraintFunctor( bool shouldReactOnXScroll, bool shouldReactOnYScroll );
 
+    std::function< bool( const STimerEvent& ) > getTimerEventConstraintFunctor( timer_id_t timerID );
+
 } // namespace chestnut
 
 #endif // __CHESTNUT_EVENT_CONSTRAINT_FUNCTOR_CREATORS_H__
