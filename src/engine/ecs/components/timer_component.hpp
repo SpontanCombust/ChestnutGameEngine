@@ -10,10 +10,14 @@
 
 namespace chestnut
 {
-    struct STimerComponent
+    struct STimerComponent : IComponent
     {
+        bool shouldDeleteTimersOnComponentDestroy;
         std::list< CLockedTimer* > timerList;
-        std::unordered_map< timer_id_t, eventListener_id_t > timerIDToListenerIDMap;
+
+        STimerComponent();
+        STimerComponent( bool _shouldDeleteTimersOnComponentDestroy );
+        ~STimerComponent();
     };
 
 } // namespace chestnut
