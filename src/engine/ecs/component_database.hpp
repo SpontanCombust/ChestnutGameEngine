@@ -3,7 +3,8 @@
 
 #include "component.hpp"
 #include "engine/debug/debug.hpp"
-#include "engine/misc/utils.hpp"
+#include "engine/misc/exception.hpp"
+#include "engine/misc/tindex.hpp"
 
 #include <unordered_map>
 #include <typeindex>

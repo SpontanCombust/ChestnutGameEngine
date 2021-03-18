@@ -4,7 +4,7 @@
 #include "ecs_utils.hpp"
 #include "components/components.hpp"
 #include "component_database.hpp"
-#include "engine/misc/utils.hpp"
+#include "engine/misc/tindex.hpp"
 
 #include <algorithm>
 #include <list>

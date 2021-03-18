@@ -1,7 +1,7 @@
 #include "renderer.hpp"
 
 #include "engine/maths/angles.hpp"
-#include "engine/misc/utils.hpp"
+#include "engine/misc/exception.hpp"
 
 namespace chestnut
 {

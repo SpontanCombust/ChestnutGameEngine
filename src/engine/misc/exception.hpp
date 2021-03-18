@@ -1,15 +1,11 @@
-#ifndef __CHESTNUT_UTILS_H__
-#define __CHESTNUT_UTILS_H__
+#ifndef __CHESTNUT_EXCEPTION_H__
+#define __CHESTNUT_EXCEPTION_H__
 
 #include <exception>
-#include <typeindex>
+#include <string>
 
 namespace chestnut
 {
-    #define TINDEX(T) ( std::type_index( typeid( T ) ) )
-
-    #define TINDEX_NAME(T) ( std::type_index( typeid( T ) ).name() )
-
     struct ChestnutException : std::exception
     {
         const std::string msg;
@@ -27,4 +23,4 @@ namespace chestnut
 } // namespace chestnut
 
 
-#endif // __CHESTNUT_UTILS_H__
+#endif // __CHESTNUT_EXCEPTION_H__

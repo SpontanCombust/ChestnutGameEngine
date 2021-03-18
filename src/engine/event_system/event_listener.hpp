@@ -3,7 +3,8 @@
 
 #include "function_invoker.hpp"
 #include "event_constraint.hpp"
-#include "engine/misc/utils.hpp"
+#include "engine/misc/exception.hpp"
+#include "engine/misc/tindex.hpp"
 
 #include <typeindex>
 
