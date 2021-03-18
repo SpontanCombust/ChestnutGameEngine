@@ -1,8 +1,11 @@
 #include "application.hpp"
 
+#include "engine/globals.hpp"
+
 namespace chestnut
 {
-    CApplication *theApp = nullptr;
+    // global app instance definition
+    CApplication *__g_application = nullptr;
 
 
     CApplication::CApplication( bool lockFramerate ) 
@@ -11,7 +14,8 @@ namespace chestnut
         m_rendererFlags = SDL_RENDERER_ACCELERATED;
         m_lockFramerate = lockFramerate;
 
-        theApp = this;
+        // set this instance as theApp
+        __g_application = this;
     }
 
     CApplication::CApplication( bool lockFramerate, int windowFlags, int rendererFlags )
@@ -20,7 +24,7 @@ namespace chestnut
         m_rendererFlags = rendererFlags;
         m_lockFramerate = lockFramerate;
 
-        theApp = this;
+        __g_application = this;
     }
 
     bool CApplication::initSDL() 

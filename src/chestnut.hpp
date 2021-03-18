@@ -1,5 +1,6 @@
 #include "engine/types.hpp"
 #include "engine/constants.hpp"
+#include "engine/globals.hpp"
 
 #include "engine/debug/debug.hpp"
 

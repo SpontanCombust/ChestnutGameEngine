@@ -41,11 +41,6 @@ namespace chestnut
         void deinitSDL();
     };
 
-
-    // globally available application instance
-    extern CApplication *theApp;
-
-
 } // namespace chestnut
 
 #endif // __CHESTNUT_APPLICATION_H__
