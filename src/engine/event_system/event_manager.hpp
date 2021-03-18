@@ -4,6 +4,7 @@
 #include "event_listener.hpp"
 #include "engine/debug/debug.hpp"
 #include "engine/misc/tindex.hpp"
+#include "engine/types.hpp"
 
 #include <list>
 #include <typeindex>
@@ -12,8 +13,6 @@
 
 namespace chestnut
 {
-    using eventListener_id_t = unsigned int;
-
     // Class processing raised events and triggering listeners registered for given events
     class CEventManager
     {

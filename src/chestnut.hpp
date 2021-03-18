@@ -1,6 +1,8 @@
+#include "engine/types.hpp"
+#include "engine/constants.hpp"
+
 #include "engine/debug/debug.hpp"
 
-#include "engine/ecs/ecs_utils.hpp"
 #include "engine/ecs/component.hpp"
 #include "engine/ecs/component_database.hpp"
 #include "engine/ecs/entity_manager.hpp"

@@ -2,10 +2,9 @@
 #define __CHESTNUT_ANGLES_H__
 
 #include "vector.hpp"
+#include "engine/constants.hpp"
 
 #include <cmath>
-
-#define CHESTNUT_PI 3.14159265359
 
 namespace chestnut
 {

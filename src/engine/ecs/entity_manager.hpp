@@ -1,10 +1,10 @@
 #ifndef __CHESTNUT_ENTITY_MANAGER_H__
 #define __CHESTNUT_ENTITY_MANAGER_H__
 
-#include "ecs_utils.hpp"
 #include "components/components.hpp"
 #include "component_database.hpp"
 #include "engine/misc/tindex.hpp"
+#include "engine/types.hpp"
 
 #include <algorithm>
 #include <list>

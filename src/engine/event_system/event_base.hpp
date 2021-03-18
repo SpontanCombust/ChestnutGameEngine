@@ -5,8 +5,6 @@
 
 namespace chestnut
 {
-    using event_function = void;
-
     struct SEvent
     {
         // put here whathever you want in child struct

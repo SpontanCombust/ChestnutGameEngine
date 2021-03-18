@@ -1,7 +1,8 @@
 #ifndef __CHESTNUT_COMPONENT_H__
 #define __CHESTNUT_COMPONENT_H__
 
-#include "ecs_utils.hpp"
+#include "engine/types.hpp"
+#include "engine/constants.hpp"
 
 namespace chestnut
 {

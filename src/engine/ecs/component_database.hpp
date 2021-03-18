@@ -5,6 +5,7 @@
 #include "engine/debug/debug.hpp"
 #include "engine/misc/exception.hpp"
 #include "engine/misc/tindex.hpp"
+#include "engine/types.hpp"
 
 #include <unordered_map>
 #include <typeindex>

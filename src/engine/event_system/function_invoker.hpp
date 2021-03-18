@@ -2,6 +2,7 @@
 #define __CHESTNUT_FUNCTION_INVOKER_H__
 
 #include "event_base.hpp"
+#include "engine/types.hpp"
 
 namespace chestnut
 {

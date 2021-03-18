@@ -1,14 +1,14 @@
 #ifndef __CHESTNUT_TIMER_H__
 #define __CHESTNUT_TIMER_H__
 
+#include "engine/types.hpp"
+
 #include <SDL2/SDL_timer.h>
 
 #include <cstdint>
 
 namespace chestnut
 {
-    using timer_id_t = unsigned int;
-
     class CTimer
     {
     protected:
