@@ -14,7 +14,7 @@ namespace chestnut
     class CEntityManager
     {
     private:
-        guid_t m_guidCounter = 0;
+        entityid_t m_entityIDCounter = 0;
         std::list< std::type_index > m_typesOfRecentComponents;
 
         CComponentDatabase m_componentDB;
@@ -23,12 +23,12 @@ namespace chestnut
         CEntityManager();
         ~CEntityManager();
 
-        guid_t createEntity();
+        entityid_t createEntity();
 
         template< typename T >
-        T& createComponent( guid_t guid );
+        T& createComponent( entityid_t id );
 
-        bool destroyEntity( guid_t guid );
+        bool destroyEntity( entityid_t id );
 
         void destroyAllEntities();
 
@@ -39,16 +39,16 @@ namespace chestnut
     };
 
     template< typename T >
-    T& CEntityManager::createComponent( guid_t guid ) 
+    T& CEntityManager::createComponent( entityid_t id ) 
     {
-        if( m_componentDB.hasComponent<T>( guid ) )
+        if( m_componentDB.hasComponent<T>( id ) )
         {
-            return m_componentDB.getComponent<T>( guid );
+            return m_componentDB.getComponent<T>( id );
         }
         else
         {
             T *component = new T();
-            component->parentGUID = guid;
+            component->ownerID = id;
             m_componentDB.pushComponent( component );
             m_typesOfRecentComponents.push_front( TINDEX(T) );
             return *component;

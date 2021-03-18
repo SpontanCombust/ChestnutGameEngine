@@ -59,7 +59,7 @@ namespace chestnut
 
 
     private:
-        eventListener_id_t m_quitListenerID;
+        listenerid_t m_quitListenerID;
         void registerQuitEvent();
         void unregisterQuitEvent();
     };

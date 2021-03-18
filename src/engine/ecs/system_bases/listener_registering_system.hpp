@@ -12,7 +12,7 @@ namespace chestnut
     {
     protected:
         std::list< SEventListener > m_listenersToBeRegistered;
-        std::list< std::pair< eventListener_id_t, std::type_index > > m_listenersToBeUnregisteredDataPairs;
+        std::list< std::pair< listenerid_t, std::type_index > > m_listenersToBeUnregisteredDataPairs;
 
     public:
         virtual bool needsToManageListeners();

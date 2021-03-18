@@ -11,8 +11,8 @@ namespace chestnut
     class CRenderingSystem : public IUpdatableSystem, public IComponentFetchingSystem
     {
     private:
-        std::unordered_map< guid_t, STransformComponent* > m_transformCompMap;
-        std::unordered_map< guid_t, STextureComponent* > m_textureCompMap;
+        std::unordered_map< entityid_t, STransformComponent* > m_transformCompMap;
+        std::unordered_map< entityid_t, STextureComponent* > m_textureCompMap;
 
     public:
         bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;

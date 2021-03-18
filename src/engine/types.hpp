@@ -5,13 +5,13 @@
 
 namespace chestnut
 {
-    typedef uint64_t guid_t;
+    typedef uint64_t entityid_t;
 
-    typedef unsigned int eventListener_id_t;
+    typedef unsigned int listenerid_t;
     
     typedef void event_function;
 
-    typedef unsigned int timer_id_t;
+    typedef unsigned int timerid_t;
 
 } // namespace chestnut
 

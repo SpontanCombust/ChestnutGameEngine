@@ -12,14 +12,14 @@ namespace chestnut
         m_componentDB.clearComponents();
     }
 
-    guid_t CEntityManager::createEntity() 
+    entityid_t CEntityManager::createEntity() 
     {
-        return ++m_guidCounter;
+        return ++m_entityIDCounter;
     }
 
-    bool CEntityManager::destroyEntity( guid_t guid ) 
+    bool CEntityManager::destroyEntity( entityid_t id ) 
     {
-        return m_componentDB.eraseComponents( guid, true );
+        return m_componentDB.eraseComponents( id, true );
     }
 
     void CEntityManager::destroyAllEntities() 

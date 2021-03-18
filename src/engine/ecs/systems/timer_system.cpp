@@ -57,7 +57,7 @@ namespace chestnut
         }
     }
 
-    timer_id_t CTimerSystem::getNewTimerID() 
+    timerid_t CTimerSystem::getNewTimerID() 
     {
         return ++m_timerIDCounter;
     }

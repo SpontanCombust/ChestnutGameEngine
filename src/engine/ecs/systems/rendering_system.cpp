@@ -41,7 +41,7 @@ namespace chestnut
 
     void CRenderingSystem::transformTextures() 
     {
-        guid_t guid;
+        entityid_t guid;
         STransformComponent *transformComp;
         STextureComponent *textureComp;
         for( auto &pair : m_transformCompMap )

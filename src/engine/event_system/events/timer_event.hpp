@@ -8,7 +8,7 @@ namespace chestnut
 {
     struct STimerEvent : SEvent
     {
-        timer_id_t timerID;
+        timerid_t timerID;
         float timerTimeInSeconds;
         float timerIntervalInSeconds;
         bool isTimerRepeating;

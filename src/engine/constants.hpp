@@ -3,7 +3,7 @@
 
 namespace chestnut
 {
-    const int GUID_UNREGISTERED = 0;
+    const int ENTITY_ID_INVALID = 0;
 
     const double CHESTNUT_PI = 3.14159265359;
 

@@ -9,8 +9,8 @@ namespace chestnut
     // Every component needs to have a default no-parameters constructor
     struct IComponent
     {
-        guid_t parentGUID;
-        IComponent() : parentGUID( GUID_UNREGISTERED ) {}
+        entityid_t ownerID;
+        IComponent() : ownerID( ENTITY_ID_INVALID ) {}
         virtual ~IComponent() {};
     };
 

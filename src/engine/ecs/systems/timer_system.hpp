@@ -14,8 +14,8 @@ namespace chestnut
     class CTimerSystem : public IUpdatableSystem, public IComponentFetchingSystem, public CEventRaisingSystem
     {
     private:
-        timer_id_t m_timerIDCounter = 0;
-        std::unordered_map< guid_t, STimerComponent* > m_timerCompMap;
+        timerid_t m_timerIDCounter = 0;
+        std::unordered_map< entityid_t, STimerComponent* > m_timerCompMap;
         bool m_shouldDeleteNonRepeatingTimers = true;
 
     public:
@@ -23,7 +23,7 @@ namespace chestnut
         void fetchComponents( const CComponentDatabase& dbRef ) override;
         void update( float deltaTime ) override;
         
-        timer_id_t getNewTimerID();
+        timerid_t getNewTimerID();
 
         void setShouldDeleteNonRepeatingTimers( bool shouldDeleteNonRepeatingTimers );
     };

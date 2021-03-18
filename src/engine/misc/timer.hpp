@@ -34,12 +34,12 @@ namespace chestnut
         // user defined, constant properties //
 
         // ID given to a timer
-        const timer_id_t m_timerID;
+        const timerid_t m_timerID;
 
     public:
-        CTimer( timer_id_t id );
+        CTimer( timerid_t id );
 
-        timer_id_t getID();
+        timerid_t getID();
 
         virtual void reset( bool init = false );
         virtual void start();

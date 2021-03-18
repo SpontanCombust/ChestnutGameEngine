@@ -18,9 +18,9 @@ namespace chestnut
 
         for( auto& pair : m_listenersToBeUnregisteredDataPairs )
         {
-            eventListener_id_t lid = pair.first;
+            listenerid_t id = pair.first;
             std::type_index tindex = pair.second;
-            eventManagerRef.unregisterListenerByID( lid, tindex );
+            eventManagerRef.unregisterListenerByID( id, tindex );
         }
 
         m_listenersToBeUnregisteredDataPairs.clear();

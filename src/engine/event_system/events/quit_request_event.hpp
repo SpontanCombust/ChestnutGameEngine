@@ -7,7 +7,7 @@ namespace chestnut
 {
     struct SQuitRequestEvent : SEvent
     {
-        const std::string getName() { return "QuitRequestEvent"; }
+        const std::string getName() override { return "QuitRequestEvent"; }
     };
     
 } // namespace chestnut
