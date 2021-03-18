@@ -1,7 +1,6 @@
 #ifndef __CHESTNUT_ENGINE_H__
 #define __CHESTNUT_ENGINE_H__
 
-#include "application.hpp"
 #include "engine/event_system/event_manager.hpp"
 #include "engine/event_system/events/events.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -13,19 +12,17 @@
 
 namespace chestnut
 {
-    class CEngine : public CApplication
+    class CEngine
     {
+    public:
+        CEntityManager entityManager;
+        CEventManager eventManager;
+
     private:
-        typedef CApplication super;
-
-        bool m_lockFramerate;
-
-    protected:
         CTimer *m_gameUpdateTimer;
 
         bool m_isRunning;
         bool m_isSuspended;
-
 
         CSDLEventDispatchSystem *m_sdlEventDispatchSystem;
         CTimerSystem *m_timerSystem;
@@ -36,29 +33,23 @@ namespace chestnut
         std::list< CEventRaisingSystem* > m_eventRaisingSystemsList;
 
 
-        CEntityManager m_entityManager;
-        CEventManager m_eventManager;
-
-
     public:
-        CEngine( bool lockFramerate );
-
-        CEntityManager& getEntityManager();
-        CEventManager& getEventManager();
+        CEngine();
+        ~CEngine();
 
         float getGameTimeInSeconds();
-
-        bool onCreate() override;
-        void onStart() override;
-        void onEnd() override;
         
-        virtual void onUpdate( float deltaTime );
-        virtual void onSuspend();
+        void init( bool lockFramerate );
+        void start();
+        void suspend();
+        void stop();
 
         event_function onQuitEvent( const SQuitRequestEvent& event );
 
-
     private:
+        void update( float deltaTime );
+        void destroy();
+
         listenerid_t m_quitListenerID;
         void registerQuitEvent();
         void unregisterQuitEvent();

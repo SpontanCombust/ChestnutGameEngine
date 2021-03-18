@@ -2,18 +2,26 @@
 
 namespace chestnut
 {    
-    CEngine::CEngine( bool lockFramerate )
+    CEngine::CEngine()
     {
-        m_lockFramerate = lockFramerate;
-        m_isRunning = false;
-        m_isSuspended = true;
+        m_gameUpdateTimer           = nullptr;
+
+        m_isRunning                 = false;
+        m_isSuspended               = true;
+
+        m_sdlEventDispatchSystem    = nullptr;
+        m_timerSystem               = nullptr;
+        m_renderingSystem           = nullptr;
     }
 
-    bool CEngine::onCreate() 
+    CEngine::~CEngine() 
     {
-        bool valid = super::onCreate();
+        destroy();
+    }
 
-        if( m_lockFramerate )
+    void CEngine::init( bool lockFramerate ) 
+    {
+        if( lockFramerate )
             m_gameUpdateTimer = new CLockedTimer(0, 1/60.f, true );
         else
             m_gameUpdateTimer = new CTimer(0);
@@ -34,14 +42,10 @@ namespace chestnut
         m_eventRaisingSystemsList.push_back( m_timerSystem );
 
         registerQuitEvent();
-
-        return valid;
     }
 
-    void CEngine::onStart() 
+    void CEngine::start() 
     {
-        super::onStart();
-
         m_isRunning = true;
         m_isSuspended = false;
         
@@ -49,14 +53,14 @@ namespace chestnut
         while( m_isRunning )
         {
             if( m_gameUpdateTimer->update() )
-                onUpdate( m_gameUpdateTimer->getDeltaTime() );
+                update( m_gameUpdateTimer->getDeltaTime() );
         }
     }
 
-    void CEngine::onUpdate( float deltaTime ) 
+    void CEngine::update( float deltaTime ) 
     {
         // updating event manager
-        m_eventManager.delegateEvents();
+        eventManager.delegateEvents();
 
         // updating systems
         for( IUpdatableSystem *us : m_updatableSystemsList )
@@ -65,23 +69,23 @@ namespace chestnut
         }
 
         // fetching new components to component systems
-        std::list< std::type_index > recentComponents = m_entityManager.getTypesOfRecentComponents();
+        std::list< std::type_index > recentComponents = entityManager.getTypesOfRecentComponents();
         for( IComponentFetchingSystem *cfs : m_componentFetchingSystemsList )
         {
             if( !recentComponents.empty() )
             {
                 if( cfs->needsAnyOfComponents( recentComponents ) )
-                    cfs->fetchComponents( m_entityManager.getComponentDatabase() );
+                    cfs->fetchComponents( entityManager.getComponentDatabase() );
             }
 
-            m_entityManager.clearTypesOfRecentComponents();
+            entityManager.clearTypesOfRecentComponents();
         }
 
         for( CEventRaisingSystem *ers : m_eventRaisingSystemsList )
         {
             if( ers->needsToRaiseEvents() )
             {
-                ers->raiseEvents( m_eventManager );
+                ers->raiseEvents( eventManager );
             }
         }
 
@@ -89,12 +93,17 @@ namespace chestnut
         m_renderingSystem->draw();
     }
 
-    void CEngine::onSuspend() 
+    void CEngine::suspend() 
     {
         m_isSuspended = true;
     }
 
-    void CEngine::onEnd() 
+    void CEngine::stop()
+    {
+        m_isRunning = false;
+    }
+
+    void CEngine::destroy() 
     {
         delete m_gameUpdateTimer;
 
@@ -107,21 +116,9 @@ namespace chestnut
         m_eventRaisingSystemsList.clear();
 
         unregisterQuitEvent();
-        m_eventManager.clearListeners();
+        eventManager.clearListeners();
         
-        m_entityManager.destroyAllEntities();
-
-        super::onEnd();
-    }
-
-    CEntityManager& CEngine::getEntityManager() 
-    {
-        return m_entityManager;
-    }
-
-    CEventManager& CEngine::getEventManager() 
-    {
-        return m_eventManager;
+        entityManager.destroyAllEntities();
     }
 
     float CEngine::getGameTimeInSeconds() 
@@ -133,17 +130,17 @@ namespace chestnut
 
     event_function CEngine::onQuitEvent( const SQuitRequestEvent& event ) 
     {
-        m_isRunning = false;
+        stop();
     }
 
     void CEngine::registerQuitEvent() 
     {
-        m_quitListenerID = m_eventManager.registerListener( this, &CEngine::onQuitEvent );
+        m_quitListenerID = eventManager.registerListener( this, &CEngine::onQuitEvent );
     }
 
     void CEngine::unregisterQuitEvent() 
     {
-        m_eventManager.unregisterListenerByID< SQuitRequestEvent >( m_quitListenerID );
+        eventManager.unregisterListenerByID< SQuitRequestEvent >( m_quitListenerID );
     }
 
 } // namespace chestnut

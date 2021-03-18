@@ -1,6 +1,8 @@
 #ifndef __CHESTNUT_WINDOW_H__
 #define __CHESTNUT_WINDOW_H__
 
+#include "engine/maths/vector.hpp"
+
 #include <SDL2/SDL.h>
 
 namespace chestnut
@@ -8,21 +10,31 @@ namespace chestnut
     class CWindow
     {
     private:
-        SDL_Window *m_window;
-        SDL_Renderer *m_renderer;
-        int m_width;
-        int m_height;
+        SDL_Window *m_sdlWindow;
+        SDL_Renderer *m_sdlRenderer;
 
     public:
-        CWindow() = delete;
-        CWindow( const char *title, int width, int height, int x = 0, int y = 0,
-                            int windowFlags = 0, int rendererFlags = 0 );
+        CWindow();
         ~CWindow();
-        int getWindowHeight();
-        int getWindowWidth();
+
+        bool create( const char *title, int width = 800, int height = 600, int x = 0, int y = 0,
+                            int windowFlags = SDL_WINDOW_SHOWN, int rendererFlags = SDL_RENDERER_ACCELERATED );
+
+        void destroy();
+
+        void setTitle( const char *title );
+        const char *getTitle();
+
+        void setSize( int w, int h );
+        Vector2i getSize();
+
+        void setPosition( int x, int y );
+        Vector2i getPosition();
 
         void setWindowRendererAsGlobalRenderer();
         SDL_Renderer *getSDLRenderer();
+
+        //TODO flipBuffer()
     };
 
 } // namespace chestnut
