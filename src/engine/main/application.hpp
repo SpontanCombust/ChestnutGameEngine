@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_APPLICATION_H__
 #define __CHESTNUT_APPLICATION_H__
 
-#include "render_window.hpp"
+#include "window.hpp"
 #include "engine/debug/debug.hpp"
 
 #include <SDL2/SDL.h>

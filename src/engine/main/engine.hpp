@@ -1,7 +1,7 @@
-#ifndef __CHESTNUT_GAME_H__
-#define __CHESTNUT_GAME_H__
+#ifndef __CHESTNUT_ENGINE_H__
+#define __CHESTNUT_ENGINE_H__
 
-#include "../app/application.hpp"
+#include "application.hpp"
 #include "engine/event_system/event_manager.hpp"
 #include "engine/event_system/events/events.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -13,7 +13,7 @@
 
 namespace chestnut
 {
-    class CChestnutGame : public CApplication
+    class CEngine : public CApplication
     {
     private:
         typedef CApplication super;
@@ -41,7 +41,7 @@ namespace chestnut
 
 
     public:
-        CChestnutGame( bool lockFramerate );
+        CEngine( bool lockFramerate );
 
         CEntityManager& getEntityManager();
         CEventManager& getEventManager();
@@ -67,4 +67,4 @@ namespace chestnut
 } // namespace chestnut
 
 
-#endif // __CHESTNUT_GAME_H__
+#endif // __CHESTNUT_ENGINE_H__

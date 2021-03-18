@@ -1,15 +1,15 @@
-#include "game.hpp"
+#include "engine.hpp"
 
 namespace chestnut
 {    
-    CChestnutGame::CChestnutGame( bool lockFramerate )
+    CEngine::CEngine( bool lockFramerate )
     {
         m_lockFramerate = lockFramerate;
         m_isRunning = false;
         m_isSuspended = true;
     }
 
-    bool CChestnutGame::onCreate() 
+    bool CEngine::onCreate() 
     {
         bool valid = super::onCreate();
 
@@ -38,7 +38,7 @@ namespace chestnut
         return valid;
     }
 
-    void CChestnutGame::onStart() 
+    void CEngine::onStart() 
     {
         super::onStart();
 
@@ -53,7 +53,7 @@ namespace chestnut
         }
     }
 
-    void CChestnutGame::onUpdate( float deltaTime ) 
+    void CEngine::onUpdate( float deltaTime ) 
     {
         // updating event manager
         m_eventManager.delegateEvents();
@@ -89,12 +89,12 @@ namespace chestnut
         m_renderingSystem->draw();
     }
 
-    void CChestnutGame::onSuspend() 
+    void CEngine::onSuspend() 
     {
         m_isSuspended = true;
     }
 
-    void CChestnutGame::onEnd() 
+    void CEngine::onEnd() 
     {
         delete m_gameUpdateTimer;
 
@@ -114,34 +114,34 @@ namespace chestnut
         super::onEnd();
     }
 
-    CEntityManager& CChestnutGame::getEntityManager() 
+    CEntityManager& CEngine::getEntityManager() 
     {
         return m_entityManager;
     }
 
-    CEventManager& CChestnutGame::getEventManager() 
+    CEventManager& CEngine::getEventManager() 
     {
         return m_eventManager;
     }
 
-    float CChestnutGame::getGameTimeInSeconds() 
+    float CEngine::getGameTimeInSeconds() 
     {
         return m_gameUpdateTimer->getCurrentTimeInSeconds();
     }
 
 
 
-    event_function CChestnutGame::onQuitEvent( const SQuitRequestEvent& event ) 
+    event_function CEngine::onQuitEvent( const SQuitRequestEvent& event ) 
     {
         m_isRunning = false;
     }
 
-    void CChestnutGame::registerQuitEvent() 
+    void CEngine::registerQuitEvent() 
     {
-        m_quitListenerID = m_eventManager.registerListener( this, &CChestnutGame::onQuitEvent );
+        m_quitListenerID = m_eventManager.registerListener( this, &CEngine::onQuitEvent );
     }
 
-    void CChestnutGame::unregisterQuitEvent() 
+    void CEngine::unregisterQuitEvent() 
     {
         m_eventManager.unregisterListenerByID< SQuitRequestEvent >( m_quitListenerID );
     }

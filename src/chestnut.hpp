@@ -25,9 +25,9 @@
 #include "engine/graphics/texture.hpp"
 #include "engine/graphics/texture_resource.hpp"
 
-#include "engine/main/app/render_window.hpp"
-#include "engine/main/app/application.hpp"
-#include "engine/main/game/game.hpp"
+#include "engine/main/window.hpp"
+#include "engine/main/application.hpp"
+#include "engine/main/engine.hpp"
 
 #include "engine/maths/angles.hpp"
 #include "engine/maths/vector.hpp"

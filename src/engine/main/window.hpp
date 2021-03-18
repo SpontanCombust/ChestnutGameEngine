@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_RENDER_WINDOW_H__
-#define __CHESTNUT_RENDER_WINDOW_H__
+#ifndef __CHESTNUT_WINDOW_H__
+#define __CHESTNUT_WINDOW_H__
 
 #include <SDL2/SDL.h>
 
@@ -27,4 +27,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_RENDER_WINDOW_H__
+#endif // __CHESTNUT_WINDOW_H__
