@@ -1,6 +1,7 @@
 #include "sdl_event_dispatch_system.hpp"
 
 #include "engine/event_system/events/events.hpp"
+#include "engine/globals.hpp"
 
 namespace chestnut
 {      
@@ -19,7 +20,7 @@ namespace chestnut
                     keyboardEvent->isPressed = ( sdlEvent.key.type == SDL_KEYDOWN ) ? true : false;
                     keyboardEvent->button = sdlEvent.key.keysym.sym;
                     keyboardEvent->modifiers = sdlEvent.key.keysym.mod;
-                    m_localEventQueue.push( keyboardEvent );
+                    theEventManager.raiseEvent( keyboardEvent );
                     break;
                 }
 
@@ -31,7 +32,7 @@ namespace chestnut
                     mouseBtnEvent->button = sdlEvent.button.button;
                     mouseBtnEvent->clickPos = Vector2i( sdlEvent.button.x, sdlEvent.button.y );
                     mouseBtnEvent->clicksNum = sdlEvent.button.clicks;
-                    m_localEventQueue.push( mouseBtnEvent );
+                    theEventManager.raiseEvent( mouseBtnEvent );
                     break;
                 }
 
@@ -46,7 +47,7 @@ namespace chestnut
 
                     SMouseWheelEvent *mouseWheelEvent = new SMouseWheelEvent();
                     mouseWheelEvent->scrollAmount = Vector2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
-                    m_localEventQueue.push( mouseWheelEvent );
+                    theEventManager.raiseEvent( mouseWheelEvent );
                     break;
                 }
 
@@ -61,14 +62,14 @@ namespace chestnut
                     SMouseMotionEvent *mouseMotionEvent = new SMouseMotionEvent();
                     mouseMotionEvent->pos = Vector2i( sdlEvent.motion.x, sdlEvent.motion.y );
                     mouseMotionEvent->motion = Vector2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
-                    m_localEventQueue.push( mouseMotionEvent );
+                    theEventManager.raiseEvent( mouseMotionEvent );
                     break;
                 }
 
                 case SDL_QUIT:
                 {
                     SQuitRequestEvent *quitRequestEvent = new SQuitRequestEvent();
-                    m_localEventQueue.push( quitRequestEvent );
+                    theEventManager.raiseEvent( quitRequestEvent );
                     break;
                 }
 
@@ -76,7 +77,7 @@ namespace chestnut
                 {
                     SMiscSDLEvent *miscEvent = new SMiscSDLEvent();
                     miscEvent->sdlEvent = sdlEvent;
-                    m_localEventQueue.push( miscEvent );
+                    theEventManager.raiseEvent( miscEvent );
                 }
             }
         }

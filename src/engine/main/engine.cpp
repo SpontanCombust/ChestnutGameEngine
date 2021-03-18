@@ -31,15 +31,12 @@ namespace chestnut
         m_timerSystem = new CTimerSystem();
         m_renderingSystem = new CRenderingSystem();
 
-        m_updatableSystemsList.push_back( m_sdlEventDispatchSystem );
-        m_updatableSystemsList.push_back( m_timerSystem );
-        m_updatableSystemsList.push_back( m_renderingSystem );
+        m_systemsList.push_back( m_sdlEventDispatchSystem );
+        m_systemsList.push_back( m_timerSystem );
+        m_systemsList.push_back( m_renderingSystem );
 
-        m_componentFetchingSystemsList.push_back( m_timerSystem );
-        m_componentFetchingSystemsList.push_back( m_renderingSystem );
-
-        m_eventRaisingSystemsList.push_back( m_sdlEventDispatchSystem );
-        m_eventRaisingSystemsList.push_back( m_timerSystem );
+        m_componentSystemsList.push_back( m_timerSystem );
+        m_componentSystemsList.push_back( m_renderingSystem );
 
         registerQuitEvent();
     }
@@ -63,30 +60,22 @@ namespace chestnut
         eventManager.delegateEvents();
 
         // updating systems
-        for( IUpdatableSystem *us : m_updatableSystemsList )
+        for( ISystem *sys : m_systemsList )
         {
-            us->update( deltaTime );
+            sys->update( deltaTime );
         }
 
         // fetching new components to component systems
         std::list< std::type_index > recentComponents = entityManager.getTypesOfRecentComponents();
-        for( IComponentFetchingSystem *cfs : m_componentFetchingSystemsList )
+        for( IComponentSystem *compSys : m_componentSystemsList )
         {
             if( !recentComponents.empty() )
             {
-                if( cfs->needsAnyOfComponents( recentComponents ) )
-                    cfs->fetchComponents( entityManager.getComponentDatabase() );
+                if( compSys->needsAnyOfComponents( recentComponents ) )
+                    compSys->fetchComponents( entityManager.getComponentDatabase() );
             }
 
             entityManager.clearTypesOfRecentComponents();
-        }
-
-        for( CEventRaisingSystem *ers : m_eventRaisingSystemsList )
-        {
-            if( ers->needsToRaiseEvents() )
-            {
-                ers->raiseEvents( eventManager );
-            }
         }
 
         // drawing the frame
@@ -111,9 +100,8 @@ namespace chestnut
         delete m_timerSystem;
         delete m_sdlEventDispatchSystem;
 
-        m_updatableSystemsList.clear();
-        m_componentFetchingSystemsList.clear();
-        m_eventRaisingSystemsList.clear();
+        m_systemsList.clear();
+        m_componentSystemsList.clear();
 
         unregisterQuitEvent();
         eventManager.clearListeners();

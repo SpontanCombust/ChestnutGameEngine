@@ -8,10 +8,8 @@
 #include "engine/ecs/component_database.hpp"
 #include "engine/ecs/entity_manager.hpp"
 #include "engine/ecs/components/components.hpp"
-#include "engine/ecs/system_bases/updatable_system.hpp"
-#include "engine/ecs/system_bases/component_fetching_system.hpp"
-#include "engine/ecs/system_bases/event_raising_system.hpp"
-#include "engine/ecs/system_bases/listener_registering_system.hpp"
+#include "engine/ecs/system.hpp"
+#include "engine/ecs/component_system.hpp"
 #include "engine/ecs/systems/systems.hpp"
 
 #include "engine/event_system/event_base.hpp"

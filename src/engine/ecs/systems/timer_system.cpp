@@ -1,5 +1,7 @@
 #include "timer_system.hpp"
 
+#include "engine/globals.hpp"
+
 #include <algorithm>
 
 namespace chestnut
@@ -44,7 +46,7 @@ namespace chestnut
                     event->timerTimeInSeconds = timer->getCurrentTimeInSeconds();
                     event->timerIntervalInSeconds = timer->getUpdateIntervalInSeconds();
                     event->isTimerRepeating = timer->getIsRepeating();
-                    m_localEventQueue.push( event );
+                    theEventManager.raiseEvent( event );
 
                     if( !timer->getIsRepeating() && m_shouldDeleteNonRepeatingTimers )
                     {

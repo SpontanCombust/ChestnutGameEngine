@@ -8,7 +8,7 @@
 #include "engine/ecs/systems/systems.hpp"
 #include "engine/misc/locked_timer.hpp"
 
-#include <list>
+#include <vector>
 
 namespace chestnut
 {
@@ -28,9 +28,8 @@ namespace chestnut
         CTimerSystem *m_timerSystem;
         CRenderingSystem *m_renderingSystem;
 
-        std::list< IUpdatableSystem* > m_updatableSystemsList;
-        std::list< IComponentFetchingSystem* > m_componentFetchingSystemsList;
-        std::list< CEventRaisingSystem* > m_eventRaisingSystemsList;
+        std::list< ISystem* > m_systemsList;
+        std::list< IComponentSystem* > m_componentSystemsList;
 
 
     public:
