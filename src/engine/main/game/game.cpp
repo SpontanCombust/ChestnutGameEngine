@@ -131,7 +131,7 @@ namespace chestnut
 
 
 
-    event_function CChestnutGame::onQuitEvent( const SMiscSDLEvent& event ) 
+    event_function CChestnutGame::onQuitEvent( const SQuitRequestEvent& event ) 
     {
         m_isRunning = false;
     }
@@ -139,18 +139,11 @@ namespace chestnut
     void CChestnutGame::registerQuitEvent() 
     {
         m_quitListenerID = m_eventManager.registerListener( this, &CChestnutGame::onQuitEvent );
-
-        m_eventManager.constrainListenerByID< SMiscSDLEvent >( m_quitListenerID,
-            []( const SMiscSDLEvent& event ) -> bool
-            {
-                return event.sdlEvent.type == SDL_QUIT;
-            }
-        );
     }
 
     void CChestnutGame::unregisterQuitEvent() 
     {
-        m_eventManager.unregisterListenerByID< SMiscSDLEvent >( m_quitListenerID );
+        m_eventManager.unregisterListenerByID< SQuitRequestEvent >( m_quitListenerID );
     }
 
 } // namespace chestnut

@@ -55,7 +55,7 @@ namespace chestnut
         virtual void onUpdate( float deltaTime );
         virtual void onSuspend();
 
-        event_function onQuitEvent( const SMiscSDLEvent& event );
+        event_function onQuitEvent( const SQuitRequestEvent& event );
 
 
     private:

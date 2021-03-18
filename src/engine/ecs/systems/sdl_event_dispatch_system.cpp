@@ -20,8 +20,8 @@ namespace chestnut
                     keyboardEvent->button = sdlEvent.key.keysym.sym;
                     keyboardEvent->modifiers = sdlEvent.key.keysym.mod;
                     m_localEventQueue.push( keyboardEvent );
-                }
                     break;
+                }
 
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
@@ -32,6 +32,7 @@ namespace chestnut
                     mouseBtnEvent->clickPos = Vector2i( sdlEvent.button.x, sdlEvent.button.y );
                     mouseBtnEvent->clicksNum = sdlEvent.button.clicks;
                     m_localEventQueue.push( mouseBtnEvent );
+                    break;
                 }
 
                 case SDL_MOUSEWHEEL:
@@ -46,6 +47,7 @@ namespace chestnut
                     SMouseWheelEvent *mouseWheelEvent = new SMouseWheelEvent();
                     mouseWheelEvent->scrollAmount = Vector2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
                     m_localEventQueue.push( mouseWheelEvent );
+                    break;
                 }
 
                 case SDL_MOUSEMOTION:
@@ -60,6 +62,14 @@ namespace chestnut
                     mouseMotionEvent->pos = Vector2i( sdlEvent.motion.x, sdlEvent.motion.y );
                     mouseMotionEvent->motion = Vector2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
                     m_localEventQueue.push( mouseMotionEvent );
+                    break;
+                }
+
+                case SDL_QUIT:
+                {
+                    SQuitRequestEvent *quitRequestEvent = new SQuitRequestEvent();
+                    m_localEventQueue.push( quitRequestEvent );
+                    break;
                 }
 
                 default:
