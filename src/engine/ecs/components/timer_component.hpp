@@ -5,19 +5,22 @@
 #include "engine/misc/locked_timer.hpp"
 #include "engine/event_system/event_manager.hpp"
 
-#include <list>
-#include <unordered_map>
+#include <vector>
 
 namespace chestnut
 {
     struct STimerComponent : IComponent
     {
-        bool shouldDeleteTimersOnComponentDestroy;
-        std::list< CLockedTimer* > timerList;
+        std::vector< CLockedTimer > vTimers;
 
-        STimerComponent();
-        STimerComponent( bool _shouldDeleteTimersOnComponentDestroy );
         ~STimerComponent();
+
+        timerid_t addTimer( float updateIntervalSec, bool isRepeating = false );
+        bool removeTimer( timerid_t id );
+        void removeTimers();
+
+    private:
+        static timerid_t m_timerIDAccumulator;
     };
 
 } // namespace chestnut

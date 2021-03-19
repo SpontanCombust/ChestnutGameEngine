@@ -12,9 +12,9 @@ namespace chestnut
         // user defined, constant properties //
 
         // timer alarm interval in seconds
-        const float m_updateIntervalInSeconds;
+        float m_updateIntervalInSeconds;
         // whether alarm should be raised multiple times
-        const bool m_isRepeating;
+        bool m_isRepeating;
 
     public:
         CLockedTimer( timerid_t id, float updateIntervalInSeconds, bool isRepeating = false );

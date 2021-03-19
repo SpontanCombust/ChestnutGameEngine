@@ -2,30 +2,37 @@
 
 namespace chestnut
 {   
-    STimerComponent::STimerComponent()
-    {
-        shouldDeleteTimersOnComponentDestroy = false;
-        timerList.clear();
-    }
-
-    STimerComponent::STimerComponent( bool _shouldDeleteTimersOnComponentDestroy ) 
-    {
-        shouldDeleteTimersOnComponentDestroy = _shouldDeleteTimersOnComponentDestroy;
-        timerList.clear();
-    }
-
+    timerid_t STimerComponent::m_timerIDAccumulator = 0;
+    
     STimerComponent::~STimerComponent() 
     {
-        if( shouldDeleteTimersOnComponentDestroy )
+        vTimers.clear();
+    }
+
+    timerid_t STimerComponent::addTimer( float updateIntervalSec, bool isRepeating ) 
+    {
+        ++m_timerIDAccumulator;
+        vTimers.push_back( CLockedTimer( m_timerIDAccumulator, updateIntervalSec, isRepeating ) );
+        return m_timerIDAccumulator;
+    }
+
+    bool STimerComponent::removeTimer( timerid_t id ) 
+    {
+        auto it = vTimers.begin();
+        for(; it != vTimers.end(); ++it )
         {
-            for( CLockedTimer *timer : timerList )
+            if( it->getID() == id )
             {
-                delete timer;
-                timer = nullptr;
+                vTimers.erase( it );
+                return true;
             }
         }
+        return false;
+    }
 
-        timerList.clear();
+    void STimerComponent::removeTimers() 
+    {
+        vTimers.clear();
     }
 
 } // namespace chestnut

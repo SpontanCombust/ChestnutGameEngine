@@ -28,45 +28,25 @@ namespace chestnut
         {
             timerComp = pair.second;
 
-            for( auto timerIt = timerComp->timerList.begin(); timerIt != timerComp->timerList.end(); ++timerIt )
+            for( CLockedTimer& timer : timerComp->vTimers )
             {
-                CLockedTimer *timer = *timerIt;
-
-                // if the timer is null, erase it outright
-                if( !timer )
-                {
-                    timerIt = timerComp->timerList.erase( timerIt );
-                    continue;
-                }
-
-                if( timer->update() )
+                if( timer.update() )
                 {
                     STimerEvent *event = new STimerEvent();
-                    event->timerID = timer->getID();
-                    event->timerTimeInSeconds = timer->getCurrentTimeInSeconds();
-                    event->timerIntervalInSeconds = timer->getUpdateIntervalInSeconds();
-                    event->isTimerRepeating = timer->getIsRepeating();
+                    event->timerID = timer.getID();
+                    event->timerTimeInSeconds = timer.getCurrentTimeInSeconds();
+                    event->timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
+                    event->isTimerRepeating = timer.getIsRepeating();
                     theEventManager.raiseEvent( event );
 
-                    if( !timer->getIsRepeating() && m_shouldDeleteNonRepeatingTimers )
+                    // if a timer is supposed to tick only once
+                    if( !timer.getIsRepeating() )
                     {
-                        timerIt = timerComp->timerList.erase( timerIt );
-                        delete timer;
-                        timer = nullptr;
+                        timerComp->removeTimer( timer.getID() );
                     }
                 }
             }
         }
-    }
-
-    timerid_t CTimerSystem::getNewTimerID() 
-    {
-        return ++m_timerIDCounter;
-    }
-
-    void CTimerSystem::setShouldDeleteNonRepeatingTimers( bool shouldDeleteNonRepeatingTimers ) 
-    {
-        m_shouldDeleteNonRepeatingTimers = shouldDeleteNonRepeatingTimers;
     }
 
 } // namespace chestnut

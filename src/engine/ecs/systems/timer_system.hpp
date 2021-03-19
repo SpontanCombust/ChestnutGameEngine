@@ -14,16 +14,11 @@ namespace chestnut
     private:
         timerid_t m_timerIDCounter = 0;
         std::unordered_map< entityid_t, STimerComponent* > m_timerCompMap;
-        bool m_shouldDeleteNonRepeatingTimers = true;
 
     public:
         bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;
         void fetchComponents( const CComponentDatabase& dbRef ) override;
         void update( float deltaTime ) override;
-        
-        timerid_t getNewTimerID();
-
-        void setShouldDeleteNonRepeatingTimers( bool shouldDeleteNonRepeatingTimers );
     };
 
 } // namespace chestnut

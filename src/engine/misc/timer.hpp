@@ -34,7 +34,7 @@ namespace chestnut
         // user defined, constant properties //
 
         // ID given to a timer
-        const timerid_t m_timerID;
+        timerid_t m_timerID;
 
     public:
         CTimer( timerid_t id );
