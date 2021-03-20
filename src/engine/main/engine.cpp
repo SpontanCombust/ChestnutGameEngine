@@ -31,7 +31,7 @@ namespace chestnut
             }
             else
             {
-                m_logicUpdateTimer = new CLockedTimer( 0, updateInterval, true );
+                m_logicUpdateTimer = new CLockedTimer( 0, updateInterval, true, true );
             }
 
             if( renderInterval < 0 )
@@ -40,7 +40,7 @@ namespace chestnut
             }
             else
             {
-                m_renderTimer = new CLockedTimer( 1, renderInterval, true );
+                m_renderTimer = new CLockedTimer( 1, renderInterval, true, false );
             }
             
 
@@ -70,10 +70,19 @@ namespace chestnut
         if( m_wasInit )
         {
             m_logicUpdateTimer->start();
+            m_renderTimer->start();
             while( m_isRunning )
             {
-                if( m_logicUpdateTimer->update() )
+                if( m_logicUpdateTimer->update( false ) )
+                {
                     update( m_logicUpdateTimer->getDeltaTime() );
+                }
+
+                if( m_renderTimer->update( false ) )
+                {
+                    // drawing the frame
+                    m_renderingSystem->draw();
+                }
             }
         }
         else
@@ -104,14 +113,7 @@ namespace chestnut
                     compSys->fetchComponents( entityManager.getComponentDatabase() );
             }
         }
-        entityManager.clearTypesOfRecentComponents();
-
-        if( m_renderTimer->update() )
-        {
-            // drawing the frame
-            m_renderingSystem->draw();
-        }
-        
+        entityManager.clearTypesOfRecentComponents();       
     }
 
     void CEngine::suspend() 
