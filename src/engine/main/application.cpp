@@ -8,23 +8,48 @@ namespace chestnut
     CApplication *__g_application = nullptr;
 
 
-    CApplication::CApplication( bool lockFramerate ) 
+    CApplication::CApplication( float renderInterval ) 
     {
-        m_windowFlags = SDL_WINDOW_SHOWN;
+        m_windowFlags   = SDL_WINDOW_SHOWN;
         m_rendererFlags = SDL_RENDERER_ACCELERATED;
-        m_lockFramerate = lockFramerate;
+
+        m_updateInterval = -1.f;
+        m_renderInterval = renderInterval;
 
         // set this instance as theApp
         __g_application = this;
     }
 
-    CApplication::CApplication( bool lockFramerate, int windowFlags, int rendererFlags )
+    CApplication::CApplication( float renderInterval, float updateInterval ) 
     {
-        m_windowFlags = windowFlags;
-        m_rendererFlags = rendererFlags;
-        m_lockFramerate = lockFramerate;
+        m_windowFlags   = SDL_WINDOW_SHOWN;
+        m_rendererFlags = SDL_RENDERER_ACCELERATED;
 
+        m_updateInterval = updateInterval;
+        m_renderInterval = renderInterval;
+
+        // set this instance as theApp
         __g_application = this;
+    }
+
+    CApplication::CApplication(float renderInterval, float updateInterval, int windowFlags, int rendererFlags) 
+    {
+        m_windowFlags   = windowFlags;
+        m_rendererFlags = rendererFlags;
+
+        m_updateInterval = updateInterval;
+        m_renderInterval = renderInterval;
+
+        // set this instance as theApp
+        __g_application = this;
+    }
+
+    CApplication::~CApplication() 
+    {
+        if( __g_application == this )
+        {
+            __g_application = nullptr;
+        }
     }
 
     bool CApplication::initSDL() 
@@ -73,7 +98,7 @@ namespace chestnut
         }
         window.setWindowRendererAsGlobalRenderer();
 
-        engine.init( m_lockFramerate );
+        engine.init( m_renderInterval, m_updateInterval );
 
         return true;
     }

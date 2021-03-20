@@ -8,7 +8,7 @@ namespace chestnut
     // globally available application instance declaration
     extern CApplication *__g_application;
 
-    #define theApp __g_application
+    #define theApp (*__g_application)
 
     #define theEngine __g_application->engine
 

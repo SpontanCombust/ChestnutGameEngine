@@ -17,21 +17,26 @@ namespace chestnut
     private:
         int m_windowFlags;
         int m_rendererFlags;
-        bool m_lockFramerate;
+        float m_updateInterval;
+        float m_renderInterval;
 
     public:
         CWindow window;
         CEngine engine;
 
     public:
-        CApplication( bool lockFramerate );
-        CApplication( bool lockFramerate, int windowFlags, int rendererFlags );
+        // -1 for unlocked render rate (not recommended)
+        CApplication( float renderInterval );
+        // -1 for unlocked render rate (not recommended) and update rate
+        CApplication( float renderInterval, float updateInterval );
+        // -1 for unlocked render rate (not recommended) and update rate
+        CApplication( float renderInterval, float updateInterval, int windowFlags, int rendererFlags );
 
         virtual bool onCreate();
         virtual void onStart();
         virtual void onEnd();
 
-        virtual ~CApplication() {}
+        virtual ~CApplication();
 
     protected:
         void setWindowParams( const char *title, int width, int height, int x, int y );

@@ -4,7 +4,9 @@ namespace chestnut
 {    
     CEngine::CEngine()
     {
-        m_gameUpdateTimer           = nullptr;
+        m_wasInit                   = false;
+
+        m_logicUpdateTimer          = nullptr;
 
         m_isRunning                 = false;
         m_isSuspended               = true;
@@ -19,26 +21,45 @@ namespace chestnut
         destroy();
     }
 
-    void CEngine::init( bool lockFramerate ) 
+    void CEngine::init( float renderInterval, float updateInterval ) 
     {
-        if( lockFramerate )
-            m_gameUpdateTimer = new CLockedTimer(0, 1/60.f, true );
-        else
-            m_gameUpdateTimer = new CTimer(0);
+        if( !m_wasInit )
+        {
+            if( updateInterval < 0 )
+            {
+                m_logicUpdateTimer = new CTimer(0);
+            }
+            else
+            {
+                m_logicUpdateTimer = new CLockedTimer( 0, updateInterval, true );
+            }
+
+            if( renderInterval < 0 )
+            {
+                m_renderTimer = new CTimer(1);
+            }
+            else
+            {
+                m_renderTimer = new CLockedTimer( 1, renderInterval, true );
+            }
+            
 
 
-        m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
-        m_timerSystem = new CTimerSystem();
-        m_renderingSystem = new CRenderingSystem();
+            m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
+            m_timerSystem = new CTimerSystem();
+            m_renderingSystem = new CRenderingSystem();
 
-        m_systemsList.push_back( m_sdlEventDispatchSystem );
-        m_systemsList.push_back( m_timerSystem );
-        m_systemsList.push_back( m_renderingSystem );
+            m_systemsList.push_back( m_sdlEventDispatchSystem );
+            m_systemsList.push_back( m_timerSystem );
+            m_systemsList.push_back( m_renderingSystem );
 
-        m_componentSystemsList.push_back( m_timerSystem );
-        m_componentSystemsList.push_back( m_renderingSystem );
+            m_componentSystemsList.push_back( m_timerSystem );
+            m_componentSystemsList.push_back( m_renderingSystem );
 
-        registerQuitEvent();
+            registerQuitEvent();
+
+            m_wasInit = true;
+        }
     }
 
     void CEngine::start() 
@@ -46,11 +67,18 @@ namespace chestnut
         m_isRunning = true;
         m_isSuspended = false;
         
-        m_gameUpdateTimer->start();
-        while( m_isRunning )
+        if( m_wasInit )
         {
-            if( m_gameUpdateTimer->update() )
-                update( m_gameUpdateTimer->getDeltaTime() );
+            m_logicUpdateTimer->start();
+            while( m_isRunning )
+            {
+                if( m_logicUpdateTimer->update() )
+                    update( m_logicUpdateTimer->getDeltaTime() );
+            }
+        }
+        else
+        {
+            LOG_CHANNEL( "CEngine", "The engine was not initialized!" );
         }
     }
 
@@ -62,24 +90,28 @@ namespace chestnut
         // updating systems
         for( ISystem *sys : m_systemsList )
         {
+            // TODO exclude rendering system
             sys->update( deltaTime );
         }
 
         // fetching new components to component systems
         std::list< std::type_index > recentComponents = entityManager.getTypesOfRecentComponents();
-        for( IComponentSystem *compSys : m_componentSystemsList )
+        if( !recentComponents.empty() )
         {
-            if( !recentComponents.empty() )
+            for( IComponentSystem *compSys : m_componentSystemsList )
             {
                 if( compSys->needsAnyOfComponents( recentComponents ) )
                     compSys->fetchComponents( entityManager.getComponentDatabase() );
             }
-
-            entityManager.clearTypesOfRecentComponents();
         }
+        entityManager.clearTypesOfRecentComponents();
 
-        // drawing the frame
-        m_renderingSystem->draw();
+        if( m_renderTimer->update() )
+        {
+            // drawing the frame
+            m_renderingSystem->draw();
+        }
+        
     }
 
     void CEngine::suspend() 
@@ -94,7 +126,7 @@ namespace chestnut
 
     void CEngine::destroy() 
     {
-        delete m_gameUpdateTimer;
+        delete m_logicUpdateTimer;
 
         delete m_renderingSystem;
         delete m_timerSystem;
@@ -109,9 +141,14 @@ namespace chestnut
         entityManager.destroyAllEntities();
     }
 
+    float CEngine::getGameUpdatesPerSecond() 
+    {
+        return m_logicUpdateTimer->getAvgUpdatesPerSec();
+    }
+
     float CEngine::getGameTimeInSeconds() 
     {
-        return m_gameUpdateTimer->getCurrentTimeInSeconds();
+        return m_logicUpdateTimer->getCurrentTimeInSeconds();
     }
 
 

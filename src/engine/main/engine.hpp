@@ -19,7 +19,10 @@ namespace chestnut
         CEventManager eventManager;
 
     private:
-        CTimer *m_gameUpdateTimer;
+        bool m_wasInit;
+
+        CTimer *m_logicUpdateTimer;
+        CTimer *m_renderTimer;
 
         bool m_isRunning;
         bool m_isSuspended;
@@ -36,9 +39,21 @@ namespace chestnut
         CEngine();
         ~CEngine();
 
+        float getGameUpdatesPerSecond();
         float getGameTimeInSeconds();
         
-        void init( bool lockFramerate );
+        /**
+         * @brief Initlialize engine's timers and systems.
+         * 
+         * @details
+         * It is highly recommended to limit rendering rate as when rendering more frequently than
+         * display refresh is simply pointless, especially if the render rate is orders of magnitude
+         * higher than display refresh rate.
+         * 
+         * @param renderInterval interval of rendering to the screen in seconds (-1 for unlocked rate)
+         * @param updateInterval interval of updating systems in seconds (-1 for unlocked rate)
+         */
+        void init( float renderInterval = 1.f / 60.f, float updateInterval = -1 );
         void start();
         void suspend();
         void stop();
