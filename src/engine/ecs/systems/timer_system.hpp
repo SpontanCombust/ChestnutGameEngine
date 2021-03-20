@@ -1,9 +1,7 @@
 #ifndef __CHESTNUT_TIMER_SYSTEM_H__
 #define __CHESTNUT_TIMER_SYSTEM_H__
 
-#include "../system_bases/updatable_system.hpp"
-#include "../system_bases/component_fetching_system.hpp"
-#include "../system_bases/event_raising_system.hpp"
+#include "../component_system.hpp"
 #include "../components/timer_component.hpp"
 #include "engine/event_system/events/timer_event.hpp"
 
@@ -11,21 +9,16 @@
 
 namespace chestnut
 {
-    class CTimerSystem : public IUpdatableSystem, public IComponentFetchingSystem, public CEventRaisingSystem
+    class CTimerSystem : public IComponentSystem
     {
     private:
         timerid_t m_timerIDCounter = 0;
         std::unordered_map< entityid_t, STimerComponent* > m_timerCompMap;
-        bool m_shouldDeleteNonRepeatingTimers = true;
 
     public:
         bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;
         void fetchComponents( const CComponentDatabase& dbRef ) override;
         void update( float deltaTime ) override;
-        
-        timerid_t getNewTimerID();
-
-        void setShouldDeleteNonRepeatingTimers( bool shouldDeleteNonRepeatingTimers );
     };
 
 } // namespace chestnut

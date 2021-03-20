@@ -1,14 +1,13 @@
 #ifndef __CHESTNUT_RENDERING_SYSTEM_H__
 #define __CHESTNUT_RENDERING_SYSTEM_H__
 
-#include "../system_bases/updatable_system.hpp"
-#include "../system_bases/component_fetching_system.hpp"
+#include "../component_system.hpp"
 #include "../components/transform_component.hpp"
 #include "../components/texture_component.hpp"
 
 namespace chestnut
 {
-    class CRenderingSystem : public IUpdatableSystem, public IComponentFetchingSystem
+    class CRenderingSystem : public IComponentSystem
     {
     private:
         std::unordered_map< entityid_t, STransformComponent* > m_transformCompMap;

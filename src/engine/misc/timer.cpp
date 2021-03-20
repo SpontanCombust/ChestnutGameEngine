@@ -30,12 +30,9 @@ namespace chestnut
 
     void CTimer::start()
     {
-        if( !m_wasStarted )
-        {
-            m_startTick = SDL_GetTicks();
-            m_currentRelativeTick = m_lastRelativeTick = 0;
-            m_wasStarted = true;
-        }
+        m_startTick = SDL_GetTicks();
+        m_currentRelativeTick = m_lastRelativeTick = 0;
+        m_wasStarted = true;
     }
 
     void CTimer::pause() 
