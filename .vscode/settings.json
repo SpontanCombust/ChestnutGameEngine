@@ -49,7 +49,8 @@
         "typeinfo": "cpp",
         "hash_map": "cpp",
         "forward_list": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "*.tpp": "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__"
 }
