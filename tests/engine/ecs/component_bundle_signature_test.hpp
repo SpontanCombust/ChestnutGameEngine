@@ -1,8 +1,8 @@
 #ifndef __CHESTNUT_COMPONENT_BUNDLE_SIGNATURE_TEST_H__
 #define __CHESTNUT_COMPONENT_BUNDLE_SIGNATURE_TEST_H__
 
-#include "../src/engine/ecs/db/component_bundle_signature.hpp"
-#include "../src/engine/ecs/components/components.hpp"
+#include "engine/ecs/db/component_bundle_signature.hpp"
+#include "engine/ecs/components/components.hpp"
 
 namespace chestnut 
 { 
