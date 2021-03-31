@@ -13,7 +13,7 @@ namespace chestnut
     }
 
     template< typename T >
-    bool SComponentBundleSignature::includes() 
+    bool SComponentBundleSignature::includes() const
     {
         return includes( TINDEX(T) );
     }

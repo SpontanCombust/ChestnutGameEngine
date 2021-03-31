@@ -3,8 +3,9 @@
 
 #include "engine/misc/tindex.hpp"
 
-#include <typeindex>
 #include <set>
+#include <string>
+#include <typeindex>
 #include <vector>
 
 namespace chestnut
@@ -29,15 +30,18 @@ namespace chestnut
         void remove();
 
 
-        bool includes( std::type_index tindex );
+        bool includes( std::type_index tindex ) const;
 
         template< typename T >
-        bool includes();
+        bool includes() const;
 
 
-        bool isEqualTo( const SComponentBundleSignature& other );
+        bool isEqualTo( const SComponentBundleSignature& other ) const;
 
-        bool operator==( const SComponentBundleSignature& other );
+        bool operator==( const SComponentBundleSignature& other ) const;
+
+
+        const std::string toString() const;
     };
     
 } // namespace chestnut
