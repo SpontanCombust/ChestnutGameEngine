@@ -1,19 +1,22 @@
+#ifndef __CHESTNUT_COMPONENT_VECTOR_WRAPPER_TEST_H__
+#define __CHESTNUT_COMPONENT_VECTOR_WRAPPER_TEST_H__
+
 #include "engine/ecs/db/component_vector_wrapper.hpp"
 #include "engine/ecs/components/components.hpp"
 
-namespace chestnut_test
+namespace chestnut 
+{ 
+namespace test
 {
-    int componentVectorWrapperTest()
+    void componentVectorWrapperTest()
     {
-        using namespace chestnut;
-
         CComponentVectorWrapper<STransformComponent> transfVec;
         IComponentVectorWrapper *baseVec = (IComponentVectorWrapper *)&transfVec;
 
-        STransformComponent *transfComp1 = ( STransformComponent * )baseVec->add(1);
+        STransformComponent *transfComp1 = ( STransformComponent * )baseVec->create(1);
         transfComp1->position = Vector2f(1,1);
 
-        baseVec->add(2);
+        baseVec->create(2);
         STransformComponent *transfComp2 = ( STransformComponent * )baseVec->get(2);
         transfComp2->scale = Vector2f(2,2);
 
@@ -26,7 +29,7 @@ namespace chestnut_test
             LOG( "" );
         }
 
-        baseVec->add(3);
+        baseVec->create(3);
 
         baseVec->erase(2);
 
@@ -38,9 +41,10 @@ namespace chestnut_test
             LOG( VEC_TO_STR( comp.scale ) );
             LOG( "" );
         }
-
-        return 0;
-
     }
 
-} // namespace chestnut_test
+} // namespace test
+
+} // namespace chestnut
+
+#endif // __CHESTNUT_COMPONENT_VECTOR_WRAPPER_TEST_H__

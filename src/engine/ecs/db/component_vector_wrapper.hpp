@@ -12,7 +12,7 @@ namespace chestnut
     public:
         virtual ~IComponentVectorWrapper() {}
 
-        virtual IComponent *add( entityid_t ownerID ) = 0;
+        virtual IComponent *create( entityid_t ownerID ) = 0;
         virtual IComponent *get( entityid_t ownerID ) = 0;
         virtual void erase( entityid_t ownerID ) = 0;
     };
@@ -23,7 +23,7 @@ namespace chestnut
     public:
         std::vector<T> vec;
 
-        IComponent *add( entityid_t ownerID ) override;
+        IComponent *create( entityid_t ownerID ) override;
         IComponent *get( entityid_t ownerID ) override;
         void erase( entityid_t ownerID ) override;
     };

@@ -3,7 +3,7 @@
 namespace chestnut
 {    
     template<typename T>
-    IComponent* CComponentVectorWrapper<T>::add( entityid_t ownerID ) 
+    IComponent* CComponentVectorWrapper<T>::create( entityid_t ownerID ) 
     {
         T comp;
         comp.ownerID = ownerID;
