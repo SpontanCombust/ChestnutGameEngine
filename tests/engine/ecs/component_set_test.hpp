@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_COMPONENT_SET_TEST_H__
 #define __CHESTNUT_COMPONENT_SET_TEST_H__
 
-#include "engine/ecs/db/component_set.hpp"
+#include "engine/ecs/management/component_set.hpp"
 #include "engine/ecs/components/components.hpp"
 #include "engine/debug/debug.hpp"
 

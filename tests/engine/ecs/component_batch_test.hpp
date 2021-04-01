@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_COMPONENT_BATCH_TEST_H__
 #define __CHESTNUT_COMPONENT_BATCH_TEST_H__
 
-#include "engine/ecs/db/component_batch.hpp"
+#include "engine/ecs/management/component_batch.hpp"
 #include "engine/ecs/components/components.hpp"
 
 namespace chestnut
