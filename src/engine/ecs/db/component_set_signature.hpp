@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_COMPONENT_BUNDLE_SIGNATURE_H__
-#define __CHESTNUT_COMPONENT_BUNDLE_SIGNATURE_H__
+#ifndef __CHESTNUT_COMPONENT_SET_SIGNATURE_H__
+#define __CHESTNUT_COMPONENT_SET_SIGNATURE_H__
 
 #include "engine/misc/tindex.hpp"
 
@@ -10,12 +10,12 @@
 
 namespace chestnut
 {
-    struct SComponentBundleSignature
+    struct SComponentSetSignature
     {
         std::set< std::type_index > componentTindexes;
 
-        SComponentBundleSignature() = default;
-        SComponentBundleSignature( const SComponentBundleSignature& other );
+        SComponentSetSignature() = default;
+        SComponentSetSignature( const SComponentSetSignature& other );
 
 
         void add( std::type_index tindex );
@@ -36,9 +36,9 @@ namespace chestnut
         bool includes() const;
 
 
-        bool isEqualTo( const SComponentBundleSignature& other ) const;
+        bool isEqualTo( const SComponentSetSignature& other ) const;
 
-        bool operator==( const SComponentBundleSignature& other ) const;
+        bool operator==( const SComponentSetSignature& other ) const;
 
 
         const std::string toString() const;
@@ -47,7 +47,7 @@ namespace chestnut
 } // namespace chestnut
 
 
-#include "component_bundle_signature.tpp"
+#include "component_set_signature.tpp"
 
 
-#endif // __CHESTNUT_COMPONENT_BUNDLE_SIGNATURE_H__
+#endif // __CHESTNUT_COMPONENT_SET_SIGNATURE_H__

@@ -23,39 +23,39 @@ namespace test
         transfComp2.ownerID = textComp2.ownerID = kinemComp2.ownerID = 2;
 
 
-        SComponentBundle bundle1, bundle2, bundle3;
+        SComponentSet compSet1, compSet2, compSet3;
 
-        bundle1.componentOwnerID = 1;
-        bundle1.addComponent( &transfComp1 );
-        bundle1.addComponent( &textComp1 );
-        bundle1.addComponent( &kinemComp1 );
+        compSet1.componentOwnerID = 1;
+        compSet1.addComponent( &transfComp1 );
+        compSet1.addComponent( &textComp1 );
+        compSet1.addComponent( &kinemComp1 );
 
-        bundle2.componentOwnerID = 2;
-        bundle2.addComponent( &transfComp2 );
-        bundle2.addComponent( &textComp2 );
-        bundle2.addComponent( &kinemComp2 );
+        compSet2.componentOwnerID = 2;
+        compSet2.addComponent( &transfComp2 );
+        compSet2.addComponent( &textComp2 );
+        compSet2.addComponent( &kinemComp2 );
 
         // components for entity 1 are reused for convenience, normally you need new components as this bundle is for different signature
-        bundle3.componentOwnerID = 1;
-        bundle3.addComponent( &transfComp1 );
-        bundle3.addComponent( &textComp1 );
+        compSet3.componentOwnerID = 1;
+        compSet3.addComponent( &transfComp1 );
+        compSet3.addComponent( &textComp1 );
 
 
         CComponentBatch batch = CComponentBatch();
 
-        batch.setSignature( bundle1.getSignature() );
+        batch.setSignature( compSet1.getSignature() );
 
         LOG_CHANNEL( "TEST", "<<Batch signature>>" );
         LOG_CHANNEL( "TEST", batch.getSignature().toString() );
         LOG_CHANNEL( "TEST", "");
 
         LOG_CHANNEL( "TEST", "<<Incorrent bundle submit test>>" );
-        batch.submitBundle( bundle3 ); // should print errors
+        batch.submitComponentSet( compSet3 ); // should print errors
         LOG_CHANNEL( "TEST", "");
 
 
-        batch.submitBundle( bundle1 );
-        batch.submitBundle( bundle2 );
+        batch.submitComponentSet( compSet1 );
+        batch.submitComponentSet( compSet2 );
 
         
         LOG_CHANNEL( "TEST", "<<Get entities test>>" );

@@ -6,7 +6,7 @@
 
 namespace chestnut
 {
-    CComponentBatch::CComponentBatch( const SComponentBundleSignature& signature ) 
+    CComponentBatch::CComponentBatch( const SComponentSetSignature& signature ) 
     {
         m_signature = signature;
     }
@@ -17,7 +17,7 @@ namespace chestnut
         m_mapTindexToCompVec.clear();
     }
 
-    void CComponentBatch::setSignature( const SComponentBundleSignature& signature ) 
+    void CComponentBatch::setSignature( const SComponentSetSignature& signature ) 
     {
         m_signature = signature;
 
@@ -31,7 +31,7 @@ namespace chestnut
         }
     }
 
-    const SComponentBundleSignature& CComponentBatch::getSignature() const
+    const SComponentSetSignature& CComponentBatch::getSignature() const
     {
         return m_signature;
     }
@@ -41,9 +41,9 @@ namespace chestnut
         return m_entityIDs;
     }
 
-    void CComponentBatch::submitBundle( const SComponentBundle& bundle ) 
+    void CComponentBatch::submitComponentSet( const SComponentSet& bundle ) 
     {
-        // check if the bundle is even for this batch
+        // check if the set is even for this batch
         if( bundle.getSignature() == m_signature )
         {
             // check if entity isn't already in the batch
@@ -52,7 +52,7 @@ namespace chestnut
             {
                 m_entityIDs.push_back( bundle.componentOwnerID );
 
-                // copy component pointers from bundle to local vectors
+                // copy component pointers from set to local vectors
                 for( const auto& [ tindex, comp ] : bundle.mapTindexToComponent )
                 {
                     m_mapTindexToCompVec[ tindex ].push_back( comp );
@@ -61,9 +61,9 @@ namespace chestnut
         }
         else
         {
-            LOG_CHANNEL( "COMPONENT_BATCH", "Tried to submit bundle with incompatible signature!" );
+            LOG_CHANNEL( "COMPONENT_BATCH", "Tried to submit set with incompatible signature!" );
             LOG_CHANNEL( "COMPONENT_BATCH", "This batch's signature is: " + m_signature.toString() );
-            LOG_CHANNEL( "COMPONENT_BATCH", "Bundle's signature is: " + bundle.getSignature().toString() );
+            LOG_CHANNEL( "COMPONENT_BATCH", "Set's signature is: " + bundle.getSignature().toString() );
         }
     }
 
@@ -89,7 +89,7 @@ namespace chestnut
                 // remove components belonging to entity
                 for( auto& [ tindex, compVec ] : m_mapTindexToCompVec )
                 {
-                    // by using only bundles to add components we can be sure the same index in all vectors (entity id and components)
+                    // by using only sets of components to add components we can be sure the same index in all vectors (entity id and components)
                     // is used for the same entity
                     // components are always pushed back, never sorted and always deleted in bulk
                     // (both entity ID and all components belonging to that entity get removed),

@@ -1,19 +1,19 @@
 namespace chestnut
 {    
     template< typename T >
-    void SComponentBundleSignature::add() 
+    void SComponentSetSignature::add() 
     {
         add( TINDEX(T) );
     }
 
     template< typename T >
-    void SComponentBundleSignature::remove() 
+    void SComponentSetSignature::remove() 
     {
         remove( TINDEX(T) );
     }
 
     template< typename T >
-    bool SComponentBundleSignature::includes() const
+    bool SComponentSetSignature::includes() const
     {
         return includes( TINDEX(T) );
     }
