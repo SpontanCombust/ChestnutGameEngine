@@ -48,7 +48,7 @@ namespace chestnut
         template< typename T >
         std::vector< T * > getComponents();
 
-        void submitComponentSet( const SComponentSet& bundle );
+        bool submitComponentSet( const SComponentSet& bundle );
 
         void removeEntityAndComponents( entityid_t id );
 

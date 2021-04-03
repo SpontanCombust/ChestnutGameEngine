@@ -43,9 +43,11 @@ namespace test
 
         CComponentBatch batch = CComponentBatch();
 
+
+
+        LOG_CHANNEL( "TEST", "<<Batch signature test>>" );
         batch.setSignature( compSet1.getSignature() );
 
-        LOG_CHANNEL( "TEST", "<<Batch signature>>" );
         LOG_CHANNEL( "TEST", batch.getSignature().toString() );
         LOG_CHANNEL( "TEST", "");
 
@@ -54,9 +56,15 @@ namespace test
         LOG_CHANNEL( "TEST", "");
 
 
-        batch.submitComponentSet( compSet1 );
-        batch.submitComponentSet( compSet2 );
 
+        LOG_CHANNEL( "TEST", "<<Already existing bundle submit test>>" );
+        batch.submitComponentSet( compSet1 );
+        batch.submitComponentSet( compSet1 );
+        LOG_CHANNEL( "TEST", "");
+
+
+
+        batch.submitComponentSet( compSet2 );
         
         LOG_CHANNEL( "TEST", "<<Get entities test>>" );
         auto ids = batch.getEntities();
@@ -67,9 +75,11 @@ namespace test
         LOG_CHANNEL( "TEST", "");
 
 
+
         LOG_CHANNEL( "TEST", "<<Get components incorrect test>>" );
         auto timerComps = batch.getComponents<STimerComponent>();
         LOG_CHANNEL( "TEST", "");
+
 
 
         LOG_CHANNEL( "TEST", "<<Get components test>>" );
@@ -91,6 +101,7 @@ namespace test
             LOG_CHANNEL( "TEST", VEC_TO_STR( comp->acceleration ) );
         }
         LOG_CHANNEL( "TEST", "");
+
 
 
         LOG_CHANNEL( "TEST", "<<Remove entity test>>" );
@@ -120,6 +131,7 @@ namespace test
             LOG_CHANNEL( "TEST", VEC_TO_STR( comp->acceleration ) );
         }
         LOG_CHANNEL( "TEST", "");
+
 
 
         LOG_CHANNEL( "TEST", "<<Remove all entities test>>" );

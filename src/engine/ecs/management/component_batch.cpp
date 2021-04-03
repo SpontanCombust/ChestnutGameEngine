@@ -41,13 +41,14 @@ namespace chestnut
         return m_entityIDs;
     }
 
-    void CComponentBatch::submitComponentSet( const SComponentSet& bundle ) 
+    bool CComponentBatch::submitComponentSet( const SComponentSet& bundle ) 
     {
         // check if the set is even for this batch
         if( bundle.getSignature() == m_signature )
         {
             // check if entity isn't already in the batch
             auto foundEntity = std::find( m_entityIDs.begin(), m_entityIDs.end(), bundle.componentOwnerID );
+            // if iterator equals end, it's not in the batch
             if( foundEntity == m_entityIDs.end() )
             {
                 m_entityIDs.push_back( bundle.componentOwnerID );
@@ -56,7 +57,14 @@ namespace chestnut
                 for( const auto& [ tindex, comp ] : bundle.mapTindexToComponent )
                 {
                     m_mapTindexToCompVec[ tindex ].push_back( comp );
-                }   
+                }
+
+                return true;
+            }
+            else
+            {
+                LOG_CHANNEL( "COMPONENT_BATCH", "Entity " << bundle.componentOwnerID << " is already in the batch!" );
+                return false;
             }
         }
         else
@@ -64,6 +72,7 @@ namespace chestnut
             LOG_CHANNEL( "COMPONENT_BATCH", "Tried to submit set with incompatible signature!" );
             LOG_CHANNEL( "COMPONENT_BATCH", "This batch's signature is: " + m_signature.toString() );
             LOG_CHANNEL( "COMPONENT_BATCH", "Set's signature is: " + bundle.getSignature().toString() );
+            return false;
         }
     }
 
