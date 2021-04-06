@@ -21,11 +21,17 @@ namespace chestnut
 
         void updateEntity( entityid_t id, const SComponentSetSignature& newSignature );
 
+        bool hasEntity( entityid_t id ) const;
+
         void removeEntity( entityid_t id );
 
-        bool hasEntity( entityid_t id ) const;
-        // throws exception on not finding the entity
+        void removeAllEntities();
+
+        // Throws exception on not finding the entity
         const SComponentSetSignature getEntitySignature( entityid_t id ) const;
+
+
+        const std::string toString() const;
     };
     
 } // namespace chestnut

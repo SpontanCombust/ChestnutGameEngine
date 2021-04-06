@@ -82,6 +82,11 @@ namespace chestnut
         }
     }
 
+    void CEntityRegistry::removeAllEntities() 
+    {
+        m_entityRecords.clear();
+    }
+
     bool CEntityRegistry::hasEntity( entityid_t id ) const
     {
         entityid_t testId;
@@ -117,6 +122,23 @@ namespace chestnut
 
         // entity was not found in the registry
         throw ChestnutException( "Couldn't find entity " + std::to_string(id) + " in the registry!" );
+    }
+
+
+    const std::string CEntityRegistry::toString() const
+    {
+        std::string str;
+
+        for( const auto& pair : m_entityRecords )
+        {
+            str += "( ";
+            str += std::to_string( pair.first ) + ", ";
+            str += pair.second.toString();
+            str += " )";
+            str += "\n";
+        }
+
+        return str;
     }
 
 } // namespace chestnut
