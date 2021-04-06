@@ -41,20 +41,25 @@ namespace chestnut
         return m_entityIDs;
     }
 
-    bool CComponentBatch::submitComponentSet( const SComponentSet& bundle ) 
+    const entityid_t CComponentBatch::getEntityCount() const
+    {
+        return m_entityIDs.size();
+    }
+
+    bool CComponentBatch::submitComponentSet( const SComponentSet& compSet ) 
     {
         // check if the set is even for this batch
-        if( bundle.getSignature() == m_signature )
+        if( compSet.getSignature() == m_signature )
         {
             // check if entity isn't already in the batch
-            auto foundEntity = std::find( m_entityIDs.begin(), m_entityIDs.end(), bundle.componentOwnerID );
+            auto foundEntity = std::find( m_entityIDs.begin(), m_entityIDs.end(), compSet.componentOwnerID );
             // if iterator equals end, it's not in the batch
             if( foundEntity == m_entityIDs.end() )
             {
-                m_entityIDs.push_back( bundle.componentOwnerID );
+                m_entityIDs.push_back( compSet.componentOwnerID );
 
                 // copy component pointers from set to local vectors
-                for( const auto& [ tindex, comp ] : bundle.mapTindexToComponent )
+                for( const auto& [ tindex, comp ] : compSet.mapTindexToComponent )
                 {
                     m_mapTindexToCompVec[ tindex ].push_back( comp );
                 }
@@ -63,7 +68,7 @@ namespace chestnut
             }
             else
             {
-                LOG_CHANNEL( "COMPONENT_BATCH", "Entity " << bundle.componentOwnerID << " is already in the batch!" );
+                LOG_CHANNEL( "COMPONENT_BATCH", "Entity " << compSet.componentOwnerID << " is already in the batch!" );
                 return false;
             }
         }
@@ -71,12 +76,12 @@ namespace chestnut
         {
             LOG_CHANNEL( "COMPONENT_BATCH", "Tried to submit set with incompatible signature!" );
             LOG_CHANNEL( "COMPONENT_BATCH", "This batch's signature is: " + m_signature.toString() );
-            LOG_CHANNEL( "COMPONENT_BATCH", "Set's signature is: " + bundle.getSignature().toString() );
+            LOG_CHANNEL( "COMPONENT_BATCH", "Set's signature is: " + compSet.getSignature().toString() );
             return false;
         }
     }
 
-    void CComponentBatch::removeEntityAndComponents( entityid_t id ) 
+    void CComponentBatch::removeComponentSet( entityid_t id ) 
     {
         if( m_entityIDs.size() > 0 )
         {
@@ -109,10 +114,35 @@ namespace chestnut
         }
     }
 
-    void CComponentBatch::removeAllEntitiesAndComponents() 
+    void CComponentBatch::removeAllComponentSets() 
     {
         m_entityIDs.clear();
         m_mapTindexToCompVec.clear();
+    }
+
+
+    const std::string CComponentBatch::toString() const
+    {
+        std::string msg;
+
+        msg += "Signature: " + m_signature.toString();
+        msg += "\n";
+
+        msg += "Entities: [";
+        if( !m_entityIDs.empty() )
+        {
+            auto it = m_entityIDs.begin();
+            msg += std::to_string( (*it) );
+            ++it;
+
+            for(; it != m_entityIDs.end(); ++it )
+            {
+                msg += ", " + std::to_string( (*it) );
+            }
+        }
+        msg += "]";
+
+        return msg;
     }
 
 } // namespace chestnut

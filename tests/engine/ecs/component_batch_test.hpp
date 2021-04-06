@@ -103,9 +103,15 @@ namespace test
         LOG_CHANNEL( "TEST", "");
 
 
+        LOG_CHANNEL( "TEST", "<<To string test>>" );
+        {
+            LOG_CHANNEL( "TEST", batch.toString() );
+        }
+        LOG_CHANNEL( "TEST", "");
+
 
         LOG_CHANNEL( "TEST", "<<Remove entity test>>" );
-        batch.removeEntityAndComponents(1);
+        batch.removeComponentSet(1);
 
         ids = batch.getEntities();
         transfComps = batch.getComponents<STransformComponent>(); 
@@ -135,7 +141,7 @@ namespace test
 
 
         LOG_CHANNEL( "TEST", "<<Remove all entities test>>" );
-        batch.removeAllEntitiesAndComponents();
+        batch.removeAllComponentSets();
 
         ids = batch.getEntities();
         transfComps = batch.getComponents<STransformComponent>(); 

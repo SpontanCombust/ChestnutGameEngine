@@ -43,16 +43,21 @@ namespace chestnut
 
         const SComponentSetSignature& getSignature() const;
 
+        const entityid_t getEntityCount() const;
+
         const std::vector< entityid_t >& getEntities() const;
 
         template< typename T >
         std::vector< T * > getComponents();
 
-        bool submitComponentSet( const SComponentSet& bundle );
+        bool submitComponentSet( const SComponentSet& compSet );
 
-        void removeEntityAndComponents( entityid_t id );
+        void removeComponentSet( entityid_t id );
 
-        void removeAllEntitiesAndComponents();
+        void removeAllComponentSets();
+
+
+        const std::string toString() const;
     };
     
 } // namespace chestnut
