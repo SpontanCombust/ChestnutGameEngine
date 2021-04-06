@@ -8,39 +8,59 @@ namespace chestnut
 { 
 namespace test
 {
+    static void logTransformCompVec( CComponentVectorWrapper<STransformComponent> transfVec )
+    {
+        for( const STransformComponent& comp : transfVec.vec )
+        {
+            LOG_CHANNEL( "TEST", comp.ownerID );
+            LOG_CHANNEL( "TEST", VEC_TO_STR( comp.position ) );
+            LOG_CHANNEL( "TEST", VEC_TO_STR( comp.rotation ) );
+            LOG_CHANNEL( "TEST", VEC_TO_STR( comp.scale ) );
+            LOG_CHANNEL( "TEST", "" );
+        }
+    }
+
     void componentVectorWrapperTest()
     {
         CComponentVectorWrapper<STransformComponent> transfVec;
         IComponentVectorWrapper *baseVec = (IComponentVectorWrapper *)&transfVec;
 
-        STransformComponent *transfComp1 = ( STransformComponent * )baseVec->create(1);
-        transfComp1->position = Vector2f(1,1);
-
-        baseVec->create(2);
-        STransformComponent *transfComp2 = ( STransformComponent * )baseVec->get(2);
-        transfComp2->scale = Vector2f(2,2);
-
-        for( const STransformComponent& comp : transfVec.vec )
+        LOG_CHANNEL( "TEST", "<< Create test >>" );
         {
-            LOG( comp.ownerID );
-            LOG( VEC_TO_STR( comp.position ) );
-            LOG( VEC_TO_STR( comp.rotation ) );
-            LOG( VEC_TO_STR( comp.scale ) );
-            LOG( "" );
+            STransformComponent *transfComp1 = ( STransformComponent * )baseVec->create(1);
+            transfComp1->position = Vector2f(1,1);
+
+            logTransformCompVec( transfVec );
         }
+        LOG_CHANNEL( "TEST", "" );
 
-        baseVec->create(3);
 
-        baseVec->erase(2);
-
-        for( const STransformComponent& comp : transfVec.vec )
+        LOG_CHANNEL( "TEST", "<< Get test >>" );
         {
-            LOG( comp.ownerID );
-            LOG( VEC_TO_STR( comp.position ) );
-            LOG( VEC_TO_STR( comp.rotation ) );
-            LOG( VEC_TO_STR( comp.scale ) );
-            LOG( "" );
+            baseVec->create(2);
+            STransformComponent *transfComp2 = ( STransformComponent * )baseVec->get(2);
+            transfComp2->scale = Vector2f(2,2);
+
+            logTransformCompVec( transfVec );            
         }
+        LOG_CHANNEL( "TEST", "" );
+        
+
+        LOG_CHANNEL( "TEST", "<< Erase test >>" );
+        {
+            baseVec->create(3);
+
+            baseVec->erase(2);
+
+            logTransformCompVec( transfVec );
+        }
+        LOG_CHANNEL( "TEST", "" );
+
+        LOG_CHANNEL( "TEST", "<< toString test >>" );
+        {
+            LOG_CHANNEL( "TEST", baseVec->toString() );
+        }
+        LOG_CHANNEL( "TEST", "" );
     }
 
 } // namespace test

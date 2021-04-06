@@ -42,4 +42,27 @@ namespace chestnut
         }
     }
 
+    template<typename T>
+    const std::string CComponentVectorWrapper<T>::toString() const 
+    {
+        std::string str;
+
+        str += "[";
+        if( !vec.empty() )
+        {
+            auto it = vec.begin();
+            str += std::to_string( it->ownerID );
+            ++it;
+
+            for(; it != vec.end(); ++it )
+            {
+                str += ", " + std::to_string( it->ownerID );
+            }
+        }
+        str += "]";
+
+        return str;
+    }
+
+
 } // namespace chestnut
