@@ -14,22 +14,24 @@ namespace chestnut
         componentOwnerID = _componentOwnerID;
     }
 
-    void SComponentSet::addComponent( IComponent *component ) 
+    bool SComponentSet::addComponent( IComponent *component ) 
     {
         if( !component )
         {
             LOG_CHANNEL( "COMPONENT_SET", "Tried adding a null component!" );
-            return;
+            return false;
         }
         if( component->ownerID != componentOwnerID )
         {
             LOG_CHANNEL( "COMPONENT_SET", "Tried adding a component that belong to different entity!" );
             LOG_CHANNEL( "COMPONENT_SET", "This set is for entity: " << componentOwnerID );
             LOG_CHANNEL( "COMPONENT_SET", "Owner of the component is: " << component->ownerID );
-            return;
+            return false;
         }
 
         mapTindexToComponent[ TINDEX( *component ) ] = component;
+
+        return true;
     }
 
     void SComponentSet::removeComponent( std::type_index tindex ) 

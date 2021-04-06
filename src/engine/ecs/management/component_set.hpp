@@ -25,7 +25,7 @@ namespace chestnut
         SComponentSet();
         SComponentSet( entityid_t _componentOwnerID );
 
-        void addComponent( IComponent *component );
+        bool addComponent( IComponent *component );
         void removeComponent( std::type_index tindex );
 
         SComponentSetSignature getSignature() const;
