@@ -43,6 +43,13 @@ namespace chestnut
     }
 
     template<typename T>
+    void CComponentVectorWrapper<T>::clear() 
+    {
+        vec.clear();
+    }
+
+
+    template<typename T>
     const std::string CComponentVectorWrapper<T>::toString() const 
     {
         std::string str;

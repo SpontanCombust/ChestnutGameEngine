@@ -41,9 +41,9 @@ namespace chestnut
         return m_entityIDs;
     }
 
-    const entityid_t CComponentBatch::getEntityCount() const
+    const int CComponentBatch::getEntityCount() const
     {
-        return m_entityIDs.size();
+        return (int)m_entityIDs.size();
     }
 
     bool CComponentBatch::submitComponentSet( const SComponentSet& compSet ) 

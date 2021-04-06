@@ -43,7 +43,7 @@ namespace chestnut
 
         const SComponentSetSignature& getSignature() const;
 
-        const entityid_t getEntityCount() const;
+        const int getEntityCount() const;
 
         const std::vector< entityid_t >& getEntities() const;
 

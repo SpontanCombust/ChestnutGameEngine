@@ -16,6 +16,7 @@ namespace chestnut
         virtual IComponent *create( entityid_t ownerID ) = 0;
         virtual IComponent *get( entityid_t ownerID ) = 0;
         virtual void erase( entityid_t ownerID ) = 0;
+        virtual void clear() = 0;
 
         virtual const std::string toString() const = 0;
     };
@@ -29,6 +30,7 @@ namespace chestnut
         IComponent *create( entityid_t ownerID ) override;
         IComponent *get( entityid_t ownerID ) override;
         void erase( entityid_t ownerID ) override;
+        void clear() override;
         
         const std::string toString() const override;
     };
