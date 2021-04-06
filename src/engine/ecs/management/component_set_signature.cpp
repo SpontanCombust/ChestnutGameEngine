@@ -34,6 +34,11 @@ namespace chestnut
         return isEqualTo( other );
     }
 
+    bool SComponentSetSignature::isEmpty() 
+    {
+        return componentTindexes.empty();
+    }
+
     const std::string SComponentSetSignature::toString() const
     {
         std::string str;

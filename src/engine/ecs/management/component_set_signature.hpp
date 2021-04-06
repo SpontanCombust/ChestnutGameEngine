@@ -41,6 +41,9 @@ namespace chestnut
         bool operator==( const SComponentSetSignature& other ) const;
 
 
+        bool isEmpty();
+
+
         const std::string toString() const;
     };
     
