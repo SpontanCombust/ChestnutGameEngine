@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_RENDERING_SYSTEM_H__
 #define __CHESTNUT_RENDERING_SYSTEM_H__
 
-#include "../component_system.hpp"
+#include "component_system.hpp"
 #include "../components/transform_component.hpp"
 #include "../components/texture_component.hpp"
 
@@ -10,12 +10,11 @@ namespace chestnut
     class CRenderingSystem : public IComponentSystem
     {
     private:
-        std::unordered_map< entityid_t, STransformComponent* > m_transformCompMap;
-        std::unordered_map< entityid_t, STextureComponent* > m_textureCompMap;
+        std::vector< CComponentBatch * > m_rendnerableBatches;
 
     public:
-        bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;
-        void fetchComponents( const CComponentDatabase& dbRef ) override;
+        void submitBatch( CComponentBatch *batch ) override;
+        void clearBatches() override;
         void update( float deltaTime ) override;
         void draw() const;
 

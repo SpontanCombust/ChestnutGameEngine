@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_TIMER_SYSTEM_H__
 #define __CHESTNUT_TIMER_SYSTEM_H__
 
-#include "../component_system.hpp"
+#include "component_system.hpp"
 #include "../components/timer_component.hpp"
 #include "engine/event_system/events/timer_event.hpp"
 
@@ -13,11 +13,11 @@ namespace chestnut
     {
     private:
         timerid_t m_timerIDCounter = 0;
-        std::unordered_map< entityid_t, STimerComponent* > m_timerCompMap;
+        std::vector< CComponentBatch * > m_batchesWithTimerComps;
 
     public:
-        bool needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) override;
-        void fetchComponents( const CComponentDatabase& dbRef ) override;
+        void submitBatch( CComponentBatch *batch ) override;
+        void clearBatches() override;
         void update( float deltaTime ) override;
     };
 

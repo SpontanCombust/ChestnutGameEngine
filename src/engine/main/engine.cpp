@@ -93,6 +93,25 @@ namespace chestnut
 
     void CEngine::update( float deltaTime ) 
     {
+        std::vector< CComponentBatch * > vecComponentBatches;
+
+        // clearing outdated batches from systems
+        for( IComponentSystem *compSys : m_componentSystemsList )
+        {
+            compSys->clearBatches();
+        }    
+
+        vecComponentBatches = entityManager.getComponentBatches();
+        
+        // fetching components to component systems
+        for( CComponentBatch *batch : vecComponentBatches )
+        {
+            for( IComponentSystem *compSys : m_componentSystemsList )
+            {
+                compSys->submitBatch( batch );
+            }
+        }
+
         // updating event manager
         eventManager.delegateEvents();
 
@@ -103,17 +122,6 @@ namespace chestnut
             sys->update( deltaTime );
         }
 
-        // fetching new components to component systems
-        std::list< std::type_index > recentComponents = entityManager.getTypesOfRecentComponents();
-        if( !recentComponents.empty() )
-        {
-            for( IComponentSystem *compSys : m_componentSystemsList )
-            {
-                if( compSys->needsAnyOfComponents( recentComponents ) )
-                    compSys->fetchComponents( entityManager.getComponentDatabase() );
-            }
-        }
-        entityManager.clearTypesOfRecentComponents();       
     }
 
     void CEngine::suspend() 
