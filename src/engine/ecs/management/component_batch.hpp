@@ -29,7 +29,7 @@ namespace chestnut
         SComponentSetSignature m_signature;
         
         std::vector< entityid_t > m_entityIDs;
-        std::unordered_map< std::type_index, std::vector<IComponent *> > m_mapTindexToCompVec;
+        std::unordered_map< componenttindex_t, std::vector<IComponent *> > m_mapTindexToCompVec;
 
     public:
         CComponentBatch() = default;

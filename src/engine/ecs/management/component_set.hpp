@@ -3,7 +3,6 @@
 
 #include "component_set_signature.hpp"
 #include "../component.hpp"
-#include "engine/misc/tindex.hpp"
 
 #include <unordered_map>
 
@@ -20,13 +19,13 @@ namespace chestnut
     struct SComponentSet
     {
         entityid_t componentOwnerID;
-        std::unordered_map< std::type_index, IComponent *> mapTindexToComponent;
+        std::unordered_map< componenttindex_t, IComponent *> mapTindexToComponent;
 
         SComponentSet();
         SComponentSet( entityid_t _componentOwnerID );
 
         bool addComponent( IComponent *component );
-        void removeComponent( std::type_index tindex );
+        void removeComponent( componenttindex_t compTindex );
 
         SComponentSetSignature getSignature() const;
     };

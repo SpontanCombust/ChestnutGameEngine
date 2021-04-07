@@ -34,9 +34,9 @@ namespace chestnut
         return true;
     }
 
-    void SComponentSet::removeComponent( std::type_index tindex ) 
+    void SComponentSet::removeComponent( componenttindex_t compTindex ) 
     {
-        mapTindexToComponent.erase( tindex );
+        mapTindexToComponent.erase( compTindex );
     }
 
     SComponentSetSignature SComponentSet::getSignature() const

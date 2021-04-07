@@ -4,22 +4,22 @@ namespace chestnut
 {    
     SComponentSetSignature::SComponentSetSignature( const SComponentSetSignature& other ) 
     {
-        componentTindexes = std::set< std::type_index >( other.componentTindexes );
+        componentTindexes = std::set< componenttindex_t >( other.componentTindexes );
     }
 
-    void SComponentSetSignature::add( std::type_index tindex ) 
+    void SComponentSetSignature::add( componenttindex_t compTindex ) 
     {
-        componentTindexes.insert( tindex );
+        componentTindexes.insert( compTindex );
     }
 
-    void SComponentSetSignature::remove( std::type_index tindex ) 
+    void SComponentSetSignature::remove( componenttindex_t compTindex ) 
     {
-        componentTindexes.erase( tindex );
+        componentTindexes.erase( compTindex );
     }
 
-    bool SComponentSetSignature::includes( std::type_index tindex ) const
+    bool SComponentSetSignature::includes( componenttindex_t compTindex ) const
     {
-        auto it = componentTindexes.find( tindex ); 
+        auto it = componentTindexes.find( compTindex ); 
         auto end = componentTindexes.end();
         return it != end;
     }

@@ -53,7 +53,8 @@
         "forward_list": "cpp",
         "list": "cpp",
         "*.tpp": "cpp",
-        "unordered_set": "cpp"
+        "unordered_set": "cpp",
+        "set": "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__"
 }
