@@ -50,7 +50,7 @@ namespace chestnut
 
             // create an instance of the component //
             wrapper = getComponentVectorWrapper<T>();
-            uncastedComp = wrapper->create( id );
+            uncastedComp = wrapper->push_back( id );
             castedComp = dynamic_cast<T*>( uncastedComp );
 
             if( !castedComp )
@@ -140,7 +140,7 @@ namespace chestnut
         T *castedComp;
 
         wrapper = m_mapComponentVecWrappers[ TINDEX(T) ];
-        uncastedComp = wrapper->get( id );
+        uncastedComp = wrapper->at( id );
         castedComp = dynamic_cast<T*>( uncastedComp );
 
         if( !castedComp )

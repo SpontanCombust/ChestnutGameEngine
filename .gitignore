@@ -1,6 +1,5 @@
 bin
 build
 main.cpp
-test.cpp
-test
 _media_test
+TODO.md

@@ -13,10 +13,16 @@ namespace chestnut
     public:
         virtual ~IComponentVectorWrapper() {}
 
-        virtual IComponent *create( entityid_t ownerID ) = 0;
-        virtual IComponent *get( entityid_t ownerID ) = 0;
+        // Allocates and pushes back a component with given owner ID, returns a pointer to this component
+        virtual IComponent *push_back( entityid_t ownerID ) = 0;
+        // Returns a pointer to component with given owner ID, returns null on failure
+        virtual IComponent *at( entityid_t ownerID ) = 0;
+        // Erases a component with given owner ID if it exists
         virtual void erase( entityid_t ownerID ) = 0;
+        // Erases all elements
         virtual void clear() = 0;
+        // Returns number of stored components
+        virtual size_t size() = 0;
 
         virtual const std::string toString() const = 0;
     };
@@ -27,10 +33,18 @@ namespace chestnut
     public:
         std::vector<T> vec;
 
-        IComponent *create( entityid_t ownerID ) override;
-        IComponent *get( entityid_t ownerID ) override;
+        ~CComponentVectorWrapper();
+
+        // Allocates and pushes back a component with given owner ID, returns a pointer to this component
+        IComponent *push_back( entityid_t ownerID ) override;
+        // Returns a pointer to component with given owner ID, returns null on failure
+        IComponent *at( entityid_t ownerID ) override;
+        // Erases a component with given owner ID if it exists
         void erase( entityid_t ownerID ) override;
+        // Erases all elements
         void clear() override;
+        // Returns number of stored components
+        size_t size() override;
         
         const std::string toString() const override;
     };

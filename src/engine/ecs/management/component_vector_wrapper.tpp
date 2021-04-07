@@ -1,9 +1,16 @@
 #include <algorithm>
 
 namespace chestnut
-{    
+{
+
     template<typename T>
-    IComponent* CComponentVectorWrapper<T>::create( entityid_t ownerID ) 
+    CComponentVectorWrapper<T>::~CComponentVectorWrapper() 
+    {
+        vec.clear();
+    }
+
+    template<typename T>
+    IComponent* CComponentVectorWrapper<T>::push_back( entityid_t ownerID ) 
     {
         T comp;
         comp.ownerID = ownerID;
@@ -14,7 +21,7 @@ namespace chestnut
     }
 
     template<typename T>
-    IComponent* CComponentVectorWrapper<T>::get( entityid_t ownerID ) 
+    IComponent* CComponentVectorWrapper<T>::at( entityid_t ownerID ) 
     {
         IComponent *retComp = nullptr;
         for( auto it = vec.begin(); it != vec.end(); ++it )
@@ -46,6 +53,12 @@ namespace chestnut
     void CComponentVectorWrapper<T>::clear() 
     {
         vec.clear();
+    }
+
+    template<typename T>
+    size_t CComponentVectorWrapper<T>::size() 
+    {
+        return vec.size();
     }
 
 

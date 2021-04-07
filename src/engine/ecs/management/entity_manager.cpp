@@ -106,7 +106,7 @@ namespace chestnut
         for( const std::type_index& tindex : signature.componentTindexes )
         {
             wrapper = getComponentVectorWrapperUnsafe( tindex );
-            comp = wrapper->get( id );
+            comp = wrapper->at( id );
             compSet.addComponent( comp );
         }
 

@@ -27,7 +27,7 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<< Create test >>" );
         {
-            STransformComponent *transfComp1 = ( STransformComponent * )baseVec->create(1);
+            STransformComponent *transfComp1 = ( STransformComponent * )baseVec->push_back(1);
             transfComp1->position = Vector2f(1,1);
 
             logTransformCompVec( transfVec );
@@ -37,8 +37,8 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<< Get test >>" );
         {
-            baseVec->create(2);
-            STransformComponent *transfComp2 = ( STransformComponent * )baseVec->get(2);
+            baseVec->push_back(2);
+            STransformComponent *transfComp2 = ( STransformComponent * )baseVec->at(2);
             transfComp2->scale = Vector2f(2,2);
 
             logTransformCompVec( transfVec );            
@@ -48,7 +48,7 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<< Erase test >>" );
         {
-            baseVec->create(3);
+            baseVec->push_back(3);
 
             baseVec->erase(2);
 
