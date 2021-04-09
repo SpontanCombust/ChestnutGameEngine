@@ -1,15 +1,15 @@
 namespace chestnut
 {    
     template< typename T >
-    void SComponentSetSignature::add() 
+    SComponentSetSignature& SComponentSetSignature::add() 
     {
-        add( TINDEX(T) );
+        return add( TINDEX(T) );
     }
 
     template< typename T >
-    void SComponentSetSignature::remove() 
+    SComponentSetSignature& SComponentSetSignature::remove() 
     {
-        remove( TINDEX(T) );
+        return remove( TINDEX(T) );
     }
 
     template< typename T >

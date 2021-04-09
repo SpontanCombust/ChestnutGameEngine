@@ -18,16 +18,16 @@ namespace chestnut
         SComponentSetSignature( const SComponentSetSignature& other );
 
 
-        void add( componenttindex_t compTindex );
+        SComponentSetSignature& add( componenttindex_t compTindex );
 
         template< typename T >
-        void add();
+        SComponentSetSignature& add();
 
 
-        void remove( componenttindex_t compTindex );
+        SComponentSetSignature& remove( componenttindex_t compTindex );
 
         template< typename T >
-        void remove();
+        SComponentSetSignature& remove();
 
 
         bool includes( componenttindex_t compTindex ) const;

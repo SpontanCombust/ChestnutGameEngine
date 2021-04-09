@@ -7,14 +7,16 @@ namespace chestnut
         componentTindexes = std::set< componenttindex_t >( other.componentTindexes );
     }
 
-    void SComponentSetSignature::add( componenttindex_t compTindex ) 
+    SComponentSetSignature& SComponentSetSignature::add( componenttindex_t compTindex ) 
     {
         componentTindexes.insert( compTindex );
+        return *this;
     }
 
-    void SComponentSetSignature::remove( componenttindex_t compTindex ) 
+    SComponentSetSignature& SComponentSetSignature::remove( componenttindex_t compTindex ) 
     {
         componentTindexes.erase( compTindex );
+        return *this;
     }
 
     bool SComponentSetSignature::includes( componenttindex_t compTindex ) const
