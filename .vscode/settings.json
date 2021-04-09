@@ -1,6 +1,8 @@
 {
     "C_Cpp.errorSquiggles": "Enabled",
     "files.associations": {
+        "*.glfs": "glsl",
+        "*.glvs": "glsl",
         "functional": "cpp",
         "array": "cpp",
         "atomic": "cpp",
@@ -50,7 +52,15 @@
         "hash_map": "cpp",
         "forward_list": "cpp",
         "list": "cpp",
-        "*.tpp": "cpp"
+        "*.tpp": "cpp",
+        "unordered_set": "cpp",
+        "set": "cpp",
+        "cerrno": "cpp",
+        "cfloat": "cpp",
+        "climits": "cpp",
+        "ios": "cpp",
+        "queue": "cpp",
+        "cstdbool": "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__"
 }

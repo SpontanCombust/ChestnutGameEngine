@@ -6,43 +6,44 @@
 
 namespace chestnut
 {
-    bool CTimerSystem::needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes ) 
+
+    void CTimerSystem::submitBatch( CComponentBatch *batch ) 
     {
-        return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
-            []( std::type_index tindex ) -> bool
-            {
-                return tindex == TINDEX( STimerComponent );
-            }
-        );
+        if( batch->getSignature().includes<STimerComponent>() )
+        {
+            m_batchesWithTimerComps.push_back( batch );
+        }
     }
 
-    void CTimerSystem::fetchComponents( const CComponentDatabase& dbRef ) 
+    void CTimerSystem::clearBatches() 
     {
-        m_timerCompMap = dbRef.getComponentMapOfType< STimerComponent >();
+        m_batchesWithTimerComps.clear();
     }
 
     void CTimerSystem::update( float deltaTime ) 
     {
-        STimerComponent *timerComp;
-        for( auto& pair : m_timerCompMap )
+        std::vector< STimerComponent * > vecTimerComps;
+        for( CComponentBatch *batch : m_batchesWithTimerComps )
         {
-            timerComp = pair.second;
-
-            for( CLockedTimer& timer : timerComp->vTimers )
-            {
-                if( timer.update() )
+            vecTimerComps = batch->getComponents<STimerComponent>();
+            for( STimerComponent *timerComp : vecTimerComps )
+            {     
+                for( CLockedTimer& timer : timerComp->vTimers )
                 {
-                    STimerEvent *event = new STimerEvent();
-                    event->timerID = timer.getID();
-                    event->timerTimeInSeconds = timer.getCurrentTimeInSeconds();
-                    event->timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
-                    event->isTimerRepeating = timer.getIsRepeating();
-                    theEventManager.raiseEvent( event );
-
-                    // if a timer is supposed to tick only once
-                    if( !timer.getIsRepeating() )
+                    if( timer.update() )
                     {
-                        timerComp->removeTimer( timer.getID() );
+                        STimerEvent *event = new STimerEvent();
+                        event->timerID = timer.getID();
+                        event->timerTimeInSeconds = timer.getCurrentTimeInSeconds();
+                        event->timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
+                        event->isTimerRepeating = timer.getIsRepeating();
+                        theEventManager.raiseEvent( event );
+
+                        // if a timer is supposed to tick only once
+                        if( !timer.getIsRepeating() )
+                        {
+                            timerComp->removeTimer( timer.getID() );
+                        }
                     }
                 }
             }

@@ -2,6 +2,7 @@
 #define __CHESTNUT_TYPES_H__
 
 #include <cstdint>
+#include <typeindex>
 
 namespace chestnut
 {
@@ -12,6 +13,8 @@ namespace chestnut
     typedef void event_function;
 
     typedef unsigned int timerid_t;
+
+    typedef std::type_index componenttindex_t;
 
 } // namespace chestnut
 

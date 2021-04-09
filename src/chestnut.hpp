@@ -5,11 +5,13 @@
 #include "engine/debug/debug.hpp"
 
 #include "engine/ecs/component.hpp"
-#include "engine/ecs/component_database.hpp"
-#include "engine/ecs/entity_manager.hpp"
-#include "engine/ecs/components/components.hpp"
 #include "engine/ecs/system.hpp"
-#include "engine/ecs/component_system.hpp"
+#include "engine/ecs/management/component_vector_wrapper.hpp"
+#include "engine/ecs/management/component_set_signature.hpp"
+#include "engine/ecs/management/component_set.hpp"
+#include "engine/ecs/management/component_batch.hpp"
+#include "engine/ecs/management/entity_manager.hpp"
+#include "engine/ecs/components/components.hpp"
 #include "engine/ecs/systems/systems.hpp"
 
 #include "engine/event_system/event_base.hpp"

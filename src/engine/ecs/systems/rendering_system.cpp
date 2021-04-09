@@ -8,23 +8,23 @@
 
 namespace chestnut
 {
-    bool CRenderingSystem::needsAnyOfComponents( const std::list< std::type_index >& compTypeIndexes )
+    void CRenderingSystem::submitBatch( CComponentBatch *batch ) 
     {
-        return std::any_of( compTypeIndexes.begin(), compTypeIndexes.end(),
-            []( std::type_index tindex )
-            { 
-                return tindex == TINDEX( STransformComponent )
-                    || tindex == TINDEX( STextureComponent );
-            }
-        );
+        SComponentSetSignature signature;
+
+        signature = batch->getSignature();
+
+        if( signature.includes<STransformComponent>() && signature.includes<STextureComponent>() )
+        {
+            m_rendnerableBatches.push_back( batch );
+        }
     }
-    
-    void CRenderingSystem::fetchComponents( const CComponentDatabase& dbRef )
+        
+    void CRenderingSystem::clearBatches() 
     {
-        m_transformCompMap = dbRef.getComponentMapOfType< STransformComponent >();
-        m_textureCompMap = dbRef.getComponentMapOfType< STextureComponent >();
+        m_rendnerableBatches.clear();
     }
-    
+
     void CRenderingSystem::update( float deltaTime ) 
     {
         transformTextures();
@@ -41,70 +41,75 @@ namespace chestnut
 
     void CRenderingSystem::transformTextures() 
     {
-        entityid_t guid;
-        STransformComponent *transformComp;
+        std::vector< STransformComponent * > vecTransfComps;
+        std::vector< STextureComponent * > vecTextureComps;
+        STransformComponent *transfComp;
         STextureComponent *textureComp;
-        for( auto &pair : m_transformCompMap )
-        {
-            guid = pair.first;
-            transformComp = pair.second;
 
-            textureComp = m_textureCompMap[guid];
-            if( textureComp != nullptr )
+        for( CComponentBatch *renderBatch : m_rendnerableBatches )
+        {
+            vecTransfComps = renderBatch->getComponents<STransformComponent>();
+            vecTextureComps = renderBatch->getComponents<STextureComponent>();
+
+            for( int i = 0; i < renderBatch->getEntityCount(); i++ )
             {
-                textureComp->texture.setScale( textureComp->scaleOffset + transformComp->scale );
+                transfComp = vecTransfComps[i];
+                textureComp = vecTextureComps[i];
+
+                textureComp->texture.setScale( textureComp->scaleOffset + transfComp->scale );
 
                 switch( textureComp->anchor )
                 {
                     case ETextureAnchor::UPPER_LEFT:
-                        textureComp->texture.setPosition( transformComp->position );
+                        textureComp->texture.setPosition( transfComp->position );
                         textureComp->texture.setRotationPoint( Vector2lf( 0.f, 0.f ) );
                         break;
                     case ETextureAnchor::UP:
-                        textureComp->texture.setPosition( transformComp->position - Vector2f( textureComp->texture.getSize().x * 0.5f, 0.f ) );
+                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x * 0.5f, 0.f ) );
                         textureComp->texture.setRotationPoint( Vector2lf( 0.5f, 0.f ) );
                         break;
                     case ETextureAnchor::UPPER_RIGHT:
-                        textureComp->texture.setPosition( transformComp->position - Vector2f( textureComp->texture.getSize().x, 0.f ) );
+                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x, 0.f ) );
                         textureComp->texture.setRotationPoint( Vector2lf( 1.f, 0.f ) );
                         break;
                     case ETextureAnchor::LEFT:
-                        textureComp->texture.setPosition( transformComp->position - Vector2f( 0.f, textureComp->texture.getSize().y * 0.5f ) );
+                        textureComp->texture.setPosition( transfComp->position - Vector2f( 0.f, textureComp->texture.getSize().y * 0.5f ) );
                         textureComp->texture.setRotationPoint( Vector2lf( 0.f, 0.5f ) );
                         break;
                     case ETextureAnchor::RIGHT:
-                        textureComp->texture.setPosition( transformComp->position - Vector2f( textureComp->texture.getSize().x, textureComp->texture.getSize().y * 0.5f ) );
+                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x, textureComp->texture.getSize().y * 0.5f ) );
                         textureComp->texture.setRotationPoint( Vector2lf( 1.f, 0.5f ) );
                         break;
                     case ETextureAnchor::LOWER_LEFT:
-                        textureComp->texture.setPosition( transformComp->position - Vector2f( 0.f, textureComp->texture.getSize().y ) );
+                        textureComp->texture.setPosition( transfComp->position - Vector2f( 0.f, textureComp->texture.getSize().y ) );
                         textureComp->texture.setRotationPoint( Vector2lf( 0.f, 1.f ) );
                         break;
                     case ETextureAnchor::DOWN:
-                        textureComp->texture.setPosition( transformComp->position - Vector2f( textureComp->texture.getSize().x * 0.5f, textureComp->texture.getSize().y ) );
+                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x * 0.5f, textureComp->texture.getSize().y ) );
                         textureComp->texture.setRotationPoint( Vector2lf( 0.5f, 1.f ) );
                         break;
                     case ETextureAnchor::LOWER_RIGHT:
-                        textureComp->texture.setPosition( transformComp->position - textureComp->texture.getSize() );
+                        textureComp->texture.setPosition( transfComp->position - textureComp->texture.getSize() );
                         textureComp->texture.setRotationPoint( Vector2lf( 1.f, 1.f ) );
                         break;
                     default:
-                        textureComp->texture.setPosition( transformComp->position - textureComp->texture.getSize() * 0.5f );
+                        textureComp->texture.setPosition( transfComp->position - textureComp->texture.getSize() * 0.5f );
                         textureComp->texture.setRotationPoint( Vector2lf( 0.5f, 0.5f ) );
                 }
 
-                textureComp->texture.setRotation( transformComp->rotation );
+                textureComp->texture.setRotation( transfComp->rotation );
             }
         }
     }
 
     void CRenderingSystem::drawTextures() const
     {
-        STextureComponent *textureComp;
-        for( const auto &pair : m_textureCompMap )
+        std::vector< STextureComponent * > vecTextureComps;
+        
+        for( CComponentBatch *renderBatch : m_rendnerableBatches )
         {
-            textureComp = pair.second;
-            if( textureComp != nullptr )
+            vecTextureComps = renderBatch->getComponents<STextureComponent>();
+            for( STextureComponent *textureComp : vecTextureComps )
             {
                 CRenderer::renderTexture( textureComp->texture );
             }

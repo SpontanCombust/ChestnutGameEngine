@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(ChestnutGameEngine VERSION 0.1.0)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/cmake/sdl2)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
@@ -8,6 +12,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} main.cpp )
 include_directories(${PROJECT_NAME} src )
 
 target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
+
 
 find_package(SDL2 REQUIRED)
 target_link_libraries(${PROJECT_NAME} SDL2::Main)
