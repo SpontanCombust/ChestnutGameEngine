@@ -38,7 +38,7 @@ namespace test
         LOG_CHANNEL( "TEST", "<< Get test >>" );
         {
             baseVec->push_back(2);
-            STransformComponent *transfComp2 = ( STransformComponent * )baseVec->at(2);
+            STransformComponent *transfComp2 = ( STransformComponent * )baseVec->find(2);
             transfComp2->scale = Vector2f(2,2);
 
             logTransformCompVec( transfVec );            

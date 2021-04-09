@@ -15,8 +15,10 @@ namespace chestnut
 
         // Allocates and pushes back a component with given owner ID, returns a pointer to this component
         virtual IComponent *push_back( entityid_t ownerID ) = 0;
+        // Returns a pointer to component at a given position in the vector, returns null on error
+        virtual IComponent *at( size_t i ) = 0;
         // Returns a pointer to component with given owner ID, returns null on failure
-        virtual IComponent *at( entityid_t ownerID ) = 0;
+        virtual IComponent *find( entityid_t ownerID ) = 0;
         // Erases a component with given owner ID if it exists
         virtual void erase( entityid_t ownerID ) = 0;
         // Erases all elements
@@ -37,8 +39,10 @@ namespace chestnut
 
         // Allocates and pushes back a component with given owner ID, returns a pointer to this component
         IComponent *push_back( entityid_t ownerID ) override;
+        // Returns a pointer to component at a given position in the vector, returns null on error
+        virtual IComponent *at( size_t i ) override;
         // Returns a pointer to component with given owner ID, returns null on failure
-        IComponent *at( entityid_t ownerID ) override;
+        IComponent *find( entityid_t ownerID ) override;
         // Erases a component with given owner ID if it exists
         void erase( entityid_t ownerID ) override;
         // Erases all elements

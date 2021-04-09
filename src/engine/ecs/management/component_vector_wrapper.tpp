@@ -21,7 +21,18 @@ namespace chestnut
     }
 
     template<typename T>
-    IComponent* CComponentVectorWrapper<T>::at( entityid_t ownerID ) 
+    IComponent* CComponentVectorWrapper<T>::at( size_t i )
+    {
+        if( i >= vec.size() )
+        {
+            return nullptr;
+        }
+
+        return ( IComponent * )&vec[i];
+    }
+
+    template<typename T>
+    IComponent* CComponentVectorWrapper<T>::find( entityid_t ownerID ) 
     {
         IComponent *retComp = nullptr;
         for( auto it = vec.begin(); it != vec.end(); ++it )
