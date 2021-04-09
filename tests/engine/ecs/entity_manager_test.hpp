@@ -12,7 +12,7 @@ namespace test
     void entityManagerTest()
     {
         CEntityManager manager;
-        entityid_t ids[4];
+        entityid_t ids[7];
 
 
         LOG_CHANNEL( "TEST", "<< Create/has entity test >>");
@@ -63,6 +63,31 @@ namespace test
         }
         LOG_CHANNEL( "TEST", "" );
 
+
+        LOG_CHANNEL( "TEST", "<< Create/has signed entity test >>");
+        {
+            std::vector< entityid_t > tmp;
+
+            SComponentSetSignature sign1;
+            SComponentSetSignature sign2;
+
+            sign1.add<STransformComponent>();
+
+            sign2.add<STextureComponent>()
+                 .add<SKinematicsComponent>();
+
+            ids[4] = manager.createEntity( sign1 );
+            
+            tmp = manager.createEntities( sign2, 2 );
+            ids[5] = tmp[0];
+            ids[6] = tmp[1];
+
+            LOG_CHANNEL( "TEST", "Has entity " << ids[4] << " got STransformComponent? : " << manager.hasComponent<STransformComponent>( ids[4] ) );
+
+            LOG_CHANNEL( "TEST", "Has entity " << ids[5] << " got STextureComponent? : " << manager.hasComponent<STextureComponent>( ids[5] ) );
+            LOG_CHANNEL( "TEST", "Has entity " << ids[6] << " got SKinematicsComponent? : " << manager.hasComponent<SKinematicsComponent>( ids[6] ) );
+        }
+        LOG_CHANNEL( "TEST", "");
 
         LOG_CHANNEL( "TEST", "<< Get component test >>");
         {
@@ -133,6 +158,8 @@ namespace test
             }
         }
         LOG_CHANNEL( "TEST", "");
+
+        manager.destroyAllEntities();
     }
 
 } // namespace test
