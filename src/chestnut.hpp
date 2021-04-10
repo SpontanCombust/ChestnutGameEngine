@@ -21,6 +21,7 @@
 #include "engine/event_system/event_manager.hpp"
 #include "engine/event_system/events/events.hpp"
 #include "engine/event_system/event_helpers/event_constraint_functor_creators.hpp"
+#include "engine/event_system/event_helpers/registers_keyboard_listeners.hpp"
 
 #include "engine/graphics/renderer.hpp"
 #include "engine/graphics/texture.hpp"
