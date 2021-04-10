@@ -18,7 +18,7 @@ namespace chestnut
         return m_idCounter;
     }
 
-    void CEventManager::unregisterListenerByID( listenerid_t id, std::type_index tindex ) 
+    void CEventManager::unregisterListenerByID( listenerid_t id, eventtindex_t tindex ) 
     {
         // Checks if listener even exists
         if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
@@ -36,7 +36,7 @@ namespace chestnut
         m_IDToListenerMap.erase( id );
 
         // Gets the refernce to the list of IDs of listeners for the event type
-        std::list< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
+        std::vector< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
         // Searches the list for the ID of unregistered listener and erases it
         bool found = false;
@@ -99,12 +99,12 @@ namespace chestnut
     void CEventManager::delegateEvent( SEvent *event ) 
     {
         // Find the type of the event
-        std::type_index tindex = TINDEX( *event );
+        eventtindex_t tindex = TINDEX( *event );
         // Check if there are listeners with that type
         if( m_eventTypeToIDListMap.find( tindex ) != m_eventTypeToIDListMap.end() )
         {
             // Get list of listener IDs for that event type
-            std::list< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
+            std::vector< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
             // Iterate over every ID in the list
             for( const listenerid_t &id : typedIDList )

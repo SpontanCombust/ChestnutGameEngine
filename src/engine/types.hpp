@@ -16,6 +16,8 @@ namespace chestnut
 
     typedef std::type_index componenttindex_t;
 
+    typedef std::type_index eventtindex_t;
+
 } // namespace chestnut
 
 

@@ -67,7 +67,7 @@ namespace chestnut
         m_IDToListenerMap.erase( id );
 
         // Gets the refernce to the list of IDs of listeners for the event type
-        std::list< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ TINDEX( EventType ) ];
+        std::vector< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ TINDEX( EventType ) ];
 
         // Searches the list for the ID of unregistered listener and erases it
         bool found = false;

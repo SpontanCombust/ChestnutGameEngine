@@ -5,15 +5,14 @@
 #include "event_constraint.hpp"
 #include "engine/misc/exception.hpp"
 #include "engine/misc/tindex.hpp"
-
-#include <typeindex>
+#include "engine/types.hpp"
 
 namespace chestnut
 {
     // Struct containing function invoker and its (optional) constraint
     struct SEventListener 
     { 
-        std::type_index eventTindex;
+        eventtindex_t eventTindex;
         IFunctionInvoker *functionInvoker;
         IEventConstraint *constraint;
 

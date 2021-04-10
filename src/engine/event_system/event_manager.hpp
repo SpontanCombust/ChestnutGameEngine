@@ -6,9 +6,8 @@
 #include "engine/misc/tindex.hpp"
 #include "engine/types.hpp"
 
-#include <list>
-#include <typeindex>
 #include <unordered_map>
+#include <vector>
 #include <queue>
 
 namespace chestnut
@@ -19,7 +18,7 @@ namespace chestnut
     private:
         listenerid_t m_idCounter = 0;
 
-        std::unordered_map< std::type_index, std::list< listenerid_t > > m_eventTypeToIDListMap;
+        std::unordered_map< eventtindex_t, std::vector< listenerid_t > > m_eventTypeToIDListMap;
         std::unordered_map< listenerid_t, SEventListener > m_IDToListenerMap;
         std::queue< SEvent* > m_eventQueue;
 
@@ -42,7 +41,7 @@ namespace chestnut
         void unregisterListenerByID( listenerid_t id );
 
         // Removes the event listener with given ID and type index
-        void unregisterListenerByID( listenerid_t id, std::type_index tindex );
+        void unregisterListenerByID( listenerid_t id, eventtindex_t tindex );
 
         // Sets a constraint for the event listener with given ID
         template< typename EventType >

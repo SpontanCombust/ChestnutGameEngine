@@ -2,7 +2,7 @@
 
 namespace chestnut
 {
-    std::function< bool( const SKeyboardEvent& ) > getKeyboardEventConstraintFunctor( SDL_Keycode button, bool checkIfPressed, bool shouldBePressed, bool checkModifiers, uint16_t modifiers )
+    std::function< bool( const SKeyboardEvent& ) > keyboardEventConstraintFunc( SDL_Keycode button, bool checkIfPressed, bool shouldBePressed, bool checkModifiers, uint16_t modifiers )
     {
         return [=]( const SKeyboardEvent& event ) -> bool
         {
@@ -23,7 +23,7 @@ namespace chestnut
         };
     }
 
-    std::function< bool( const SMouseButtonEvent& ) > getMouseButtonEventConstraintFunctor( uint8_t button, bool checkIfPressed, bool shouldBePressed, bool checkClickNum, uint8_t clickNum )
+    std::function< bool( const SMouseButtonEvent& ) > mouseButtonEventConstraintFunc( uint8_t button, bool checkIfPressed, bool shouldBePressed, bool checkClickNum, uint8_t clickNum )
     {
         return [=]( const SMouseButtonEvent& event ) -> bool
         {
@@ -44,7 +44,7 @@ namespace chestnut
         };
     }
 
-    std::function< bool( const SMouseWheelEvent& ) > getMouseWheelEventConstraintFunctor( bool shouldReactOnXScroll, bool shouldReactOnYScroll )
+    std::function< bool( const SMouseWheelEvent& ) > mouseWheelEventConstraintFunc( bool shouldReactOnXScroll, bool shouldReactOnYScroll )
     {
         return [=]( const SMouseWheelEvent& event ) -> bool
         {
@@ -57,7 +57,7 @@ namespace chestnut
         };
     }
 
-    std::function< bool( const STimerEvent& ) > getTimerEventConstraintFunctor( timerid_t timerID )
+    std::function< bool( const STimerEvent& ) > timerEventConstraintFunc( timerid_t timerID )
     {
         return [=]( const STimerEvent& event ) -> bool
         {
