@@ -8,7 +8,14 @@
 
 namespace chestnut
 {
-    // Timer which gets updated using SDL timer functionality
+    /**
+     * @brief A timer class which objects get updated (ticked) using SDL timer functionality
+     * 
+     * @details
+     * The timer counts time starting from the point of calling start(). To update it call tick().
+     * If it returns true, the timer ticked.
+     * Total timer time here is the sum of all delta times provided (until reset() is called).
+     */
     class CAutoTimer : public ITimer
     {
     protected:

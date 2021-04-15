@@ -5,6 +5,15 @@
 
 namespace chestnut
 {
+    /**
+     * @brief A timer class which objects get updated (ticked) using SDL timer functionality and tick only in given tick interval.
+     * 
+     * @details
+     * The timer counts time starting from the point of calling start(). To update it call tick().
+     * If it returns true, timer time reached the next interval and timer ticked.
+     * Timer time here is a multiple of timer interval (until reset() is called).
+     * Supports making the thread wait until timer hits interval.
+     */
     class CLockedAutoTimer : public CAutoTimer
     {
     protected:

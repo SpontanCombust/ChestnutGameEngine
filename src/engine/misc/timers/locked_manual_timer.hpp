@@ -5,6 +5,14 @@
 
 namespace chestnut
 {
+    /**
+     * @brief A timer class, which objects get updated (ticked) using extrnal delta time value and tick only in given time interval.
+     * 
+     * @details
+     * The timer counts time starting from the point of calling start(). To update it call tick()
+     * and pass it the elapsed time value. If it returns true, timer time reached the next interval and timer ticked.
+     * Timer time here is a multiple of timer interval (until reset() is called).
+     */
     class CLockedManualTimer : public CManualTimer
     {
     protected:
