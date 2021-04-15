@@ -24,7 +24,7 @@ namespace chestnut
     {
         if( !m_wasStarted )
         {
-            LOG_CHANNEL( "MANUAL_TIMER", "Warning! Trying to update a timer that wasn't started yet!" );
+            LOG_CHANNEL( "MANUAL_TIMER", "Warning! Trying to update a timer that wasn't started yet! ID: " << m_timerID );
             return false;
         }
 

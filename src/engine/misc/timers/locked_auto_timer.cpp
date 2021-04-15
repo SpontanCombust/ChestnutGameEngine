@@ -43,7 +43,7 @@ namespace chestnut
     {
         if( !m_wasStarted )
         {
-            LOG_CHANNEL( "LOCKED_AUTO_TIMER", "Warning! Trying to update a timer that wasn't started yet!" );
+            LOG_CHANNEL( "LOCKED_AUTO_TIMER", "Warning! Trying to update a timer that wasn't started yet! ID: " << m_timerID );
             return false;
         }
         
@@ -76,8 +76,8 @@ namespace chestnut
             if( currentIntermediaryRelativeTick >= m_nextRelativeTick )
             {
                 m_lastRelativeTick = m_currentRelativeTick;
-                m_currentRelativeTick = m_nextRelativeTick;
-                m_nextRelativeTick += updateIntervalInMs;
+                m_currentRelativeTick = currentIntermediaryRelativeTick;
+                m_nextRelativeTick = currentIntermediaryRelativeTick + updateIntervalInMs;
                 m_tickCount++;
                 return true;
             }
