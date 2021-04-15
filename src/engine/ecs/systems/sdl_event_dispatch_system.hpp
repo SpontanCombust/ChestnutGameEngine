@@ -9,7 +9,7 @@ namespace chestnut
     class CSDLEventDispatchSystem : public ISystem
     {
     public:
-        void update( float deltaTime ) override;   
+        void update( uint32_t deltaTime ) override;   
     };
 
 } // namespace chestnut

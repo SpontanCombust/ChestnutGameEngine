@@ -27,20 +27,20 @@ namespace chestnut
         {
             if( updateInterval < 0 )
             {
-                m_logicUpdateTimer = new CTimer(0);
+                m_logicUpdateTimer = new CAutoTimer(0);
             }
             else
             {
-                m_logicUpdateTimer = new CLockedTimer( 0, updateInterval, true, true );
+                m_logicUpdateTimer = new CLockedAutoTimer( 0, updateInterval, true );
             }
 
             if( renderInterval < 0 )
             {
-                m_renderTimer = new CTimer(1);
+                m_renderTimer = new CAutoTimer(1);
             }
             else
             {
-                m_renderTimer = new CLockedTimer( 1, renderInterval, true, false );
+                m_renderTimer = new CLockedAutoTimer( 1, renderInterval, true );
             }
             
 
@@ -70,20 +70,8 @@ namespace chestnut
         if( m_wasInit )
         {
             m_logicUpdateTimer->start();
-            m_renderTimer->start();
-            while( m_isRunning )
-            {
-                if( m_logicUpdateTimer->update( false ) )
-                {
-                    update( m_logicUpdateTimer->getDeltaTime() );
-                }
-
-                if( m_renderTimer->update( false ) )
-                {
-                    // drawing the frame
-                    m_renderingSystem->draw();
-                }
-            }
+            m_renderTimer->start();   
+            gameLoop();
         }
         else
         {
@@ -91,7 +79,23 @@ namespace chestnut
         }
     }
 
-    void CEngine::update( float deltaTime ) 
+    void CEngine::gameLoop() 
+    {
+        while( m_isRunning )
+        {
+            if( m_logicUpdateTimer->tick() )
+            {
+                update( m_logicUpdateTimer->getDeltaTime() );
+            }
+
+            if( m_renderTimer->tick() )
+            {
+                m_renderingSystem->draw();
+            }
+        }
+    }
+
+    void CEngine::update( uint32_t deltaTime ) 
     {
         std::vector< CComponentBatch * > vecComponentBatches;
 
@@ -112,9 +116,6 @@ namespace chestnut
             }
         }
 
-        // updating event manager
-        eventManager.delegateEvents();
-
         // updating systems
         for( ISystem *sys : m_systemsList )
         {
@@ -122,6 +123,8 @@ namespace chestnut
             sys->update( deltaTime );
         }
 
+        // updating event manager
+        eventManager.delegateEvents();
     }
 
     void CEngine::suspend() 

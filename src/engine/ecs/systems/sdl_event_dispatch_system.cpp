@@ -5,7 +5,7 @@
 
 namespace chestnut
 {      
-    void CSDLEventDispatchSystem::update( float deltaTime ) 
+    void CSDLEventDispatchSystem::update( uint32_t deltaTime ) 
     {
         SDL_Event sdlEvent;
 

@@ -2,7 +2,7 @@
 #define __CHESTNUT_TIMER_EVENT_H__
 
 #include "../event_base.hpp"
-#include "engine/misc/locked_timer.hpp"
+#include "engine/types.hpp"
 
 namespace chestnut
 {

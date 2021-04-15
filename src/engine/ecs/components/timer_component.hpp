@@ -2,7 +2,7 @@
 #define __CHESTNUT_TIMER_COMPONENT_H__
 
 #include "../component.hpp"
-#include "engine/misc/locked_timer.hpp"
+#include "engine/misc/timers/locked_manual_timer.hpp"
 #include "engine/event_system/event_manager.hpp"
 
 #include <vector>
@@ -11,7 +11,7 @@ namespace chestnut
 {
     struct STimerComponent : IComponent
     {
-        std::vector< CLockedTimer > vTimers;
+        std::vector< CLockedManualTimer > vTimers;
 
         ~STimerComponent();
 

@@ -15,7 +15,7 @@ namespace chestnut
     public:
         void submitBatch( CComponentBatch *batch ) override;
         void clearBatches() override;
-        void update( float deltaTime ) override;
+        void update( uint32_t deltaTime ) override;
         void draw() const;
 
     private:

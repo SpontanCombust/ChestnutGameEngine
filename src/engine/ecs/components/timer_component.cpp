@@ -12,7 +12,9 @@ namespace chestnut
     timerid_t STimerComponent::addTimer( float updateIntervalSec, bool isRepeating ) 
     {
         ++m_timerIDAccumulator;
-        vTimers.push_back( CLockedTimer( m_timerIDAccumulator, updateIntervalSec, isRepeating ) );
+        CLockedManualTimer timer = CLockedManualTimer( m_timerIDAccumulator, updateIntervalSec, isRepeating );
+        timer.start();
+        vTimers.push_back( timer );
         return m_timerIDAccumulator;
     }
 

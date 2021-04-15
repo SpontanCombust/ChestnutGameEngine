@@ -6,7 +6,8 @@
 #include "engine/ecs/components/components.hpp"
 #include "engine/ecs/management/entity_manager.hpp"
 #include "engine/ecs/systems/systems.hpp"
-#include "engine/misc/locked_timer.hpp"
+#include "engine/misc/timers/auto_timer.hpp"
+#include "engine/misc/timers/locked_auto_timer.hpp"
 
 #include <vector>
 
@@ -21,8 +22,8 @@ namespace chestnut
     private:
         bool m_wasInit;
 
-        CTimer *m_logicUpdateTimer;
-        CTimer *m_renderTimer;
+        CAutoTimer *m_logicUpdateTimer;
+        CAutoTimer *m_renderTimer;
 
         bool m_isRunning;
         bool m_isSuspended;
@@ -61,7 +62,8 @@ namespace chestnut
         event_function onQuitEvent( const SQuitRequestEvent& event );
 
     private:
-        void update( float deltaTime );
+        void gameLoop();
+        void update( uint32_t deltaTime );
         void destroy();
 
         listenerid_t m_quitListenerID;

@@ -25,7 +25,7 @@ namespace chestnut
         m_rendnerableBatches.clear();
     }
 
-    void CRenderingSystem::update( float deltaTime ) 
+    void CRenderingSystem::update( uint32_t deltaTime ) 
     {
         transformTextures();
     }

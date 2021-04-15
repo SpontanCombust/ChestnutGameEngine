@@ -20,7 +20,7 @@ namespace chestnut
         m_batchesWithTimerComps.clear();
     }
 
-    void CTimerSystem::update( float deltaTime ) 
+    void CTimerSystem::update( uint32_t deltaTime ) 
     {
         std::vector< STimerComponent * > vecTimerComps;
         for( CComponentBatch *batch : m_batchesWithTimerComps )
@@ -28,9 +28,9 @@ namespace chestnut
             vecTimerComps = batch->getComponents<STimerComponent>();
             for( STimerComponent *timerComp : vecTimerComps )
             {     
-                for( CLockedTimer& timer : timerComp->vTimers )
+                for( CLockedManualTimer& timer : timerComp->vTimers )
                 {
-                    if( timer.update() )
+                    if( timer.tick( deltaTime ) )
                     {
                         STimerEvent *event = new STimerEvent();
                         event->timerID = timer.getID();
