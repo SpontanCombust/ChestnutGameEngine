@@ -5,6 +5,7 @@
 #include "engine/debug/debug.hpp"
 #include "engine/misc/tindex.hpp"
 #include "engine/types.hpp"
+#include "engine/memory/multi_type_dynamic_memory_pool.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -20,6 +21,8 @@ namespace chestnut
 
         std::unordered_map< eventtindex_t, std::vector< listenerid_t > > m_eventTypeToIDListMap;
         std::unordered_map< listenerid_t, SEventListener > m_IDToListenerMap;
+
+        CMultiTypeDynamicMemoryPool m_eventMemoryPool;
         std::queue< SEvent* > m_eventQueue;
 
     public:
@@ -47,8 +50,9 @@ namespace chestnut
         template< typename EventType >
         void constrainListenerByID( listenerid_t id, std::function< bool( const EventType& ) > constraintFunctor );
 
-        // Puts the event in the event queue
-        void raiseEvent( SEvent *event );
+        // Creates event and returns a pointer to it, event manager maintains the ownership
+        template< typename EventType >
+        EventType *raiseEvent();
 
         // Removes all event listeners
         void clearListeners();

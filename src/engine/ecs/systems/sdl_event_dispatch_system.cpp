@@ -16,23 +16,21 @@ namespace chestnut
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
                 {
-                    SKeyboardEvent *keyboardEvent = new SKeyboardEvent();
+                    SKeyboardEvent *keyboardEvent = theEventManager.raiseEvent<SKeyboardEvent>();
                     keyboardEvent->isPressed = ( sdlEvent.key.type == SDL_KEYDOWN ) ? true : false;
                     keyboardEvent->button = sdlEvent.key.keysym.sym;
                     keyboardEvent->modifiers = sdlEvent.key.keysym.mod;
-                    theEventManager.raiseEvent( keyboardEvent );
                     break;
                 }
 
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                 {
-                    SMouseButtonEvent *mouseBtnEvent = new SMouseButtonEvent();
+                    SMouseButtonEvent *mouseBtnEvent = theEventManager.raiseEvent<SMouseButtonEvent>();
                     mouseBtnEvent->isPressed = ( sdlEvent.button.type == SDL_MOUSEBUTTONDOWN ) ? true : false;
                     mouseBtnEvent->button = sdlEvent.button.button;
                     mouseBtnEvent->clickPos = Vector2i( sdlEvent.button.x, sdlEvent.button.y );
                     mouseBtnEvent->clicksNum = sdlEvent.button.clicks;
-                    theEventManager.raiseEvent( mouseBtnEvent );
                     break;
                 }
 
@@ -45,9 +43,8 @@ namespace chestnut
                         break;
                     }
 
-                    SMouseWheelEvent *mouseWheelEvent = new SMouseWheelEvent();
+                    SMouseWheelEvent *mouseWheelEvent = theEventManager.raiseEvent<SMouseWheelEvent>();
                     mouseWheelEvent->scrollAmount = Vector2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
-                    theEventManager.raiseEvent( mouseWheelEvent );
                     break;
                 }
 
@@ -59,25 +56,22 @@ namespace chestnut
                         break;
                     }
 
-                    SMouseMotionEvent *mouseMotionEvent = new SMouseMotionEvent();
+                    SMouseMotionEvent *mouseMotionEvent = theEventManager.raiseEvent<SMouseMotionEvent>();
                     mouseMotionEvent->pos = Vector2i( sdlEvent.motion.x, sdlEvent.motion.y );
                     mouseMotionEvent->motion = Vector2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
-                    theEventManager.raiseEvent( mouseMotionEvent );
                     break;
                 }
 
                 case SDL_QUIT:
                 {
-                    SQuitRequestEvent *quitRequestEvent = new SQuitRequestEvent();
-                    theEventManager.raiseEvent( quitRequestEvent );
+                    theEventManager.raiseEvent<SQuitRequestEvent>();
                     break;
                 }
 
                 default:
                 {
-                    SMiscSDLEvent *miscEvent = new SMiscSDLEvent();
+                    SMiscSDLEvent *miscEvent = theEventManager.raiseEvent<SMiscSDLEvent>();
                     miscEvent->sdlEvent = sdlEvent;
-                    theEventManager.raiseEvent( miscEvent );
                 }
             }
         }

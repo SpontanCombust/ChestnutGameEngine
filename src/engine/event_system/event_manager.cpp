@@ -56,17 +56,6 @@ namespace chestnut
         }
     }
 
-    void CEventManager::raiseEvent( SEvent *event ) 
-    {
-        if( !event )
-        {
-            LOG_CHANNEL( "EVENT_MANAGER", "Attempt to raise null event!" );
-            return;
-        }
-
-        m_eventQueue.push( event );
-    }
-    
     void CEventManager::clearListeners() 
     {
         // For every listener, free the memory from the invoker and constraint
@@ -90,9 +79,7 @@ namespace chestnut
         {
             SEvent *event = m_eventQueue.front();
             m_eventQueue.pop();
-            
-            delete event;
-            event = nullptr;
+            m_eventMemoryPool.remove( event );
         }
     }
     
@@ -134,9 +121,7 @@ namespace chestnut
             event = m_eventQueue.front();
             m_eventQueue.pop();
             delegateEvent( event );
-            
-            delete event;
-            event = nullptr;
+            m_eventMemoryPool.remove( event );
         }
     }
 

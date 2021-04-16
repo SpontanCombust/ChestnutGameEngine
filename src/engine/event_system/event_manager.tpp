@@ -112,4 +112,12 @@ namespace chestnut
         }
     }
 
+    template< typename EventType >
+    EventType *CEventManager::raiseEvent() 
+    {
+        EventType *ptr = m_eventMemoryPool.create<EventType>();
+        m_eventQueue.push( ptr );
+        return ptr;
+    }
+    
 } // namespace chestnut

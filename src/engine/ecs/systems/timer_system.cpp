@@ -32,12 +32,11 @@ namespace chestnut
                 {
                     if( timer.tick( deltaTime ) )
                     {
-                        STimerEvent *event = new STimerEvent();
+                        STimerEvent *event = theEventManager.raiseEvent<STimerEvent>();
                         event->timerID = timer.getID();
                         event->timerTimeInSeconds = timer.getCurrentTimeInSeconds();
                         event->timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
                         event->isTimerRepeating = timer.getIsRepeating();
-                        theEventManager.raiseEvent( event );
 
                         // if a timer is supposed to tick only once
                         if( !timer.getIsRepeating() )
