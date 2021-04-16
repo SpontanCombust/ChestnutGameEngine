@@ -3,7 +3,7 @@ namespace chestnut
     template< typename EventType >
     listenerid_t CEventManager::registerListener( event_function( *func )( const EventType& ) ) 
     {
-        SEventListener listener = createEventListener( func );
+        CEventListener<EventType> *listener = createEventListener( std::bind( func, std::placeholders::_1 ) );
 
         // Creates new ID for the listener
         m_idCounter++;
@@ -12,7 +12,7 @@ namespace chestnut
         m_IDToListenerMap[ m_idCounter ] = listener;
 
         // Adds new listener ID to type-to-IDs map
-        m_eventTypeToIDListMap[ listener.eventTindex ].push_back( m_idCounter );
+        m_eventTypeToIDListMap[ listener->eventTindex ].push_back( m_idCounter );
         
         // Returns ID of the new listener
         return m_idCounter;
@@ -22,94 +22,64 @@ namespace chestnut
     template< typename T, typename EventType >
     listenerid_t CEventManager::registerListener( T *objPtr, event_function ( T::*membFunc )( const EventType& ) ) 
     {
-        SEventListener listener;
-
-        try
+        if( objPtr )
         {
-            listener = createEventListener( objPtr, membFunc );
+            CEventListener<EventType> *listener = nullptr;
+
+            listener = createEventListener<EventType>( std::bind( membFunc, objPtr, std::placeholders::_1 ) );
+                    
+            // Creates new ID for the listener
+            m_idCounter++;
+
+            // Copies listener to ID-to-listener map under its designated ID
+            m_IDToListenerMap[ m_idCounter ] = listener;
+
+            // Adds new listener ID to type-to-IDs map
+            m_eventTypeToIDListMap[ listener->eventTindex ].push_back( m_idCounter );
+            
+            // Returns ID of the new listener
+            return m_idCounter;
         }
-        catch(const std::exception& e)
+        else
         {
-            LOG_CHANNEL( "EVENT_MANAGER", e.what() );
-            return 0;
+            LOG_CHANNEL( "EVENT_MANAGER", "Can't register a listener for null object!" );
+            return LISTENER_ID_INVALID;
         }
-        
-        // Creates new ID for the listener
-        m_idCounter++;
-
-        // Copies listener to ID-to-listener map under its designated ID
-        m_IDToListenerMap[ m_idCounter ] = listener;
-
-        // Adds new listener ID to type-to-IDs map
-        m_eventTypeToIDListMap[ listener.eventTindex ].push_back( m_idCounter );
-        
-        // Returns ID of the new listener
-        return m_idCounter;
     }
     
 
     template< typename EventType >
     void CEventManager::unregisterListenerByID( listenerid_t id ) 
     {
-        // Checks if listener even exists
-        if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
-        {
-            LOG_CHANNEL( "EVENT_MANAGER", "No listener with ID " << id << " exists!" );
-            return;
-        }
-
-        // Retrieves the listener from ID-to-listener map
-        SEventListener &listener = m_IDToListenerMap[ id ];
-
-        destroyEventListener( listener );
-
-        // Erases listener from ID-to-listener map
-        m_IDToListenerMap.erase( id );
-
-        // Gets the refernce to the list of IDs of listeners for the event type
-        std::vector< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ TINDEX( EventType ) ];
-
-        // Searches the list for the ID of unregistered listener and erases it
-        bool found = false;
-        for( auto it = typedIDList.begin(); it != typedIDList.end(); ++it )
-        {
-            if( *it == id )
-            {
-                typedIDList.erase( it );
-                found = true;
-                break;
-            }
-        }
-
-        if( !found )
-        {
-            LOG_CHANNEL( "EVENT_MANAGER", "No listener with ID " << id << " and type " << TINDEX_NAME( EventType ) << " exists!" );
-        }
+        unregisterListenerByID( id, TINDEX(EventType) );
     }
 
 
     template< typename EventType >
-    void CEventManager::constrainListenerByID( listenerid_t id, std::function< bool( const EventType& ) > constraintFunctor )
+    listenerid_t CEventManager::constrainListenerByID( listenerid_t id, std::function< bool( const EventType& ) > constraintFunctor )
     {
         // Checks if listener even exists
         if( m_IDToListenerMap.find( id ) == m_IDToListenerMap.end() )
         {
             LOG_CHANNEL( "EVENT_MANAGER", "No listener with ID " << id << " exists!" );
-            return;
+            return LISTENER_ID_INVALID;
         }
         
         // Retrieves the listener from ID-to-listener map
-        SEventListener &listener = m_IDToListenerMap[ id ];
+        IEventListener *untypedListener = m_IDToListenerMap[ id ];
+        CEventListener<EventType> *typedListener = dynamic_cast< CEventListener<EventType> * >( untypedListener );
 
         try
         {
-            constrainEventListener( listener, constraintFunctor );
+            constrainEventListener( typedListener, constraintFunctor );
         }
         catch(const std::exception& e)
         {
             LOG_CHANNEL( "EVENT_MANAGER", e.what() );
-            return;
+            return LISTENER_ID_INVALID;
         }
+
+        return id;
     }
 
     template< typename EventType >

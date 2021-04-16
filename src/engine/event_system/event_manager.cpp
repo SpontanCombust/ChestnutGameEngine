@@ -3,16 +3,25 @@
 namespace chestnut
 {
 
-    listenerid_t CEventManager::registerListener( SEventListener& listener ) 
+    listenerid_t CEventManager::registerListener( IEventListener *listener ) 
     {
-        // Creates new ID for the listener
-        m_idCounter++;
+        if( listener )
+        {
+            // Creates new ID for the listener
+            m_idCounter++;
 
-        // Copies listener to ID-to-listener map under its designated ID
-        m_IDToListenerMap[ m_idCounter ] = listener;
+            // Copies listener to ID-to-listener map under its designated ID
+            m_IDToListenerMap[ m_idCounter ] = listener;
 
-        // Adds new listener ID to type-to-IDs map
-        m_eventTypeToIDListMap[ listener.eventTindex ].push_back( m_idCounter );
+            // Adds new listener ID to type-to-IDs map
+            m_eventTypeToIDListMap[ listener->eventTindex ].push_back( m_idCounter );
+        }
+        else
+        {
+            LOG_CHANNEL( "EVENT_MANAGER", "Can't register a listener using null listener object!" );
+            return LISTENER_ID_INVALID;
+        }
+        
         
         // Returns ID of the new listener
         return m_idCounter;
@@ -28,9 +37,9 @@ namespace chestnut
         }
 
         // Retrieves the listener from ID-to-listener map
-        SEventListener &listener = m_IDToListenerMap[ id ];
+        IEventListener *listener = m_IDToListenerMap[ id ];
 
-        destroyEventListener( listener );
+        delete listener;
 
         // Erases listener from ID-to-listener map
         m_IDToListenerMap.erase( id );
@@ -39,31 +48,19 @@ namespace chestnut
         std::vector< listenerid_t > &typedIDList = m_eventTypeToIDListMap[ tindex ];
 
         // Searches the list for the ID of unregistered listener and erases it
-        bool found = false;
-        for( auto it = typedIDList.begin(); it != typedIDList.end(); ++it )
+        auto it = std::find( typedIDList.begin(), typedIDList.end(), id );
+        if( it != typedIDList.end() )
         {
-            if( *it == id )
-            {
-                typedIDList.erase( it );
-                found = true;
-                break;
-            }
-        }
-
-        if( !found )
-        {
-            LOG_CHANNEL( "EVENT_MANAGER", "No listener with ID " << id << " and type " << tindex.name() << " exists!" );
+            typedIDList.erase( it );
         }
     }
 
     void CEventManager::clearListeners() 
     {
         // For every listener, free the memory from the invoker and constraint
-        for( auto &pair : m_IDToListenerMap )
+        for( auto &[ id, listener ] : m_IDToListenerMap )
         {
-            SEventListener listener = pair.second;
-
-            destroyEventListener( listener );
+            delete listener;
         }
 
         // Clear maps from IDs and listener objects
@@ -97,18 +94,13 @@ namespace chestnut
             for( const listenerid_t &id : typedIDList )
             {
                 // Get the specific listener
-                SEventListener &listener = m_IDToListenerMap[ id ];
+                IEventListener *listener = m_IDToListenerMap[ id ];
 
-                if( listener.constraint )
+                // First check if event fits constraint's demands
+                if( listener->checkConstraint( event ) )
                 {
-                    // If event doesn't fit constraint's demands, move onto next listener
-                    if( !listener.constraint->verify( event ) )
-                    {
-                        continue;
-                    }
+                    listener->invoke( event );
                 }
-                
-                listener.functionInvoker->invoke( event );
             }
         }
     }
