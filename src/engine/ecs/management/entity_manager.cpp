@@ -28,6 +28,7 @@ namespace chestnut
     {
         ++m_idCounter;
         m_entityRegistry.addEntity( m_idCounter );
+        // there are no components yet, so entity request in not needed
         return m_idCounter;
     }
 
@@ -41,7 +42,108 @@ namespace chestnut
             m_entityRegistry.addEntity( m_idCounter );
             ids.push_back( m_idCounter );
         }
-        
+        // there are no components yet, so entity requests are not needed
+        return ids;
+    }
+
+    entityid_t CEntityManager::createEntity( SComponentSetSignature signature ) 
+    {
+        // validation stage
+        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        {
+            if( !isPreparedForComponentType( compTindex ) )
+            {
+                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
+                return ENTITY_ID_INVALID;
+            }
+        }
+
+        // creation stage
+        entityid_t id;
+        IComponentVectorWrapper *wrapper;
+        SEntityRequest request;
+
+
+        id = ++m_idCounter;
+        m_entityRegistry.addEntity( id, signature );
+
+
+        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        {
+            // create an instance of the component //
+            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
+            wrapper->push_back( id );
+        }
+
+
+        // request post tick handling of batches //
+        request.id = id;
+        request.type = EEntityRequestType::CREATE_ENTITY;
+        // old signature is not needed, because hasn't had components before
+        request.newSignature = signature;
+
+        m_queuePostTickRequests.push( request );
+
+        // actual entity and its components are created outright to allow component initialization on user's side
+        // batches are processed only through request to maintain their coherence on per tick basis
+        // so that no system misses out on all new components that get created on a single tick being available at the same time
+
+        return id;
+    }
+
+    std::vector< entityid_t > CEntityManager::createEntities( SComponentSetSignature signature, int amount ) 
+    {
+        std::vector< entityid_t > ids;
+
+        // validation stage
+        if( amount <= 0 )
+        {
+            return ids;
+        }
+
+        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        {
+            if( !isPreparedForComponentType( compTindex ) )
+            {
+                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
+                return ids; // returns empty vector
+            }
+        }
+
+        // creation stage
+        entityid_t id;
+        IComponentVectorWrapper *wrapper;
+        SEntityRequest request;
+
+        for (int i = 0; i < amount; i++)
+        {
+            id = ++m_idCounter;
+            m_entityRegistry.addEntity( id, signature );
+
+
+            for( const componenttindex_t& compTindex : signature.componentTindexes )
+            {
+                // create an instance of the component //
+                wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
+                wrapper->push_back( id );
+            }
+
+
+            // request post tick handling of batches //
+            request.id = id;
+            request.type = EEntityRequestType::CREATE_ENTITY;
+            // old signature is not needed, because hasn't had components before
+            request.newSignature = signature;
+
+            m_queuePostTickRequests.push( request );
+
+            // actual entity and its components are created outright to allow component initialization on user's side
+            // batches are processed only through request to maintain their coherence on per tick basis
+            // so that no system misses out on all new components that get created on a single tick being available at the same time
+
+            ids.push_back( id );
+        }
+
         return ids;
     }
 
@@ -59,32 +161,28 @@ namespace chestnut
         }
 
         SComponentSetSignature signature;
-        CComponentBatch *batch;
-        IComponentVectorWrapper *vecWrapper;
+        SEntityRequest request;
 
+
+        // get the signature entity had before removing it
         signature = m_entityRegistry.getEntitySignature( id ); // hasEntity() ensures entity exists
-        batch = getBatchWithSignature( signature );
 
-        // remove references to entity's components stored in the batch
-        if( batch )
-        {
-            batch->removeComponentSet( id );
 
-            if( batch->getEntityCount() == 0 )
-            {
-                destroyBatchWithSignature( signature );
-            }
-        }
-
-        // remove actual components belonging to entity
-        for( const std::type_index& tindex : signature.componentTindexes )
-        {
-            vecWrapper = getComponentVectorWrapper( tindex );
-            vecWrapper->erase( id );
-        }
-
-        // remove entity from registry
         m_entityRegistry.removeEntity( id );
+
+
+        // request post tick handling of CVWs and batches //
+        request.id = id;
+        request.type = EEntityRequestType::DESTROY_ENTITY;
+        request.oldSignature = signature;
+        // new signature is not needed as it will be empty anyways
+
+        m_queuePostTickRequests.push( request );
+
+        // only entity registry gets updated outright
+        // actual components and batches are processed only through request to maintain their coherence on per tick basis
+        // so that systems won't receive invalid components or batches in the middle of processing them
+        // e.g. when component gets destroyed which invalidates its pointer, worse: its batch gets destroyed and it is invalid in the whole
     }
 
     void CEntityManager::destroyEntities( std::vector< entityid_t > ids ) 
@@ -131,6 +229,7 @@ namespace chestnut
         IComponent *uncastedComp;
         SComponentSetSignature oldSignature;
         SComponentSetSignature newSignature;
+        SEntityRequest request;
 
 
         // compute signatures //
@@ -144,17 +243,23 @@ namespace chestnut
         uncastedComp = wrapper->push_back( id );
 
 
-        // update component batches //
-        if( !moveEntityAccrossBatches( id, oldSignature, newSignature ) )
-        {
-            wrapper->erase( id );
-            return nullptr;
-        }
-
-
         // update entity registry - apply new signature to entity //
         m_entityRegistry.updateEntity( id, newSignature );
 
+
+        // request post tick handling of batches //
+        request.id = id;
+        request.type = EEntityRequestType::CREATE_COMPONENT;
+        request.oldSignature = oldSignature;
+        request.newSignature = newSignature;
+
+        m_queuePostTickRequests.push( request );
+
+        // registry can be updated and component itself can be created outright
+        // batches are processed only through request to maintain their coherence on per tick basis
+        // so that systems won't receive invalid components or batches in the middle of processing them
+        // e.g. when component gets created, all components belonging to entity should be moved to other batch
+        // and this moving could lead to errors on current tick
 
         return uncastedComp;
     }
@@ -203,7 +308,8 @@ namespace chestnut
 
         SComponentSetSignature oldSignature;
         SComponentSetSignature newSignature;
-        IComponentVectorWrapper *wrapper;
+        SEntityRequest request;
+
 
         // compute signatures //
         oldSignature = m_entityRegistry.getEntitySignature( id ); // hasComponent() assures entity exists
@@ -211,118 +317,23 @@ namespace chestnut
         newSignature.remove( compTindex );
 
 
-        // update component batches //
-        if( !moveEntityAccrossBatches( id, oldSignature, newSignature ) )
-        {
-            return;
-        }
-
-
-        // erase instance of the destroyed component //
-        wrapper = getComponentVectorWrapper( compTindex ); // hasComponent() assures wrapper exists
-        wrapper->erase( id );
-
-
         // update registry //
         m_entityRegistry.updateEntity( id, newSignature );
-    }
 
 
+        // request post tick handling of CVWs batches //
+        request.id = id;
+        request.type = EEntityRequestType::DESTROY_COMPONENT;
+        request.oldSignature = oldSignature;
+        request.newSignature = newSignature;
 
-    entityid_t CEntityManager::createEntity( SComponentSetSignature signature ) 
-    {
-        // validation stage
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
-        {
-            if( !isPreparedForComponentType( compTindex ) )
-            {
-                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-                return ENTITY_ID_INVALID;
-            }
-        }
+        m_queuePostTickRequests.push( request );
 
-        // creation stage
-        entityid_t id;
-        IComponentVectorWrapper *wrapper;
-        SComponentSetSignature oldSignature;
-        SComponentSetSignature newSignature;
-
-        oldSignature = SComponentSetSignature(); // empty signature
-        newSignature = signature;
-
-        id = ++m_idCounter;
-        m_entityRegistry.addEntity( id, newSignature );
-
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
-        {
-            // create an instance of the component //
-            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
-            wrapper->push_back( id );
-        }
-
-        // update component batches //
-        if( !moveEntityAccrossBatches( id, oldSignature, newSignature ) )
-        {
-            LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity with signature: " << newSignature.toString() << " ! Halting entity creation!" );
-            destroyEntity( id );
-            return ENTITY_ID_INVALID;
-        }
-
-        return id;
-    }
-
-    std::vector< entityid_t > CEntityManager::createEntities( SComponentSetSignature signature, int amount ) 
-    {
-        std::vector< entityid_t > ids;
-
-        // validation stage
-        if( amount <= 0 )
-        {
-            return ids;
-        }
-
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
-        {
-            if( !isPreparedForComponentType( compTindex ) )
-            {
-                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-                return ids; // returns empty vector
-            }
-        }
-
-        // creation stage
-        entityid_t id;
-        IComponentVectorWrapper *wrapper;
-        SComponentSetSignature oldSignature;
-        SComponentSetSignature newSignature;
-
-        oldSignature = SComponentSetSignature(); // empty signature
-        newSignature = signature;
-
-        for (int i = 0; i < amount; i++)
-        {
-            id = ++m_idCounter;
-            m_entityRegistry.addEntity( id, signature );
-
-            for( const componenttindex_t& compTindex : signature.componentTindexes )
-            {
-                // create an instance of the component //
-                wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
-                wrapper->push_back( id );
-            }
-
-            // update component batches //
-            if( !moveEntityAccrossBatches( id, oldSignature, newSignature ) )
-            {
-                LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity with signature: " << signature.toString() << " ! Halting entity creation!" );
-                destroyEntity( id );
-                break;
-            }
-
-            ids.push_back( id );
-        }
-
-        return ids;
+        // registry can be updated outright
+        // actual component and batches are processed only through request to maintain their coherence on per tick basis
+        // so that systems won't receive invalid components or batches in the middle of processing them
+        // e.g. when component gets destroyed, all components belonging to entity should be moved to other batch
+        // and this moving could lead to errors on current tick
     }
 
 
@@ -340,6 +351,35 @@ namespace chestnut
     }
 
 
+
+    void CEntityManager::processEntityRequests() 
+    {
+        while( !m_queuePostTickRequests.empty() )
+        {
+            SEntityRequest& request = m_queuePostTickRequests.front();
+
+            switch( request.type )
+            {
+                case EEntityRequestType::CREATE_ENTITY:
+                    processPostTickCreateEntityRequest( request );
+                    break;
+
+                case EEntityRequestType::DESTROY_ENTITY:
+                    processPostTickDestroyEntityRequest( request );
+                    break;
+
+                case EEntityRequestType::CREATE_COMPONENT:
+                    processPostTickCreateComponentRequest( request );
+                    break;
+
+                case EEntityRequestType::DESTROY_COMPONENT:
+                    processPostTickDestroyComponentRequest( request );
+                    break;
+            }
+
+            m_queuePostTickRequests.pop();
+        }
+    }
 
     // ========================= PRIVATE ========================= //
 
@@ -504,6 +544,68 @@ namespace chestnut
         }
 
         return true;
+    }
+
+
+
+    void CEntityManager::processPostTickCreateEntityRequest( const SEntityRequest& request ) 
+    {
+        // empty old signature means it won't attempt to remove components from old one, because it hasn't been assigned to one yet
+        if( !moveEntityAccrossBatches( request.id, SComponentSetSignature(), request.newSignature ) )
+        {
+            LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity " << request.id << " with signature " << request.newSignature.toString() << " ! Reverting entity creation..." );
+
+            IComponentVectorWrapper *vecWrapper;
+            for( const std::type_index& tindex : request.newSignature.componentTindexes )
+            {
+                vecWrapper = getComponentVectorWrapper( tindex );
+                vecWrapper->erase( request.id );
+            }
+
+            m_entityRegistry.removeEntity( request.id );
+        }
+    }
+
+    void CEntityManager::processPostTickDestroyEntityRequest( const SEntityRequest& request ) 
+    {
+        IComponentVectorWrapper *vecWrapper;
+
+        // remove actual components belonging to entity
+        for( const std::type_index& tindex : request.oldSignature.componentTindexes )
+        {
+            vecWrapper = getComponentVectorWrapper( tindex );
+            vecWrapper->erase( request.id );
+        }
+
+        // empty new signature means it will get removed from new one and not assigned to any new
+        moveEntityAccrossBatches( request.id, request.oldSignature, SComponentSetSignature() );
+    }
+
+    void CEntityManager::processPostTickCreateComponentRequest( const SEntityRequest& request ) 
+    {
+        if( !moveEntityAccrossBatches( request.id, request.oldSignature, request.newSignature ) )
+        {
+            LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity with signature: " << request.newSignature.toString() << " ! Reverting component creation!" );
+
+            SComponentSetSignature signDiff = request.newSignature - request.oldSignature;
+            componenttindex_t createdCompTindex = *( signDiff.componentTindexes.begin() );
+            IComponentVectorWrapper *vecWrapper = getComponentVectorWrapper( createdCompTindex );
+            
+            vecWrapper->erase( request.id );
+
+            m_entityRegistry.updateEntity( request.id, request.oldSignature );
+        }
+    }
+
+    void CEntityManager::processPostTickDestroyComponentRequest( const SEntityRequest& request ) 
+    {
+        SComponentSetSignature signDiff = request.oldSignature - request.newSignature;
+        componenttindex_t destroyedCompTindex = *( signDiff.componentTindexes.begin() );
+        IComponentVectorWrapper *vecWrapper = getComponentVectorWrapper( destroyedCompTindex );
+
+        vecWrapper->erase( request.id );
+
+        moveEntityAccrossBatches( request.id, request.oldSignature, request.newSignature );
     }
 
 } // namespace chestnut

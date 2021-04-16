@@ -6,7 +6,9 @@
 #include "entity_registry.hpp"
 #include "component_batch.hpp"
 #include "component_vector_wrapper.hpp"
+#include "entity_request.hpp"
 
+#include <queue>
 #include <typeindex>
 #include <unordered_map>
 #include <vector>
@@ -18,12 +20,18 @@ namespace chestnut
     private:
         // A counter used to distribute IDs to entities
         entityid_t m_idCounter;
+
         // A bookkeeping object used to keep track of created entities and their signatures
         CEntityRegistry m_entityRegistry;
+
         // A map pointing to direct component storages (vector wrappers)
         std::unordered_map< componenttindex_t, IComponentVectorWrapper * > m_mapComponentVecWrappers;
+
         // A vector of component batches, which reference components from the component map
         std::vector< CComponentBatch > m_vecCompBatches;
+
+        // a queue of requests for adding/destroying components or whole entities
+        std::queue< SEntityRequest > m_queuePostTickRequests;
 
 
     public:
@@ -41,6 +49,12 @@ namespace chestnut
         entityid_t createEntity();
 
         std::vector< entityid_t > createEntities( int amount );
+
+        // Returns ENTITY_ID_INVALID if manager was not prepared for component type
+        entityid_t createEntity( SComponentSetSignature signature );
+
+        // Returns empty vector if manager was not prepared for component type
+        std::vector< entityid_t > createEntities( SComponentSetSignature signature, int amount );
 
         bool hasEntity( entityid_t id ) const;
 
@@ -62,13 +76,6 @@ namespace chestnut
         void destroyComponent( componenttindex_t compTindex, entityid_t id );
 
 
-        // Returns ENTITY_ID_INVALID if manager was not prepared for component type
-        entityid_t createEntity( SComponentSetSignature signature );
-
-        // Returns empty vector if manager was not prepared for component type
-        std::vector< entityid_t > createEntities( SComponentSetSignature signature, int amount );
-
-
         // Returns null on error. Additionally prepares manager for given component type.
         template< typename T >
         T *createComponent( entityid_t id );
@@ -85,6 +92,9 @@ namespace chestnut
 
 
         std::vector< CComponentBatch * > getComponentBatches();
+
+
+        void processEntityRequests();
 
 
     private:
@@ -108,6 +118,15 @@ namespace chestnut
         SComponentSet buildComponentSetForEntity( entityid_t id, SComponentSetSignature signature );
 
         bool moveEntityAccrossBatches( entityid_t id, SComponentSetSignature oldSignature, SComponentSetSignature newSignature );
+
+
+        void processPostTickCreateComponentRequest( const SEntityRequest& request );
+
+        void processPostTickDestroyComponentRequest( const SEntityRequest& request );
+
+        void processPostTickCreateEntityRequest( const SEntityRequest& request );
+
+        void processPostTickDestroyEntityRequest( const SEntityRequest& request );
     };
     
 } // namespace chestnut

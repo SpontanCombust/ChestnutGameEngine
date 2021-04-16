@@ -54,6 +54,7 @@ namespace test
             manager.createComponent<SKinematicsComponent>( ids[3] );
             manager.createComponent<STimerComponent>( ids[3] );
 
+            manager.processEntityRequests();
 
             LOG_CHANNEL( "TEST", "Has entity " << ids[0] << " got STransformComponent? : " << manager.hasComponent<STransformComponent>( ids[0] ) );
 
@@ -81,6 +82,8 @@ namespace test
             tmp = manager.createEntities( sign2, 2 );
             ids[5] = tmp[0];
             ids[6] = tmp[1];
+
+            manager.processEntityRequests();
 
             LOG_CHANNEL( "TEST", "Has entity " << ids[4] << " got STransformComponent? : " << manager.hasComponent<STransformComponent>( ids[4] ) );
 
@@ -133,6 +136,8 @@ namespace test
             manager.destroyComponent<STextureComponent>( ids[2] );
             manager.destroyComponent<STextureComponent>( ids[3] );
 
+            manager.processEntityRequests();
+
             LOG_CHANNEL( "TEST", "Has entity " << ids[2] << " got STextureComponent? : " << manager.hasComponent<STextureComponent>( ids[2] ) );
 
             auto vec = manager.getComponentBatches();
@@ -150,6 +155,8 @@ namespace test
             manager.destroyEntity( ids[0] );
             manager.destroyEntity( ids[3] );
 
+            manager.processEntityRequests();
+            
             auto vec = manager.getComponentBatches();
 
             for( const auto batch : vec )

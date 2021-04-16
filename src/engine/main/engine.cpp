@@ -127,6 +127,8 @@ namespace chestnut
 
         // updating event manager
         eventManager.delegateEvents();
+
+        entityManager.processEntityRequests();
     }
 
     void CEngine::suspend() 
