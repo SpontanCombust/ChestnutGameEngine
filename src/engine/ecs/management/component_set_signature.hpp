@@ -17,6 +17,8 @@ namespace chestnut
         SComponentSetSignature() = default;
         SComponentSetSignature( const SComponentSetSignature& other );
 
+        SComponentSetSignature& operator=( const SComponentSetSignature& other );
+
 
         SComponentSetSignature& add( componenttindex_t compTindex );
 
@@ -43,10 +45,18 @@ namespace chestnut
 
         bool isEmpty();
 
-
         const std::string toString() const;
     };
     
+
+    SComponentSetSignature signatureSum( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs );
+
+    SComponentSetSignature operator+( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs );
+
+    SComponentSetSignature signatureDifference( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs );
+
+    SComponentSetSignature operator-( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs );
+
 } // namespace chestnut
 
 

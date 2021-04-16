@@ -7,6 +7,12 @@ namespace chestnut
         componentTindexes = std::set< componenttindex_t >( other.componentTindexes );
     }
 
+    SComponentSetSignature& SComponentSetSignature::operator=( const SComponentSetSignature& other ) 
+    {
+        componentTindexes = std::set< componenttindex_t >( other.componentTindexes );
+        return *this;
+    }
+
     SComponentSetSignature& SComponentSetSignature::add( componenttindex_t compTindex ) 
     {
         componentTindexes.insert( compTindex );
@@ -61,6 +67,42 @@ namespace chestnut
         str += ")";
 
         return str;
+    }
+
+
+
+    SComponentSetSignature signatureSum( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs ) 
+    {
+        SComponentSetSignature sum = lhs;
+
+        for( const componenttindex_t& tindex : rhs.componentTindexes )
+        {
+            sum.add( tindex );
+        }
+
+        return sum;
+    }
+
+    SComponentSetSignature operator+( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs ) 
+    {
+        return signatureSum( lhs, rhs );
+    }
+
+    SComponentSetSignature signatureDifference( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs ) 
+    {
+        SComponentSetSignature diff = lhs;
+
+        for( const componenttindex_t& tindex : rhs.componentTindexes )
+        {
+            diff.remove( tindex );
+        }
+
+        return diff;
+    }
+
+    SComponentSetSignature operator-( const SComponentSetSignature& lhs, const SComponentSetSignature& rhs ) 
+    {
+        return signatureDifference( lhs, rhs );
     }
 
 } // namespace chestnut
