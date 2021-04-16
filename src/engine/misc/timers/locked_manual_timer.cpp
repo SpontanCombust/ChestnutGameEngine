@@ -8,7 +8,16 @@ namespace chestnut
     : CManualTimer( id ) 
     {
         reset( true );
-        m_updateIntervalInSeconds = updateIntervalInSeconds;
+
+        if( updateIntervalInSeconds >= 0.001f )
+        {
+            m_updateIntervalInSeconds = updateIntervalInSeconds;
+        }
+        else
+        {
+            m_updateIntervalInSeconds = 0.001f;
+        }
+        
         m_isRepeating = isRepeating;
     }
 

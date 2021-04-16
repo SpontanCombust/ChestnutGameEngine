@@ -31,7 +31,9 @@ namespace chestnut
             }
             else
             {
-                m_logicUpdateTimer = new CLockedAutoTimer( 0, updateInterval, true );
+                CLockedAutoTimer *lockedTimer = new CLockedAutoTimer( 0, updateInterval, true );
+                lockedTimer->toggleThreadWaitingForTimerInterval( true );
+                m_logicUpdateTimer = lockedTimer;
             }
 
             if( renderInterval < 0 )
