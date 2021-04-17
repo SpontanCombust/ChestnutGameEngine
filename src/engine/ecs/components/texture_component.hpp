@@ -18,11 +18,11 @@ namespace chestnut
         CTexture texture;
         
         ETextureAnchor anchor;
-        Vector2f scaleOffset;
+        vec2f scaleOffset;
 
         //TODO create "missing texture" for default constructor
         STextureComponent();
-        STextureComponent( CTexture textureInstance, ETextureAnchor _anchor = ETextureAnchor::CENTER, Vector2f _scaleOffset = Vector2f( 0.f, 0.f ) );
+        STextureComponent( CTexture textureInstance, ETextureAnchor _anchor = ETextureAnchor::CENTER, vec2f _scaleOffset = vec2f( 0.f, 0.f ) );
     };
 
 } // namespace chestnut 

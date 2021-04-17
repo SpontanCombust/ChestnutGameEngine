@@ -13,9 +13,9 @@ namespace test
         for( const STransformComponent& comp : transfVec.vec )
         {
             LOG_CHANNEL( "TEST", comp.ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp.position ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp.rotation ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp.scale ) );
+            LOG_CHANNEL( "TEST", comp.position.toString() );
+            LOG_CHANNEL( "TEST", comp.rotation.toString()  );
+            LOG_CHANNEL( "TEST", comp.scale.toString() );
             LOG_CHANNEL( "TEST", "" );
         }
     }
@@ -28,7 +28,7 @@ namespace test
         LOG_CHANNEL( "TEST", "<< Create test >>" );
         {
             STransformComponent *transfComp1 = ( STransformComponent * )baseVec->push_back(1);
-            transfComp1->position = Vector2f(1,1);
+            transfComp1->position = vec2f(1,1);
 
             logTransformCompVec( transfVec );
         }
@@ -39,7 +39,7 @@ namespace test
         {
             baseVec->push_back(2);
             STransformComponent *transfComp2 = ( STransformComponent * )baseVec->find(2);
-            transfComp2->scale = Vector2f(2,2);
+            transfComp2->scale = vec2f(2,2);
 
             logTransformCompVec( transfVec );            
         }

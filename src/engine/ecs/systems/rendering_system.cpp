@@ -62,39 +62,39 @@ namespace chestnut
                 {
                     case ETextureAnchor::UPPER_LEFT:
                         textureComp->texture.setPosition( transfComp->position );
-                        textureComp->texture.setRotationPoint( Vector2lf( 0.f, 0.f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 0.f, 0.f ) );
                         break;
                     case ETextureAnchor::UP:
-                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x * 0.5f, 0.f ) );
-                        textureComp->texture.setRotationPoint( Vector2lf( 0.5f, 0.f ) );
+                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x * 0.5f, 0.f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 0.5f, 0.f ) );
                         break;
                     case ETextureAnchor::UPPER_RIGHT:
-                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x, 0.f ) );
-                        textureComp->texture.setRotationPoint( Vector2lf( 1.f, 0.f ) );
+                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x, 0.f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 1.f, 0.f ) );
                         break;
                     case ETextureAnchor::LEFT:
-                        textureComp->texture.setPosition( transfComp->position - Vector2f( 0.f, textureComp->texture.getSize().y * 0.5f ) );
-                        textureComp->texture.setRotationPoint( Vector2lf( 0.f, 0.5f ) );
+                        textureComp->texture.setPosition( transfComp->position - vec2f( 0.f, textureComp->texture.getSize().y * 0.5f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 0.f, 0.5f ) );
                         break;
                     case ETextureAnchor::RIGHT:
-                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x, textureComp->texture.getSize().y * 0.5f ) );
-                        textureComp->texture.setRotationPoint( Vector2lf( 1.f, 0.5f ) );
+                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x, textureComp->texture.getSize().y * 0.5f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 1.f, 0.5f ) );
                         break;
                     case ETextureAnchor::LOWER_LEFT:
-                        textureComp->texture.setPosition( transfComp->position - Vector2f( 0.f, textureComp->texture.getSize().y ) );
-                        textureComp->texture.setRotationPoint( Vector2lf( 0.f, 1.f ) );
+                        textureComp->texture.setPosition( transfComp->position - vec2f( 0.f, textureComp->texture.getSize().y ) );
+                        textureComp->texture.setRotationPoint( vec2f( 0.f, 1.f ) );
                         break;
                     case ETextureAnchor::DOWN:
-                        textureComp->texture.setPosition( transfComp->position - Vector2f( textureComp->texture.getSize().x * 0.5f, textureComp->texture.getSize().y ) );
-                        textureComp->texture.setRotationPoint( Vector2lf( 0.5f, 1.f ) );
+                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x * 0.5f, textureComp->texture.getSize().y ) );
+                        textureComp->texture.setRotationPoint( vec2f( 0.5f, 1.f ) );
                         break;
                     case ETextureAnchor::LOWER_RIGHT:
                         textureComp->texture.setPosition( transfComp->position - textureComp->texture.getSize() );
-                        textureComp->texture.setRotationPoint( Vector2lf( 1.f, 1.f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 1.f, 1.f ) );
                         break;
                     default:
                         textureComp->texture.setPosition( transfComp->position - textureComp->texture.getSize() * 0.5f );
-                        textureComp->texture.setRotationPoint( Vector2lf( 0.5f, 0.5f ) );
+                        textureComp->texture.setRotationPoint( vec2f( 0.5f, 0.5f ) );
                 }
 
                 textureComp->texture.setRotation( transfComp->rotation );

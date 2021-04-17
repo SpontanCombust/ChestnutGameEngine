@@ -67,18 +67,18 @@ namespace chestnut
         m_clippingRectSize = { w, h };
     }
 
-    void CTexture::setClippingRect( Vector2i position, Vector2i dimensions ) 
+    void CTexture::setClippingRect( vec2i position, vec2i dimensions ) 
     {
         m_clippingRectPos = position;
         m_clippingRectSize = dimensions;
     }
     
-    const Vector2i& CTexture::getClippingRectPos() const 
+    const vec2i& CTexture::getClippingRectPos() const 
     {
         return m_clippingRectPos;
     }
 
-    const Vector2i& CTexture::getClippingRectSize() const
+    const vec2i& CTexture::getClippingRectSize() const
     {
         return m_clippingRectSize;
     }
@@ -88,12 +88,12 @@ namespace chestnut
         m_position = { x, y };
     }
 
-    void CTexture::setPosition( Vector2f position ) 
+    void CTexture::setPosition( vec2f position ) 
     {
         m_position = position;
     }
 
-    const Vector2f& CTexture::getPosition() const
+    const vec2f& CTexture::getPosition() const
     {
         return m_position;
     }
@@ -107,7 +107,7 @@ namespace chestnut
         };
     }
 
-    void CTexture::setScale( Vector2f scale ) 
+    void CTexture::setScale( vec2f scale ) 
     {
         m_size = 
         { 
@@ -116,9 +116,9 @@ namespace chestnut
         };
     }
 
-    const Vector2f CTexture::getScale() const
+    const vec2f CTexture::getScale() const
     {
-        return Vector2f( 
+        return vec2f( 
             m_size.x / m_clippingRectSize.x,
             m_size.y / m_clippingRectSize.y
         );
@@ -129,12 +129,12 @@ namespace chestnut
         m_size = { w, h };
     }
 
-    void CTexture::setSizeDirectly( Vector2f size ) 
+    void CTexture::setSizeDirectly( vec2f size ) 
     {
         m_size = { size.x, size.y };
     }
 
-    const Vector2f& CTexture::getSize() const 
+    const vec2f& CTexture::getSize() const 
     {
         return m_size;
     }
@@ -144,10 +144,10 @@ namespace chestnut
         m_rotationRad = angleRad;
     }
 
-    void CTexture::setRotation( Vector2f rotationVec ) 
+    void CTexture::setRotation( vec2f rotationVec ) 
     {
         // 0 radians is equivalent to vector [1;0]
-        m_rotationRad = unitVector2fToAngle( vec2GetNormalized( rotationVec ) );
+        m_rotationRad = unitVec2fToAngle( vec2Normalized( rotationVec ) );
     }
     
     const float& CTexture::getRotationRad() const
@@ -155,17 +155,17 @@ namespace chestnut
         return m_rotationRad;
     }
 
-    const Vector2f CTexture::getRotationVec() const
+    const vec2f CTexture::getRotationVec() const
     {
-        return angleToUnitVector2f( m_rotationRad );
+        return angleToUnitVec2f( m_rotationRad );
     }
 
-    void CTexture::setRotationPoint( double rx, double ry ) 
+    void CTexture::setRotationPoint( float rx, float ry ) 
     {
         m_rotationPoint = { rx, ry };
     }
 
-    void CTexture::setRotationPoint( Vector2lf rotPoint ) 
+    void CTexture::setRotationPoint( vec2f rotPoint ) 
     {
         m_rotationPoint = rotPoint;
     }
@@ -175,7 +175,7 @@ namespace chestnut
         m_rotationPoint = { 0.5f, 0.5f };
     }
 
-    const Vector2lf& CTexture::getRotationPoint() const
+    const vec2f& CTexture::getRotationPoint() const
     {
         return m_rotationPoint;
     }

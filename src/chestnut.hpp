@@ -26,8 +26,8 @@
 #include "engine/main/application.hpp"
 #include "engine/main/engine.hpp"
 
+#include "engine/maths/vector2.hpp"
 #include "engine/maths/angles.hpp"
-#include "engine/maths/vector.hpp"
 
 #include "engine/misc/timers/auto_timer.hpp"
 #include "engine/misc/timers/locked_auto_timer.hpp"

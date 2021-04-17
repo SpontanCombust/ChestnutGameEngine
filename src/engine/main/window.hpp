@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_WINDOW_H__
 #define __CHESTNUT_WINDOW_H__
 
-#include "engine/maths/vector.hpp"
+#include "engine/maths/vector2.hpp"
 
 #include <SDL2/SDL.h>
 
@@ -26,10 +26,10 @@ namespace chestnut
         const char *getTitle();
 
         void setSize( int w, int h );
-        Vector2i getSize();
+        vec2i getSize();
 
         void setPosition( int x, int y );
-        Vector2i getPosition();
+        vec2i getPosition();
 
         void setWindowRendererAsGlobalRenderer();
         SDL_Renderer *getSDLRenderer();

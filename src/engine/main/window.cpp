@@ -73,9 +73,9 @@ namespace chestnut
         SDL_SetWindowSize( m_sdlWindow, w, h );
     }
 
-    Vector2i CWindow::getSize() 
+    vec2i CWindow::getSize() 
     {
-        Vector2i size;
+        vec2i size;
         SDL_GetWindowSize( m_sdlWindow, &size.x, &size.y );
         return size;
     }
@@ -85,9 +85,9 @@ namespace chestnut
         SDL_SetWindowPosition( m_sdlWindow, x, y );
     }
 
-    Vector2i CWindow::getPosition() 
+    vec2i CWindow::getPosition() 
     {
-        Vector2i pos;
+        vec2i pos;
         SDL_GetWindowPosition( m_sdlWindow, &pos.x, &pos.y );
         return pos;
     }

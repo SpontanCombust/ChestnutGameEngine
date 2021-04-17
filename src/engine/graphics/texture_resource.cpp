@@ -40,9 +40,9 @@ namespace chestnut
         }
     }
 
-    Vector2i CTextureResource::getSize() const
+    vec2i CTextureResource::getSize() const
     {
-        Vector2i size;
+        vec2i size;
         SDL_QueryTexture( m_sdlTexture, NULL, NULL, &size.x, &size.y );
         return size;
     }

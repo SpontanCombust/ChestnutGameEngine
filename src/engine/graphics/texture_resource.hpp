@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_TEXTURE_RESOURCE_H__
 #define __CHESTNUT_TEXTURE_RESOURCE_H__
 
-#include "engine/maths/vector.hpp"
+#include "engine/maths/vector2.hpp"
 
 #include <SDL2/SDL_image.h>
 
@@ -19,7 +19,7 @@ namespace chestnut
         ~CTextureResource();
 
         void loadFromFile( const std::string path );
-        Vector2i getSize() const;
+        vec2i getSize() const;
 
         SDL_Texture *getSDLTexturePtr() const;
     };

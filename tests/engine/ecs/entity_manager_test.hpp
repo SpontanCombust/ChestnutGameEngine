@@ -100,20 +100,20 @@ namespace test
 
             if( transfComp )
             {
-                transfComp->position = Vector2f( 1, 2 );
-                LOG_CHANNEL( "TEST", VEC_TO_STR( transfComp->position ) );
+                transfComp->position = vec2f( 1, 2 );
+                LOG_CHANNEL( "TEST", transfComp->position.toString() );
             }
 
             if( kinemComp )
             {
-                kinemComp->velocity = Vector2f( 3, 4 );
-                LOG_CHANNEL( "TEST", VEC_TO_STR( kinemComp->velocity ) );
+                kinemComp->velocity = vec2f( 3, 4 );
+                LOG_CHANNEL( "TEST", kinemComp->velocity.toString() );
             }
 
             if( textComp )
             {
-                textComp->scaleOffset = Vector2f( 5, 6 );
-                LOG_CHANNEL( "TEST", VEC_TO_STR( textComp->scaleOffset ) );
+                textComp->scaleOffset = vec2f( 5, 6 );
+                LOG_CHANNEL( "TEST", textComp->scaleOffset.toString() );
             }
         }
         LOG_CHANNEL( "TEST", "");

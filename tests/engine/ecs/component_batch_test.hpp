@@ -14,10 +14,10 @@ namespace test
         STextureComponent textComp1, textComp2;
         SKinematicsComponent kinemComp1, kinemComp2;
 
-        transfComp1 = STransformComponent( Vector2f( 1, 1 ), Vector2f( 2, 2 ), Vector2f( 3, 3 ) );
-        kinemComp1 = SKinematicsComponent( Vector2f( 4, 4 ), Vector2f( 5, 5 ) );
-        transfComp2 = STransformComponent( Vector2f( 6, 6 ), Vector2f( 7, 7 ), Vector2f( 8, 8 ) );
-        kinemComp2 = SKinematicsComponent( Vector2f( 9, 9 ), Vector2f( 0, 0 ) );
+        transfComp1 = STransformComponent( vec2f( 1, 1 ), vec2f( 2, 2 ), vec2f( 3, 3 ) );
+        kinemComp1 = SKinematicsComponent( vec2f( 4, 4 ), vec2f( 5, 5 ) );
+        transfComp2 = STransformComponent( vec2f( 6, 6 ), vec2f( 7, 7 ), vec2f( 8, 8 ) );
+        kinemComp2 = SKinematicsComponent( vec2f( 9, 9 ), vec2f( 0, 0 ) );
 
         transfComp1.ownerID = textComp1.ownerID = kinemComp1.ownerID = 1;
         transfComp2.ownerID = textComp2.ownerID = kinemComp2.ownerID = 2;
@@ -89,16 +89,16 @@ namespace test
         for( auto comp : transfComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->position ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->rotation ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->scale ) );
+            LOG_CHANNEL( "TEST", comp->position.toString() );
+            LOG_CHANNEL( "TEST", comp->rotation.toString() );
+            LOG_CHANNEL( "TEST", comp->scale.toString() );
         }
         LOG_CHANNEL( "TEST", "");
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->velocity ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->acceleration ) );
+            LOG_CHANNEL( "TEST", comp->velocity.toString() );
+            LOG_CHANNEL( "TEST", comp->acceleration.toString() );
         }
         LOG_CHANNEL( "TEST", "");
 
@@ -125,16 +125,16 @@ namespace test
         for( auto comp : transfComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->position ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->rotation ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->scale ) );
+            LOG_CHANNEL( "TEST", comp->position.toString() );
+            LOG_CHANNEL( "TEST", comp->rotation.toString() );
+            LOG_CHANNEL( "TEST", comp->scale.toString() );
         }
         LOG_CHANNEL( "TEST", "");
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->velocity ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->acceleration ) );
+            LOG_CHANNEL( "TEST", comp->velocity.toString() );
+            LOG_CHANNEL( "TEST", comp->acceleration.toString() );
         }
         LOG_CHANNEL( "TEST", "");
 
@@ -155,16 +155,16 @@ namespace test
         for( auto comp : transfComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->position ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->rotation ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->scale ) );
+            LOG_CHANNEL( "TEST", comp->position.toString() );
+            LOG_CHANNEL( "TEST", comp->rotation.toString() );
+            LOG_CHANNEL( "TEST", comp->scale.toString() );
         }
         LOG_CHANNEL( "TEST", "");
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->velocity ) );
-            LOG_CHANNEL( "TEST", VEC_TO_STR( comp->acceleration ) );
+            LOG_CHANNEL( "TEST", comp->velocity.toString() );
+            LOG_CHANNEL( "TEST", comp->acceleration.toString() );
         }
         LOG_CHANNEL( "TEST", "");
     }
