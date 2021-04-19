@@ -55,7 +55,7 @@ namespace chestnut
         ss << "[ " << get(0,0) << ",\t" << get(0,1) << ",\t" << get(0,2) << ",\t" << get(0,3) << " ]\n";
         ss << "[ " << get(1,0) << ",\t" << get(1,1) << ",\t" << get(1,2) << ",\t" << get(1,3) << " ]\n";
         ss << "[ " << get(2,0) << ",\t" << get(2,1) << ",\t" << get(2,2) << ",\t" << get(2,3) << " ]\n";
-        ss << "[ " << get(3,0) << ",\t" << get(3,1) << ",\t" << get(3,2) << ",\t" << get(3,3) << " ]\n";
+        ss << "[ " << get(3,0) << ",\t" << get(3,1) << ",\t" << get(3,2) << ",\t" << get(3,3) << " ]";
 
         return ss.str();
     }
@@ -108,7 +108,7 @@ namespace chestnut
     template< typename T >
     Matrix4<T> operator-( const Matrix4<T>& m )
     {
-        return mat4Negated(m);
+        return mat4Negated<T>(m);
     }
 
 
@@ -132,7 +132,7 @@ namespace chestnut
     template< typename T >
     Matrix4<T> operator+( const Matrix4<T>& m1, const Matrix4<T>& m2 )
     {
-        return mat4Sum( m1, m2 );
+        return mat4Sum<T>( m1, m2 );
     }
 
 
@@ -156,7 +156,7 @@ namespace chestnut
     template< typename T >
     Matrix4<T> operator-( const Matrix4<T>& m1, const Matrix4<T>& m2 )
     {
-        return mat4Difference( m1, m2 );
+        return mat4Difference<T>( m1, m2 );
     }
 
 
@@ -180,13 +180,43 @@ namespace chestnut
     template< typename T >
     Matrix4<T> operator*( const Matrix4<T>& m1, const Matrix4<T>& m2 )
     {
-        return mat4Product( m1, m2 );
+        return mat4Product<T>( m1, m2 );
     }
 
     
 
     template< typename T >
-    Matrix4<T> mat4Orthographic( T left, T right, T bottom, T top, T zNear, T zFar )
+    Matrix4<T> mat4ScalarProduct( const Matrix4<T>& m, T s )
+    {
+        Matrix4<T> sm;
+
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                sm( i, j ) = m.get( i, j ) * s;
+            }
+        }
+
+        return sm;
+    }
+
+    template< typename T >
+    Matrix4<T> operator*( const Matrix4<T>& m, T s )
+    {
+        return mat4ScalarProduct<T>( m, s );
+    }
+
+    template< typename T >
+    Matrix4<T> operator*( T s, const Matrix4<T>& m )
+    {
+        return mat4ScalarProduct<T>( m, s );
+    }
+
+
+
+    template< typename T >
+    Matrix4<T> mat4MakeOrthographic( T left, T right, T bottom, T top, T near, T far )
     {
         Matrix4<T> m;
 
@@ -202,8 +232,8 @@ namespace chestnut
 
         m(2,0) = 0.0;
         m(2,1) = 0.0;
-        m(2,2) = -2.0 / ( zFar - zNear );
-        m(2,3) = -( zFar + zNear ) / ( zFar - zNear );
+        m(2,2) = -2.0 / ( far - near );
+        m(2,3) = -( far + near ) / ( far - near );
 
         m(3,0) = 0.0;
         m(3,1) = 0.0;
@@ -213,16 +243,47 @@ namespace chestnut
         return m;
     }
 
-
-
     template< typename T >
-    Matrix4<T> mat4Translation( T dx, T dy, T dz )
+    Matrix4<T> mat4MakeFrustum( T left, T right, T bottom, T top, T near, T far )
     {
         Matrix4<T> m;
 
-        m(0,3) = dx;
-        m(1,3) = dy;
-        m(2,3) = dz;
+        m(0,0) = 2.0 * near / ( right - left );
+        m(0,1) = 0.0;
+        m(0,2) = ( right + left ) / ( right - left );
+        m(0,3) = 0.0;
+
+        m(1,0) = 0.0;
+        m(1,1) = 2.0 * near / ( top - bottom );
+        m(1,2) = ( top + bottom ) / ( top - bottom );
+        m(1,3) = 0.0;
+
+        m(2,0) = 0.0;
+        m(2,1) = 0.0;
+        m(2,2) = -( far + near ) / ( far - near );
+        m(2,3) = -2.0 * far * near / ( far - near );
+
+        m(3,0) = 0.0;
+        m(3,1) = 0.0;
+        m(3,2) = -1.0;
+        m(3,3) = 0.0;
+
+        return m;
+    }
+
+    template< typename T >
+    Matrix4<T> mat4MakePerspective( T fovy, T aspect, T near, T far )
+    {
+        Matrix4<T> m;
+
+        double cotangent = std::cos( fovy / 2.0 );
+
+        m(0,0) = cotangent / aspect;
+        m(1,1) = cotangent;
+        m(2,2) = ( far + near ) / ( near - far );
+        m(2,3) = 2 * far * near / ( near - far );
+        m(3,2) = -1.0;
+        m(3,3) = 0.0;
 
         return m;
     }
@@ -230,7 +291,21 @@ namespace chestnut
 
 
     template< typename T >
-    Matrix4<T> mat4Scale( T sx, T sy, T sz )
+    Matrix4<T> mat4MakeTranslation( T tx, T ty, T tz )
+    {
+        Matrix4<T> m;
+
+        m(0,3) = tx;
+        m(1,3) = ty;
+        m(2,3) = tz;
+
+        return m;
+    }
+
+
+
+    template< typename T >
+    Matrix4<T> mat4MakeScale( T sx, T sy, T sz )
     {
         Matrix4<T> m;
 
@@ -244,28 +319,28 @@ namespace chestnut
 
 
     template< typename T >
-    Matrix4<T> mat4RotationX( double rxRad )
+    Matrix4<T> mat4MakeRotationX( double angleRad )
     {
         Matrix4<T> m;
 
-        double sine = std::sin( rxRad );
-        double cosine = std::cos( rxRad );
+        double sine = std::sin( angleRad );
+        double cosine = std::cos( angleRad );
 
         m(1,1) = cosine;
         m(1,2) = -sine;
-        m(2,2) = sine;
-        m(2,3) = cosine;
+        m(2,1) = sine;
+        m(2,2) = cosine;
 
         return m;
     }
 
     template< typename T >
-    Matrix4<T> mat4RotationY( double ryRad )
+    Matrix4<T> mat4MakeRotationY( double angleRad )
     {
         Matrix4<T> m;
 
-        double sine = std::sin( ryRad );
-        double cosine = std::cos( ryRad );
+        double sine = std::sin( angleRad );
+        double cosine = std::cos( angleRad );
 
         m(0,0) = cosine;
         m(0,2) = sine;
@@ -276,12 +351,12 @@ namespace chestnut
     }
 
     template< typename T >
-    Matrix4<T> mat4RotationZ( double rzRad )
+    Matrix4<T> mat4MakeRotationZ( double angleRad )
     {
         Matrix4<T> m;
 
-        double sine = std::sin( rzRad );
-        double cosine = std::cos( rzRad );
+        double sine = std::sin( angleRad );
+        double cosine = std::cos( angleRad );
 
         m(0,0) = cosine;
         m(0,1) = -sine;
@@ -289,6 +364,130 @@ namespace chestnut
         m(1,1) = cosine;
 
         return m;
+    }
+
+    template< typename T >
+    Matrix4<T> mat4MakeRotation( Vector3<T> axis, double angleRad )
+    {
+        Matrix4<T> rm;
+        double sine, cosine;
+
+        sine = std::sin( angleRad );
+        cosine = std::cos( angleRad );
+        axis = vec3Normalized<T>( axis );
+
+        rm(0,0) = cosine + ( axis.x * axis.x ) * ( 1 - cosine );
+        rm(0,1) = axis.x * axis.y * ( 1 - cosine ) - axis.z * sine;
+        rm(0,2) = axis.x * axis.z * ( 1 - cosine ) + axis.y * sine;
+
+        rm(1,0) = axis.y * axis.x * ( 1 - cosine ) + axis.z * sine;
+        rm(1,1) = cosine + ( axis.y * axis.y ) * ( 1 - cosine );
+        rm(1,2) = axis.y * axis.z * ( 1 - cosine ) - axis.x * sine;
+
+        rm(2,0) = axis.z * axis.x * ( 1 - cosine ) - axis.y * sine;
+        rm(2,1) = axis.z * axis.y * ( 1 - cosine ) + axis.x * sine;
+        rm(2,2) = cosine + ( axis.z * axis.z ) * ( 1 - cosine );
+
+        return rm;
+    }
+
+
+
+    template< typename T >
+    Vector2<T> vec2LeftMultiplyByMatrix( const Vector2<T>& v, const Matrix4<T>& m ) 
+    {
+        Vector2<T> v1;
+
+        v1.x = m.get(0,0) * v.x + m.get(0,1) * v.y + /* m.get(0,2) * 0.0 + */ m.get(0,3) /* * 1.0 */;
+        v1.y = m.get(1,0) * v.x + m.get(1,1) * v.y + /* m.get(1,2) * 0.0 + */ m.get(1,3) /* * 1.0 */;
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector2<T> operator*( const Matrix4<T>& lhs, const Vector2<T>& rhs )
+    {
+        return vec2LeftMultiplyByMatrix<T>( rhs, lhs );
+    }
+
+    template<typename T>
+    Vector3<T> vec3LeftMultiplyByMatrix(const Vector3<T>& v, const Matrix4<T>& m) 
+    {
+        Vector3<T> v1;
+
+        v1.x = m.get(0,0) * v.x + m.get(0,1) * v.y + m.get(0,2) * v.z + m.get(0,3) /* * 1.0 */;
+        v1.y = m.get(1,0) * v.x + m.get(1,1) * v.y + m.get(1,2) * v.z + m.get(1,3) /* * 1.0 */;
+        v1.z = m.get(2,0) * v.x + m.get(2,1) * v.y + m.get(2,2) * v.z + m.get(2,3) /* * 1.0 */;
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector3<T> operator*( const Matrix4<T>& lhs, const Vector3<T>& rhs )
+    {
+        return vec3LeftMultiplyByMatrix<T>( rhs, lhs );
+    }
+
+
+
+    template< typename T >
+    Vector2<T> vec2Translate( const Vector2<T>& v, T tx, T ty )
+    {
+        Matrix4<T> m = mat4MakeTranslation<T>( tx, ty, 0.0 );
+        Vector2<T> v1 = vec2LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector3<T> vec3Translate( const Vector3<T>& v, T tx, T ty, T tz )
+    {
+        Matrix4<T> m = mat4MakeTranslation<T>( tx, ty, tz);
+        Vector3<T> v1 = vec3LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+
+
+    template< typename T >
+    Vector2<T> vec2Scale( const Vector2<T>& v, T sx, T sy )
+    {
+        Matrix4<T> m = mat4MakeScale<T>( sx, sy, 1.0 );
+        Vector2<T> v1 = vec2LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector3<T> vec3Scale( const Vector3<T>& v, T sx, T sy, T sz )
+    {
+        Matrix4<T> m = mat4MakeScale<T>( sx, sy, sz );
+        Vector3<T> v1 = vec3LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+
+
+    template< typename T >
+    Vector2<T> vec2Rotate( const Vector2<T>& v, double angleRad )
+    {
+        Matrix4<T> m = mat4MakeRotationZ<T>( angleRad );
+        Vector2<T> v1 = vec2LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector3<T> vec3Rotate( const Vector3<T>& v, Vector3<T> axis, double angleRad )
+    {
+        axis = vec3Normalized<T>( axis );
+
+        Matrix4<T> m = mat4MakeRotation<T>( axis, angleRad );
+        Vector3<T> v1 = vec3LeftMultiplyByMatrix( v, m );
+
+        return v1;
     }
 
 } // namespace chestnut

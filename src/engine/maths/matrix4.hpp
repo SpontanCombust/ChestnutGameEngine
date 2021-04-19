@@ -1,6 +1,9 @@
 #ifndef __CHESTNUT_MATRIX4_H__
 #define __CHESTNUT_MATRIX4_H__
 
+#include "vector2.hpp"
+#include "vector3.hpp"
+
 #include <string>
 
 namespace chestnut
@@ -72,25 +75,78 @@ namespace chestnut
 
     
     template< typename T >
-    Matrix4<T> mat4Orthographic( T left, T right, T bottom, T top, T zNear, T zFar );
+    Matrix4<T> mat4ScalarProduct( const Matrix4<T>& m, T s );
+
+    template< typename T >
+    Matrix4<T> operator*( const Matrix4<T>& m, T s );
+
+    template< typename T >
+    Matrix4<T> operator*( T s, const Matrix4<T>& m );
 
 
     template< typename T >
-    Matrix4<T> mat4Translation( T dx, T dy, T dz );
+    Matrix4<T> mat4MakeOrthographic( T left, T right, T bottom, T top, T near, T far );
+
+    template< typename T >
+    Matrix4<T> mat4MakeFrustum( T left, T right, T bottom, T top, T near, T far );
+
+    template< typename T >
+    Matrix4<T> mat4MakePerspective( T fovy, T aspect, T near, T far );
 
 
     template< typename T >
-    Matrix4<T> mat4Scale( T sx, T sy, T sz );
+    Matrix4<T> mat4MakeTranslation( T tx, T ty, T tz );
 
 
     template< typename T >
-    Matrix4<T> mat4RotationX( double rxRad );
+    Matrix4<T> mat4MakeScale( T sx, T sy, T sz );
+
 
     template< typename T >
-    Matrix4<T> mat4RotationY( double ryRad );
+    Matrix4<T> mat4MakeRotationX( double angleRad );
 
     template< typename T >
-    Matrix4<T> mat4RotationZ( double rzRad );
+    Matrix4<T> mat4MakeRotationY( double angleRad );
+
+    template< typename T >
+    Matrix4<T> mat4MakeRotationZ( double angleRad );
+
+    template< typename T >
+    Matrix4<T> mat4MakeRotation( Vector3<T> axis, double angleRad );
+
+
+    template< typename T >
+    Vector2<T> vec2LeftMultiplyByMatrix( const Vector2<T>& v, const Matrix4<T>& m );
+
+    template< typename T >
+    Vector2<T> operator*( const Matrix4<T>& lhs, const Vector2<T>& rhs );
+
+    template< typename T >
+    Vector3<T> vec3LeftMultiplyByMatrix( const Vector3<T>& v, const Matrix4<T>& m );
+
+    template< typename T >
+    Vector3<T> operator*( const Matrix4<T>& lhs, const Vector3<T>& rhs );
+
+
+    template< typename T >
+    Vector2<T> vec2Translate( const Vector2<T>& v, T tx, T ty );
+
+    template< typename T >
+    Vector3<T> vec3Translate( const Vector3<T>& v, T tx, T ty, T tz );
+
+
+    template< typename T >
+    Vector2<T> vec2Scale( const Vector2<T>& v, T sx, T sy );
+
+    template< typename T >
+    Vector3<T> vec3Scale( const Vector3<T>& v, T sx, T sy, T sz );
+
+
+    template< typename T >
+    Vector2<T> vec2Rotate( const Vector2<T>& v, double angleRad );
+
+    template< typename T >
+    Vector3<T> vec3Rotate( const Vector3<T>& v, Vector3<T> axis, double angleRad );
 
 } // namespace chestnut
 
