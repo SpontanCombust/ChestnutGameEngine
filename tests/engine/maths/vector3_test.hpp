@@ -58,21 +58,30 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<<Sum test>>" );
         {
+            vec3f v3 = v1;
+            v3 += v2;
             LOG_CHANNEL( "TEST", "v1+v2=" << (v1+v2).toString() );
+            LOG_CHANNEL( "TEST", "v1+=v2=" << v3.toString() );
         }
         LOG_CHANNEL( "TEST", "" );
 
 
         LOG_CHANNEL( "TEST", "<<Difference test>>" );
         {
+            vec3f v3 = v1;
+            v3 -= v2;
             LOG_CHANNEL( "TEST", "v1-v2=" << (v1-v2).toString() );
+            LOG_CHANNEL( "TEST", "v1-=v2=" << v3.toString() );
         }
         LOG_CHANNEL( "TEST", "" );
 
 
         LOG_CHANNEL( "TEST", "<<Scaled test>>" );
         {
-            LOG_CHANNEL( "TEST", "-0.2 * v1=" << ( -0.2f * v1 ).toString() );   
+            vec3f v3 = v1;
+            v3 *= -0.2f;
+            LOG_CHANNEL( "TEST", "-0.2 * v1=" << ( -0.2f * v1 ).toString() );  
+            LOG_CHANNEL( "TEST", "v1*=-0.2=" << v3.toString() ); 
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -80,6 +89,20 @@ namespace test
         LOG_CHANNEL( "TEST", "<<Dot product test>>" );
         {
             LOG_CHANNEL( "TEST", "v1 dot v2=" << vec3DotProduct( v1, v2 ) );
+        }
+        LOG_CHANNEL( "TEST", "" );
+
+
+        LOG_CHANNEL( "TEST", "<<Cross product test>>" );
+        {
+            LOG_CHANNEL( "TEST", "v1 x v2=" << vec3CrossProduct( v1, v2 ).toString() );
+        }
+        LOG_CHANNEL( "TEST", "" );
+
+
+        LOG_CHANNEL( "TEST", "<<vec2 cross product test>>" );
+        {
+            LOG_CHANNEL( "TEST", "(vec2)v1 x (vec2)v2=" << vec2CrossProduct( vec3ToVec2(v1), vec3ToVec2(v2) ).toString() );
         }
         LOG_CHANNEL( "TEST", "" );
 

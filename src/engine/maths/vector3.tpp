@@ -18,6 +18,27 @@ namespace chestnut
         z = _z;
     }
 
+    template<typename T>
+    Vector3<T>& Vector3<T>::operator+=( const Vector3& v ) 
+    {
+        *this = vec3Sum<T>( *this, v );
+        return *this;
+    }
+
+    template<typename T>
+    Vector3<T>& Vector3<T>::operator-=( const Vector3& v ) 
+    {
+        *this = vec3Difference<T>( *this, v );
+        return *this;
+    }
+
+    template<typename T>
+    Vector3<T>& Vector3<T>::operator*=( T s ) 
+    {
+        *this = vec3ScalarProduct<T>( *this, s );
+        return *this;
+    }
+
     template< typename T >
     std::string Vector3<T>::toString() const
     {
@@ -47,7 +68,7 @@ namespace chestnut
         Vector3<T> v1 = v;
         if( v1.x != 0 && v1.y != 0 && v1.z != 0 )
         {
-            T mag = vec3Magnitude(v);
+            T mag = vec3Magnitude<T>(v);
             v1.x /= mag;
             v1.y /= mag;
             v1.z /= mag;
@@ -70,7 +91,7 @@ namespace chestnut
     template< typename T >
     Vector3<T> operator-( const Vector3<T>& v ) 
     {
-        return vec3Negated(v);
+        return vec3Negated<T>(v);
     }
 
 
@@ -88,7 +109,7 @@ namespace chestnut
     template< typename T >
     Vector3<T> operator+( const Vector3<T>& v1, const Vector3<T>& v2 ) 
     {
-        return vec3Sum( v1, v2 );
+        return vec3Sum<T>( v1, v2 );
     }
 
 
@@ -106,13 +127,13 @@ namespace chestnut
     template<typename T>
     Vector3<T> operator-( const Vector3<T>& v1, const Vector3<T>& v2 )
     {
-        return vec3Difference( v1, v2 );
+        return vec3Difference<T>( v1, v2 );
     }
 
 
 
     template< typename T >
-    Vector3<T> vec3Scaled( const Vector3<T>& v, T s ) 
+    Vector3<T> vec3ScalarProduct( const Vector3<T>& v, T s ) 
     {
         Vector3<T> v1;
         v1.x = v.x * s;
@@ -124,13 +145,13 @@ namespace chestnut
     template< typename T >
     Vector3<T> operator*( T s, const Vector3<T>& v ) 
     {
-        return vec3Scaled( v, s );
+        return vec3ScalarProduct<T>( v, s );
     }
 
     template< typename T >
     Vector3<T> operator*( const Vector3<T>& v, T s ) 
     {
-        return vec3Scaled( v, s );
+        return vec3ScalarProduct<T>( v, s );
     }
 
 
@@ -138,7 +159,29 @@ namespace chestnut
     template< typename T >
     T vec3DotProduct( const Vector3<T>& v1, const Vector3<T>& v2 ) 
     {
-        return v1.x * v2.x + v1.y * v2.y;
+        return v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+    }
+
+    template< typename T >
+    Vector3<T> vec3CrossProduct( const Vector3<T>& v1, const Vector3<T>& v2 )
+    {
+        Vector3<T> pv;
+        pv.x = v1.y * v2.z - v1.z * v2.y;
+        pv.y = v1.z * v2.x - v1.x * v2.z;
+        pv.z = v1.x * v2.y - v1.y * v2.x;
+        return pv;
+    }
+
+
+
+    template< typename T >
+    Vector3<T> vec2CrossProduct( const Vector2<T>& v1, const Vector2<T>& v2 )
+    {
+        Vector3<T> pv;
+        pv.x = 0.0;
+        pv.y = 0.0;
+        pv.z = v1.x * v2.y - v1.y * v2.x;
+        return pv;   
     }
    
 

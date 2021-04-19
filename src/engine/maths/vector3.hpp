@@ -15,6 +15,10 @@ namespace chestnut
         Vector3();
         Vector3( T _x, T _y, T _z );
 
+        Vector3& operator+=( const Vector3& v );
+        Vector3& operator-=( const Vector3& v );
+        Vector3& operator*=( T s );
+
         std::string toString() const;
 
         template< typename U >
@@ -57,7 +61,7 @@ namespace chestnut
 
 
     template< typename T >
-    Vector3<T> vec3Scaled( const Vector3<T>& v, T s );
+    Vector3<T> vec3ScalarProduct( const Vector3<T>& v, T s );
 
     template< typename T >
     Vector3<T> operator*( T s, const Vector3<T>& v );
@@ -70,7 +74,14 @@ namespace chestnut
     T vec3DotProduct( const Vector3<T>& v1, const Vector3<T>& v2 );
 
     template< typename T >
+    Vector3<T> vec3CrossProduct( const Vector3<T>& v1, const Vector3<T>& v2 );
+
+    template< typename T >
     T operator*( Vector3<T> v1, Vector3<T> v2 ) = delete; // forbidden due to ambiguity between dot and cross product
+
+
+    template< typename T >
+    Vector3<T> vec2CrossProduct( const Vector2<T>& v1, const Vector2<T>& v2 );
 
 
     template< typename T >
