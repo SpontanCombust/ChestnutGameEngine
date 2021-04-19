@@ -43,7 +43,7 @@ namespace chestnut
     Vector2<T> vec2Normalized( const Vector2<T>& v )
     {
         Vector2<T> v1 = v;
-        if( v1.x != 0 && v1.y != 0 )
+        if( v1.x != 0.0 && v1.y != 0.0 )
         {
             T mag = vec2Magnitude(v);
             v1.x /= mag;

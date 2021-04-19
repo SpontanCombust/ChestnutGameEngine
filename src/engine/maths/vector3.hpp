@@ -1,6 +1,8 @@
 #ifndef __CHESTNUT_VECTOR3_H__
 #define __CHESTNUT_VECTOR3_H__
 
+#include "vector2.hpp"
+
 #include <string>
 
 namespace chestnut
@@ -69,6 +71,13 @@ namespace chestnut
 
     template< typename T >
     T operator*( Vector3<T> v1, Vector3<T> v2 ) = delete; // forbidden due to ambiguity between dot and cross product
+
+
+    template< typename T >
+    Vector2<T> vec3ToVec2( const Vector3<T>& v );
+
+    template< typename T >
+    Vector3<T> vec2ToVec3( const Vector2<T>& v );
 
 } // namespace chestnut
 

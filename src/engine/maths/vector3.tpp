@@ -47,7 +47,7 @@ namespace chestnut
         Vector3<T> v1 = v;
         if( v1.x != 0 && v1.y != 0 && v1.z != 0 )
         {
-            T mag = vec2Magnitude(v);
+            T mag = vec3Magnitude(v);
             v1.x /= mag;
             v1.y /= mag;
             v1.z /= mag;
@@ -141,4 +141,25 @@ namespace chestnut
         return v1.x * v2.x + v1.y * v2.y;
     }
    
+
+
+    template< typename T >
+    Vector2<T> vec3ToVec2( const Vector3<T>& v )
+    {
+        Vector2<T> v1;
+        v1.x = v.x;
+        v1.y = v.y;
+        return v1;
+    }
+
+    template< typename T >
+    Vector3<T> vec2ToVec3( const Vector2<T>& v )
+    {
+        Vector3<T> v1;
+        v1.x = v.x;
+        v1.y = v.y;
+        v1.z = 0.f;
+        return v1;
+    }
+
 } // namespace chestnut
