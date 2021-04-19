@@ -58,21 +58,30 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<<Sum test>>" );
         {
+            vec2f v3 = v1;
+            v3 += v2;
             LOG_CHANNEL( "TEST", "v1+v2=" << (v1+v2).toString() );
+            LOG_CHANNEL( "TEST", "v1+=v2=" << v3.toString() );
         }
         LOG_CHANNEL( "TEST", "" );
 
 
         LOG_CHANNEL( "TEST", "<<Difference test>>" );
         {
+            vec2f v3 = v1;
+            v3 -= v2;
             LOG_CHANNEL( "TEST", "v1-v2=" << (v1-v2).toString() );
+            LOG_CHANNEL( "TEST", "v1-=v2=" << v3.toString() );
         }
         LOG_CHANNEL( "TEST", "" );
 
 
         LOG_CHANNEL( "TEST", "<<Scaled test>>" );
         {
+            vec2f v3 = v1;
+            v3 *= 0.1f;
             LOG_CHANNEL( "TEST", "0.1 * v1=" << ( 0.1f * v1 ).toString() );   
+            LOG_CHANNEL( "TEST", "v1*=0.1=" << v3.toString() );   
         }
         LOG_CHANNEL( "TEST", "" );
 

@@ -16,6 +16,27 @@ namespace chestnut
         y = _y;
     }
 
+    template<typename T>
+    Vector2<T>& Vector2<T>::operator+=( const Vector2& v ) 
+    {
+        *this = vec2Sum<T>( *this, v );
+        return *this;
+    }
+
+    template<typename T>
+    Vector2<T>& Vector2<T>::operator-=( const Vector2& v ) 
+    {
+        *this = vec2Difference<T>( *this, v );
+        return *this;
+    }
+
+    template<typename T>
+    Vector2<T>& Vector2<T>::operator*=( T s ) 
+    {
+        *this = vec2ScalarProduct<T>( *this, s );
+        return *this;
+    }
+
     template< typename T >
     std::string Vector2<T>::toString() const
     {
@@ -45,7 +66,7 @@ namespace chestnut
         Vector2<T> v1 = v;
         if( v1.x != 0.0 && v1.y != 0.0 )
         {
-            T mag = vec2Magnitude(v);
+            T mag = vec2Magnitude<T>(v);
             v1.x /= mag;
             v1.y /= mag;
         }
@@ -66,7 +87,7 @@ namespace chestnut
     template< typename T >
     Vector2<T> operator-( const Vector2<T>& v ) 
     {
-        return vec2Negated(v);
+        return vec2Negated<T>(v);
     }
 
 
@@ -83,7 +104,7 @@ namespace chestnut
     template< typename T >
     Vector2<T> operator+( const Vector2<T>& v1, const Vector2<T>& v2 ) 
     {
-        return vec2Sum( v1, v2 );
+        return vec2Sum<T>( v1, v2 );
     }
 
 
@@ -100,13 +121,13 @@ namespace chestnut
     template<typename T>
     Vector2<T> operator-( const Vector2<T>& v1, const Vector2<T>& v2 )
     {
-        return vec2Difference( v1, v2 );
+        return vec2Difference<T>( v1, v2 );
     }
 
 
 
     template< typename T >
-    Vector2<T> vec2Scaled( const Vector2<T>& v, T s ) 
+    Vector2<T> vec2ScalarProduct( const Vector2<T>& v, T s ) 
     {
         Vector2<T> v1;
         v1.x = v.x * s;
@@ -117,13 +138,13 @@ namespace chestnut
     template< typename T >
     Vector2<T> operator*( T s, const Vector2<T>& v ) 
     {
-        return vec2Scaled( v, s );
+        return vec2ScalarProduct<T>( v, s );
     }
 
     template< typename T >
     Vector2<T> operator*( const Vector2<T>& v, T s ) 
     {
-        return vec2Scaled( v, s );
+        return vec2ScalarProduct<T>( v, s );
     }
 
 

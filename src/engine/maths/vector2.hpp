@@ -13,6 +13,10 @@ namespace chestnut
         Vector2();
         Vector2( T _x, T _y );
 
+        Vector2& operator+=( const Vector2& v );
+        Vector2& operator-=( const Vector2& v );
+        Vector2& operator*=( T s );
+
         std::string toString() const;
 
         template< typename U >
@@ -55,7 +59,7 @@ namespace chestnut
 
 
     template< typename T >
-    Vector2<T> vec2Scaled( const Vector2<T>& v, T s );
+    Vector2<T> vec2ScalarProduct( const Vector2<T>& v, T s );
 
     template< typename T >
     Vector2<T> operator*( T s, const Vector2<T>& v );
