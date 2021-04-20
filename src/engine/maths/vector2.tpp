@@ -1,5 +1,8 @@
 #include <cmath>
 
+#include "vector3.hpp"
+#include "matrix4.hpp"
+
 namespace chestnut
 {
     template< typename T >
@@ -17,14 +20,14 @@ namespace chestnut
     }
 
     template<typename T>
-    Vector2<T>& Vector2<T>::operator+=( const Vector2& v ) 
+    Vector2<T>& Vector2<T>::operator+=( const Vector2<T>& v ) 
     {
         *this = vec2Sum<T>( *this, v );
         return *this;
     }
 
     template<typename T>
-    Vector2<T>& Vector2<T>::operator-=( const Vector2& v ) 
+    Vector2<T>& Vector2<T>::operator-=( const Vector2<T>& v ) 
     {
         *this = vec2Difference<T>( *this, v );
         return *this;
@@ -48,6 +51,18 @@ namespace chestnut
     Vector2<T>::operator Vector2<U>() const
     {
         return { static_cast<U>(x), static_cast<U>(y) };
+    }
+
+    template<typename T>
+    Vector2<T>::operator Vector3<T>() const
+    {
+        return vec2ToVec3( *this );
+    }
+
+    template<typename T>
+    Vector2<T>::operator Vector4<T>() const
+    {
+        return vec2ToVec4( *this );
     }
 
 
@@ -154,5 +169,84 @@ namespace chestnut
     {
         return v1.x * v2.x + v1.y * v2.y;
     }
-   
+
+    template< typename T >
+    Vector3<T> vec2CrossProduct( const Vector2<T>& v1, const Vector2<T>& v2 )
+    {
+        Vector3<T> pv;
+        pv.x = 0.0;
+        pv.y = 0.0;
+        pv.z = v1.x * v2.y - v1.y * v2.x;
+        return pv;   
+    }
+    
+
+
+    template< typename T >
+    Vector2<T> vec2LeftMultiplyByMatrix( const Matrix4<T>& m, const Vector2<T>& v ) 
+    {
+        Vector2<T> v1;
+
+        v1.x = m.get(0,0) * v.x + m.get(0,1) * v.y + m.get(0,3);
+        v1.y = m.get(1,0) * v.x + m.get(1,1) * v.y + m.get(1,3);
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector2<T> operator*( const Matrix4<T>& lhs, const Vector2<T>& rhs )
+    {
+        return vec2LeftMultiplyByMatrix<T>( lhs, rhs );
+    }
+
+    template< typename T >
+    Vector2<T> vec2Translate( const Vector2<T>& v, T tx, T ty )
+    {
+        Matrix4<T> m = mat4MakeTranslation<T>( tx, ty, 0.0 );
+        Vector2<T> v1 = vec2LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector2<T> vec2Scale( const Vector2<T>& v, T sx, T sy )
+    {
+        Matrix4<T> m = mat4MakeScale<T>( sx, sy, 1.0 );
+        Vector2<T> v1 = vec2LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+
+    template< typename T >
+    Vector2<T> vec2Rotate( const Vector2<T>& v, double angleRad )
+    {
+        Matrix4<T> m = mat4MakeRotationZ<T>( angleRad );
+        Vector2<T> v1 = vec2LeftMultiplyByMatrix<T>( v, m );
+
+        return v1;
+    }
+    
+
+
+    template< typename T >
+    Vector3<T> vec2ToVec3( const Vector2<T>& v, T z )
+    {
+        Vector3<T> v1;
+        v1.x = v.x;
+        v1.y = v.y;
+        v1.z = z;
+        return v1;
+    }
+
+    template< typename T >
+    Vector4<T> vec2ToVec4( const Vector2<T>& v, T z, T w )
+    {
+        Vector4<T> v1;
+        v1.x = v.x;
+        v1.y = v.y;
+        v1.z = z;
+        v1.w = w;
+        return v1;
+    }
+
 } // namespace chestnut

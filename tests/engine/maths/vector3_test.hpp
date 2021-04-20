@@ -109,8 +109,8 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<<vec-cast test>>" );
         {
-            vec2f v3 = vec3ToVec2(v1);
-            vec3f v4 = vec2ToVec3(v3);
+            vec2f v3 = vec2f(v1);
+            vec3f v4 = vec3f(v3);
             LOG_CHANNEL( "TEST", "v3=(vec2)v1=" << v3.toString() );
             LOG_CHANNEL( "TEST", "v4=(vec3)v3=" << v4.toString() );
         }

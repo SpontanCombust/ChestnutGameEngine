@@ -1,12 +1,20 @@
 #ifndef __CHESTNUT_VECTOR3_H__
 #define __CHESTNUT_VECTOR3_H__
 
-#include "vector2.hpp"
-
 #include <string>
 
 namespace chestnut
 {
+    template< typename T >
+    struct Vector2;
+
+    template< typename T >
+    struct Vector4;
+
+    template< typename T >
+    struct Matrix4;
+
+
     template< typename T >
     struct Vector3
     {
@@ -23,8 +31,14 @@ namespace chestnut
 
         template< typename U >
         operator Vector3<U>() const;
+
+        operator Vector2<T>() const;
+        operator Vector4<T>() const;
     };
 
+
+    template< typename T >
+    using vec3 = Vector3<T>;
 
     // predefined vectors //
     typedef Vector3<float> vec3f;
@@ -81,14 +95,26 @@ namespace chestnut
 
 
     template< typename T >
-    Vector3<T> vec2CrossProduct( const Vector2<T>& v1, const Vector2<T>& v2 );
+    Vector3<T> vec3LeftMultiplyByMatrix( const Matrix4<T>& m, const Vector3<T>& v );
+
+    template< typename T >
+    Vector3<T> operator*( const Matrix4<T>& lhs, const Vector3<T>& rhs );
+
+    template< typename T >
+    Vector3<T> vec3Translate( const Vector3<T>& v, T tx, T ty, T tz );
+
+    template< typename T >
+    Vector3<T> vec3Scale( const Vector3<T>& v, T sx, T sy, T sz );
+
+    template< typename T >
+    Vector3<T> vec3Rotate( const Vector3<T>& v, Vector3<T> axis, double angleRad );
 
 
     template< typename T >
     Vector2<T> vec3ToVec2( const Vector3<T>& v );
 
     template< typename T >
-    Vector3<T> vec2ToVec3( const Vector2<T>& v );
+    Vector4<T> vec3ToVec4( const Vector3<T>& v, T w = 1.0 );
 
 } // namespace chestnut
 
