@@ -33,7 +33,7 @@ namespace chestnut
 
     inline float angleBetweenUnitVecs2f( vec2f v1, vec2f v2 )
     {
-        return acos( vec2DotProduct( v1, v2 ) );
+        return acos( vecDotProduct( v1, v2 ) );
     }
 
     void rotateUnitVec2f( vec2f& v, float angleRad );
