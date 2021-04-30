@@ -3,8 +3,7 @@
 
 #include "../event_base.hpp"
 #include "engine/maths/vector2.hpp"
-
-#include <SDL2/SDL_events.h>
+#include "engine/libs.hpp"
 
 namespace chestnut
 {
