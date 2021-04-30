@@ -2,6 +2,7 @@
 #define __CHESTNUT_MATRIX4_H__
 
 #include "matrix.hpp"
+#include "vector3.hpp"
 
 #include <string>
 
