@@ -54,7 +54,6 @@ namespace chestnut
 
     bool CApplication::initSDL() 
     {
-        bool retcode = true;
         int flags;
 
         flags = SDL_INIT_EVERYTHING;
@@ -62,7 +61,7 @@ namespace chestnut
         {
             LOG( "SDL failed to initialize!" );
             LOG( SDL_GetError() );
-            retcode = false;
+            return false;
         }
 
         flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -70,12 +69,46 @@ namespace chestnut
         {
             LOG( "SDL_image failed to initialize!" );
             LOG( IMG_GetError() );
-            retcode = false;
+            return false;
         }
 
-        return retcode;
+        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
+        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
+#ifdef CHESTNUT_DEBUG
+        SDL_GL_SetAttribute( SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG | SDL_GL_CONTEXT_DEBUG_FLAG );
+#else
+        SDL_GL_SetAttribute( SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_FORWARD_COMPATIBLE_FLAG );
+#endif
+        SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
+
+        return true;
     }
-    
+
+    bool CApplication::initGL() 
+    {
+        GLenum err = glewInit();
+
+        if( err != GLEW_OK )
+        {
+            LOG( "Failed to initialize GLEW! Error: " );
+            LOG( glewGetErrorString( err ) );
+            return false;
+        }
+
+        if( !GLEW_VERSION_3_3 )
+        {
+            LOG( "Needed OpenGL version is not supported by this machine!" );
+            return false;
+        }
+
+        glViewport( 0, 0, window.getWidth(), window.getHeight() );
+
+        glClearColor( 0.f, 0.f, 0.f, 1.f );
+        glClear( GL_COLOR_BUFFER_BIT );
+
+        return true;
+    }
+
     void CApplication::deinitSDL() 
     {
         IMG_Quit();
@@ -90,13 +123,19 @@ namespace chestnut
             return false;
         }
 
-        if( !window.create( "Chestnut App", 800, 600, 0, 0, m_windowFlags, m_rendererFlags ) )
+        if( !window.create( "Chestnut App", 800, 600, 0, 0 ) )
         {
             LOG( "Failed to create a window!" );
             deinitSDL();
             return false;
         }
-        window.setWindowRendererAsGlobalRenderer();
+
+        if( !initGL() )
+        {
+            LOG( "Failed to initialize OpenGL!" );
+            deinitSDL();
+            return false;
+        }
 
         engine.init( m_renderInterval, m_updateInterval );
 

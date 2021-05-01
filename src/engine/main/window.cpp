@@ -1,14 +1,14 @@
 #include "window.hpp"
 
 #include "engine/debug/debug.hpp"
-#include "engine/graphics/renderer.hpp"
+
+#define WINDOW_FLAGS_DEFAULT 
 
 namespace chestnut
 {
     CWindow::CWindow(  ) 
     {
         m_sdlWindow = nullptr;
-        m_sdlRenderer = nullptr;
     }
 
     CWindow::~CWindow() 
@@ -16,41 +16,33 @@ namespace chestnut
         destroy();
     }
 
-    bool CWindow::create( const char *title, int width, int height, int x, int y, int windowFlags, int rendererFlags )
+    bool CWindow::create( const char *title, int width, int height, int x, int y )
     {
-        m_sdlWindow = SDL_CreateWindow( title, x, y, width, height, windowFlags );
+        m_sdlWindow = SDL_CreateWindow( title, x, y, width, height, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL );
 
         if( !m_sdlWindow )
         {
             LOG( "Failed to create window. Error: " );
             LOG( SDL_GetError() );
-            
             return false;
         }
 
-        m_sdlRenderer = SDL_CreateRenderer( m_sdlWindow, -1, rendererFlags );
-
-        if( !m_sdlRenderer )
+        SDL_GLContext context = SDL_GL_CreateContext( m_sdlWindow );
+        if( !context )
         {
-            LOG( "Failed to create renderer. Error: " );
+            LOG( "Failed to create OpenGL context for the window. Error: " );
             LOG( SDL_GetError() );
-
             SDL_DestroyWindow( m_sdlWindow );
-            m_sdlWindow = nullptr;
-
             return false;
         }
+
+        SDL_GL_SetSwapInterval(0);
 
         return true;
     }
 
     void CWindow::destroy() 
     {
-        if( m_sdlRenderer )
-        {
-            SDL_DestroyRenderer( m_sdlRenderer );
-            m_sdlRenderer = nullptr;
-        }
         if( m_sdlWindow )
         {
             SDL_DestroyWindow( m_sdlWindow );
@@ -73,11 +65,18 @@ namespace chestnut
         SDL_SetWindowSize( m_sdlWindow, w, h );
     }
 
-    vec2i CWindow::getSize() 
+    int CWindow::getWidth() 
     {
-        vec2i size;
-        SDL_GetWindowSize( m_sdlWindow, &size.x, &size.y );
-        return size;
+        int w;
+        SDL_GetWindowSize( m_sdlWindow, &w, NULL );
+        return w;
+    }
+
+    int CWindow::getHeight() 
+    {
+        int h;
+        SDL_GetWindowSize( m_sdlWindow, NULL, &h );
+        return h;
     }
 
     void CWindow::setPosition( int x, int y ) 
@@ -85,22 +84,28 @@ namespace chestnut
         SDL_SetWindowPosition( m_sdlWindow, x, y );
     }
 
-    vec2i CWindow::getPosition() 
+    int CWindow::getPositionX() 
     {
-        vec2i pos;
-        SDL_GetWindowPosition( m_sdlWindow, &pos.x, &pos.y );
-        return pos;
+        int x;
+        SDL_GetWindowPosition( m_sdlWindow, &x, NULL );
+        return x;
     }
 
-
-    void CWindow::setWindowRendererAsGlobalRenderer() 
+    int CWindow::getPositionY() 
     {
-        CRenderer::setSDLRenderer( m_sdlRenderer );
+        int y;
+        SDL_GetWindowPosition( m_sdlWindow, NULL, &y );
+        return y;
     }
 
-    SDL_Renderer* CWindow::getSDLRenderer() 
+    void CWindow::clear() 
     {
-        return m_sdlRenderer;
+        glClear( GL_COLOR_BUFFER_BIT );
+    }
+
+    void CWindow::flipBuffer() 
+    {
+        SDL_GL_SwapWindow( m_sdlWindow );
     }
 
 } // namespace chestnut

@@ -1,12 +1,10 @@
 #ifndef __CHESTNUT_APPLICATION_H__
 #define __CHESTNUT_APPLICATION_H__
 
+#include "engine/libs.hpp"
 #include "window.hpp"
 #include "engine.hpp"
 #include "engine/debug/debug.hpp"
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
 #include <string>
 
@@ -43,6 +41,7 @@ namespace chestnut
 
     private:
         bool initSDL();
+        bool initGL();
         void deinitSDL();
     };
 

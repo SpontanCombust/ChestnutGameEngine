@@ -2,8 +2,7 @@
 #define __CHESTNUT_WINDOW_H__
 
 #include "engine/maths/vector2.hpp"
-
-#include <SDL2/SDL.h>
+#include "engine/libs.hpp"
 
 namespace chestnut
 {
@@ -11,14 +10,12 @@ namespace chestnut
     {
     private:
         SDL_Window *m_sdlWindow;
-        SDL_Renderer *m_sdlRenderer;
 
     public:
         CWindow();
         ~CWindow();
 
-        bool create( const char *title, int width = 800, int height = 600, int x = 0, int y = 0,
-                            int windowFlags = SDL_WINDOW_SHOWN, int rendererFlags = SDL_RENDERER_ACCELERATED );
+        bool create( const char *title, int width = 800, int height = 600, int x = 0, int y = 0 );
 
         void destroy();
 
@@ -26,15 +23,15 @@ namespace chestnut
         const char *getTitle();
 
         void setSize( int w, int h );
-        vec2i getSize();
+        int getWidth();
+        int getHeight();
 
         void setPosition( int x, int y );
-        vec2i getPosition();
+        int getPositionX();
+        int getPositionY();
 
-        void setWindowRendererAsGlobalRenderer();
-        SDL_Renderer *getSDLRenderer();
-
-        //TODO flipBuffer()
+        void clear();
+        void flipBuffer();
     };
 
 } // namespace chestnut
