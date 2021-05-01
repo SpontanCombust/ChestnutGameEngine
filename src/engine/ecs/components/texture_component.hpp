@@ -2,27 +2,18 @@
 #define __CHESTNUT_TEXTURE_COMPONENT_H__
 
 #include "../component.hpp"
-#include "engine/graphics/texture.hpp"
+#include "engine/maths/vector2.hpp"
+#include "engine/graphics/texture2d.hpp"
 
 namespace chestnut
 {
-    enum class ETextureAnchor
-    {
-        UPPER_LEFT, UP,     UPPER_RIGHT,
-        LEFT,       CENTER, RIGHT,
-        LOWER_LEFT, DOWN,   LOWER_RIGHT
-    };
-
     struct STextureComponent : IComponent
     {
-        CTexture texture;
+        CTexture2D texture;
         
-        ETextureAnchor anchor;
-        vec2f scaleOffset;
-
         //TODO create "missing texture" for default constructor
-        STextureComponent();
-        STextureComponent( CTexture textureInstance, ETextureAnchor _anchor = ETextureAnchor::CENTER, vec2f _scaleOffset = vec2f( 0.f, 0.f ) );
+        STextureComponent() = default;
+        STextureComponent( CTexture2D _texture );
     };
 
 } // namespace chestnut 

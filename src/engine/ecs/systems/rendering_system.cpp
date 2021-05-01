@@ -1,13 +1,28 @@
 #include "rendering_system.hpp"
 
 #include "engine/maths/angles.hpp"
-#include "engine/graphics/renderer.hpp"
 #include "engine/misc/tindex.hpp"
+#include "engine/globals.hpp"
 
+#include <cassert>
 #include <algorithm>
 
 namespace chestnut
 {
+    CRenderingSystem::CRenderingSystem()
+    {
+        m_spriteShader = theResourceManager.loadShaderProgram( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
+        assert( m_spriteShader.isValid() );
+
+        m_renderer = new CSpriteRenderer( m_spriteShader );
+        m_renderer->setShaderVariableNames( "aPos", "aTexCoord", "uModel", "uView", "uProjection", "uTexClip" );
+    }
+
+    CRenderingSystem::~CRenderingSystem() 
+    {
+        delete m_renderer;
+    }
+
     void CRenderingSystem::submitBatch( CComponentBatch *batch ) 
     {
         SComponentSetSignature signature;
@@ -16,102 +31,55 @@ namespace chestnut
 
         if( signature.includes<STransformComponent>() && signature.includes<STextureComponent>() )
         {
-            m_rendnerableBatches.push_back( batch );
+            m_renderableBatches.push_back( batch );
         }
     }
         
     void CRenderingSystem::clearBatches() 
     {
-        m_rendnerableBatches.clear();
+        m_renderableBatches.clear();
     }
 
     void CRenderingSystem::update( uint32_t deltaTime ) 
     {
-        transformTextures();
+        /* NOP */
     }
 
-    void CRenderingSystem::draw() const
+    void CRenderingSystem::draw()
     {
-        CRenderer::renderClear();
+        theWindow.clear();
         
         drawTextures();
 
-        CRenderer::renderPresent();
+        theWindow.flipBuffer();
     }
 
-    void CRenderingSystem::transformTextures() 
+    void CRenderingSystem::drawTextures()
     {
+        int entCount;
         std::vector< STransformComponent * > vecTransfComps;
         std::vector< STextureComponent * > vecTextureComps;
-        STransformComponent *transfComp;
-        STextureComponent *textureComp;
 
-        for( CComponentBatch *renderBatch : m_rendnerableBatches )
+        m_renderer->setViewMatrix( mat4f() );
+        m_renderer->setProjectionMatrix( matMakeOrthographic<float>( 0.f, theWindow.getWidth(), theWindow.getHeight(), 0.f, 1.f, -1.f ) );
+        
+        for( CComponentBatch *renderBatch : m_renderableBatches )
         {
+            entCount = renderBatch->getEntityCount();
             vecTransfComps = renderBatch->getComponents<STransformComponent>();
             vecTextureComps = renderBatch->getComponents<STextureComponent>();
 
-            for( int i = 0; i < renderBatch->getEntityCount(); i++ )
+            STransformComponent *transfComp;
+            STextureComponent *texComp;
+            for (int i = 0; i < entCount; i++)
             {
                 transfComp = vecTransfComps[i];
-                textureComp = vecTextureComps[i];
+                texComp = vecTextureComps[i];
 
-                textureComp->texture.setScale( textureComp->scaleOffset + transfComp->scale );
-
-                switch( textureComp->anchor )
+                if( texComp->texture.isValid() )
                 {
-                    case ETextureAnchor::UPPER_LEFT:
-                        textureComp->texture.setPosition( transfComp->position );
-                        textureComp->texture.setRotationPoint( vec2f( 0.f, 0.f ) );
-                        break;
-                    case ETextureAnchor::UP:
-                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x * 0.5f, 0.f ) );
-                        textureComp->texture.setRotationPoint( vec2f( 0.5f, 0.f ) );
-                        break;
-                    case ETextureAnchor::UPPER_RIGHT:
-                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x, 0.f ) );
-                        textureComp->texture.setRotationPoint( vec2f( 1.f, 0.f ) );
-                        break;
-                    case ETextureAnchor::LEFT:
-                        textureComp->texture.setPosition( transfComp->position - vec2f( 0.f, textureComp->texture.getSize().y * 0.5f ) );
-                        textureComp->texture.setRotationPoint( vec2f( 0.f, 0.5f ) );
-                        break;
-                    case ETextureAnchor::RIGHT:
-                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x, textureComp->texture.getSize().y * 0.5f ) );
-                        textureComp->texture.setRotationPoint( vec2f( 1.f, 0.5f ) );
-                        break;
-                    case ETextureAnchor::LOWER_LEFT:
-                        textureComp->texture.setPosition( transfComp->position - vec2f( 0.f, textureComp->texture.getSize().y ) );
-                        textureComp->texture.setRotationPoint( vec2f( 0.f, 1.f ) );
-                        break;
-                    case ETextureAnchor::DOWN:
-                        textureComp->texture.setPosition( transfComp->position - vec2f( textureComp->texture.getSize().x * 0.5f, textureComp->texture.getSize().y ) );
-                        textureComp->texture.setRotationPoint( vec2f( 0.5f, 1.f ) );
-                        break;
-                    case ETextureAnchor::LOWER_RIGHT:
-                        textureComp->texture.setPosition( transfComp->position - textureComp->texture.getSize() );
-                        textureComp->texture.setRotationPoint( vec2f( 1.f, 1.f ) );
-                        break;
-                    default:
-                        textureComp->texture.setPosition( transfComp->position - textureComp->texture.getSize() * 0.5f );
-                        textureComp->texture.setRotationPoint( vec2f( 0.5f, 0.5f ) );
+                    m_renderer->renderSprite( texComp->texture, transfComp->position, transfComp->scale, transfComp->rotation );
                 }
-
-                textureComp->texture.setRotation( transfComp->rotation );
-            }
-        }
-    }
-
-    void CRenderingSystem::drawTextures() const
-    {
-        std::vector< STextureComponent * > vecTextureComps;
-        
-        for( CComponentBatch *renderBatch : m_rendnerableBatches )
-        {
-            vecTextureComps = renderBatch->getComponents<STextureComponent>();
-            for( STextureComponent *textureComp : vecTextureComps )
-            {
-                CRenderer::renderTexture( textureComp->texture );
             }
         }
     }

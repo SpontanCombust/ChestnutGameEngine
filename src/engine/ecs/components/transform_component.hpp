@@ -9,11 +9,11 @@ namespace chestnut
     struct STransformComponent : IComponent
     {
         vec2f position;
-        vec2f rotation;
         vec2f scale;
+        double rotation;
 
         STransformComponent();
-        STransformComponent( vec2f _position, vec2f _rotation, vec2f _scale );
+        STransformComponent( vec2f _position, vec2f _scale, double _rotation );
     };
 
 } // namespace chestnut 
