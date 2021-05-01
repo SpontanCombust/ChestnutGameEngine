@@ -8,14 +8,15 @@ namespace chestnut
     /*
         A mathematical square matrix with data of type and number of both rows and columns equal n 
 
-        Data is always arranged the same way as OpenGL does matrices.
+        Data is always arranged in memory the same way as OpenGL does matrices.
         For example for a 4x4 it would be:
         00 04 08 12
         01 05 09 13
         02 06 10 14
         03 07 11 15
 
-        Method accessors however allow to intuitively access this data by "column" and "row".
+        Method accessors however allow to intuitively access this data by "column" and "row" 
+        without having to think about whether it's row-major, column-major or whatever.
     */
     template< typename T, size_t n >
     struct Matrix

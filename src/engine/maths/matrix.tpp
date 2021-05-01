@@ -32,9 +32,21 @@ namespace chestnut
 
     template<typename T, size_t n>
     Matrix<T, n>::Matrix( T init )
-    : data{ init }
     {
-
+        for (size_t i = 0; i < n; i++)
+        {
+            for (size_t j = 0; j < n; j++)
+            {
+                if( i == j )
+                {
+                    data[ j * n + i ] = init;
+                }
+                else
+                {
+                    data[ j * n + i ] = 0;
+                }
+            }
+        }
     }
 
     template<typename T, size_t n>
