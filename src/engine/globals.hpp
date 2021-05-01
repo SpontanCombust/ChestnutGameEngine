@@ -10,11 +10,15 @@ namespace chestnut
 
     #define theApp (*__g_application)
 
+    #define theWindow __g_application->window
+
     #define theEngine __g_application->engine
 
     #define theEntityManager __g_application->engine.entityManager
 
     #define theEventManager __g_application->engine.eventManager
+
+    #define theResourceManager __g_application->engine.resourceManager
 
 } // namespace chestnut
 

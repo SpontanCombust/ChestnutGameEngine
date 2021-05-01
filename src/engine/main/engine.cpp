@@ -85,9 +85,11 @@ namespace chestnut
     {
         while( m_isRunning )
         {
+            uint32_t dt = m_logicUpdateTimer->getDeltaTime();
+            
             if( m_logicUpdateTimer->tick() )
             {
-                update( m_logicUpdateTimer->getDeltaTime() );
+                update(dt);
             }
 
             if( m_renderTimer->tick() )
