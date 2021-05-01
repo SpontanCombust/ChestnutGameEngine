@@ -23,15 +23,15 @@ namespace chestnut
         unsigned int getID() const;
         bool isValid() const;
 
-        void bind();
-        void unbind();
+        void bind() const;
+        void unbind() const;
 
         unsigned int getPixelFormat() const;
         int getWidth() const;
         int getHeight() const;
 
-        SRectangle getClippingRect();
-        void setClippingRect( SRectangle rect );
+        SRectangle getClippingRect() const;
+        void setClippingRect( const SRectangle& rect );
 
         void setFiltering( int minifyingFilter, int magnifyingFilter );
 

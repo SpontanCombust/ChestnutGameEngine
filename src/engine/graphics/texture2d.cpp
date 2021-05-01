@@ -31,12 +31,12 @@ namespace chestnut
         return m_texID != 0;
     }
     
-    void CTexture2D::bind() 
+    void CTexture2D::bind() const
     {
         glBindTexture( GL_TEXTURE_2D, m_texID );
     }
 
-    void CTexture2D::unbind() 
+    void CTexture2D::unbind() const
     {
         glBindTexture( GL_TEXTURE_2D, 0 );
     }
@@ -56,12 +56,12 @@ namespace chestnut
         return m_height;
     }
 
-    SRectangle CTexture2D::getClippingRect() 
+    SRectangle CTexture2D::getClippingRect() const
     {
         return m_clipRect;
     }
 
-    void CTexture2D::setClippingRect( SRectangle rect ) 
+    void CTexture2D::setClippingRect( const SRectangle& rect ) 
     {
         m_clipRect = rect;
     }
