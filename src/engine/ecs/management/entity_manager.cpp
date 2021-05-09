@@ -352,8 +352,13 @@ namespace chestnut
 
 
 
-    void CEntityManager::processEntityRequests() 
+    bool CEntityManager::processEntityRequests() 
     {
+        if( m_queuePostTickRequests.empty() )
+        {
+            return false;
+        }
+
         while( !m_queuePostTickRequests.empty() )
         {
             SEntityRequest& request = m_queuePostTickRequests.front();
@@ -379,6 +384,8 @@ namespace chestnut
 
             m_queuePostTickRequests.pop();
         }
+
+        return true;
     }
 
     // ========================= PRIVATE ========================= //

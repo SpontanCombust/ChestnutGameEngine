@@ -93,8 +93,8 @@ namespace chestnut
 
         std::vector< CComponentBatch * > getComponentBatches();
 
-
-        void processEntityRequests();
+        // Returns true if had any requests to process
+        bool processEntityRequests();
 
 
     private:
