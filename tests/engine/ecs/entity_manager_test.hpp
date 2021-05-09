@@ -106,8 +106,8 @@ namespace test
 
             if( kinemComp )
             {
-                kinemComp->velocity = vec2f( 3, 4 );
-                LOG_CHANNEL( "TEST", kinemComp->velocity.toString() );
+                kinemComp->linearVelocity = vec2f( 3, 4 );
+                LOG_CHANNEL( "TEST", kinemComp->linearVelocity.toString() );
             }
 
             if( textComp )

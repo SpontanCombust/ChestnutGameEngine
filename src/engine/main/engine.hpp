@@ -33,6 +33,7 @@ namespace chestnut
 
         CSDLEventDispatchSystem *m_sdlEventDispatchSystem;
         CTimerSystem *m_timerSystem;
+        CKinematicsSystem *m_kinematicsSystem;
         CRenderingSystem *m_renderingSystem;
 
         std::list< ISystem* > m_systemsList;

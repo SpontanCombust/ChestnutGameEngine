@@ -13,6 +13,7 @@ namespace chestnut
 
         m_sdlEventDispatchSystem    = nullptr;
         m_timerSystem               = nullptr;
+        m_kinematicsSystem          = nullptr;
         m_renderingSystem           = nullptr;
     }
 
@@ -49,13 +50,16 @@ namespace chestnut
 
             m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
             m_timerSystem = new CTimerSystem();
+            m_kinematicsSystem = new CKinematicsSystem();
             m_renderingSystem = new CRenderingSystem();
 
             m_systemsList.push_back( m_sdlEventDispatchSystem );
             m_systemsList.push_back( m_timerSystem );
+            m_systemsList.push_back( m_kinematicsSystem );
             m_systemsList.push_back( m_renderingSystem );
 
             m_componentSystemsList.push_back( m_timerSystem );
+            m_componentSystemsList.push_back( m_kinematicsSystem );
             m_componentSystemsList.push_back( m_renderingSystem );
 
             registerQuitEvent();

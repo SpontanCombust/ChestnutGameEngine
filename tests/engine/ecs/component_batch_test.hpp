@@ -97,8 +97,8 @@ namespace test
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->velocity.toString() );
-            LOG_CHANNEL( "TEST", comp->acceleration.toString() );
+            LOG_CHANNEL( "TEST", comp->linearVelocity.toString() );
+            LOG_CHANNEL( "TEST", comp->linearAcceleration.toString() );
         }
         LOG_CHANNEL( "TEST", "");
 
@@ -133,8 +133,8 @@ namespace test
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->velocity.toString() );
-            LOG_CHANNEL( "TEST", comp->acceleration.toString() );
+            LOG_CHANNEL( "TEST", comp->linearVelocity.toString() );
+            LOG_CHANNEL( "TEST", comp->linearAcceleration.toString() );
         }
         LOG_CHANNEL( "TEST", "");
 
@@ -163,8 +163,8 @@ namespace test
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->velocity.toString() );
-            LOG_CHANNEL( "TEST", comp->acceleration.toString() );
+            LOG_CHANNEL( "TEST", comp->linearVelocity.toString() );
+            LOG_CHANNEL( "TEST", comp->linearAcceleration.toString() );
         }
         LOG_CHANNEL( "TEST", "");
     }

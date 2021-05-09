@@ -4,14 +4,18 @@ namespace chestnut
 {
     SKinematicsComponent::SKinematicsComponent()
     {
-        velocity = vec2f(0, 0);
-        acceleration = vec2f(0, 0);
+        linearVelocity = vec2f(0, 0);
+        linearAcceleration = vec2f(0, 0);
+        angularVelocity = 0;
+        angularAcceleration = 0;
     }
 
-    SKinematicsComponent::SKinematicsComponent( vec2f _velocity, vec2f _acceleration ) 
+    SKinematicsComponent::SKinematicsComponent( vec2f _linearVelocity, vec2f _linearAcceleration, double _angularVelocity, double _angularAcceleration ) 
     {
-        velocity = _velocity;
-        acceleration = _acceleration;
+        linearVelocity = _linearVelocity;
+        linearAcceleration = _linearAcceleration;
+        angularVelocity = _angularVelocity;
+        angularAcceleration = _angularAcceleration;
     }
 
 } // namespace chestnut

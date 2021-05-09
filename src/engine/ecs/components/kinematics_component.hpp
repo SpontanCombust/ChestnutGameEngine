@@ -8,11 +8,13 @@ namespace chestnut
 {
     struct SKinematicsComponent : IComponent
     {
-        vec2f velocity;
-        vec2f acceleration;
+        vec2f linearVelocity;
+        vec2f linearAcceleration;
+        double angularVelocity;
+        double angularAcceleration;
 
         SKinematicsComponent();
-        SKinematicsComponent( vec2f _velocity, vec2f _acceleration );
+        SKinematicsComponent( vec2f _linearVelocity, vec2f _linearAcceleration, double _angularVelocity, double _angularAcceleration );
     };
 
 } // namespace chestnut 
