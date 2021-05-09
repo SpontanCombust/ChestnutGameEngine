@@ -25,10 +25,10 @@ namespace chestnut
 
     inline float unitVec2fToAngle( vec2f v )
     {
-        if( v.y >= 0.f )
-            return atan2( v.y, v.x );
+        if( v.y() >= 0.f )
+            return atan2( v.y(), v.x() );
         else
-            return 2 * CHESTNUT_PI + atan2( v.y, v.x );
+            return 2 * CHESTNUT_PI + atan2( v.y(), v.x() );
     }
 
     inline float angleBetweenUnitVecs2f( vec2f v1, vec2f v2 )

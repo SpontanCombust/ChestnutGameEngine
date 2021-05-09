@@ -5,32 +5,53 @@ namespace chestnut
 {
     template<typename T >
     Vector<T,2>::Vector()
-    : data{0},
-      x( data[0] ), y( data[1] )
+    : data{0}
     {
 
     }
 
     template<typename T>
     Vector<T,2>::Vector( const Vector<T,2>& v )
-    : x( data[0] ), y( data[1] )
     {
         std::memcpy( data, v.data, sizeof( data ) );
     }
 
     template<typename T>
-    Vector<T,2>::Vector( T init ) 
-    : x( data[0] ), y( data[1] )
+    Vector<T,2>::Vector( T init )
+    : data{ init, init }
     {
-        std::fill_n( data, 2, init );
+        
     }
 
     template<typename T>
     Vector<T,2>::Vector( T _x, T _y )
-    : data{ _x, _y },
-      x( data[0] ), y( data[1] )
+    : data{ _x, _y }
     {
 
+    }
+
+    template<typename T>
+    T& Vector<T,2>::x() 
+    {
+        return data[0];
+    }
+
+    template<typename T>
+    const T& Vector<T,2>::x() const
+    {
+        return data[0];
+    }
+
+    template<typename T>
+    T& Vector<T,2>::y() 
+    {
+        return data[1];
+    }
+
+    template<typename T>
+    const T& Vector<T,2>::y() const
+    {
+        return data[1];
     }
 
     template<typename T>
@@ -89,7 +110,7 @@ namespace chestnut
         std::string str;
 
         str += "[ ";
-        str += std::to_string(x) + ", " + std::to_string(y);
+        str += std::to_string(data[0]) + ", " + std::to_string(data[1]);
         str += " ]";
         
         return str;

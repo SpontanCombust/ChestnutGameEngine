@@ -92,8 +92,8 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<<vec2 cross product test>>" );
         {
-            vec2f v3 = vec2f( v1.x, v1.y );
-            vec2f v4 = vec2f( v2.x, v2.y );
+            vec2f v3 = vec2f( v1.x(), v1.y() );
+            vec2f v4 = vec2f( v2.x(), v2.y() );
             LOG_CHANNEL( "TEST", "(vec2)v1 cross (vec2)v2=" << vecCrossProduct( v3, v4 ).toString() );
         }
         LOG_CHANNEL( "TEST", "" );

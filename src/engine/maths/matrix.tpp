@@ -7,20 +7,11 @@ namespace chestnut
 {    
     template<typename T, size_t n>
     Matrix<T, n>::Matrix()
+    : data{ 0 }
     {
         for (size_t i = 0; i < n; i++)
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                if( i == j )
-                {
-                    data[ j * n + i ] = 1;
-                }
-                else
-                {
-                    data[ j * n + i ] = 0;
-                }
-            }
+            data[ i * n + i ] = (T)1;
         }        
     }
 
@@ -32,20 +23,11 @@ namespace chestnut
 
     template<typename T, size_t n>
     Matrix<T, n>::Matrix( T init )
+    : data{ 0 }
     {
         for (size_t i = 0; i < n; i++)
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                if( i == j )
-                {
-                    data[ j * n + i ] = init;
-                }
-                else
-                {
-                    data[ j * n + i ] = 0;
-                }
-            }
+            data[ i * n + i ] = init;
         }
     }
 

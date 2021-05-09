@@ -13,7 +13,12 @@ namespace chestnut
     {
         T data[3];
 
-        T &x, &y, &z;
+        T& x(); 
+        const T& x() const;
+        T& y(); 
+        const T& y() const;
+        T& z();
+        const T& z() const;
 
         Vector();
         Vector( const Vector& v );

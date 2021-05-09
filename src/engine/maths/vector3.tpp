@@ -2,32 +2,65 @@ namespace chestnut
 {
     template<typename T >
     Vector<T,3>::Vector()
-    : data{0},
-      x( data[0] ), y( data[1] ), z( data[2] )
+    : data{0}
     {
 
     }
 
     template<typename T>
     Vector<T,3>::Vector( const Vector<T,3>& v )
-    : x( data[0] ), y( data[1] ), z( data[2] )
     {
         std::memcpy( data, v.data, sizeof( data ) );
     }
 
     template<typename T>
     Vector<T,3>::Vector( T init ) 
-    : x( data[0] ), y( data[1] ), z( data[2] )
+    : data{ init, init, init }
     {
-        std::fill_n( data, 3, init );
+        
     }
 
     template<typename T>
     Vector<T,3>::Vector( T _x, T _y, T _z )
-    : data{ _x, _y, _z },
-      x( data[0] ), y( data[1] ), z( data[2] )
+    : data{ _x, _y, _z }
     {
 
+    }
+
+    template<typename T>
+    T& Vector<T,3>::x() 
+    {
+        return data[0];
+    }
+
+    template<typename T>
+    const T& Vector<T,3>::x() const
+    {
+        return data[0];
+    }
+
+    template<typename T>
+    T& Vector<T,3>::y() 
+    {
+        return data[1];
+    }
+
+    template<typename T>
+    const T& Vector<T,3>::y() const
+    {
+        return data[1];
+    }
+
+    template<typename T>
+    T& Vector<T,3>::z() 
+    {
+        return data[2];
+    }
+
+    template<typename T>
+    const T& Vector<T,3>::z() const
+    {
+        return data[2];
     }
 
     template<typename T>
@@ -86,7 +119,7 @@ namespace chestnut
         std::string str;
 
         str += "[ ";
-        str += std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z);
+        str += std::to_string(data[0]) + ", " + std::to_string(data[1]) + ", " + std::to_string(data[2]);
         str += " ]";
         
         return str;
@@ -100,7 +133,7 @@ namespace chestnut
         Vector<T,3> pv;
         pv.data[0] = 0.0;
         pv.data[1] = 0.0;
-        pv.data[2] = v1.x * v2.y - v1.y * v2.x;
+        pv.data[2] = v1.x() * v2.y() - v1.y() * v2.x();
         return pv;   
     }
 
@@ -108,9 +141,9 @@ namespace chestnut
     Vector<T,3> vecCrossProduct( const Vector<T,3>& v1, const Vector<T,3>& v2 )
     {
         Vector<T,3> pv;
-        pv.x = v1.y * v2.z - v1.z * v2.y;
-        pv.y = v1.z * v2.x - v1.x * v2.z;
-        pv.z = v1.x * v2.y - v1.y * v2.x;
+        pv.data[0] = v1.y() * v2.z() - v1.z() * v2.y();
+        pv.data[1] = v1.z() * v2.x() - v1.x() * v2.z();
+        pv.data[2] = v1.x() * v2.y() - v1.y() * v2.x();
         return pv;
     }
 

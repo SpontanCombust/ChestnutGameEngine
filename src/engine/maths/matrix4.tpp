@@ -6,24 +6,13 @@ namespace chestnut
         Matrix<T,4> m;
 
         m(0,0) = 2.0 / ( right - left );
-        m(0,1) = 0.0;
-        m(0,2) = 0.0;
         m(0,3) = -( right + left ) / ( right - left );
 
-        m(1,0) = 0.0;
         m(1,1) = 2.0 / ( top - bottom );
-        m(1,2) = 0.0;
         m(1,3) = -( top + bottom ) / ( top - bottom );
 
-        m(2,0) = 0.0;
-        m(2,1) = 0.0;
         m(2,2) = -2.0 / ( far - near );
         m(2,3) = -( far + near ) / ( far - near );
-
-        m(3,0) = 0.0;
-        m(3,1) = 0.0;
-        m(3,2) = 0.0;
-        m(3,3) = 1.0;
 
         return m;
     }
@@ -31,27 +20,18 @@ namespace chestnut
     template< typename T >
     Matrix<T,4> matMakeFrustum( T left, T right, T bottom, T top, T near, T far )
     {
-        Matrix<T,4> m;
+        Matrix<T,4> m(0);
 
         m(0,0) = 2.0 * near / ( right - left );
-        m(0,1) = 0.0;
         m(0,2) = ( right + left ) / ( right - left );
-        m(0,3) = 0.0;
 
-        m(1,0) = 0.0;
         m(1,1) = 2.0 * near / ( top - bottom );
         m(1,2) = ( top + bottom ) / ( top - bottom );
-        m(1,3) = 0.0;
-
-        m(2,0) = 0.0;
-        m(2,1) = 0.0;
+        
         m(2,2) = -( far + near ) / ( far - near );
         m(2,3) = -2.0 * far * near / ( far - near );
 
-        m(3,0) = 0.0;
-        m(3,1) = 0.0;
         m(3,2) = -1.0;
-        m(3,3) = 0.0;
 
         return m;
     }
@@ -59,7 +39,7 @@ namespace chestnut
     template< typename T >
     Matrix<T,4> matMakePerspective( T fovy, T aspect, T near, T far )
     {
-        Matrix<T,4> m;
+        Matrix<T,4> m(0);
 
         double cotangent = std::cos( fovy / 2.0 );
 
@@ -68,7 +48,6 @@ namespace chestnut
         m(2,2) = ( far + near ) / ( near - far );
         m(2,3) = 2 * far * near / ( near - far );
         m(3,2) = -1.0;
-        m(3,3) = 0.0;
 
         return m;
     }
@@ -161,17 +140,17 @@ namespace chestnut
         cosine = std::cos( angleRad );
         axis = vecNormalized<T>( axis );
 
-        rm(0,0) = cosine + ( axis.x * axis.x ) * ( 1 - cosine );
-        rm(0,1) = axis.x * axis.y * ( 1 - cosine ) - axis.z * sine;
-        rm(0,2) = axis.x * axis.z * ( 1 - cosine ) + axis.y * sine;
+        rm(0,0) = cosine + ( axis.x() * axis.x() ) * ( 1 - cosine );
+        rm(0,1) = axis.x() * axis.y() * ( 1 - cosine ) - axis.z() * sine;
+        rm(0,2) = axis.x() * axis.z() * ( 1 - cosine ) + axis.y() * sine;
 
-        rm(1,0) = axis.y * axis.x * ( 1 - cosine ) + axis.z * sine;
-        rm(1,1) = cosine + ( axis.y * axis.y ) * ( 1 - cosine );
-        rm(1,2) = axis.y * axis.z * ( 1 - cosine ) - axis.x * sine;
+        rm(1,0) = axis.y() * axis.x() * ( 1 - cosine ) + axis.z() * sine;
+        rm(1,1) = cosine + ( axis.y() * axis.y() ) * ( 1 - cosine );
+        rm(1,2) = axis.y() * axis.z() * ( 1 - cosine ) - axis.x() * sine;
 
-        rm(2,0) = axis.z * axis.x * ( 1 - cosine ) - axis.y * sine;
-        rm(2,1) = axis.z * axis.y * ( 1 - cosine ) + axis.x * sine;
-        rm(2,2) = cosine + ( axis.z * axis.z ) * ( 1 - cosine );
+        rm(2,0) = axis.z() * axis.x() * ( 1 - cosine ) - axis.y() * sine;
+        rm(2,1) = axis.z() * axis.y() * ( 1 - cosine ) + axis.x() * sine;
+        rm(2,2) = cosine + ( axis.z() * axis.z() ) * ( 1 - cosine );
 
         return rm;
     }

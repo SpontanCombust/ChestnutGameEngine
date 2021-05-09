@@ -48,7 +48,7 @@ namespace chestnut
     {
         return [=]( const SMouseWheelEvent& event ) -> bool
         {
-            if( ( shouldReactOnXScroll && event.scrollAmount.x != 0 ) || ( shouldReactOnYScroll && event.scrollAmount.y != 0 ) )
+            if( ( shouldReactOnXScroll && event.scrollAmount.x() != 0 ) || ( shouldReactOnYScroll && event.scrollAmount.y() != 0 ) )
             {
                 return true;
             }

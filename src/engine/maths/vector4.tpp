@@ -2,32 +2,77 @@ namespace chestnut
 {    
     template<typename T >
     Vector<T,4>::Vector()
-    : data{0},
-      x( data[0] ), y( data[1] ), z( data[2] ), w( data[3] )
+    : data{0}
     {
 
     }
     
     template<typename T>
     Vector<T,4>::Vector( const Vector<T,4>& v )
-    : x( data[0] ), y( data[1] ), z( data[2] ), w( data[3] )
     {
         std::memcpy( data, v.data, sizeof( data ) );
     }
 
     template<typename T>
     Vector<T,4>::Vector( T init ) 
-    : x( data[0] ), y( data[1] ), z( data[2] ), w( data[3] )
+    : data{ init, init, init, init }
     {
-        std::fill_n( data, 4, init );
+        
     }
 
     template<typename T>
     Vector<T,4>::Vector( T _x, T _y, T _z, T _w )
-    : data{ _x, _y, _z, _w },
-      x( data[0] ), y( data[1] ), z( data[2] ), w( data[3] )
+    : data{ _x, _y, _z, _w }
     {
 
+    }
+
+    template<typename T>
+    T& Vector<T,4>::x() 
+    {
+        return data[0];
+    }
+
+    template<typename T>
+    const T& Vector<T,4>::x() const
+    {
+        return data[0];
+    }
+
+    template<typename T>
+    T& Vector<T,4>::y() 
+    {
+        return data[1];
+    }
+
+    template<typename T>
+    const T& Vector<T,4>::y() const
+    {
+        return data[1];
+    }
+
+    template<typename T>
+    T& Vector<T,4>::z() 
+    {
+        return data[2];
+    }
+
+    template<typename T>
+    const T& Vector<T,4>::z() const
+    {
+        return data[2];
+    }
+
+    template<typename T>
+    T& Vector<T,4>::w() 
+    {
+        return data[3];
+    }
+
+    template<typename T>
+    const T& Vector<T,4>::w() const
+    {
+        return data[3];
     }
 
     template<typename T>
@@ -86,7 +131,7 @@ namespace chestnut
         std::string str;
 
         str += "[ ";
-        str += std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ", " + std::to_string(w);
+        str += std::to_string(data[0]) + ", " + std::to_string(data[1]) + ", " + std::to_string(data[2]) + ", " + std::to_string(data[3]);
         str += " ]";
         
         return str;
