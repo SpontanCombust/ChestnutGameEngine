@@ -1,19 +1,16 @@
 #version 330 core
 
-in vec3 aPos;
-in vec2 aTexCoord;
+in vec2 aPos;
+in vec2 aUV;
 
-out vec2 texCoord;
+out vec2 uv;
 
-uniform mat4 uModel;
 uniform mat4 uView;
 uniform mat4 uProjection;
-uniform mat3 uTexClip;
 
 void main()
 {
-    vec3 texCoordTransf = uTexClip * vec3( aTexCoord, 1.0 );
-    texCoord = texCoordTransf.xy;
+    uv = aUV;
     
-    gl_Position = uProjection * uView * uModel * vec4( aPos, 1.0 );
+    gl_Position = uProjection * uView * vec4( aPos, 0.0, 1.0 );
 }

@@ -1,21 +1,19 @@
 #include "rendering_system.hpp"
 
-#include "engine/maths/angles.hpp"
-#include "engine/misc/tindex.hpp"
+#include "../components/transform_component.hpp"
+#include "../components/texture_component.hpp"
 #include "engine/globals.hpp"
-
-#include <cassert>
-#include <algorithm>
 
 namespace chestnut
 {
     CRenderingSystem::CRenderingSystem()
     {
-        m_spriteShader = theResourceManager.loadShaderProgram( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
-        assert( m_spriteShader.isValid() );
+        m_renderer = new CSpriteRenderer( theResourceManager.loadShaderProgram( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
 
-        m_renderer = new CSpriteRenderer( m_spriteShader );
-        m_renderer->setShaderVariableNames( "aPos", "aTexCoord", "uModel", "uView", "uProjection", "uTexClip" );
+        m_renderer->bindShader();
+        m_renderer->setViewMatrix( mat4f() );
+        m_renderer->setProjectionMatrix( matMakeOrthographic<float>( 0.f, theWindow.getWidth(), theWindow.getHeight(), 0.f, 1.f, -1.f ) );
+        m_renderer->unbindShader();
     }
 
     CRenderingSystem::~CRenderingSystem() 
@@ -42,26 +40,11 @@ namespace chestnut
 
     void CRenderingSystem::update( uint32_t deltaTime ) 
     {
-        /* NOP */
-    }
-
-    void CRenderingSystem::draw()
-    {
-        theWindow.clear();
-        
-        drawTextures();
-
-        theWindow.flipBuffer();
-    }
-
-    void CRenderingSystem::drawTextures()
-    {
         int entCount;
         std::vector< STransformComponent * > vecTransfComps;
         std::vector< STextureComponent * > vecTextureComps;
 
-        m_renderer->setViewMatrix( mat4f() );
-        m_renderer->setProjectionMatrix( matMakeOrthographic<float>( 0.f, theWindow.getWidth(), theWindow.getHeight(), 0.f, 1.f, -1.f ) );
+        m_renderer->clear();
         
         for( CComponentBatch *renderBatch : m_renderableBatches )
         {
@@ -78,10 +61,26 @@ namespace chestnut
 
                 if( texComp->texture.isValid() )
                 {
-                    m_renderer->renderSprite( texComp->texture, transfComp->position, transfComp->scale, transfComp->rotation );
+                    m_renderer->submitSprite( texComp->texture, transfComp->position, transfComp->scale, transfComp->rotation );
                 }
             }
         }
+    }
+
+    void CRenderingSystem::draw()
+    {
+        theWindow.clear();
+        
+        drawTextures();
+
+        theWindow.flipBuffer();
+    }
+
+    void CRenderingSystem::drawTextures()
+    {
+        m_renderer->bindShader();
+        m_renderer->render();
+        m_renderer->unbindShader();
     }
 
 } // namespace chestnut
