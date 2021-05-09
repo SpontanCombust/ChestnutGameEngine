@@ -28,7 +28,7 @@ namespace test
             vec3f v1 = { -1, 4, 0 };
             vec4f v2 = { -1, 0, 4, 1 };
             mat3f m1 = matMakeRotation<float>( CHESTNUT_PI );
-            mat4f m2 = matMakeRotation<float>( { 1, 0, 0 }, CHESTNUT_PI );
+            mat4f m2 = matMakeRotation<float>( { 0, 0, 1 }, CHESTNUT_PI );
 
             LOG_CHANNEL( "TEST", "v1=" << v1.toString() );
             LOG_CHANNEL( "TEST", "m1=\n" << m1.toString() );
@@ -41,6 +41,23 @@ namespace test
             LOG_CHANNEL( "TEST", "m2=\n" << m2.toString() );
 
             LOG_CHANNEL( "TEST", "m2*v2=" << ( m2 * v2 ).toString() );
+        }
+        LOG_CHANNEL( "TEST", "" );
+
+
+        LOG_CHANNEL( "TEST", "<< Multiply vector by matrix different size test >>");
+        {
+            vec3f v3 = { -1, 4, 0 };
+            mat4f m4 = matMakeRotation<float>( { 0, 0, 1 }, CHESTNUT_PI );
+
+            LOG_CHANNEL( "TEST", "v3=" << v3.toString() );
+            LOG_CHANNEL( "TEST", "m4=\n" << m4.toString() );
+
+            LOG_CHANNEL( "TEST", "m4*v3=" << ( m4 * v3 ).toString() );
+
+            // vec4f v4 = { 1, 2, 3, 4 };
+            // mat3f m3 = matMakeTranslation<float>( 1.f, 2.f );
+            // LOG_CHANNEL( "TEST", "m3*v4=" << ( m3 * v4 ).toString() ); // compiler error
         }
         LOG_CHANNEL( "TEST", "" );
 

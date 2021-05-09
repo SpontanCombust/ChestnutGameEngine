@@ -1,9 +1,26 @@
 #include "matrix3.hpp"
 #include "vector4.hpp"
 #include "matrix4.hpp"
+#include "vector_cast.hpp"
 
 namespace chestnut
 {
+    template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
+    Vector<T,vn> vecLeftMultiplyByMatrix( const Matrix<T,mn>& m, const Vector<T,vn>& v )
+    {
+        Vector<T,mn> res;
+
+        for (size_t i = 0; i < mn; i++)
+        {
+            for (size_t j = 0; j < mn; j++)
+            {
+                res.data[i] += m.get(i,j) * v.data[j];
+            }
+        }
+
+        return vecCastSize<vn>(res);
+    }
+
     template< typename T, size_t n >
     Vector<T,n> vecLeftMultiplyByMatrix( const Matrix<T,n>& m, const Vector<T,n>& v )
     {
@@ -20,10 +37,10 @@ namespace chestnut
         return res;
     }
 
-    template< typename T, size_t n >
-    Vector<T,n> operator*( const Matrix<T,n>& m, const Vector<T,n>& v )
+    template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
+    Vector<T,vn> operator*( const Matrix<T,mn>& m, const Vector<T,vn>& v )
     {
-        return vecLeftMultiplyByMatrix<T,n>(m,v);
+        return vecLeftMultiplyByMatrix<T,mn,vn>(m,v);
     }
 
 

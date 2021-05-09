@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cstring>
 
 namespace chestnut
@@ -19,10 +20,9 @@ namespace chestnut
 
     template<typename T>
     Vector<T,2>::Vector( T init ) 
-    : data{ init },
-      x( data[0] ), y( data[1] )
+    : x( data[0] ), y( data[1] )
     {
-
+        std::fill_n( data, 2, init );
     }
 
     template<typename T>

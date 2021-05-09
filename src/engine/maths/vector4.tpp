@@ -17,10 +17,9 @@ namespace chestnut
 
     template<typename T>
     Vector<T,4>::Vector( T init ) 
-    : data{ init },
-      x( data[0] ), y( data[1] ), z( data[2] ), w( data[3] )
+    : x( data[0] ), y( data[1] ), z( data[2] ), w( data[3] )
     {
-
+        std::fill_n( data, 4, init );
     }
 
     template<typename T>

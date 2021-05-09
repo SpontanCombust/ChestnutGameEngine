@@ -1,5 +1,6 @@
 #include "engine/misc/exception.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <cstring>
 
@@ -20,9 +21,8 @@ namespace chestnut
 
     template<typename T, size_t n>
     Vector<T, n>::Vector( T init ) 
-    : data{ init }
     {
-
+        std::fill_n( data, n, init );
     }
 
     template<typename T, size_t n>
