@@ -60,7 +60,8 @@
         "climits": "cpp",
         "ios": "cpp",
         "queue": "cpp",
-        "cstdbool": "cpp"
+        "cstdbool": "cpp",
+        "cstring": "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__"
 }

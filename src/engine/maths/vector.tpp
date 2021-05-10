@@ -14,22 +14,9 @@ namespace chestnut
     }
 
     template<typename T, size_t n>
-    Vector<T, n>::Vector(const Vector<T,n>& v) 
-    {
-        std::memcpy( data, v.data, sizeof( data ) );
-    }
-
-    template<typename T, size_t n>
     Vector<T, n>::Vector( T init ) 
     {
         std::fill_n( data, n, init );
-    }
-
-    template<typename T, size_t n>
-    Vector<T,n>& Vector<T, n>::operator=(const Vector<T,n>& v ) 
-    {
-        std::memcpy( data, v.data, sizeof( data ) );
-        return *this;
     }
 
     template<typename T, size_t n>

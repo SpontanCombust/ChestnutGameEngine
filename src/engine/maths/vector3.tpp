@@ -8,12 +8,6 @@ namespace chestnut
     }
 
     template<typename T>
-    Vector<T,3>::Vector( const Vector<T,3>& v )
-    {
-        std::memcpy( data, v.data, sizeof( data ) );
-    }
-
-    template<typename T>
     Vector<T,3>::Vector( T init ) 
     : data{ init, init, init }
     {
@@ -61,13 +55,6 @@ namespace chestnut
     const T& Vector<T,3>::z() const
     {
         return data[2];
-    }
-
-    template<typename T>
-    Vector<T,3>& Vector<T,3>::operator=( const Vector<T,3>& v ) 
-    {
-        std::memcpy( data, v.data, sizeof( data ) );
-        return *this;
     }
 
     template<typename T>

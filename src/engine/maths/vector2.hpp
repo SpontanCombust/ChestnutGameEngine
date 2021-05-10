@@ -18,11 +18,9 @@ namespace chestnut
         const T& y() const;
 
         Vector();
-        Vector( const Vector& v );
         Vector( T init );
         Vector( T _x, T _y );
 
-        Vector& operator=( const Vector& v );
         T& operator[]( size_t i );
         T operator[]( size_t i ) const;
         Vector& operator+=( const Vector& v );

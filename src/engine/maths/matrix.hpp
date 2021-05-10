@@ -24,10 +24,7 @@ namespace chestnut
         T data[ n * n ];
 
         Matrix();
-        Matrix( const Matrix& m );
         Matrix( T init );
-
-        Matrix& operator=( const Matrix& m );
 
         T get( size_t row, size_t column ) const;
         void set( size_t row, size_t column, T val );

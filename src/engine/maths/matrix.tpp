@@ -16,12 +16,6 @@ namespace chestnut
     }
 
     template<typename T, size_t n>
-    Matrix<T, n>::Matrix( const Matrix& m ) 
-    {
-        std::memcpy( data, m.data, sizeof( data ) );
-    }
-
-    template<typename T, size_t n>
     Matrix<T, n>::Matrix( T init )
     : data{ 0 }
     {
@@ -29,13 +23,6 @@ namespace chestnut
         {
             data[ i * n + i ] = init;
         }
-    }
-
-    template<typename T, size_t n>
-    Matrix<T,n>& Matrix<T, n>::operator=( const Matrix<T,n>& m ) 
-    {
-        std::memcpy( data, m.data, sizeof( data ) );
-        return *this;
     }
 
     template<typename T, size_t n>
