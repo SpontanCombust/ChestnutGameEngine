@@ -42,27 +42,34 @@ namespace test
     {
         srand( time(nullptr) );
 
+        lol = theResourceManager.loadTexture( "../_media_test/awesomeface.png" );
+        gatsu = theResourceManager.loadTexture( "../_media_test/berk.jpg" );
+
         SComponentSetSignature sign;
         sign.add<STransformComponent>()
             .add<SKinematicsComponent>()
             .add<STextureComponent>();
 
-        int amount = 1000;
-        std::vector<entityid_t> ids = theEntityManager.createEntities( sign, amount );
+        int amount = 10000;
+        std::vector<SComponentSet> vecCompSets = theEntityManager.createEntitiesReturnSets( sign, amount );
 
-        lol = theResourceManager.loadTexture( "../_media_test/awesomeface.png" );
-        gatsu = theResourceManager.loadTexture( "../_media_test/berk.jpg" );
-
-        for( const auto& id : ids )
+        for( auto& compSet : vecCompSets )
         {
-            STransformComponent *transf = theEntityManager.getComponent<STransformComponent>( id );
-            SKinematicsComponent *kinem = theEntityManager.getComponent<SKinematicsComponent>( id );
-            STextureComponent *tex = theEntityManager.getComponent<STextureComponent>( id );
+            sign = compSet.getSignature();
+            
+            IComponent *c;
+
+            c = compSet.mapTindexToComponent[ TINDEX( STransformComponent ) ];
+            STransformComponent *transf = ( STransformComponent* )c;
+            c = compSet.mapTindexToComponent[ TINDEX( SKinematicsComponent ) ];
+            SKinematicsComponent *kinem = ( SKinematicsComponent* )c;
+            c = compSet.mapTindexToComponent[ TINDEX( STextureComponent ) ];
+            STextureComponent *tex = ( STextureComponent* )c;
 
             randTransf( transf );
             randRot( kinem );
             randTex( tex );
-        }
+        }        
     }
 
 } // namespace test

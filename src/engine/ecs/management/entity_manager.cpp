@@ -100,7 +100,10 @@ namespace chestnut
         {
             return ids;
         }
-
+        if( signature.isEmpty() )
+        {
+            return ids;
+        }
         for( const componenttindex_t& compTindex : signature.componentTindexes )
         {
             if( !isPreparedForComponentType( compTindex ) )
@@ -111,8 +114,18 @@ namespace chestnut
         }
 
         // creation stage
-        entityid_t id;
+
+        // get all needed component vectors
+        std::vector< IComponentVectorWrapper *> vecWrappers;
         IComponentVectorWrapper *wrapper;
+        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        {
+            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
+            wrapper->reserve( wrapper->capacity() + amount );
+            vecWrappers.push_back( wrapper ); 
+        }
+
+        entityid_t id;
         SEntityRequest request;
 
         for (int i = 0; i < amount; i++)
@@ -120,14 +133,11 @@ namespace chestnut
             id = ++m_idCounter;
             m_entityRegistry.addEntity( id, signature );
 
-
-            for( const componenttindex_t& compTindex : signature.componentTindexes )
+            for( IComponentVectorWrapper *wrapper : vecWrappers )
             {
                 // create an instance of the component //
-                wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
                 wrapper->push_back( id );
             }
-
 
             // request post tick handling of batches //
             request.id = id;
@@ -145,6 +155,77 @@ namespace chestnut
         }
 
         return ids;
+    }
+
+    std::vector< SComponentSet > CEntityManager::createEntitiesReturnSets( SComponentSetSignature signature, int amount )
+    {
+        std::vector< SComponentSet > vecCompSets;
+
+        // validation stage
+        if( amount <= 0 )
+        {
+            return vecCompSets;
+        }
+        if( signature.isEmpty() )
+        {
+            return vecCompSets;
+        }
+        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        {
+            if( !isPreparedForComponentType( compTindex ) )
+            {
+                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
+                return vecCompSets; // returns empty vector
+            }
+        }
+
+        // creation stage
+
+        // get all needed component vectors
+        std::vector< IComponentVectorWrapper *> vecWrappers;
+        IComponentVectorWrapper *wrapper;
+        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        {
+            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
+            wrapper->reserve( wrapper->capacity() + amount );
+            vecWrappers.push_back( wrapper ); 
+        }
+
+        entityid_t id;    
+        IComponent *comp;
+        SEntityRequest request;
+
+        for (int i = 0; i < amount; i++)
+        {
+            SComponentSet compSet;
+
+            id = ++m_idCounter;
+            m_entityRegistry.addEntity( id, signature );
+            compSet.componentOwnerID = id;
+    
+            for( IComponentVectorWrapper *wrapper : vecWrappers )
+            {
+                // create an instance of the component //
+                comp = wrapper->push_back( id );
+                compSet.addComponent( comp );
+            }
+
+            // request post tick handling of batches //
+            request.id = id;
+            request.type = EEntityRequestType::CREATE_ENTITY;
+            // old signature is not needed, because hasn't had components before
+            request.newSignature = signature;
+
+            m_queuePostTickRequests.push( request );
+
+            // actual entity and its components are created outright to allow component initialization on user's side
+            // batches are processed only through request to maintain their coherence on per tick basis
+            // so that no system misses out on all new components that get created on a single tick being available at the same time
+            
+            vecCompSets.push_back( compSet );
+        }
+
+        return vecCompSets;
     }
 
     bool CEntityManager::hasEntity( entityid_t id ) const
@@ -334,6 +415,30 @@ namespace chestnut
         // so that systems won't receive invalid components or batches in the middle of processing them
         // e.g. when component gets destroyed, all components belonging to entity should be moved to other batch
         // and this moving could lead to errors on current tick
+    }
+
+    SComponentSet CEntityManager::getComponentSet( entityid_t id ) 
+    {
+        SComponentSet compSet;
+
+        if( !hasEntity( id ) )
+        {
+            // return empty set with ENTITY_ID_INVALID
+            return compSet;
+        }
+        
+        compSet.componentOwnerID = id;
+
+        SComponentSetSignature sign = m_entityRegistry.getEntitySignature( id );
+        if( sign.isEmpty() )
+        {
+            // return empty set
+            return compSet;
+        }
+
+        compSet = buildComponentSetForEntity( id, sign );
+
+        return compSet;
     }
 
 

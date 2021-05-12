@@ -55,6 +55,8 @@ namespace chestnut
 
         // Returns empty vector if manager was not prepared for component type
         std::vector< entityid_t > createEntities( SComponentSetSignature signature, int amount );
+        // temporary name
+        std::vector< SComponentSet > createEntitiesReturnSets( SComponentSetSignature signature, int amount );
 
         bool hasEntity( entityid_t id ) const;
 
@@ -74,6 +76,8 @@ namespace chestnut
         IComponent *getComponent( componenttindex_t compTindex, entityid_t id );
 
         void destroyComponent( componenttindex_t compTindex, entityid_t id );
+
+        SComponentSet getComponentSet( entityid_t id );
 
 
         // Returns null on error. Additionally prepares manager for given component type.
