@@ -51,7 +51,7 @@ namespace chestnut
             transfComp = m_vecTransformComps[i];
             texComp = m_vecTextureComps[i];
 
-            m_renderer->submitSprite( texComp->texture, transfComp->position, transfComp->scale, transfComp->rotation );
+            m_renderer->submitSprite( texComp->texture, texComp->origin, transfComp->position, transfComp->scale, transfComp->rotation );
         }
     }
 

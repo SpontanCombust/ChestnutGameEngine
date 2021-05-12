@@ -5,6 +5,7 @@ in vec2 avUVPos;
 
 uniform vec2 uTexSize;
 
+in vec2 aiOrigin;
 in vec2 aiTransl;
 in vec2 aiScale;
 in float aiRot;
@@ -50,6 +51,7 @@ mat4 mat4Rotation( float angle )
 
 mat4 makeModel()
 {
+    mat4 origin = mat4Translation( -aiOrigin );
     //                    rect.w, rect.h
     mat4 dim = mat4Scale( aiClipRect.zw );
 
@@ -59,7 +61,7 @@ mat4 makeModel()
 
     mat4 translation = mat4Translation( aiTransl );
 
-    return translation * rotation * scale * dim;
+    return translation * rotation * scale * dim * origin;
 }
 
 mat4 makeClipping()

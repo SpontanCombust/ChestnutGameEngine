@@ -16,7 +16,7 @@ namespace chestnut
     {
         m_shader = shader;
         assert( m_shader.isValid() );
-        assert( setShaderVariableNames( "avPos", "avUVPos", "aiTransl", "aiScale", "aiRot", "aiClipRect", "uTexSize", "uView", "uProjection" ) );
+        assert( setShaderVariableNames( "avPos", "avUVPos", "aiOrigin", "aiTransl", "aiScale", "aiRot", "aiClipRect", "uTexSize", "uView", "uProjection" ) );
         
         m_shader.bind();
 
@@ -44,7 +44,8 @@ namespace chestnut
     }
 
     bool CSpriteRenderer::setShaderVariableNames( const std::string& attrVertPos,
-                                                  const std::string& attrVertUVPos, 
+                                                  const std::string& attrVertUVPos,
+                                                  const std::string& attrInstOrigin,
                                                   const std::string& attrInstTransl,
                                                   const std::string& attrInstScale,
                                                   const std::string& attrInstRot,
@@ -53,38 +54,34 @@ namespace chestnut
                                                   const std::string& unifView,
                                                   const std::string& unifProjection )
     {
-        bool success = true;
-
         m_attrVertPosLoc = m_shader.getAttributeLocation( attrVertPos );
-        if( m_attrVertPosLoc == -1 ) success = false;
-
         m_attrVertUVPosLoc = m_shader.getAttributeLocation( attrVertUVPos );
-        if( m_attrVertUVPosLoc == -1 ) success = false;
 
-
+        m_attrInstOriginLoc = m_shader.getAttributeLocation( attrInstOrigin );
         m_attrInstTranslLoc = m_shader.getAttributeLocation( attrInstTransl );
-        if( m_attrInstTranslLoc == -1 ) success = false;
-
         m_attrInstScaleLoc = m_shader.getAttributeLocation( attrInstScale );
-        if( m_attrInstScaleLoc == -1 ) success = false;
-
         m_attrInstRotLoc = m_shader.getAttributeLocation( attrInstRot );
-        if( m_attrInstRotLoc == -1 ) success = false;
-
         m_attrInstClipRectLoc = m_shader.getAttributeLocation( attrInstClipRect );
-        if( m_attrInstClipRectLoc == -1 ) success = false;
-
 
         m_unifTexSizeLoc = m_shader.getUniformLocation( unifTexSize );
-        if( m_unifTexSizeLoc == -1 ) success = false;
-
         m_unifViewLoc = m_shader.getUniformLocation( unifView );
-        if( m_unifViewLoc == -1 ) success = false;
-
         m_unifProjectionLoc = m_shader.getUniformLocation( unifProjection );
-        if( m_unifProjectionLoc == -1 ) success = false;
 
-        return success;
+        if(    m_attrVertPosLoc         == -1 
+            || m_attrVertUVPosLoc       == -1
+            || m_attrInstOriginLoc         == -1
+            || m_attrInstTranslLoc      == -1
+            || m_attrInstScaleLoc       == -1 
+            || m_attrInstRotLoc         == -1
+            || m_attrInstClipRectLoc    == -1
+            || m_unifTexSizeLoc         == -1
+            || m_unifViewLoc            == -1
+            || m_unifProjectionLoc      == -1 )
+        {
+            return false;
+        }
+
+        return true;
     }
 
     void CSpriteRenderer::initBuffers() 
@@ -123,6 +120,10 @@ namespace chestnut
 
 
             glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
+
+            glEnableVertexAttribArray( m_attrInstOriginLoc );
+            glVertexAttribPointer( m_attrInstOriginLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, origin ) );
+            glVertexAttribDivisor( m_attrInstOriginLoc, 1 );
 
             glEnableVertexAttribArray( m_attrInstTranslLoc );
             glVertexAttribPointer( m_attrInstTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, transl ) );
@@ -184,7 +185,7 @@ namespace chestnut
         m_vecBatches.clear();
     }
 
-    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& position, const vec2f& scale, double rotation ) 
+    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& origin, const vec2f& position, const vec2f& scale, double rotation ) 
     {
         GLuint id;
         int w, h;
@@ -196,6 +197,7 @@ namespace chestnut
         rect = texture.getClippingRect();
 
         SSpriteInstance instance;
+        instance.origin = origin;
         instance.transl = position;
         instance.scale = scale;
         instance.rot = (float)rotation;

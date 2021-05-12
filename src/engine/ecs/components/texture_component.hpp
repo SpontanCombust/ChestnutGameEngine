@@ -10,6 +10,7 @@ namespace chestnut
     struct STextureComponent : IComponent
     {
         CTexture2D texture;
+        vec2f origin; // values typically in range (0;1) where 0 = left/top and 1 = right/bottom
         
         //TODO create "missing texture" for default constructor
         STextureComponent() = default;

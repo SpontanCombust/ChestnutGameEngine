@@ -18,6 +18,7 @@ namespace chestnut
     {
         struct SSpriteInstance
         {
+            vec2f origin;
             vec2f transl;
             vec2f scale;
             float rot;
@@ -53,6 +54,7 @@ namespace chestnut
 
         GLint m_unifTexSizeLoc;
 
+        GLint m_attrInstOriginLoc;
         GLint m_attrInstTranslLoc;
         GLint m_attrInstScaleLoc;
         GLint m_attrInstRotLoc;
@@ -75,13 +77,14 @@ namespace chestnut
 
         void clear();
 
-        void submitSprite( const CTexture2D& texture, const vec2f& position, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
+        void submitSprite( const CTexture2D& texture, const vec2f& origin, const vec2f& position, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
         // requires bound renderer shader
         void render();
 
     private:
         bool setShaderVariableNames( const std::string& attrVertPos,
-                                     const std::string& attrVertUVPos, 
+                                     const std::string& attrVertUVPos,
+                                     const std::string& attrInstOrigin,
                                      const std::string& attrInstTransl,
                                      const std::string& attrInstScale,
                                      const std::string& attrInstRot,
