@@ -16,37 +16,48 @@ namespace chestnut
 
     class CSpriteRenderer
     {
-        struct STexturedVertex
+        struct SSpriteInstance
         {
-            vec2f pos;
-            vec2f uv; 
+            vec2f transl;
+            vec2f scale;
+            float rot;
+            vec4f clipRect;
         };
 
         struct SSpriteBatch
         {
             GLuint texID;
-            int elementAmount;
-            size_t elementOffset;
+            GLsizei instanceAmount;
+            GLuint instanceOffset;
         };
         
     private:
-        std::unordered_map< GLuint, std::vector< STexturedVertex > > m_mapTexIDToVecVertices;
+        std::unordered_map< GLuint, std::vector< SSpriteInstance > > m_mapTexIDToVecInstances;
+        std::unordered_map< GLuint, vec2f > m_mapTexIDToSize;
         std::vector< SSpriteBatch > m_vecBatches;
 
         GLuint m_vao;
-        GLuint m_vbo;
+        GLuint m_vboVert;
+        GLuint m_vboInst;
         GLuint m_ebo;
         GLsizei m_spriteCapacity;
 
         CShaderProgram m_shader;
 
-        GLint m_attrPosLoc;
-        GLint m_attrUVLoc;
 
         GLint m_unifViewLoc;
         GLint m_unifProjectionLoc;
 
-        STexturedVertex m_lookupBaseVertices[4];
+        GLint m_attrVertPosLoc;
+        GLint m_attrVertUVPosLoc;
+
+        GLint m_unifTexSizeLoc;
+
+        GLint m_attrInstTranslLoc;
+        GLint m_attrInstScaleLoc;
+        GLint m_attrInstRotLoc;
+        GLint m_attrInstClipRectLoc;
+
 
     public:
         CSpriteRenderer( const CShaderProgram& shader );
@@ -69,19 +80,18 @@ namespace chestnut
         void render();
 
     private:
-        bool setShaderVariableNames( const std::string& attrPos, 
-                                     const std::string& attrTexCoord, 
+        bool setShaderVariableNames( const std::string& attrVertPos,
+                                     const std::string& attrVertUVPos, 
+                                     const std::string& attrInstTransl,
+                                     const std::string& attrInstScale,
+                                     const std::string& attrInstRot,
+                                     const std::string& attrInstUVTransl,
+                                     const std::string& attrInstUVScale,
                                      const std::string& unifView,
                                      const std::string& unifProjection );
 
         void initBuffers();
 
-        void initLookupVertices();
-
-        mat3f makeModelMatrixForTexture( const CTexture2D& texture, const vec2f& position, const vec2f& scale, double rotation );
-
-        mat3f makeClippingMatrixForTexture( const CTexture2D& texture );
-        
         void makeBatches();
     };
 
