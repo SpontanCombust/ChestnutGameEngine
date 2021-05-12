@@ -25,6 +25,10 @@ namespace chestnut
         virtual void clear() = 0;
         // Returns number of stored components
         virtual size_t size() = 0;
+        // Returns the capacity of vector
+        virtual size_t capacity() = 0;
+        // Increases capacity to given amount without actually creating components
+        virtual void reserve( size_t newCapacity ) = 0;
 
         virtual const std::string toString() const = 0;
     };
@@ -49,6 +53,10 @@ namespace chestnut
         void clear() override;
         // Returns number of stored components
         size_t size() override;
+        // Returns the capacity of vector
+        size_t capacity() override;
+        // Increases capacity to given amount without actually creating components
+        void reserve( size_t newCapacity ) override;
         
         const std::string toString() const override;
     };
