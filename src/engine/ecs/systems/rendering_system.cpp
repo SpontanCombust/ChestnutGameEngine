@@ -1,7 +1,5 @@
 #include "rendering_system.hpp"
 
-#include "../components/transform_component.hpp"
-#include "../components/texture_component.hpp"
 #include "engine/globals.hpp"
 
 namespace chestnut
@@ -21,7 +19,7 @@ namespace chestnut
         delete m_renderer;
     }
 
-    void CRenderingSystem::submitBatch( CComponentBatch *batch ) 
+    void CRenderingSystem::submitComponents( CComponentBatch *batch ) 
     {
         SComponentSetSignature signature;
 
@@ -29,41 +27,31 @@ namespace chestnut
 
         if( signature.includes<STransformComponent>() && signature.includes<STextureComponent>() )
         {
-            m_renderableBatches.push_back( batch );
+            batch->getComponentsAppendToVec( m_vecTransformComps );
+            batch->getComponentsAppendToVec( m_vecTextureComps );
         }
     }
         
-    void CRenderingSystem::clearBatches() 
+    void CRenderingSystem::clearComponents() 
     {
-        m_renderableBatches.clear();
+        m_vecTransformComps.clear();
+        m_vecTextureComps.clear();
     }
 
     void CRenderingSystem::update( uint32_t deltaTime ) 
     {
-        int entCount;
-        std::vector< STransformComponent * > vecTransfComps;
-        std::vector< STextureComponent * > vecTextureComps;
+        STransformComponent *transfComp;
+        STextureComponent *texComp;
 
         m_renderer->clear();
         
-        for( CComponentBatch *renderBatch : m_renderableBatches )
+        size_t entityCount = m_vecTransformComps.size();
+        for (size_t i = 0; i < entityCount; i++)
         {
-            entCount = renderBatch->getEntityCount();
-            vecTransfComps = renderBatch->getComponents<STransformComponent>();
-            vecTextureComps = renderBatch->getComponents<STextureComponent>();
+            transfComp = m_vecTransformComps[i];
+            texComp = m_vecTextureComps[i];
 
-            STransformComponent *transfComp;
-            STextureComponent *texComp;
-            for (int i = 0; i < entCount; i++)
-            {
-                transfComp = vecTransfComps[i];
-                texComp = vecTextureComps[i];
-
-                if( texComp->texture.isValid() )
-                {
-                    m_renderer->submitSprite( texComp->texture, transfComp->position, transfComp->scale, transfComp->rotation );
-                }
-            }
+            m_renderer->submitSprite( texComp->texture, transfComp->position, transfComp->scale, transfComp->rotation );
         }
     }
 

@@ -1,50 +1,42 @@
 #include "kinematics_system.hpp"
 
-#include "../components/transform_component.hpp"
-#include "../components/kinematics_component.hpp"
-
 namespace chestnut
 {
-    void CKinematicsSystem::submitBatch( CComponentBatch *batch ) 
+    void CKinematicsSystem::submitComponents( CComponentBatch *batch ) 
     {
         SComponentSetSignature sign = batch->getSignature();
 
         if( sign.includes<STransformComponent>() && sign.includes<SKinematicsComponent>() )
         {
-            m_kinematicBatches.push_back( batch );
+            batch->getComponentsAppendToVec( m_vecTransformComps );
+            batch->getComponentsAppendToVec( m_vecKinematicComps );
         }
     }
 
-    void CKinematicsSystem::clearBatches() 
+    void CKinematicsSystem::clearComponents() 
     {
-        m_kinematicBatches.clear();
+        m_vecTransformComps.clear();
+        m_vecKinematicComps.clear();
     }
 
     void CKinematicsSystem::update( uint32_t deltaTime ) 
     {
-        std::vector<STransformComponent *> vecTransfComps;
-        std::vector<SKinematicsComponent *> vecKinemComps;
         STransformComponent *transfComp;
         SKinematicsComponent *kinemComp;
 
         float dt = (float)deltaTime / 1000.f;
 
-        for( CComponentBatch *batch : m_kinematicBatches )
+        size_t entityCount = m_vecTransformComps.size();
+        for (size_t i = 0; i < entityCount; i++)
         {
-            vecTransfComps = batch->getComponents<STransformComponent>();
-            vecKinemComps = batch->getComponents<SKinematicsComponent>();
+            transfComp = m_vecTransformComps[i];
+            kinemComp = m_vecKinematicComps[i];
 
-            for (int i = 0; i < batch->getEntityCount(); i++)
-            {
-                transfComp = vecTransfComps[i];
-                kinemComp = vecKinemComps[i];
+            kinemComp->linearVelocity += dt * kinemComp->linearAcceleration;
+            kinemComp->angularVelocity += dt * kinemComp->angularAcceleration;
 
-                kinemComp->linearVelocity += dt * kinemComp->linearAcceleration;
-                kinemComp->angularVelocity += dt * kinemComp->angularAcceleration;
-
-                transfComp->position += dt * kinemComp->linearVelocity;
-                transfComp->rotation += dt * kinemComp->angularVelocity;
-            }
+            transfComp->position += dt * kinemComp->linearVelocity;
+            transfComp->rotation += dt * kinemComp->angularVelocity;
         }
     }
 

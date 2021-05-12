@@ -3,6 +3,8 @@
 
 #include "component_system.hpp"
 #include "engine/graphics/sprite_renderer.hpp"
+#include "../components/transform_component.hpp"
+#include "../components/texture_component.hpp"
 
 namespace chestnut
 {
@@ -11,14 +13,15 @@ namespace chestnut
     private:
         CSpriteRenderer *m_renderer;
 
-        std::vector< CComponentBatch * > m_renderableBatches;
+        std::vector< STransformComponent * > m_vecTransformComps;
+        std::vector< STextureComponent * > m_vecTextureComps;
 
     public:
         CRenderingSystem();
         ~CRenderingSystem();
 
-        void submitBatch( CComponentBatch *batch ) override;
-        void clearBatches() override;
+        void submitComponents( CComponentBatch *batch ) override;
+        void clearComponents() override;
         void update( uint32_t deltaTime ) override;
         void draw();
 

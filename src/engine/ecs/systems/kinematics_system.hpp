@@ -10,11 +10,12 @@ namespace chestnut
     class CKinematicsSystem : public IComponentSystem
     {
     private:
-        std::vector< CComponentBatch * > m_kinematicBatches;
+        std::vector< STransformComponent * > m_vecTransformComps;
+        std::vector< SKinematicsComponent * > m_vecKinematicComps;
 
     public:
-        void submitBatch( CComponentBatch *batch ) override;
-        void clearBatches() override;
+        void submitComponents( CComponentBatch *batch ) override;
+        void clearComponents() override;
         void update( uint32_t deltaTime ) override;
     };
 

@@ -112,7 +112,7 @@ namespace chestnut
             // clearing outdated batches from systems
             for( IComponentSystem *compSys : m_componentSystemsList )
             {
-                compSys->clearBatches();
+                compSys->clearComponents();
             }    
 
             vecComponentBatches = entityManager.getComponentBatches();
@@ -122,7 +122,7 @@ namespace chestnut
             {
                 for( IComponentSystem *compSys : m_componentSystemsList )
                 {
-                    compSys->submitBatch( batch );
+                    compSys->submitComponents( batch );
                 }
             }
         }

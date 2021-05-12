@@ -5,19 +5,16 @@
 #include "../components/timer_component.hpp"
 #include "engine/event_system/events/timer_event.hpp"
 
-#include <queue>
-
 namespace chestnut
 {
     class CTimerSystem : public IComponentSystem
     {
     private:
-        timerid_t m_timerIDCounter = 0;
-        std::vector< CComponentBatch * > m_batchesWithTimerComps;
+        std::vector<STimerComponent *> m_vecTimerComps;
 
     public:
-        void submitBatch( CComponentBatch *batch ) override;
-        void clearBatches() override;
+        void submitComponents( CComponentBatch *batch ) override;
+        void clearComponents() override;
         void update( uint32_t deltaTime ) override;
     };
 
