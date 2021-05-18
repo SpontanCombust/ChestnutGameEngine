@@ -2,19 +2,24 @@
 #define __CHESTNUT_RENDERING_SYSTEM_H__
 
 #include "component_system.hpp"
-#include "engine/graphics/sprite_renderer.hpp"
 #include "../components/transform_component.hpp"
 #include "../components/texture_component.hpp"
+#include "engine/graphics/sprite_renderer.hpp"
+#include "../components/polygon_canvas_component.hpp"
+#include "engine/graphics/colored_polygon2d_renderer.hpp"
 
 namespace chestnut
 {
     class CRenderingSystem : public IComponentSystem
     {
     private:
-        CSpriteRenderer *m_renderer;
+        CSpriteRenderer *m_spriteRenderer;
+        CColoredPolygon2DRenderer *m_polygonRenderer;
 
-        std::vector< STransformComponent * > m_vecTransformComps;
+        std::vector< STransformComponent * > m_vecTransformForTextureComps;
         std::vector< STextureComponent * > m_vecTextureComps;
+        std::vector< STransformComponent * > m_vecTransformForPolygonCanvasComps;
+        std::vector< SPolygonCanvasComponent * > m_vecPolygonCanvasComps;
 
     public:
         CRenderingSystem();
@@ -23,10 +28,11 @@ namespace chestnut
         void submitComponents( CComponentBatch *batch ) override;
         void clearComponents() override;
         void update( uint32_t deltaTime ) override;
-        void draw();
+        void render();
 
     private:
-        void drawTextures();
+        void renderTextures();
+        void renderColoredPolygons();
     };
 
 } // namespace chestnut

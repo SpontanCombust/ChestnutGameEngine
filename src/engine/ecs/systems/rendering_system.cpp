@@ -6,17 +6,30 @@ namespace chestnut
 {
     CRenderingSystem::CRenderingSystem()
     {
-        m_renderer = new CSpriteRenderer( theResourceManager.loadShaderProgram( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
+        CShaderProgram shader;
+        mat4f projection = matMakeOrthographic<float>( 0.f, theWindow.getWidth(), theWindow.getHeight(), 0.f, 1.f, -1.f );
 
-        m_renderer->bindShader();
-        m_renderer->setViewMatrix( mat4f() );
-        m_renderer->setProjectionMatrix( matMakeOrthographic<float>( 0.f, theWindow.getWidth(), theWindow.getHeight(), 0.f, 1.f, -1.f ) );
-        m_renderer->unbindShader();
+        shader = theResourceManager.loadShaderProgram( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
+        m_spriteRenderer = new CSpriteRenderer( shader );
+
+        m_spriteRenderer->bindShader();
+        m_spriteRenderer->setViewMatrix( mat4f() );
+        m_spriteRenderer->setProjectionMatrix( projection );
+
+
+        shader = theResourceManager.loadShaderProgram( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" );
+        m_polygonRenderer = new CColoredPolygon2DRenderer( shader );
+
+        m_polygonRenderer->bindShader();
+        m_polygonRenderer->setViewMatrix( mat4f() );
+        m_polygonRenderer->setProjectionMatrix( projection );
+        m_polygonRenderer->unbindShader();
     }
 
     CRenderingSystem::~CRenderingSystem() 
     {
-        delete m_renderer;
+        delete m_spriteRenderer;
+        delete m_polygonRenderer;
     }
 
     void CRenderingSystem::submitComponents( CComponentBatch *batch ) 
@@ -25,50 +38,82 @@ namespace chestnut
 
         signature = batch->getSignature();
 
-        if( signature.includes<STransformComponent>() && signature.includes<STextureComponent>() )
+        if( signature.includes<STransformComponent>() )
         {
-            batch->getComponentsAppendToVec( m_vecTransformComps );
-            batch->getComponentsAppendToVec( m_vecTextureComps );
+            if( signature.includes<STextureComponent>() )
+            {
+                batch->getComponentsAppendToVec( m_vecTransformForTextureComps );
+                batch->getComponentsAppendToVec( m_vecTextureComps );
+            }
+            if( signature.includes<SPolygonCanvasComponent>() )
+            {
+                batch->getComponentsAppendToVec( m_vecTransformForPolygonCanvasComps );
+                batch->getComponentsAppendToVec( m_vecPolygonCanvasComps );
+            }
         }
     }
         
     void CRenderingSystem::clearComponents() 
     {
-        m_vecTransformComps.clear();
+        m_vecTransformForTextureComps.clear();
         m_vecTextureComps.clear();
+        m_vecTransformForPolygonCanvasComps.clear();
+        m_vecPolygonCanvasComps.clear();
     }
 
     void CRenderingSystem::update( uint32_t deltaTime ) 
     {
         STransformComponent *transfComp;
         STextureComponent *texComp;
+        SPolygonCanvasComponent *polygonCanvasComp;
+        size_t entityCount;
 
-        m_renderer->clear();
-        
-        size_t entityCount = m_vecTransformComps.size();
+        m_spriteRenderer->clear();
+        entityCount = m_vecTransformForTextureComps.size();
         for (size_t i = 0; i < entityCount; i++)
         {
-            transfComp = m_vecTransformComps[i];
+            transfComp = m_vecTransformForTextureComps[i];
             texComp = m_vecTextureComps[i];
 
-            m_renderer->submitSprite( texComp->texture, texComp->origin, transfComp->position, transfComp->scale, transfComp->rotation );
+            m_spriteRenderer->submitSprite( texComp->texture, transfComp->position, texComp->origin, transfComp->scale, transfComp->rotation );
+        }
+
+        m_polygonRenderer->clear();
+        entityCount = m_vecTransformForPolygonCanvasComps.size();
+        for (size_t i = 0; i < entityCount; i++)
+        {
+            transfComp = m_vecTransformForPolygonCanvasComps[i];
+            polygonCanvasComp = m_vecPolygonCanvasComps[i];
+
+            for( const CColoredPolygon2D& polygon : polygonCanvasComp->vecPolygons )
+            {
+                m_polygonRenderer->submitPolygon( polygon, transfComp->position, polygonCanvasComp->origin, transfComp->scale, transfComp->rotation );
+            }
         }
     }
 
-    void CRenderingSystem::draw()
+    void CRenderingSystem::render()
     {
         theWindow.clear();
         
-        drawTextures();
+        renderTextures();
+        renderColoredPolygons();
 
         theWindow.flipBuffer();
     }
 
-    void CRenderingSystem::drawTextures()
+    void CRenderingSystem::renderTextures()
     {
-        m_renderer->bindShader();
-        m_renderer->render();
-        m_renderer->unbindShader();
+        m_spriteRenderer->bindShader();
+        m_spriteRenderer->render();
+        m_spriteRenderer->unbindShader();
+    }
+
+    void CRenderingSystem::renderColoredPolygons() 
+    {
+        m_polygonRenderer->bindShader();
+        m_polygonRenderer->render();
+        m_polygonRenderer->unbindShader();
     }
 
 } // namespace chestnut

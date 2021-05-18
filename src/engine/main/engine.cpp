@@ -98,7 +98,7 @@ namespace chestnut
 
             if( m_renderTimer->tick() )
             {
-                m_renderingSystem->draw();
+                m_renderingSystem->render();
             }
         }
     }
