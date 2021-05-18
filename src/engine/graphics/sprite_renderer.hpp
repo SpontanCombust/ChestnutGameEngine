@@ -77,7 +77,7 @@ namespace chestnut
 
         void clear();
 
-        void submitSprite( const CTexture2D& texture, const vec2f& origin, const vec2f& position, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
+        void submitSprite( const CTexture2D& texture, const vec2f& position, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
         // requires bound renderer shader
         void render();
 

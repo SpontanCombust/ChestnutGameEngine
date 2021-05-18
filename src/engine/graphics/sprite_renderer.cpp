@@ -21,6 +21,7 @@ namespace chestnut
         m_shader.bind();
 
         initBuffers();
+        m_spriteCapacity = 0;
         reserveBufferSpace( INIT_SPRITE_CAPACITY );
 
         m_shader.unbind();
@@ -30,6 +31,7 @@ namespace chestnut
     {
         glDeleteVertexArrays( 1, &m_vao );
         glDeleteBuffers( 1, &m_ebo );
+        glDeleteBuffers( 1, &m_vboVert );
         glDeleteBuffers( 1, &m_vboInst );
     }
 
@@ -69,7 +71,7 @@ namespace chestnut
 
         if(    m_attrVertPosLoc         == -1 
             || m_attrVertUVPosLoc       == -1
-            || m_attrInstOriginLoc         == -1
+            || m_attrInstOriginLoc      == -1
             || m_attrInstTranslLoc      == -1
             || m_attrInstScaleLoc       == -1 
             || m_attrInstRotLoc         == -1
@@ -162,6 +164,11 @@ namespace chestnut
 
     void CSpriteRenderer::reserveBufferSpace( GLsizei targetSpriteCapacity ) 
     {
+        if( targetSpriteCapacity <= m_spriteCapacity )
+        {
+            return;
+        }
+        
         // contents of instance VBO will be changed every tick with glBufferSubData, so dynamic draw and null a data pointer
         glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
         glBufferData( GL_ARRAY_BUFFER, sizeof( SSpriteInstance ) * targetSpriteCapacity, nullptr, GL_DYNAMIC_DRAW ); // 4 vertices per sprite
@@ -185,7 +192,7 @@ namespace chestnut
         m_vecBatches.clear();
     }
 
-    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& origin, const vec2f& position, const vec2f& scale, double rotation ) 
+    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& position, const vec2f& origin, const vec2f& scale, double rotation ) 
     {
         GLuint id;
         int w, h;
