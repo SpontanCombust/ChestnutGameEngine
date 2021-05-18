@@ -5,20 +5,17 @@
 
 namespace chestnut
 {   
-    // globally available application instance declaration
-    extern CApplication *__g_application;
+    #define theApp (*CApplication::getInstance())
 
-    #define theApp (*__g_application)
+    #define theWindow CApplication::getInstance()->window
 
-    #define theWindow __g_application->window
+    #define theEngine CApplication::getInstance()->engine
 
-    #define theEngine __g_application->engine
+    #define theEntityManager CApplication::getInstance()->engine.entityManager
 
-    #define theEntityManager __g_application->engine.entityManager
+    #define theEventManager CApplication::getInstance()->engine.eventManager
 
-    #define theEventManager __g_application->engine.eventManager
-
-    #define theResourceManager __g_application->engine.resourceManager
+    #define theResourceManager CApplication::getInstance()->engine.resourceManager
 
 } // namespace chestnut
 

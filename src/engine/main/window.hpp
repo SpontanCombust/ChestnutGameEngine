@@ -4,23 +4,38 @@
 #include "engine/maths/vector2.hpp"
 #include "engine/libs.hpp"
 
+#include <string>
+
 namespace chestnut
 {
+    struct SWindowProperties
+    {
+        int sdlWindowFlags;
+        int sdlGLContextVersionMajor;
+        int sdlGLContextVersionMinor;
+        int sdlGLContextFlags;
+        int sdlGLContextProfileMask;
+    };
+
+    SWindowProperties windowPropertiesDefault( int glVersionMajor, int glVersionMinor );
+
+
     class CWindow
     {
     private:
         SDL_Window *m_sdlWindow;
+        SDL_GLContext m_sdlGLContext;
 
     public:
         CWindow();
         ~CWindow();
 
-        bool create( const char *title, int width = 800, int height = 600, int x = 0, int y = 0 );
+        bool create( const SWindowProperties& windowProperties, const std::string& title, int width, int height, int x = 0, int y = 0, bool useVsync = false );
 
         void destroy();
 
-        void setTitle( const char *title );
-        const char *getTitle();
+        void setTitle( const std::string& title );
+        std::string getTitle();
 
         void setSize( int w, int h );
         int getWidth();
@@ -29,6 +44,8 @@ namespace chestnut
         void setPosition( int x, int y );
         int getPositionX();
         int getPositionY();
+
+        void toggleVsync( bool toggle );
 
         void clear();
         void flipBuffer();

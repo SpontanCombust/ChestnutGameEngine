@@ -13,8 +13,8 @@ namespace chestnut
     class CApplication
     {
     private:
-        int m_windowFlags;
-        int m_rendererFlags;
+        static CApplication *m_instance;
+
         float m_updateInterval;
         float m_renderInterval;
 
@@ -27,22 +27,18 @@ namespace chestnut
         CApplication( float renderInterval );
         // -1 for unlocked render rate (not recommended) and update rate
         CApplication( float renderInterval, float updateInterval );
-        // -1 for unlocked render rate (not recommended) and update rate
-        CApplication( float renderInterval, float updateInterval, int windowFlags, int rendererFlags );
 
         virtual bool onCreate();
         virtual void onStart();
         virtual void onEnd();
 
+        static void setInstance( CApplication *app );
+        static CApplication *getInstance();
+
         virtual ~CApplication();
 
     protected:
         void setWindowParams( const char *title, int width, int height, int x, int y );
-
-    private:
-        bool initSDL();
-        bool initGL();
-        void deinitSDL();
     };
 
 } // namespace chestnut
