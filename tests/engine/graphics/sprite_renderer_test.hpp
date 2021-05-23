@@ -3,7 +3,7 @@
 
 #include "engine/main/window.hpp"
 #include "engine/graphics/sprite_renderer.hpp"
-#include "engine/misc/resource_manager.hpp"
+#include "engine/resources/resource_manager.hpp"
 
 #include <cassert>
 
@@ -19,7 +19,7 @@ namespace test
 
         CShaderProgram shader = loadShaderProgramFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
         CSpriteRenderer renderer = CSpriteRenderer( shader );
-        CTexture2D tex = loadTextureFromFile( "../assets/images/awesomeface.png" );
+        CTexture2D tex = CTexture2D( loadTextureResourceFromFile( "../assets/images/awesomeface.png" ) );
         CTexture2D texClipped = tex; texClipped.setClippingRect( {256, 256, 256, 256} );
         assert( tex.isValid() );
         CAutoTimer timer = CAutoTimer(0);

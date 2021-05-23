@@ -4,36 +4,30 @@
 
 namespace chestnut 
 {
-    CTexture2D::CTexture2D() 
+    CTexture2D::CTexture2D( std::shared_ptr<CTexture2DResource> resource ) 
     {
-        m_texID = 0;
-        m_width = 0;
-        m_height = 0;
-        m_pixelFormat = 0;
-    }
-
-    CTexture2D::CTexture2D( unsigned int texID, int width, int height, unsigned int pixelFormat ) 
-    {
-        m_texID = texID;
-        m_width = width;
-        m_height = height;
-        m_pixelFormat = pixelFormat;
-        m_clipRect = SRectangle( 0.f, 0.f, m_width, m_height );
+        m_texResource = resource;
+        
+        m_clipRect = SRectangle( 0.f, 0.f, resource->width, resource->height );
     }
 
     unsigned int CTexture2D::getID() const
     {
-        return m_texID;
+        return m_texResource->texID;
     }
     
     bool CTexture2D::isValid() const
     {
-        return m_texID != 0;
+        if( m_texResource && m_texResource->texID != 0 )
+        {
+            return true;
+        }
+        return false;
     }
     
     void CTexture2D::bind() const
     {
-        glBindTexture( GL_TEXTURE_2D, m_texID );
+        glBindTexture( GL_TEXTURE_2D, m_texResource->texID );
     }
 
     void CTexture2D::unbind() const
@@ -43,17 +37,17 @@ namespace chestnut
 
     unsigned int CTexture2D::getPixelFormat() const
     {
-        return m_pixelFormat;
+        return m_texResource->pixelFormat;
     }
 
     int CTexture2D::getWidth() const
     {
-        return m_width;
+        return m_texResource->width;
     }
 
     int CTexture2D::getHeight() const
     {
-        return m_height;
+        return m_texResource->height;
     }
 
     SRectangle CTexture2D::getClippingRect() const

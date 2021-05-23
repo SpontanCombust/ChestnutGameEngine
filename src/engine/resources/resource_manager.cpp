@@ -151,100 +151,6 @@ namespace chestnut
         return CShaderProgram( program );
     }
 
-
-
-    CTexture2D loadTextureFromFile( const std::string& path )
-    {
-        SDL_Surface *surf = IMG_Load( path.c_str() );
-
-        if( !surf )
-        {
-            LOG_CHANNEL( "RESOURCE_MANAGER", "Couldn't load file at " << path );
-            return CTexture2D();
-        }
-
-        if( surf->w != surf->h || ( surf->w & ( surf->w - 1 ) ) != 0 )
-        {
-            LOG_CHANNEL( "RESOURCE_MANAGER", "Warning! Loading non-power-of-two texture from " << path );
-        }
-
-        int width = surf->w;
-        int height = surf->h;
-        void *pixels = surf->pixels;
-
-        int bytesPerPixel = (int)surf->format->BytesPerPixel;
-        bool firstRed = ( surf->format->Rmask == 0x000000ff );
-        unsigned int pixelFormat;
-
-        if( bytesPerPixel == 4 )
-        {
-            if( firstRed )
-            {
-                pixelFormat = GL_RGBA;
-            }
-            else
-            {
-                pixelFormat = GL_BGRA;
-            }
-        }
-        else if( bytesPerPixel == 3 )
-        {
-            if( firstRed )
-            {
-                pixelFormat = GL_RGB;
-            }
-            else
-            {
-                pixelFormat = GL_BGR;
-            }
-        }
-        else if( bytesPerPixel == 2 )
-        {
-            pixelFormat = GL_RG;
-        }
-        else
-        {
-            pixelFormat = GL_RED;
-        }
-        
-        CTexture2D tex = loadTextureFromPixels( pixels, width, height, pixelFormat );
-        
-        SDL_FreeSurface( surf );
-
-        return tex;
-    }
-
-    CTexture2D loadTextureFromPixels( void *pixels, int width, int height, unsigned int pixelFormat )
-    {
-        unsigned int texID;
-
-        glGenTextures( 1, &texID );
-
-        glBindTexture( GL_TEXTURE_2D, texID );
-        
-        glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, pixels );
-
-        unsigned int err = glGetError();
-        if( err != GL_NO_ERROR )
-        {
-            LOG_CHANNEL( "RESOURCE_MANAGER", "Error occured while loading texture from pixels! Error:" );
-            LOG_CHANNEL( "RESOURCE_MANAGER", (char *)gluErrorString( err ) );
-            glDeleteTextures( 1, &texID );
-            texID = 0;
-        }
-
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
-        glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
-
-        glBindTexture( GL_TEXTURE_2D, 0 );
-
-        return CTexture2D( texID, width, height, pixelFormat );
-    }
-
-
-
     // ================== CLASS FUNCTIONS ==================
 
     CResourceManager::~CResourceManager() 
@@ -255,12 +161,6 @@ namespace chestnut
         {
             id = shader.getID();
             glDeleteProgram( id );
-        }
-
-        for( const auto& [ hash, texture ] : m_mapPathHashToTexture )
-        {
-            id = texture.getID();
-            glDeleteTextures( 1, &id );
         }
     }
 
@@ -285,12 +185,19 @@ namespace chestnut
 
     CTexture2D CResourceManager::loadTexture( const std::string& path ) 
     {
-        CTexture2D tex = loadTextureFromFile( path );
+        CTexture2D tex;
 
-        if( tex.getID() != 0 )
+        try
         {
+            std::shared_ptr<CTexture2DResource> resource = loadTextureResourceFromFile( path );
+            tex = CTexture2D( resource );
+
             size_t hash = strHash( path );
-            m_mapPathHashToTexture.insert( std::make_pair( hash, tex ) );
+            m_mapPathHashToTextureResource.insert( std::make_pair( hash, resource ) );
+        }
+        catch( const std::exception& e )
+        {
+            LOG_CHANNEL( "RESOURCE_MANAGER", e.what() );
         }
 
         return tex;

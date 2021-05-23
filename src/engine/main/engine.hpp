@@ -8,7 +8,7 @@
 #include "engine/ecs/systems/systems.hpp"
 #include "engine/misc/timers/auto_timer.hpp"
 #include "engine/misc/timers/locked_auto_timer.hpp"
-#include "engine/misc/resource_manager.hpp"
+#include "engine/resources/resource_manager.hpp"
 
 #include <vector>
 

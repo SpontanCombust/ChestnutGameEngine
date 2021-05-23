@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_RESOURCE_MANAGER_H__
 #define __CHESTNUT_RESOURCE_MANAGER_H__
 
+#include "texture2d_resource.hpp"
 #include "engine/graphics/shader_program.hpp"
 #include "engine/graphics/texture2d.hpp"
 
@@ -11,16 +12,11 @@ namespace chestnut
 {
     CShaderProgram loadShaderProgramFromFiles( const std::string& vertPath, const std::string& fragPath );
 
-    CTexture2D loadTextureFromFile( const std::string& path );
-
-    CTexture2D loadTextureFromPixels( void *pixels, int width, int height, unsigned int pixelFormat );
-
-
     class CResourceManager
     {
     private:
         std::unordered_map< size_t, CShaderProgram > m_mapPathHashToShader;
-        std::unordered_map< size_t, CTexture2D > m_mapPathHashToTexture;
+        std::unordered_map< size_t, std::shared_ptr<CTexture2DResource> > m_mapPathHashToTextureResource;
 
     public:
         ~CResourceManager();
