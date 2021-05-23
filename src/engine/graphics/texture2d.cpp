@@ -11,7 +11,7 @@ namespace chestnut
         m_clipRect = SRectangle( 0.f, 0.f, resource->width, resource->height );
     }
 
-    unsigned int CTexture2D::getID() const
+    GLuint CTexture2D::getID() const
     {
         return m_texResource->texID;
     }
@@ -35,7 +35,7 @@ namespace chestnut
         glBindTexture( GL_TEXTURE_2D, 0 );
     }
 
-    unsigned int CTexture2D::getPixelFormat() const
+    GLenum CTexture2D::getPixelFormat() const
     {
         return m_texResource->pixelFormat;
     }
@@ -60,13 +60,13 @@ namespace chestnut
         m_clipRect = rect;
     }
 
-    void CTexture2D::setFiltering( int minifyingFilter, int magnifyingFilter ) 
+    void CTexture2D::setFiltering( GLint minifyingFilter, GLint magnifyingFilter ) 
     {
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minifyingFilter );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter );
     }
 
-    void CTexture2D::setWrapping( int wrapS, int wrapT )
+    void CTexture2D::setWrapping( GLint wrapS, GLint wrapT )
     {
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT );

@@ -2,8 +2,9 @@
 #define __CHESTNUT_SPRITE_RENDERER_TEST_H__
 
 #include "engine/main/window.hpp"
+#include "engine/resources/shader_program_resource.hpp"
+#include "engine/resources/texture2d_resource.hpp"
 #include "engine/graphics/sprite_renderer.hpp"
-#include "engine/resources/resource_manager.hpp"
 
 #include <cassert>
 
@@ -17,9 +18,9 @@ namespace test
 
         assert( window.create( windowPropertiesDefault( 3, 3 ), "Sprite render test", 800, 600, 600, 400 ) );
 
-        CShaderProgram shader = loadShaderProgramFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
+        CShaderProgram shader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
         CSpriteRenderer renderer = CSpriteRenderer( shader );
-        CTexture2D tex = CTexture2D( loadTextureResourceFromFile( "../assets/images/awesomeface.png" ) );
+        CTexture2D tex( loadTextureResourceFromFile( "../assets/images/awesomeface.png" ) );
         CTexture2D texClipped = tex; texClipped.setClippingRect( {256, 256, 256, 256} );
         assert( tex.isValid() );
         CAutoTimer timer = CAutoTimer(0);

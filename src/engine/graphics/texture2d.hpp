@@ -17,13 +17,13 @@ namespace chestnut
         CTexture2D() = default;
         CTexture2D( std::shared_ptr<CTexture2DResource> resource );
 
-        unsigned int getID() const;
+        GLuint getID() const;
         bool isValid() const;
 
         void bind() const;
         void unbind() const;
 
-        unsigned int getPixelFormat() const;
+        GLenum getPixelFormat() const;
         int getWidth() const;
         int getHeight() const;
 
@@ -32,9 +32,9 @@ namespace chestnut
         // Coordinates and dimensions in pixels
         void setClippingRect( const SRectangle& rect );
 
-        void setFiltering( int minifyingFilter, int magnifyingFilter );
+        void setFiltering( GLint minifyingFilter, GLint magnifyingFilter );
 
-        void setWrapping( int wrapS, int wrapT );
+        void setWrapping( GLint wrapS, GLint wrapT );
     };   
 
 } // namespace chestnut

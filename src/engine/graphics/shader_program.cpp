@@ -5,29 +5,28 @@
 
 namespace chestnut
 {
-    CShaderProgram::CShaderProgram() 
+    CShaderProgram::CShaderProgram( std::shared_ptr<CShaderProgramResource> resource ) 
     {
-        m_programID = 0;
+        m_shaderResource = resource;
     }
 
-    CShaderProgram::CShaderProgram( unsigned int programID ) 
+    GLuint CShaderProgram::getID() const
     {
-        m_programID = programID;
-    }
-
-    unsigned int CShaderProgram::getID() const
-    {
-        return m_programID;
+        return m_shaderResource->programID;
     }
 
     bool CShaderProgram::isValid() const
     {
-        return m_programID != 0;
+        if( m_shaderResource && m_shaderResource->isValid() )
+        {
+            return true;
+        }
+        return false;
     }
 
     void CShaderProgram::bind()
     {
-        glUseProgram( m_programID );
+        glUseProgram( m_shaderResource->programID );
     }
 
     void CShaderProgram::unbind()
@@ -35,50 +34,52 @@ namespace chestnut
         glUseProgram(0);
     }
 
-    int CShaderProgram::getAttributeLocation( std::string attrName ) 
+    GLint CShaderProgram::getAttributeLocation( std::string attrName ) 
     {
         GLint loc;
+        auto& attrMap = m_shaderResource->mapAttributeNameToLocation;
 
-        if( m_mapVarLocations.find( attrName ) != m_mapVarLocations.end() )
+        if( attrMap.find( attrName ) != attrMap.end() )
         {
-            loc = m_mapVarLocations[ attrName ];
+            loc = attrMap[ attrName ];
         }
         else
         {
-            loc = glGetAttribLocation( m_programID, attrName.c_str() );
+            loc = glGetAttribLocation( m_shaderResource->programID, attrName.c_str() );
 
             if( loc == -1 )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM", "Couldn't find attribute with name " << attrName << " in program " << m_programID );
+                LOG_CHANNEL( "SHADER_PROGRAM", "Couldn't find attribute with name " << attrName << " in program " << m_shaderResource->programID );
             }
             else
             {
-                m_mapVarLocations[ attrName ] = loc;   
+                attrMap[ attrName ] = loc;   
             }
         }
 
         return loc;
     }
 
-    int CShaderProgram::getUniformLocation( std::string uniformName ) 
+    GLint CShaderProgram::getUniformLocation( std::string uniformName ) 
     {
         GLint loc;
+        auto& unifMap = m_shaderResource->mapUniformNameToLocation;
 
-        if( m_mapVarLocations.find( uniformName ) != m_mapVarLocations.end() )
+        if( unifMap.find( uniformName ) != unifMap.end() )
         {
-            loc = m_mapVarLocations[ uniformName ];
+            loc = unifMap[ uniformName ];
         }
         else
         {
-            loc = glGetUniformLocation( m_programID, uniformName.c_str() );
+            loc = glGetUniformLocation( m_shaderResource->programID, uniformName.c_str() );
 
             if( loc == -1 )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM", "Couldn't find uniform with name " << uniformName << " in program " << m_programID );
+                LOG_CHANNEL( "SHADER_PROGRAM", "Couldn't find uniform with name " << uniformName << " in program " << m_shaderResource->programID );
             }
             else
             {
-                m_mapVarLocations[ uniformName ] = loc;   
+                unifMap[ uniformName ] = loc;   
             }
         }
         
@@ -87,7 +88,7 @@ namespace chestnut
 
     bool CShaderProgram::setInt( const std::string& unifName, int val ) 
     {
-        int loc = getUniformLocation( unifName );
+        GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
             glUniform1i( loc, val );
@@ -101,7 +102,7 @@ namespace chestnut
 
     bool CShaderProgram::setVector2f( const std::string& unifName, const vec2f& val ) 
     {
-        int loc = getUniformLocation( unifName );
+        GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
             glUniform2fv( loc, 1, val.data );
@@ -115,7 +116,7 @@ namespace chestnut
 
     bool CShaderProgram::setVector3f( const std::string& unifName, const vec3f& val ) 
     {
-        int loc = getUniformLocation( unifName );
+        GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
             glUniform3fv( loc, 1, val.data );
@@ -129,7 +130,7 @@ namespace chestnut
 
     bool CShaderProgram::setVector4f( const std::string& unifName, const vec4f& val ) 
     {
-        int loc = getUniformLocation( unifName );
+        GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
             glUniform4fv( loc, 1, val.data );
@@ -143,7 +144,7 @@ namespace chestnut
 
     bool CShaderProgram::setMatrix3f( const std::string& unifName, const mat3f& val ) 
     {
-        int loc = getUniformLocation( unifName );
+        GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
             glUniformMatrix3fv( loc, 1, GL_FALSE, val.data );
@@ -157,7 +158,7 @@ namespace chestnut
 
     bool CShaderProgram::setMatrix4f( const std::string& unifName, const mat4f& val ) 
     {
-        int loc = getUniformLocation( unifName );
+        GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
             glUniformMatrix4fv( loc, 1, GL_FALSE, val.data ); 
@@ -169,32 +170,32 @@ namespace chestnut
         }
     }
 
-    void CShaderProgram::setInt( int loc, int val ) 
+    void CShaderProgram::setInt( GLint loc, int val ) 
     {
         glUniform1i( loc, val );
     }
 
-    void CShaderProgram::setVector2f( int loc, const vec2f& val ) 
+    void CShaderProgram::setVector2f( GLint loc, const vec2f& val ) 
     {
         glUniform2fv( loc, 1, val.data );
     }
 
-    void CShaderProgram::setVector3f( int loc, const vec3f& val ) 
+    void CShaderProgram::setVector3f( GLint loc, const vec3f& val ) 
     {
         glUniform3fv( loc, 1, val.data );
     }
 
-    void CShaderProgram::setVector4f( int loc, const vec4f& val ) 
+    void CShaderProgram::setVector4f( GLint loc, const vec4f& val ) 
     {
         glUniform4fv( loc, 1, val.data );
     }
 
-    void CShaderProgram::setMatrix3f( int loc, const mat3f& val ) 
+    void CShaderProgram::setMatrix3f( GLint loc, const mat3f& val ) 
     {
         glUniformMatrix3fv( loc, 1, GL_FALSE, val.data );
     }
 
-    void CShaderProgram::setMatrix4f( int loc, const mat4f& val ) 
+    void CShaderProgram::setMatrix4f( GLint loc, const mat4f& val ) 
     {
         glUniformMatrix4fv( loc, 1, GL_FALSE, val.data );
     }

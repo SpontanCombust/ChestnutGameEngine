@@ -6,6 +6,7 @@
 #include "engine/maths/vector4.hpp"
 #include "engine/maths/matrix3.hpp"
 #include "engine/maths/matrix4.hpp"
+#include "engine/resources/shader_program_resource.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -15,25 +16,22 @@ namespace chestnut
     class CShaderProgram
     {
     private:
-        unsigned int m_programID;
-
-        std::unordered_map< std::string, int > m_mapVarLocations;
+        std::shared_ptr<CShaderProgramResource> m_shaderResource;
 
     public:
-        CShaderProgram();
-        CShaderProgram( unsigned int programID );
-        ~CShaderProgram() = default;
+        CShaderProgram() = default;
+        CShaderProgram( std::shared_ptr<CShaderProgramResource> resource );
 
-        unsigned int getID() const;
+        GLuint getID() const;
         bool isValid() const;
         
         void bind();
         void unbind();
 
         // Returns -1 if doesn't find one
-        int getAttributeLocation( std::string attrName );
+        GLint getAttributeLocation( std::string attrName );
         // Returns -1 if doesn't find one
-        int getUniformLocation( std::string uniformName );
+        GLint getUniformLocation( std::string uniformName );
 
         bool setInt( const std::string& unifName, int val );
         bool setVector2f( const std::string& unifName, const vec2f& val );
@@ -42,12 +40,12 @@ namespace chestnut
         bool setMatrix3f( const std::string& unifName, const mat3f& val );
         bool setMatrix4f( const std::string& unifName, const mat4f& val );
 
-        void setInt( int loc, int val );
-        void setVector2f( int loc, const vec2f& val );
-        void setVector3f( int loc, const vec3f& val );
-        void setVector4f( int loc, const vec4f& val );
-        void setMatrix3f( int loc, const mat3f& val );
-        void setMatrix4f( int loc, const mat4f& val );
+        void setInt( GLint loc, int val );
+        void setVector2f( GLint loc, const vec2f& val );
+        void setVector3f( GLint loc, const vec3f& val );
+        void setVector4f( GLint loc, const vec4f& val );
+        void setMatrix3f( GLint loc, const mat3f& val );
+        void setMatrix4f( GLint loc, const mat4f& val );
     };
     
 } // namespace chestnut
