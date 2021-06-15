@@ -61,7 +61,9 @@
         "ios": "cpp",
         "queue": "cpp",
         "cstdbool": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "ctime": "cpp",
+        "iomanip": "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__"
 }
