@@ -45,6 +45,14 @@ namespace chestnut
             LOG_CHANNEL( "WINDOW", IMG_GetError() );
             SDL_Quit();
         }
+
+        if( TTF_Init() < 0 )
+        {
+            LOG_CHANNEL( "WINDOW", "SDL_ttf failed to initialize!" );
+            LOG_CHANNEL( "WINDOW", TTF_GetError() );
+            IMG_Quit();
+            SDL_Quit();
+        }
     }
 
     CWindow::~CWindow() 
@@ -54,6 +62,7 @@ namespace chestnut
             destroy();
         }
         
+        TTF_Quit();
         IMG_Quit();
         SDL_Quit();
     }

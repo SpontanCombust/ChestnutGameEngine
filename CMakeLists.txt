@@ -20,8 +20,8 @@ target_link_libraries(${PROJECT_NAME} SDL2::Main)
 find_package(SDL2_image REQUIRED)
 target_link_libraries(${PROJECT_NAME} SDL2::Image)
 
-# find_package(SDL2_ttf REQUIRED)
-# target_link_libraries(${PROJECT_NAME} SDL2::TTF)
+find_package(SDL2_ttf REQUIRED)
+target_link_libraries(${PROJECT_NAME} SDL2::TTF)
 
 # find_package(SDL2_mixer REQUIRED)
 # target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
