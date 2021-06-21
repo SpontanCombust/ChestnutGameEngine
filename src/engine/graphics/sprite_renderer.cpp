@@ -16,7 +16,7 @@ namespace chestnut
     {
         m_shader = shader;
         assert( m_shader.isValid() );
-        assert( setShaderVariableNames( "avPos", "avUVPos", "aiOrigin", "aiTransl", "aiScale", "aiRot", "aiClipRect", "uTexSize", "uView", "uProjection" ) );
+        assert( setShaderVariableNames( "avPos", "avUVPos", "aiOrigin", "aiTransl", "aiScale", "aiRot", "aiClipRect", "aiTint", "aiTintFactor", "uTexSize", "uView", "uProjection" ) );
         
         m_shader.bind();
 
@@ -52,22 +52,26 @@ namespace chestnut
                                                   const std::string& attrInstScale,
                                                   const std::string& attrInstRot,
                                                   const std::string& attrInstClipRect,
+                                                  const std::string& attrInstTint,
+                                                  const std::string& attrInstTintFactor,
                                                   const std::string& unifTexSize,
                                                   const std::string& unifView,
                                                   const std::string& unifProjection )
     {
-        m_attrVertPosLoc = m_shader.getAttributeLocation( attrVertPos );
-        m_attrVertUVPosLoc = m_shader.getAttributeLocation( attrVertUVPos );
+        m_attrVertPosLoc        = m_shader.getAttributeLocation( attrVertPos );
+        m_attrVertUVPosLoc      = m_shader.getAttributeLocation( attrVertUVPos );
 
-        m_attrInstOriginLoc = m_shader.getAttributeLocation( attrInstOrigin );
-        m_attrInstTranslLoc = m_shader.getAttributeLocation( attrInstTransl );
-        m_attrInstScaleLoc = m_shader.getAttributeLocation( attrInstScale );
-        m_attrInstRotLoc = m_shader.getAttributeLocation( attrInstRot );
-        m_attrInstClipRectLoc = m_shader.getAttributeLocation( attrInstClipRect );
+        m_attrInstOriginLoc     = m_shader.getAttributeLocation( attrInstOrigin );
+        m_attrInstTranslLoc     = m_shader.getAttributeLocation( attrInstTransl );
+        m_attrInstScaleLoc      = m_shader.getAttributeLocation( attrInstScale );
+        m_attrInstRotLoc        = m_shader.getAttributeLocation( attrInstRot );
+        m_attrInstClipRectLoc   = m_shader.getAttributeLocation( attrInstClipRect );
+        m_attrInstTint          = m_shader.getAttributeLocation( attrInstTint );
+        m_attrInstTintFactor    = m_shader.getAttributeLocation( attrInstTintFactor );
 
-        m_unifTexSizeLoc = m_shader.getUniformLocation( unifTexSize );
-        m_unifViewLoc = m_shader.getUniformLocation( unifView );
-        m_unifProjectionLoc = m_shader.getUniformLocation( unifProjection );
+        m_unifTexSizeLoc        = m_shader.getUniformLocation( unifTexSize );
+        m_unifViewLoc           = m_shader.getUniformLocation( unifView );
+        m_unifProjectionLoc     = m_shader.getUniformLocation( unifProjection );
 
         if(    m_attrVertPosLoc         == -1 
             || m_attrVertUVPosLoc       == -1
@@ -76,6 +80,8 @@ namespace chestnut
             || m_attrInstScaleLoc       == -1 
             || m_attrInstRotLoc         == -1
             || m_attrInstClipRectLoc    == -1
+            || m_attrInstTint           == -1
+            || m_attrInstTintFactor     == -1
             || m_unifTexSizeLoc         == -1
             || m_unifViewLoc            == -1
             || m_unifProjectionLoc      == -1 )
@@ -124,24 +130,32 @@ namespace chestnut
             glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
 
             glEnableVertexAttribArray( m_attrInstOriginLoc );
-            glVertexAttribPointer( m_attrInstOriginLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, origin ) );
+            glVertexAttribPointer( m_attrInstOriginLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, origin ) );
             glVertexAttribDivisor( m_attrInstOriginLoc, 1 );
 
             glEnableVertexAttribArray( m_attrInstTranslLoc );
-            glVertexAttribPointer( m_attrInstTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, transl ) );
+            glVertexAttribPointer( m_attrInstTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, transl ) );
             glVertexAttribDivisor( m_attrInstTranslLoc, 1 );
 
             glEnableVertexAttribArray( m_attrInstScaleLoc );
-            glVertexAttribPointer( m_attrInstScaleLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, scale ) );
+            glVertexAttribPointer( m_attrInstScaleLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, scale ) );
             glVertexAttribDivisor( m_attrInstScaleLoc, 1 );
 
             glEnableVertexAttribArray( m_attrInstRotLoc );
-            glVertexAttribPointer( m_attrInstRotLoc, 1, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, rot ) );
+            glVertexAttribPointer( m_attrInstRotLoc, 1, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, rot ) );
             glVertexAttribDivisor( m_attrInstRotLoc, 1 );
 
             glEnableVertexAttribArray( m_attrInstClipRectLoc );
-            glVertexAttribPointer( m_attrInstClipRectLoc, 4, GL_FLOAT, GL_FALSE, sizeof( SSpriteInstance ), (void *)offsetof( SSpriteInstance, clipRect ) );
+            glVertexAttribPointer( m_attrInstClipRectLoc, 4, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, clipRect ) );
             glVertexAttribDivisor( m_attrInstClipRectLoc, 1 );
+
+            glEnableVertexAttribArray( m_attrInstTint );
+            glVertexAttribPointer( m_attrInstTint, 3, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, tint ) );
+            glVertexAttribDivisor( m_attrInstTint, 1 );
+
+            glEnableVertexAttribArray( m_attrInstTintFactor );
+            glVertexAttribPointer( m_attrInstTintFactor, 1, GL_FLOAT, GL_FALSE, sizeof( SSpriteRender_Instance ), (void *)offsetof( SSpriteRender_Instance, tintFactor ) );
+            glVertexAttribDivisor( m_attrInstTintFactor, 1 );
 
         glBindVertexArray(0);
 
@@ -171,7 +185,7 @@ namespace chestnut
         
         // contents of instance VBO will be changed every tick with glBufferSubData, so dynamic draw and null a data pointer
         glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
-        glBufferData( GL_ARRAY_BUFFER, sizeof( SSpriteInstance ) * targetSpriteCapacity, nullptr, GL_DYNAMIC_DRAW ); // 4 vertices per sprite
+        glBufferData( GL_ARRAY_BUFFER, sizeof( SSpriteRender_Instance ) * targetSpriteCapacity, nullptr, GL_DYNAMIC_DRAW ); // 4 vertices per sprite
 
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
@@ -184,11 +198,7 @@ namespace chestnut
 
     void CSpriteRenderer::clear() 
     {
-        for( auto& [ id, vec ] : m_mapTexIDToVecInstances )
-        {
-            vec.clear();
-        }
-
+        m_mapTexIDToInstanceGroup.clear();
         m_vecBatches.clear();
     }
 
@@ -203,25 +213,27 @@ namespace chestnut
         h = texture.getHeight();
         rect = texture.getClippingRect();
 
-        SSpriteInstance instance;
+        SSpriteRender_Instance instance;
         instance.origin = origin;
         instance.transl = position;
         instance.scale = scale;
         instance.rot = (float)rotation;
-        instance.clipRect = vec4f( rect.x, rect.y, rect.w, rect.h );      
+        instance.clipRect = vec4f( rect.x, rect.y, rect.w, rect.h );    
+        instance.tint = texture.getTint();
+        instance.tintFactor = texture.getTintFactor();  
 
-        auto& vec = m_mapTexIDToVecInstances[id];
-        vec.push_back( instance );
-
-        m_mapTexIDToSize[id] = vec2f( (float)w, (float)h );
+        auto& group = m_mapTexIDToInstanceGroup[id];
+        group.texID = id;
+        group.texSize = { (float)w, (float)h };
+        group.vecInstances.push_back( instance );
     }
 
     void CSpriteRenderer::makeBatches() 
     {
         GLsizei spriteCount = 0;
-        for( const auto& [ id, vec ] : m_mapTexIDToVecInstances )
+        for( const auto& [ id, group ] : m_mapTexIDToInstanceGroup )
         {
-            spriteCount += vec.size();
+            spriteCount += group.vecInstances.size();
         }
 
         if( spriteCount > m_spriteCapacity )
@@ -229,23 +241,24 @@ namespace chestnut
             reserveBufferSpace( spriteCount );
         }
 
-        SSpriteBatch batch;
-        size_t instanceSizeBytes;
         GLsizei instanceAmount;
+        size_t instanceSizeBytes;
         GLuint instanceOffset;
         size_t instanceOffsetBytes;
+        SSpriteRender_Batch batch;
 
         instanceOffset = 0;
         instanceOffsetBytes = 0;
         glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
-        for( const auto& [ id, vec ] : m_mapTexIDToVecInstances )
+        for( const auto& [ id, group ] : m_mapTexIDToInstanceGroup )
         {
-            instanceAmount = vec.size();
-            instanceSizeBytes = instanceAmount * sizeof( SSpriteInstance );
+            instanceAmount = group.vecInstances.size();
+            instanceSizeBytes = instanceAmount * sizeof( SSpriteRender_Instance );
 
-            glBufferSubData( GL_ARRAY_BUFFER, (GLintptr)instanceOffsetBytes, (GLsizeiptr)instanceSizeBytes, (void *)vec.data() );
+            glBufferSubData( GL_ARRAY_BUFFER, (GLintptr)instanceOffsetBytes, (GLsizeiptr)instanceSizeBytes, (void *)group.vecInstances.data() );
 
-            batch.texID = id;
+            batch.texID = group.texID;
+            batch.texSize = group.texSize;
             batch.instanceOffset = instanceOffset;
             batch.instanceAmount = instanceAmount;
             m_vecBatches.push_back( batch );
@@ -260,10 +273,10 @@ namespace chestnut
         makeBatches();
 
         glBindVertexArray( m_vao );
-        for( const SSpriteBatch& batch : m_vecBatches )
+        for( const SSpriteRender_Batch& batch : m_vecBatches )
         {
             glBindTexture( GL_TEXTURE_2D, batch.texID );
-            m_shader.setVector2f( m_unifTexSizeLoc, m_mapTexIDToSize[ batch.texID ] );
+            m_shader.setVector2f( m_unifTexSizeLoc, batch.texSize );
             glDrawElementsInstancedBaseInstance( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, batch.instanceAmount, batch.instanceOffset );
         }
         glBindVertexArray(0);

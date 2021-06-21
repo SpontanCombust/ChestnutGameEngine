@@ -10,11 +10,15 @@ in vec2 aiTransl;
 in vec2 aiScale;
 in float aiRot;
 in vec4 aiClipRect; // x, y, w, h in pixels
+in vec3 aiTint;
+in float aiTintFactor;
 
 uniform mat4 uView;
 uniform mat4 uProjection;
 
 out vec2 uv;
+out vec3 tint;
+out float tintFactor;
 
 mat4 mat4Translation( vec2 t )
 {
@@ -80,4 +84,6 @@ void main()
 
     gl_Position = uProjection * uView * makeModel() * vec4( avPos, 0.0, 1.0 );
     uv = uvTransf.xy;
+    tint = aiTint;
+    tintFactor = aiTintFactor;
 }

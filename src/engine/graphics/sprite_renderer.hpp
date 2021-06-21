@@ -16,26 +16,35 @@ namespace chestnut
 
     class CSpriteRenderer
     {
-        struct SSpriteInstance
+        struct SSpriteRender_Instance
         {
             vec2f origin;
             vec2f transl;
             vec2f scale;
             float rot;
             vec4f clipRect;
+            vec3f tint;
+            float tintFactor;
         };
 
-        struct SSpriteBatch
+        struct SSpriteRender_InstanceGroup
         {
             GLuint texID;
+            vec2f texSize;
+            std::vector< SSpriteRender_Instance > vecInstances;
+        };
+
+        struct SSpriteRender_Batch
+        {
+            GLuint texID;
+            vec2f texSize;
             GLsizei instanceAmount;
             GLuint instanceOffset;
         };
         
     private:
-        std::unordered_map< GLuint, std::vector< SSpriteInstance > > m_mapTexIDToVecInstances;
-        std::unordered_map< GLuint, vec2f > m_mapTexIDToSize;
-        std::vector< SSpriteBatch > m_vecBatches;
+        std::unordered_map< GLuint, SSpriteRender_InstanceGroup > m_mapTexIDToInstanceGroup;
+        std::vector< SSpriteRender_Batch > m_vecBatches;
 
         GLuint m_vao;
         GLuint m_vboVert;
@@ -59,6 +68,8 @@ namespace chestnut
         GLint m_attrInstScaleLoc;
         GLint m_attrInstRotLoc;
         GLint m_attrInstClipRectLoc;
+        GLint m_attrInstTint;
+        GLint m_attrInstTintFactor;
 
 
     public:
@@ -88,8 +99,10 @@ namespace chestnut
                                      const std::string& attrInstTransl,
                                      const std::string& attrInstScale,
                                      const std::string& attrInstRot,
-                                     const std::string& attrInstUVTransl,
-                                     const std::string& attrInstUVScale,
+                                     const std::string& attrInstClipRect,
+                                     const std::string& attrInstTint,
+                                     const std::string& attrInstTintFactor,
+                                     const std::string& unifTexSize,
                                      const std::string& unifView,
                                      const std::string& unifProjection );
 

@@ -4,11 +4,20 @@
 
 namespace chestnut 
 {
+    CTexture2D::CTexture2D() 
+    {
+        m_clipRect = { 0, 0, 0, 0 };
+        m_tint = { 1.f, 1.f, 1.f };
+        m_tintFactor = 0.f;
+    }
+
     CTexture2D::CTexture2D( std::shared_ptr<CTexture2DResource> resource ) 
     {
         m_texResource = resource;
         
-        m_clipRect = SRectangle( 0.f, 0.f, resource->width, resource->height );
+        m_clipRect = { 0.f, 0.f, (float)resource->width, (float)resource->height };
+        m_tint = { 1.f, 1.f, 1.f };
+        m_tintFactor = 0.f;
     }
 
     GLuint CTexture2D::getID() const
@@ -50,6 +59,11 @@ namespace chestnut
         return m_texResource->height;
     }
 
+    vec2i CTexture2D::getSize() const
+    {
+        return { m_texResource->width, m_texResource->height };
+    }
+
     SRectangle CTexture2D::getClippingRect() const
     {
         return m_clipRect;
@@ -58,6 +72,26 @@ namespace chestnut
     void CTexture2D::setClippingRect( const SRectangle& rect ) 
     {
         m_clipRect = rect;
+    }
+
+    const vec3f& CTexture2D::getTint() const
+    {
+        return m_tint;
+    }
+
+    void CTexture2D::setTint( const vec3f& tint ) 
+    {
+        m_tint = tint;
+    }
+
+    float CTexture2D::getTintFactor() const
+    {
+        return m_tintFactor;
+    }
+
+    void CTexture2D::setTintFactor( float factor ) 
+    {
+        m_tintFactor = factor;
     }
 
     void CTexture2D::setFiltering( GLint minifyingFilter, GLint magnifyingFilter ) 
