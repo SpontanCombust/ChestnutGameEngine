@@ -28,9 +28,11 @@ namespace chestnut
         void bind();
         void unbind();
 
-        // Returns -1 if doesn't find one
+        // Requires shader to be bound
+        // Returns -1 if doesn't find the location
         GLint getAttributeLocation( std::string attrName );
-        // Returns -1 if doesn't find one
+        // Requires shader to be bound
+        // Returns -1 if doesn't find the location
         GLint getUniformLocation( std::string uniformName );
 
         bool setInt( const std::string& unifName, int val );

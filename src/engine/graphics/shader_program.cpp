@@ -36,54 +36,12 @@ namespace chestnut
 
     GLint CShaderProgram::getAttributeLocation( std::string attrName ) 
     {
-        GLint loc;
-        auto& attrMap = m_shaderResource->mapAttributeNameToLocation;
-
-        if( attrMap.find( attrName ) != attrMap.end() )
-        {
-            loc = attrMap[ attrName ];
-        }
-        else
-        {
-            loc = glGetAttribLocation( m_shaderResource->programID, attrName.c_str() );
-
-            if( loc == -1 )
-            {
-                LOG_CHANNEL( "SHADER_PROGRAM", "Couldn't find attribute with name " << attrName << " in program " << m_shaderResource->programID );
-            }
-            else
-            {
-                attrMap[ attrName ] = loc;   
-            }
-        }
-
-        return loc;
+        return m_shaderResource->getAttributeLocation( attrName );
     }
 
     GLint CShaderProgram::getUniformLocation( std::string uniformName ) 
     {
-        GLint loc;
-        auto& unifMap = m_shaderResource->mapUniformNameToLocation;
-
-        if( unifMap.find( uniformName ) != unifMap.end() )
-        {
-            loc = unifMap[ uniformName ];
-        }
-        else
-        {
-            loc = glGetUniformLocation( m_shaderResource->programID, uniformName.c_str() );
-
-            if( loc == -1 )
-            {
-                LOG_CHANNEL( "SHADER_PROGRAM", "Couldn't find uniform with name " << uniformName << " in program " << m_shaderResource->programID );
-            }
-            else
-            {
-                unifMap[ uniformName ] = loc;   
-            }
-        }
-        
-        return loc;
+        return m_shaderResource->getUniformLocation( uniformName );
     }
 
     bool CShaderProgram::setInt( const std::string& unifName, int val ) 

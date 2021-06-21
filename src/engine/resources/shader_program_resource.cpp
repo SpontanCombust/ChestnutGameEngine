@@ -8,35 +8,6 @@
 
 namespace chestnut
 {    
-    CShaderProgramResource::CShaderProgramResource() 
-    {
-        this->programID = 0;
-    }
-
-    CShaderProgramResource::CShaderProgramResource( GLuint programID ) 
-    {
-        this->programID = programID;
-    }
-
-    bool CShaderProgramResource::isValid() const
-    {
-        if( programID != 0 )
-        {
-            return true;
-        }
-        return false;
-    }
-
-    CShaderProgramResource::~CShaderProgramResource() 
-    {
-        if( isValid() )
-        {
-            glDeleteProgram( programID );
-        }
-    }
-
-
-
     bool checkShaderCompiled( GLuint shader, std::string& msgBuff )
     {
         GLint compiled;
@@ -135,7 +106,8 @@ namespace chestnut
         return shader;
     }
 
-    std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath )
+    // Throws exception if fails to load the shader program
+    GLuint loadOpenGLShaderProgramFromFiles( const std::string& vertPath, const std::string& fragPath )
     {
         GLuint program;
         GLuint vertShader;
@@ -174,6 +146,99 @@ namespace chestnut
 
         glDeleteShader( fragShader );
         glDeleteShader( vertShader );
+
+        return program;
+    }
+
+    
+
+
+
+
+    CShaderProgramResource::CShaderProgramResource() 
+    {
+        this->programID = 0;
+    }
+
+    CShaderProgramResource::CShaderProgramResource( GLuint programID ) 
+    {
+        this->programID = programID;
+    }
+
+    bool CShaderProgramResource::isValid() const
+    {
+        if( programID != 0 )
+        {
+            return true;
+        }
+        return false;
+    }
+
+    CShaderProgramResource::~CShaderProgramResource() 
+    {
+        if( isValid() )
+        {
+            glDeleteProgram( programID );
+        }
+    }
+
+    GLint CShaderProgramResource::getAttributeLocation( std::string attrName ) 
+    {
+        GLint loc;
+
+        if( mapAttributeNameToLocation.find( attrName ) != mapAttributeNameToLocation.end() )
+        {
+            loc = mapAttributeNameToLocation[ attrName ];
+        }
+        else
+        {
+            loc = glGetAttribLocation( programID, attrName.c_str() );
+
+            if( loc == -1 )
+            {
+                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find attribute with name " << attrName << " in program " << programID );
+            }
+            else
+            {
+                mapAttributeNameToLocation[ attrName ] = loc;   
+            }
+        }
+
+        return loc;
+    }
+
+    GLint CShaderProgramResource::getUniformLocation( std::string uniformName ) 
+    {
+        GLint loc;
+
+        if( mapUniformNameToLocation.find( uniformName ) != mapUniformNameToLocation.end() )
+        {
+            loc = mapUniformNameToLocation[ uniformName ];
+        }
+        else
+        {
+            loc = glGetUniformLocation( programID, uniformName.c_str() );
+
+            if( loc == -1 )
+            {
+                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find uniform with name " << uniformName << " in program " << programID );
+            }
+            else
+            {
+                mapUniformNameToLocation[ uniformName ] = loc;   
+            }
+        }
+        
+        return loc;
+    }
+
+
+
+
+    std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath )
+    {
+        // let the eventual exception propagate
+        GLuint program = loadOpenGLShaderProgramFromFiles( vertPath, fragPath );
 
         return std::make_shared<CShaderProgramResource>( program );
     }
