@@ -8,7 +8,7 @@ namespace chestnut
 {
     class CTexture2D
     {
-    private:
+    protected:
         std::shared_ptr<CTexture2DResource> m_texResource;
 
         SRectangle m_clipRect;
