@@ -19,8 +19,13 @@
 #include "engine/memory/multi_type_dynamic_memory_pool.hpp"
 
 #include "engine/graphics/shader_program.hpp"
-#include "engine/graphics/sprite_renderer.hpp"
 #include "engine/graphics/texture2d.hpp"
+#include "engine/graphics/map_sprite_sheet.hpp"
+#include "engine/graphics/sprite_renderer.hpp"
+#include "engine/graphics/colored_polygon2d.hpp"
+#include "engine/graphics/colored_polygon2d_renderer.hpp"
+#include "engine/graphics/text.hpp"
+#include "engine/graphics/text_renderer.hpp"
 
 #include "engine/misc/timers/auto_timer.hpp"
 #include "engine/misc/timers/locked_auto_timer.hpp"
@@ -28,7 +33,11 @@
 #include "engine/misc/timers/locked_manual_timer.hpp"
 #include "engine/misc/exception.hpp"
 #include "engine/misc/tindex.hpp"
-#include "engine/misc/resource_manager.hpp"
+
+#include "engine/resources/shader_program_resource.hpp"
+#include "engine/resources/texture2d_resource.hpp"
+#include "engine/resources/font_resource.hpp"
+#include "engine/resources/resource_manager.hpp"
 
 #include "engine/event_system/events/events.hpp"
 #include "engine/event_system/event_helpers/event_constraint_functor_creators.hpp"

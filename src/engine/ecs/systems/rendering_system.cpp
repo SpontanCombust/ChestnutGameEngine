@@ -9,7 +9,7 @@ namespace chestnut
         CShaderProgram shader;
         mat4f projection = matMakeOrthographic<float>( 0.f, theWindow.getWidth(), theWindow.getHeight(), 0.f, 1.f, -1.f );
 
-        shader = theResourceManager.loadShaderProgram( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
+        shader = theResourceManager.getShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
         m_spriteRenderer = new CSpriteRenderer( shader );
 
         m_spriteRenderer->bindShader();
@@ -17,7 +17,7 @@ namespace chestnut
         m_spriteRenderer->setProjectionMatrix( projection );
 
 
-        shader = theResourceManager.loadShaderProgram( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" );
+        shader = theResourceManager.getShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" );
         m_polygonRenderer = new CColoredPolygon2DRenderer( shader );
 
         m_polygonRenderer->bindShader();

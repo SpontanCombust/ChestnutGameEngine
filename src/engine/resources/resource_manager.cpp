@@ -1,7 +1,5 @@
 #include "resource_manager.hpp"
 
-#include "engine/debug/debug.hpp"
-
 namespace chestnut
 {
     size_t CResourceManager::strHash(const std::string& str) 
@@ -9,45 +7,69 @@ namespace chestnut
         return std::hash< std::string >()( str );
     }
 
-    CShaderProgram CResourceManager::loadShaderProgram( const std::string& vertPath, const std::string& fragPath ) 
+    std::shared_ptr<CShaderProgramResource> CResourceManager::getShaderProgramResource( const std::string& vertPath, const std::string& fragPath ) 
     {
-        CShaderProgram prog;
+        std::shared_ptr<CShaderProgramResource> resource;
 
-        try
-        {
-            std::shared_ptr<CShaderProgramResource> resource = loadShaderProgramResourceFromFiles( vertPath, fragPath );
-            prog = CShaderProgram( resource );
+        // a hash created from 2 other hashes (by using XOR)
+        size_t hash = strHash( vertPath ) ^ strHash( fragPath );
 
-            // a hash created from 2 other hashes (by using XOR)
-            size_t hash = strHash( vertPath ) ^ strHash( fragPath );        
-            m_mapPathHashToShaderResource.insert( std::make_pair( hash, resource ) );
-        }
-        catch(const std::exception& e)
+        auto it = m_mapPathHashToShaderResource.find( hash );
+        auto end = m_mapPathHashToShaderResource.end();
+        if( it != end )
         {
-            LOG_CHANNEL( "RESOURCE_MANAGER", e.what() );
+            resource = it->second;
         }
-        
-        return prog;
+        else
+        {
+            // let the eventual exception propagate
+            resource = loadShaderProgramResourceFromFiles( vertPath, fragPath );
+            m_mapPathHashToShaderResource[ hash ] = resource;
+        }
+
+        return resource;
     }
 
-    CTexture2D CResourceManager::loadTexture( const std::string& path ) 
+    std::shared_ptr<CTexture2DResource> CResourceManager::getTexture2DResource( const std::string& path ) 
     {
-        CTexture2D tex;
+        std::shared_ptr<CTexture2DResource> resource;
 
-        try
+        size_t hash = strHash( path );
+
+        auto it = m_mapPathHashToTextureResource.find( hash );
+        auto end = m_mapPathHashToTextureResource.end();
+        if( it != end )
         {
-            std::shared_ptr<CTexture2DResource> resource = loadTextureResourceFromFile( path );
-            tex = CTexture2D( resource );
-
-            size_t hash = strHash( path );
-            m_mapPathHashToTextureResource.insert( std::make_pair( hash, resource ) );
+            resource = it->second;
         }
-        catch( const std::exception& e )
+        else
         {
-            LOG_CHANNEL( "RESOURCE_MANAGER", e.what() );
+            resource = loadTexture2DResourceFromFile( path );
+            m_mapPathHashToTextureResource[ hash ] = resource;
+        }
+     
+        return resource;
+    }
+
+    std::shared_ptr<CFontResource> CResourceManager::getFontResource( const std::string& path ) 
+    {
+        std::shared_ptr<CFontResource> resource;
+
+        size_t hash = strHash( path );
+
+        auto it = m_mapPathHashToFontResource.find( hash );
+        auto end = m_mapPathHashToFontResource.end();
+        if( it != end )
+        {
+            resource = it->second;
+        }
+        else
+        {
+            resource = loadFontResourceFromFile( path );
+            m_mapPathHashToFontResource[ hash ] = resource;
         }
 
-        return tex;
+        return resource;
     }
 
 } // namespace chestnut
