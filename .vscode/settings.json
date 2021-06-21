@@ -63,7 +63,8 @@
         "cstdbool": "cpp",
         "cstring": "cpp",
         "ctime": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "map": "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__"
 }
