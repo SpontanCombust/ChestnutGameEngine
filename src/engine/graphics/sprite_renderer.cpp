@@ -237,12 +237,12 @@ namespace chestnut
 
         instanceOffset = 0;
         instanceOffsetBytes = 0;
+        glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
         for( const auto& [ id, vec ] : m_mapTexIDToVecInstances )
         {
-            instanceAmount = vec.size(); // 6 indices per 4 vertices
+            instanceAmount = vec.size();
             instanceSizeBytes = instanceAmount * sizeof( SSpriteInstance );
 
-            glBindBuffer( GL_ARRAY_BUFFER, m_vboInst );
             glBufferSubData( GL_ARRAY_BUFFER, (GLintptr)instanceOffsetBytes, (GLsizeiptr)instanceSizeBytes, (void *)vec.data() );
 
             batch.texID = id;

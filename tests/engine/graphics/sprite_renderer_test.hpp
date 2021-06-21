@@ -20,7 +20,7 @@ namespace test
 
         CShaderProgram shader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
         CSpriteRenderer renderer = CSpriteRenderer( shader );
-        CTexture2D tex( loadTextureResourceFromFile( "../assets/images/awesomeface.png" ) );
+        CTexture2D tex( loadTexture2DResourceFromFile( "../assets/images/awesomeface.png" ) );
         CTexture2D texClipped = tex; texClipped.setClippingRect( {256, 256, 256, 256} );
         assert( tex.isValid() );
         CAutoTimer timer = CAutoTimer(0);

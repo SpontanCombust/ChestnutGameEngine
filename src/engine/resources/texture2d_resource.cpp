@@ -5,7 +5,7 @@
 
 namespace chestnut
 {
-    GLuint loadOpenGLTextureFromPixels( void *pixels, int width, int height, GLenum pixelFormat )
+    GLuint loadOpenGLTexture2DFromPixels( void *pixels, int width, int height, GLenum pixelFormat )
     {
         GLuint texID;
 
@@ -38,7 +38,7 @@ namespace chestnut
         }
     }
 
-    GLuint loadOpenGLTextureFromFile( const std::string& path, int& width, int& height, GLenum& pixelFormat )
+    GLuint loadOpenGLTexture2DFromFile( const std::string& path, int& width, int& height, GLenum& pixelFormat )
     {
         SDL_Surface *surf = IMG_Load( path.c_str() );
 
@@ -96,7 +96,7 @@ namespace chestnut
 
         try
         {
-            texID = loadOpenGLTextureFromPixels( pixels, width, height, pixelFormat );
+            texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat );
             loaded = true;
         }
         catch( const std::exception& e )
@@ -156,21 +156,21 @@ namespace chestnut
 
 
 
-    std::shared_ptr< CTexture2DResource > loadTextureResourceFromPixels( void *pixels, int width, int height, unsigned int pixelFormat )
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, unsigned int pixelFormat )
     {
         // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTextureFromPixels( pixels, width, height, pixelFormat );
+        GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat );
 
         return std::make_shared< CTexture2DResource >( texID, pixelFormat, width, height );
     }
 
-    std::shared_ptr< CTexture2DResource > loadTextureResourceFromFile( const std::string& path )
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& path )
     {
         int width, height;
         GLenum pixelFormat;
 
         // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTextureFromFile( path, width, height, pixelFormat );
+        GLuint texID = loadOpenGLTexture2DFromFile( path, width, height, pixelFormat );
 
         return std::make_shared< CTexture2DResource >( texID, pixelFormat, width, height );        
     }

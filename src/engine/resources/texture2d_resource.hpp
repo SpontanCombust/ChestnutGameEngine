@@ -8,15 +8,15 @@
 
 namespace chestnut
 {
-    // Returns OpenGL texture ID
+    // Returns OpenGL 2D texture ID
     // User is responsible for freeing the texture from GPU
     // Throws exception if fails to load the texture
-    GLuint loadOpenGLTextureFromPixels( void *pixels, int width, int height, GLenum pixelFormat );
-    // Returns OpenGL texture ID
+    GLuint loadOpenGLTexture2DFromPixels( void *pixels, int width, int height, GLenum pixelFormat );
+    // Returns OpenGL 2D texture ID
     // Texture info is written into width, height and pixelFormat
     // User is responsible for freeing the texture from GPU
     // Throws exception if fails to load the texture
-    GLuint loadOpenGLTextureFromFile( const std::string& path, int& width, int& height, GLenum& pixelFormat );
+    GLuint loadOpenGLTexture2DFromFile( const std::string& path, int& width, int& height, GLenum& pixelFormat );
 
 
     // A texture resource class that provides automatic texture deallocation on object deletion
@@ -36,9 +36,9 @@ namespace chestnut
     };
 
     // Throws exception if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTextureResourceFromPixels( void *pixels, int width, int height, unsigned int pixelFormat );
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, unsigned int pixelFormat );
     // Throws exception if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTextureResourceFromFile( const std::string& path );
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& path );
 
 } // namespace chestnut
 
