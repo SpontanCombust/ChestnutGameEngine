@@ -19,7 +19,8 @@ namespace test
         assert( window.create( windowPropertiesDefault( 3, 3 ), "Sprite render test", 800, 600, 600, 400 ) );
 
         CShaderProgram shader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
-        CSpriteRenderer renderer = CSpriteRenderer( shader );
+        CSpriteRenderer renderer;
+        renderer.init( shader );
         auto texResource = loadTexture2DResourceFromFile( "../assets/images/awesomeface.png" );
         assert( texResource->isValid() );
 

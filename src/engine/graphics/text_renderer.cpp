@@ -2,50 +2,22 @@
 
 #include "engine/debug/debug.hpp"
 
-#include <cassert>
-
 #define INIT_GLYPH_CAPACITY 128
 
 namespace chestnut
 {
-    CTextRenderer::CTextRenderer( const CShaderProgram& shader ) 
+    bool CTextRenderer::onInitCustom() 
     {
-        m_shader = shader;
-        assert( m_shader.isValid() );
-
-        m_shader.bind();
-        assert( setShaderVariableNames( "avPos", "avUV", "avColor", "avTranslation", "avScale", "uProjection", "uView" ) );
-
-        initBuffers();
         m_glyphCapacity = 0;
         reserveBufferSpace( INIT_GLYPH_CAPACITY );
+        return true;
     }
 
-    CTextRenderer::~CTextRenderer() 
+    void CTextRenderer::deleteBuffers() 
     {
         glDeleteVertexArrays( 1, &m_vao );
         glDeleteBuffers( 1, &m_ebo );
         glDeleteBuffers( 1, &m_vbo );
-    }
-
-    void CTextRenderer::bindShader() 
-    {
-        m_shader.bind();
-    }
-
-    void CTextRenderer::unbindShader() 
-    {
-        m_shader.unbind();
-    }
-
-    void CTextRenderer::setProjectionMatrix( mat4f projection ) 
-    {
-        m_shader.setMatrix4f( m_unifProjectionLoc, projection );
-    }
-
-    void CTextRenderer::setViewMatrix( mat4f view ) 
-    {
-        m_shader.setMatrix4f( m_unifViewLoc, view );
     }
 
     void CTextRenderer::initBuffers() 
@@ -113,30 +85,19 @@ namespace chestnut
         }
     }
 
-    bool CTextRenderer::setShaderVariableNames( const std::string& attrVertPos,
-                                                const std::string& attrVertUV,
-                                                const std::string& attrVertColor,
-                                                const std::string& attrVertTranslation,
-                                                const std::string& attrVertScale,
-                                                const std::string& unifProjection,
-                                                const std::string& unifView ) 
+    bool CTextRenderer::setShaderVariableLocations() 
     {
-        m_attrVertPosLoc            = m_shader.getAttributeLocation( attrVertPos );
-        m_attrVertUVLoc             = m_shader.getAttributeLocation( attrVertUV );
-        m_attrVertColorLoc          = m_shader.getAttributeLocation( attrVertColor );
-        m_attrVertTranslationLoc    = m_shader.getAttributeLocation( attrVertTranslation );
-        m_attrVertScaleLoc          = m_shader.getAttributeLocation( attrVertScale );
-
-        m_unifProjectionLoc     = m_shader.getUniformLocation( unifProjection );
-        m_unifViewLoc           = m_shader.getUniformLocation( unifView );
+        m_attrVertPosLoc            = m_shader.getAttributeLocation( "avPos" );
+        m_attrVertUVLoc             = m_shader.getAttributeLocation( "avUV" );
+        m_attrVertColorLoc          = m_shader.getAttributeLocation( "avColor" );
+        m_attrVertTranslationLoc    = m_shader.getAttributeLocation( "avTranslation" );
+        m_attrVertScaleLoc          = m_shader.getAttributeLocation( "avScale" );
 
         if(    m_attrVertPosLoc         == -1 
             || m_attrVertUVLoc          == -1
             || m_attrVertColorLoc       == -1
             || m_attrVertTranslationLoc == -1
-            || m_attrVertScaleLoc       == -1 
-            || m_unifProjectionLoc      == -1
-            || m_unifViewLoc            == -1 )
+            || m_attrVertScaleLoc       == -1 )
         {
             return false;
         }
@@ -196,7 +157,7 @@ namespace chestnut
         }       
     }
 
-    void CTextRenderer::makeBatches() 
+    void CTextRenderer::prepareBuffers() 
     {
         int glyphCount = 0;
         for( const auto& vertexGroup : m_vecVertexGroups )
@@ -207,7 +168,6 @@ namespace chestnut
         {
             reserveBufferSpace( glyphCount );
         }
-
 
         GLsizei vertexCount;
         GLsizeiptr vertexSizeBytes;
@@ -238,13 +198,21 @@ namespace chestnut
 
     void CTextRenderer::render() 
     {
-        makeBatches();
+        prepareBuffers();
+
+        GLuint previousTexID = 0;
 
         glBindVertexArray( m_vao );
         for( const STextRender_Batch& batch : m_vecBatches )
         {
-            glBindTexture( GL_TEXTURE_2D, batch.texID );
+            if( batch.texID != previousTexID )
+            {
+                glBindTexture( GL_TEXTURE_2D, batch.texID );
+            }
+
             glDrawElements( GL_TRIANGLES, batch.elementCount, GL_UNSIGNED_INT, (void *)( sizeof( GLuint ) * batch.elementOffset ) );
+            
+            previousTexID = batch.texID;
         }
         glBindVertexArray(0);
     }

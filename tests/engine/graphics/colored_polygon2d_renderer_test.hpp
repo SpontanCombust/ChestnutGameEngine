@@ -15,7 +15,8 @@ namespace test
         if( window.create( windowPropertiesDefault( 3, 3 ), "Polygon render test", 800, 600, 600, 400 ) )
         {
             CShaderProgram shader( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
-            CColoredPolygon2DRenderer renderer = CColoredPolygon2DRenderer( shader );
+            CColoredPolygon2DRenderer renderer;
+            renderer.init( shader );
             CAutoTimer timer = CAutoTimer(0);
 
             renderer.bindShader();

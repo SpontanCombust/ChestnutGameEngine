@@ -1,14 +1,14 @@
 #ifndef __CHESTNUT_TEXT_RENDERER_H__
 #define __CHESTNUT_TEXT_RENDERER_H__
 
+#include "renderer.hpp"
 #include "text.hpp"
-#include "shader_program.hpp"
 
 #include <vector>
 
 namespace chestnut
 {
-    class CTextRenderer
+    class CTextRenderer : public IRenderer
     {
         struct STextRender_Vertex
         {
@@ -34,8 +34,6 @@ namespace chestnut
 
 
     private:
-        CShaderProgram m_shader;
-
         std::vector< STextRender_VertexGroup > m_vecVertexGroups;
         std::vector< STextRender_Batch > m_vecBatches;
 
@@ -51,42 +49,26 @@ namespace chestnut
         GLint m_attrVertTranslationLoc;
         GLint m_attrVertScaleLoc;
 
-        GLint m_unifProjectionLoc;
-        GLint m_unifViewLoc;
-
     public:
-        CTextRenderer( const CShaderProgram& shader );
-        ~CTextRenderer();
-
-        void bindShader();
-        void unbindShader();
-
         void reserveBufferSpace( GLsizei targetGlyphCapacity );
 
-        // requires bound renderer shader
-        void setProjectionMatrix( mat4f projection );
-        // requires bound renderer shader
-        void setViewMatrix( mat4f view );
-
-        void clear();
+        void clear() override;
 
         void submitText( const CText& text, vec2f translation, vec2f scale = { 1.f, 1.f } );
 
         // requires bound renderer shader
-        void render();
+        void render() override;
 
     private:
-        void initBuffers();
+        bool onInitCustom() override;
 
-        bool setShaderVariableNames( const std::string& attrVertPos,
-                                     const std::string& attrVertUV,
-                                     const std::string& attrVertColor,
-                                     const std::string& attrVertTranslation,
-                                     const std::string& attrVertScale,
-                                     const std::string& unifProjection,
-                                     const std::string& unifView );
+        bool setShaderVariableLocations() override;
 
-        void makeBatches();
+        void initBuffers() override;
+
+        void prepareBuffers();
+
+        void deleteBuffers() override;
     };
     
 } // namespace chestnut

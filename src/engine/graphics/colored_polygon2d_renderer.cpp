@@ -2,60 +2,41 @@
 
 #include "engine/debug/debug.hpp"
 
-#include <cassert>
-
 #define INIT_POLYGON_VERTEX_CAPACITY 100
 #define INIT_VERTEX_INDEX_CAPACITY 150
 
 namespace chestnut
 {
-    CColoredPolygon2DRenderer::CColoredPolygon2DRenderer( const CShaderProgram& shader ) 
+    bool CColoredPolygon2DRenderer::onInitCustom() 
     {
-        assert( shader.isValid() );
-        m_shader = shader;
-
-        assert( setShaderVariableNames( "avPos", "avColor", "avOrigin", "avTransl", "avScale", "avRot", "uView", "uProjection" ) );
-        initBuffers();
-
         m_polygonVertexCapacity = 0;
         m_vertexIndexCapacity = 0;
         reserveBufferSpace( INIT_POLYGON_VERTEX_CAPACITY, INIT_VERTEX_INDEX_CAPACITY );
+        return true;
     }
 
-    CColoredPolygon2DRenderer::~CColoredPolygon2DRenderer() 
+    void CColoredPolygon2DRenderer::deleteBuffers() 
     {
         glDeleteVertexArrays( 1, &m_vao );
         glDeleteBuffers( 1, &m_ebo );
         glDeleteBuffers( 1, &m_vbo );
     }
 
-    bool CColoredPolygon2DRenderer::setShaderVariableNames( const std::string& attrVertPos,
-                                                            const std::string& attrVertColor,
-                                                            const std::string& attrVertOrigin,
-                                                            const std::string& attrVertTransl,
-                                                            const std::string& attrVertScale,
-                                                            const std::string& attrVertRot,
-                                                            const std::string& unifView,
-                                                            const std::string& unifProjection )
+    bool CColoredPolygon2DRenderer::setShaderVariableLocations()
     {
-        m_attrVertPosLoc = m_shader.getAttributeLocation( attrVertPos );
-        m_attrVertColorLoc = m_shader.getAttributeLocation( attrVertColor );
-        m_attrVertOriginLoc = m_shader.getAttributeLocation( attrVertOrigin );
-        m_attrVertTranslLoc = m_shader.getAttributeLocation( attrVertTransl );
-        m_attrVertScaleLoc = m_shader.getAttributeLocation( attrVertScale );
-        m_attrVertRotLoc = m_shader.getAttributeLocation( attrVertRot );
-
-        m_unifViewLoc = m_shader.getUniformLocation( unifView );
-        m_unifProjectionLoc = m_shader.getUniformLocation( unifProjection );
+        m_attrVertPosLoc = m_shader.getAttributeLocation( "avPos" );
+        m_attrVertColorLoc = m_shader.getAttributeLocation( "avColor" );
+        m_attrVertOriginLoc = m_shader.getAttributeLocation( "avOrigin" );
+        m_attrVertTranslLoc = m_shader.getAttributeLocation( "avTransl" );
+        m_attrVertScaleLoc = m_shader.getAttributeLocation( "avScale" );
+        m_attrVertRotLoc = m_shader.getAttributeLocation( "avRot" );
 
         if(    m_attrVertPosLoc     == -1
             || m_attrVertColorLoc   == -1
             || m_attrVertOriginLoc  == -1 
             || m_attrVertTranslLoc  == -1
             || m_attrVertScaleLoc   == -1
-            || m_attrVertRotLoc     == -1
-            || m_unifViewLoc        == -1
-            || m_unifProjectionLoc  == -1 )
+            || m_attrVertRotLoc     == -1 )
         {
             return false;
         }
@@ -93,26 +74,6 @@ namespace chestnut
             glVertexAttribPointer( m_attrVertRotLoc, 1, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, rotation ) );
 
         glBindVertexArray(0);
-    }
-
-    void CColoredPolygon2DRenderer::bindShader() 
-    {
-        m_shader.bind();
-    }
-
-    void CColoredPolygon2DRenderer::unbindShader() 
-    {
-        m_shader.unbind();
-    }
-
-    void CColoredPolygon2DRenderer::setProjectionMatrix( const mat4f& mat ) 
-    {
-        m_shader.setMatrix4f( m_unifProjectionLoc, mat );
-    }
-
-    void CColoredPolygon2DRenderer::setViewMatrix( const mat4f& mat ) 
-    {
-        m_shader.setMatrix4f( m_unifViewLoc, mat );
     }
 
     void CColoredPolygon2DRenderer::reserveBufferSpace( GLsizei targetPolygonVertexCapacity, GLsizei targetVertexIndexCapacity ) 

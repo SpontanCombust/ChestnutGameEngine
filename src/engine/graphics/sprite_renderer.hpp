@@ -1,12 +1,10 @@
 #ifndef __CHESTNUT_SPRITE_RENDERER_H__
 #define __CHESTNUT_SPRITE_RENDERER_H__
 
-#include "engine/libs.hpp"
-#include "shader_program.hpp"
+#include "renderer.hpp"
 #include "texture2d.hpp"
 #include "engine/maths/vector2.hpp"
 #include "engine/maths/matrix3.hpp"
-#include "engine/maths/matrix4.hpp"
 
 #include <vector>
 #include <unordered_map>
@@ -14,7 +12,7 @@
 namespace chestnut
 {
 
-    class CSpriteRenderer
+    class CSpriteRenderer : public IRenderer
     {
         struct SSpriteRender_Instance
         {
@@ -52,11 +50,6 @@ namespace chestnut
         GLuint m_ebo;
         GLsizei m_spriteCapacity;
 
-        CShaderProgram m_shader;
-
-
-        GLint m_unifViewLoc;
-        GLint m_unifProjectionLoc;
 
         GLint m_attrVertPosLoc;
         GLint m_attrVertUVPosLoc;
@@ -73,42 +66,25 @@ namespace chestnut
 
 
     public:
-        CSpriteRenderer( const CShaderProgram& shader );
-        ~CSpriteRenderer();
-
-        void bindShader();
-        void unbindShader();
-        
-        // requires bound renderer shader
-        void setProjectionMatrix( const mat4f& mat );
-        // requires bound renderer shader
-        void setViewMatrix( const mat4f& mat );
         // requires bound renderer shader
         void reserveBufferSpace( GLsizei targetSpriteCapacity );
 
-        void clear();
+        void clear() override;
 
         void submitSprite( const CTexture2D& texture, const vec2f& position, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
         // requires bound renderer shader
-        void render();
+        void render() override;
 
-    private:
-        bool setShaderVariableNames( const std::string& attrVertPos,
-                                     const std::string& attrVertUVPos,
-                                     const std::string& attrInstOrigin,
-                                     const std::string& attrInstTransl,
-                                     const std::string& attrInstScale,
-                                     const std::string& attrInstRot,
-                                     const std::string& attrInstClipRect,
-                                     const std::string& attrInstTint,
-                                     const std::string& attrInstTintFactor,
-                                     const std::string& unifTexSize,
-                                     const std::string& unifView,
-                                     const std::string& unifProjection );
+    protected:
+        bool onInitCustom() override;
 
-        void initBuffers();
+        bool setShaderVariableLocations() override;
 
-        void makeBatches();
+        void initBuffers() override;
+
+        void prepareBuffers();
+
+        void deleteBuffers() override;
     };
 
 } // namespace chestnut

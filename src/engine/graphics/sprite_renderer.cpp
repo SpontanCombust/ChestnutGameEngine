@@ -1,33 +1,21 @@
 #include "sprite_renderer.hpp"
 
-#include "engine/globals.hpp"
 #include "engine/debug/debug.hpp"
-#include "engine/maths/vector_transform.hpp"
-#include "engine/maths/vector_cast.hpp"
 
 #include <cassert>
-#include <numeric>
 
 #define INIT_SPRITE_CAPACITY 100
 
 namespace chestnut
 {   
-    CSpriteRenderer::CSpriteRenderer( const CShaderProgram& shader ) 
+    bool CSpriteRenderer::onInitCustom() 
     {
-        m_shader = shader;
-        assert( m_shader.isValid() );
-        assert( setShaderVariableNames( "avPos", "avUVPos", "aiOrigin", "aiTransl", "aiScale", "aiRot", "aiClipRect", "aiTint", "aiTintFactor", "uTexSize", "uView", "uProjection" ) );
-        
-        m_shader.bind();
-
-        initBuffers();
         m_spriteCapacity = 0;
         reserveBufferSpace( INIT_SPRITE_CAPACITY );
-
-        m_shader.unbind();
+        return true;
     }
 
-    CSpriteRenderer::~CSpriteRenderer() 
+    void CSpriteRenderer::deleteBuffers() 
     {
         glDeleteVertexArrays( 1, &m_vao );
         glDeleteBuffers( 1, &m_ebo );
@@ -35,43 +23,20 @@ namespace chestnut
         glDeleteBuffers( 1, &m_vboInst );
     }
 
-    void CSpriteRenderer::bindShader() 
+    bool CSpriteRenderer::setShaderVariableLocations()
     {
-        m_shader.bind();
-    }
+        m_attrVertPosLoc        = m_shader.getAttributeLocation( "avPos" );
+        m_attrVertUVPosLoc      = m_shader.getAttributeLocation( "avUVPos" );
 
-    void CSpriteRenderer::unbindShader() 
-    {
-        m_shader.unbind();
-    }
+        m_attrInstOriginLoc     = m_shader.getAttributeLocation( "aiOrigin" );
+        m_attrInstTranslLoc     = m_shader.getAttributeLocation( "aiTransl" );
+        m_attrInstScaleLoc      = m_shader.getAttributeLocation( "aiScale" );
+        m_attrInstRotLoc        = m_shader.getAttributeLocation( "aiRot" );
+        m_attrInstClipRectLoc   = m_shader.getAttributeLocation( "aiClipRect" );
+        m_attrInstTint          = m_shader.getAttributeLocation( "aiTint" );
+        m_attrInstTintFactor    = m_shader.getAttributeLocation( "aiTintFactor" );
 
-    bool CSpriteRenderer::setShaderVariableNames( const std::string& attrVertPos,
-                                                  const std::string& attrVertUVPos,
-                                                  const std::string& attrInstOrigin,
-                                                  const std::string& attrInstTransl,
-                                                  const std::string& attrInstScale,
-                                                  const std::string& attrInstRot,
-                                                  const std::string& attrInstClipRect,
-                                                  const std::string& attrInstTint,
-                                                  const std::string& attrInstTintFactor,
-                                                  const std::string& unifTexSize,
-                                                  const std::string& unifView,
-                                                  const std::string& unifProjection )
-    {
-        m_attrVertPosLoc        = m_shader.getAttributeLocation( attrVertPos );
-        m_attrVertUVPosLoc      = m_shader.getAttributeLocation( attrVertUVPos );
-
-        m_attrInstOriginLoc     = m_shader.getAttributeLocation( attrInstOrigin );
-        m_attrInstTranslLoc     = m_shader.getAttributeLocation( attrInstTransl );
-        m_attrInstScaleLoc      = m_shader.getAttributeLocation( attrInstScale );
-        m_attrInstRotLoc        = m_shader.getAttributeLocation( attrInstRot );
-        m_attrInstClipRectLoc   = m_shader.getAttributeLocation( attrInstClipRect );
-        m_attrInstTint          = m_shader.getAttributeLocation( attrInstTint );
-        m_attrInstTintFactor    = m_shader.getAttributeLocation( attrInstTintFactor );
-
-        m_unifTexSizeLoc        = m_shader.getUniformLocation( unifTexSize );
-        m_unifViewLoc           = m_shader.getUniformLocation( unifView );
-        m_unifProjectionLoc     = m_shader.getUniformLocation( unifProjection );
+        m_unifTexSizeLoc        = m_shader.getUniformLocation( "uTexSize" );
 
         if(    m_attrVertPosLoc         == -1 
             || m_attrVertUVPosLoc       == -1
@@ -82,9 +47,7 @@ namespace chestnut
             || m_attrInstClipRectLoc    == -1
             || m_attrInstTint           == -1
             || m_attrInstTintFactor     == -1
-            || m_unifTexSizeLoc         == -1
-            || m_unifViewLoc            == -1
-            || m_unifProjectionLoc      == -1 )
+            || m_unifTexSizeLoc         == -1 )
         {
             return false;
         }
@@ -166,16 +129,6 @@ namespace chestnut
         }
     }
 
-    void CSpriteRenderer::setProjectionMatrix( const mat4f& mat ) 
-    {
-        m_shader.setMatrix4f( m_unifProjectionLoc, mat );
-    }
-
-    void CSpriteRenderer::setViewMatrix( const mat4f& mat ) 
-    {
-        m_shader.setMatrix4f( m_unifViewLoc, mat );
-    }
-
     void CSpriteRenderer::reserveBufferSpace( GLsizei targetSpriteCapacity ) 
     {
         if( targetSpriteCapacity <= m_spriteCapacity )
@@ -228,7 +181,7 @@ namespace chestnut
         group.vecInstances.push_back( instance );
     }
 
-    void CSpriteRenderer::makeBatches() 
+    void CSpriteRenderer::prepareBuffers() 
     {
         GLsizei spriteCount = 0;
         for( const auto& [ id, group ] : m_mapTexIDToInstanceGroup )
@@ -270,7 +223,7 @@ namespace chestnut
 
     void CSpriteRenderer::render() 
     {
-        makeBatches();
+        prepareBuffers();
 
         glBindVertexArray( m_vao );
         for( const SSpriteRender_Batch& batch : m_vecBatches )

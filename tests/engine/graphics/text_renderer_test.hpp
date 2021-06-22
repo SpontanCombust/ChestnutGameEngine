@@ -22,7 +22,8 @@ namespace test
         try
         {
             CShaderProgram textureShader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
-            CSpriteRenderer spriteRenderer( textureShader );
+            CSpriteRenderer spriteRenderer;
+            spriteRenderer.init( textureShader );
 
             std::shared_ptr< CFontResource > fontResource = loadFontResourceFromFile( "../assets/fonts/arial.ttf" );  
             assert( fontResource->isValid() );
@@ -79,7 +80,8 @@ namespace test
 
 
             CShaderProgram textShader( loadShaderProgramResourceFromFiles( "../assets/shaders/text.vert", "../assets/shaders/text.frag" ) );
-            CTextRenderer textRenderer = CTextRenderer( textShader );
+            CTextRenderer textRenderer;
+            textRenderer.init( textShader );
 
             CText text1 = CText( fontResource, 32 );
             CText text2 = CText( fontResource, 33 );
