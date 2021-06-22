@@ -12,7 +12,7 @@
 
 namespace chestnut
 {
-    struct SColoredVertex
+    struct SColoredPolygon2DRender_Vertex
     {
         vec2f position;
         vec4f color;
@@ -27,7 +27,7 @@ namespace chestnut
     private:
         CShaderProgram m_shader;
 
-        std::vector< SColoredVertex > m_vecColoredVertices;
+        std::vector< SColoredPolygon2DRender_Vertex > m_vecColoredVertices;
         std::vector< GLuint > m_vecIndices;
 
         GLuint m_vbo;

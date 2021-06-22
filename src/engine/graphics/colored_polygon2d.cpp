@@ -4,7 +4,7 @@
 
 namespace chestnut
 {    
-    SColoredVertexBase::SColoredVertexBase( vec2f position, vec4f color ) 
+    SColoredVertex::SColoredVertex( vec2f position, vec4f color ) 
     {
         this->position = position;
         this->color = color;

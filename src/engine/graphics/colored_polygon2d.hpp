@@ -7,19 +7,19 @@
 
 namespace chestnut
 {
-    struct SColoredVertexBase
+    struct SColoredVertex
     {
         vec2f position;
         vec4f color;
 
-        SColoredVertexBase() = default;
-        SColoredVertexBase( vec2f position, vec4f color );
+        SColoredVertex() = default;
+        SColoredVertex( vec2f position, vec4f color );
     };
 
     class CColoredPolygon2D
     {
     public:
-        std::vector< SColoredVertexBase > vecVertices;
+        std::vector< SColoredVertex > vecVertices;
         std::vector< GLuint > vecIndices;
 
         void addVertex( vec2f position, vec4f color );

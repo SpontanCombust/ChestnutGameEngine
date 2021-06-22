@@ -75,22 +75,22 @@ namespace chestnut
             glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
 
             glEnableVertexAttribArray( m_attrVertPosLoc );
-            glVertexAttribPointer( m_attrVertPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredVertex ), (void *)offsetof( SColoredVertex, position ) );
+            glVertexAttribPointer( m_attrVertPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, position ) );
 
             glEnableVertexAttribArray( m_attrVertColorLoc );
-            glVertexAttribPointer( m_attrVertColorLoc, 4, GL_FLOAT, GL_FALSE, sizeof( SColoredVertex ), (void *)offsetof( SColoredVertex, color ) );
+            glVertexAttribPointer( m_attrVertColorLoc, 4, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, color ) );
 
             glEnableVertexAttribArray( m_attrVertOriginLoc );
-            glVertexAttribPointer( m_attrVertOriginLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredVertex ), (void *)offsetof( SColoredVertex, origin ) );
+            glVertexAttribPointer( m_attrVertOriginLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, origin ) );
 
             glEnableVertexAttribArray( m_attrVertTranslLoc );
-            glVertexAttribPointer( m_attrVertTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredVertex ), (void *)offsetof( SColoredVertex, translation ) );
+            glVertexAttribPointer( m_attrVertTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, translation ) );
 
             glEnableVertexAttribArray( m_attrVertScaleLoc );
-            glVertexAttribPointer( m_attrVertScaleLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredVertex ), (void *)offsetof( SColoredVertex, scale ) );
+            glVertexAttribPointer( m_attrVertScaleLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, scale ) );
 
             glEnableVertexAttribArray( m_attrVertRotLoc );
-            glVertexAttribPointer( m_attrVertRotLoc, 1, GL_FLOAT, GL_FALSE, sizeof( SColoredVertex ), (void *)offsetof( SColoredVertex, rotation ) );
+            glVertexAttribPointer( m_attrVertRotLoc, 1, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, rotation ) );
 
         glBindVertexArray(0);
     }
@@ -120,7 +120,7 @@ namespace chestnut
         if( targetPolygonVertexCapacity > m_polygonVertexCapacity )
         {
             glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-            glBufferData( GL_ARRAY_BUFFER, sizeof( SColoredVertex ) * targetPolygonVertexCapacity, nullptr, GL_DYNAMIC_DRAW );
+            glBufferData( GL_ARRAY_BUFFER, sizeof( SColoredPolygon2DRender_Vertex ) * targetPolygonVertexCapacity, nullptr, GL_DYNAMIC_DRAW );
             m_polygonVertexCapacity = targetPolygonVertexCapacity;
         }
         if( targetVertexIndexCapacity > m_vertexIndexCapacity )
@@ -145,26 +145,26 @@ namespace chestnut
 
     void CColoredPolygon2DRenderer::submitPolygon( const CColoredPolygon2D& polygon, const vec2f& translation, const vec2f& origin, const vec2f& scale, float rotation ) 
     {
-        if( polygon.vecIndices.size() == 0 )
+        if( !polygon.isRenderable() )
         {
-            LOG_CHANNEL( "COLORED_POLYGON2D_RENDERER", "Polygon without indices cannot be used!" );
+            LOG_CHANNEL( "COLORED_POLYGON2D_RENDERER", "Polygon with improper indices cannot be used!" );
             return;
         }
 
         GLuint indexOffset = m_vecColoredVertices.size();
 
-        SColoredVertex vert;
-        for( const SColoredVertexBase& vertBase : polygon.vecVertices )
+        SColoredPolygon2DRender_Vertex renderVertex;
+        for( const SColoredVertex& vertex : polygon.vecVertices )
         {
-            vert.position = vertBase.position;
-            vert.color = vertBase.color;
+            renderVertex.position = vertex.position;
+            renderVertex.color = vertex.color;
 
-            vert.origin = origin;
-            vert.translation = translation;
-            vert.scale = scale;
-            vert.rotation = rotation;
+            renderVertex.origin = origin;
+            renderVertex.translation = translation;
+            renderVertex.scale = scale;
+            renderVertex.rotation = rotation;
 
-            m_vecColoredVertices.push_back( vert );
+            m_vecColoredVertices.push_back( renderVertex );
         }
 
         for( const GLuint& index : polygon.vecIndices )
@@ -181,7 +181,7 @@ namespace chestnut
         reserveBufferSpace( vertexCount, indexCount );
 
         glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof( SColoredVertex ) * vertexCount, m_vecColoredVertices.data() );
+        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof( SColoredPolygon2DRender_Vertex ) * vertexCount, m_vecColoredVertices.data() );
 
         glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
         glBufferSubData( GL_ELEMENT_ARRAY_BUFFER, 0, sizeof( GLuint ) * indexCount, m_vecIndices.data() );
