@@ -14,7 +14,7 @@ namespace test
         LOG_CHANNEL( "TEST", "<< toString test >>");
         {
             mat3f m;
-            LOG_CHANNEL( "TEST", "\n" << m.toString() );
+            LOG_CHANNEL( "TEST", "\n" <<  matToString(m) );
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -24,13 +24,13 @@ namespace test
             mat3f m;
 
             m = matMakeTranslation<float>( 1, 2 );
-            LOG_CHANNEL( "TEST", "Translation [1, 2]:\n" << m.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "Translation [1, 2]:\n" << matToString(m) << "\n" );
 
             m = matMakeScale<float>( 1, 2 );
-            LOG_CHANNEL( "TEST", "Scale [1, 2]:\n" << m.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "Scale [1, 2]:\n" << matToString(m) << "\n" );
 
             m = matMakeRotation<float>( CHESTNUT_PI );
-            LOG_CHANNEL( "TEST", "Rotation 180deg:\n" << m.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "Rotation 180deg:\n" << matToString(m) << "\n" );
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -41,26 +41,26 @@ namespace test
             mat3f m2 = matMakeScale<float>( 1, 2 );
             mat3f m3;
 
-            LOG_CHANNEL( "TEST", "m1=\n" << m1.toString() << "\n" );
-            LOG_CHANNEL( "TEST", "m2=\n" << m2.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m1=\n" << matToString(m1) << "\n" );
+            LOG_CHANNEL( "TEST", "m2=\n" << matToString(m2) << "\n" );
 
             m3 = matTransposed(m1);
-            LOG_CHANNEL( "TEST", "m3=m1T=\n" << m3.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m3=m1T=\n" << matToString(m3) << "\n" );
 
             m3 = -m1;
-            LOG_CHANNEL( "TEST", "m3=-m1=\n" << m3.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m3=-m1=\n" << matToString(m3) << "\n" );
 
             m3 = m1 + m2;
-            LOG_CHANNEL( "TEST", "m3=m1+m2=\n" << m3.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m3=m1+m2=\n" << matToString(m3) << "\n" );
 
             m3 = m1 - m2;
-            LOG_CHANNEL( "TEST", "m3=m1-m2=\n" << m3.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m3=m1-m2=\n" << matToString(m3) << "\n" );
 
             m3 = m1 * m2;
-            LOG_CHANNEL( "TEST", "m3=m1*m2=\n" << m3.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m3=m1*m2=\n" << matToString(m3) << "\n" );
 
             m3 = -2.f * m2;
-            LOG_CHANNEL( "TEST", "m3=-2*m2=\n" << m3.toString() << "\n" );
+            LOG_CHANNEL( "TEST", "m3=-2*m2=\n" << matToString(m3) << "\n" );
         }
         LOG_CHANNEL( "TEST", "" );
     }

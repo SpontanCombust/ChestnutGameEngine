@@ -21,16 +21,17 @@ namespace chestnut
     template< typename T, size_t n >
     struct Matrix
     {
-        T data[ n * n ];
+        T elements[ n * n ];
 
         Matrix();
         Matrix( T init );
 
+        const T* data() const;
+        T *data();
+
         T get( size_t row, size_t column ) const;
         void set( size_t row, size_t column, T val );
         T& operator()( size_t row, size_t column );
-
-        std::string toString() const;
     };
 
 
@@ -78,6 +79,10 @@ namespace chestnut
 
     template< typename T, size_t n >
     Matrix<T,n> operator*( T s, const Matrix<T,n>& m );
+
+
+    template< typename T, size_t n >
+    std::string matToString( const Matrix<T,n>& m );
 
 } // namespace chestnut
 

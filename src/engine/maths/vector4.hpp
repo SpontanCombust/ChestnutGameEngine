@@ -10,36 +10,21 @@ namespace chestnut
     template< typename T >
     struct Vector<T,4>
     {
-        T data[4];
-
-        T& x(); 
-        const T& x() const;
-        T& y(); 
-        const T& y() const;
-        T& z();
-        const T& z() const;
-        T& w();
-        const T& w() const;
+        T x, y, z, w;
         
         Vector();
         Vector( T init );
         Vector( T _x, T _y, T _z, T _w );
 
-        T& operator[]( size_t i );
-        T operator[]( size_t i ) const;
+        T *data();
+        const T *data() const;
+
         Vector& operator+=( const Vector& v );
         Vector& operator-=( const Vector& v );
+        Vector& operator*=( const Vector& v );
         Vector& operator*=( T s );
-
-        std::string toString() const;
-
-        template< typename U >
-        operator Vector<U,4>() const;
     };
 
-
-    template< typename T >
-    using vec4 = Vector<T,4>;
 
     using vec4f = Vector<float,4>;
 

@@ -41,7 +41,7 @@ namespace chestnut
     {
         Matrix<T,4> m(0);
 
-        double cotangent = std::cos( fovy / 2.0 );
+        float cotangent = std::cos( fovy / 2.0 );
 
         m(0,0) = cotangent / aspect;
         m(1,1) = cotangent;
@@ -83,12 +83,12 @@ namespace chestnut
 
 
     template< typename T >
-    Matrix<T,4> matMakeRotationX( double angleRad )
+    Matrix<T,4> matMakeRotationX( float angleRad )
     {
         Matrix<T,4> m;
 
-        double sine = std::sin( angleRad );
-        double cosine = std::cos( angleRad );
+        float sine = std::sin( angleRad );
+        float cosine = std::cos( angleRad );
 
         m(1,1) = cosine;
         m(1,2) = -sine;
@@ -99,12 +99,12 @@ namespace chestnut
     }
 
     template< typename T >
-    Matrix<T,4> matMakeRotationY( double angleRad )
+    Matrix<T,4> matMakeRotationY( float angleRad )
     {
         Matrix<T,4> m;
 
-        double sine = std::sin( angleRad );
-        double cosine = std::cos( angleRad );
+        float sine = std::sin( angleRad );
+        float cosine = std::cos( angleRad );
 
         m(0,0) = cosine;
         m(0,2) = sine;
@@ -115,12 +115,12 @@ namespace chestnut
     }
 
     template< typename T >
-    Matrix<T,4> matMakeRotationZ( double angleRad )
+    Matrix<T,4> matMakeRotationZ( float angleRad )
     {
         Matrix<T,4> m;
 
-        double sine = std::sin( angleRad );
-        double cosine = std::cos( angleRad );
+        float sine = std::sin( angleRad );
+        float cosine = std::cos( angleRad );
 
         m(0,0) = cosine;
         m(0,1) = -sine;
@@ -131,26 +131,26 @@ namespace chestnut
     }
 
     template< typename T >
-    Matrix<T,4> matMakeRotation( Vector<T,3> axis, double angleRad )
+    Matrix<T,4> matMakeRotation( Vector<T,3> axis, float angleRad )
     {
         Matrix<T,4> rm;
-        double sine, cosine;
+        float sine, cosine;
 
         sine = std::sin( angleRad );
         cosine = std::cos( angleRad );
         axis = vecNormalized<T>( axis );
 
-        rm(0,0) = cosine + ( axis.x() * axis.x() ) * ( 1 - cosine );
-        rm(0,1) = axis.x() * axis.y() * ( 1 - cosine ) - axis.z() * sine;
-        rm(0,2) = axis.x() * axis.z() * ( 1 - cosine ) + axis.y() * sine;
+        rm(0,0) = cosine + ( axis.x * axis.x ) * ( 1 - cosine );
+        rm(0,1) = axis.x * axis.y * ( 1 - cosine ) - axis.z * sine;
+        rm(0,2) = axis.x * axis.z * ( 1 - cosine ) + axis.y * sine;
 
-        rm(1,0) = axis.y() * axis.x() * ( 1 - cosine ) + axis.z() * sine;
-        rm(1,1) = cosine + ( axis.y() * axis.y() ) * ( 1 - cosine );
-        rm(1,2) = axis.y() * axis.z() * ( 1 - cosine ) - axis.x() * sine;
+        rm(1,0) = axis.y * axis.x * ( 1 - cosine ) + axis.z * sine;
+        rm(1,1) = cosine + ( axis.y * axis.y ) * ( 1 - cosine );
+        rm(1,2) = axis.y * axis.z * ( 1 - cosine ) - axis.x * sine;
 
-        rm(2,0) = axis.z() * axis.x() * ( 1 - cosine ) - axis.y() * sine;
-        rm(2,1) = axis.z() * axis.y() * ( 1 - cosine ) + axis.x() * sine;
-        rm(2,2) = cosine + ( axis.z() * axis.z() ) * ( 1 - cosine );
+        rm(2,0) = axis.z * axis.x * ( 1 - cosine ) - axis.y * sine;
+        rm(2,1) = axis.z * axis.y * ( 1 - cosine ) + axis.x * sine;
+        rm(2,2) = cosine + ( axis.z * axis.z ) * ( 1 - cosine );
 
         return rm;
     }

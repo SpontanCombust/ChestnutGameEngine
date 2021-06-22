@@ -9,21 +9,16 @@ namespace chestnut
     template< typename T, size_t n >
     struct Vector
     {
-        T data[n];
-
         Vector();
         Vector( T init );
 
-        T& operator[]( size_t i );
-        T operator[]( size_t i ) const;
+        const T* data() const;
+        T* data();
+
         Vector& operator+=( const Vector& v );
         Vector& operator-=( const Vector& v );
+        Vector& operator*=( const Vector& v );
         Vector& operator*=( T s );
-
-        std::string toString() const;
-
-        template< typename U >
-        operator Vector<U,n>() const;
     };
 
 
@@ -68,10 +63,17 @@ namespace chestnut
 
     template< typename T, size_t n >
     T vecDotProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 );
-    
+
 
     template< typename T, size_t n >
-    T operator*( Vector<T,n> v1, Vector<T,n> v2 ) = delete; // forbidden due to ambiguity between dot and cross product
+    Vector<T,n> vecComponentProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+    template< typename T, size_t n >
+    Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+
+    template< typename T, size_t n >
+    std::string vecToString( const Vector<T,n>& v );
 
 } // namespace chestnut
 

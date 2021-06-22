@@ -81,7 +81,7 @@ namespace chestnut
 
             fragment.vecGlyphs.push_back( glyph );
             
-            m_currentGlyphOffset.x() += metrics.advance;
+            m_currentGlyphOffset.x += metrics.advance;
         }
 
         m_vecFragments.push_back( fragment );

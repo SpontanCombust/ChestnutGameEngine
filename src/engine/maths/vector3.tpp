@@ -1,82 +1,35 @@
 namespace chestnut
 {
-    template<typename T >
+    template<typename T>
     Vector<T,3>::Vector()
-    : data{0}
     {
-
+        x = y = z = 0;
     }
 
     template<typename T>
     Vector<T,3>::Vector( T init ) 
-    : data{ init, init, init }
     {
-        
+        x = y = z = init;
     }
 
     template<typename T>
-    Vector<T,3>::Vector( T _x, T _y, T _z )
-    : data{ _x, _y, _z }
+    Vector<T,3>::Vector( T _x, T _y, T _z ) 
     {
-
+        x = _x;
+        y = _y;
+        z = _z;
     }
 
     template<typename T>
-    T& Vector<T,3>::x() 
+    T* Vector<T,3>::data()
     {
-        return data[0];
+        return &x;
     }
 
     template<typename T>
-    const T& Vector<T,3>::x() const
+    const T* Vector<T,3>::data() const
     {
-        return data[0];
-    }
-
-    template<typename T>
-    T& Vector<T,3>::y() 
-    {
-        return data[1];
-    }
-
-    template<typename T>
-    const T& Vector<T,3>::y() const
-    {
-        return data[1];
-    }
-
-    template<typename T>
-    T& Vector<T,3>::z() 
-    {
-        return data[2];
-    }
-
-    template<typename T>
-    const T& Vector<T,3>::z() const
-    {
-        return data[2];
-    }
-
-    template<typename T>
-    T& Vector<T,3>::operator[]( size_t i ) 
-    {
-        if( i >= 3 )
-        {
-            throw ChestnutException( "Vector index out of bounds!" );
-        }
-        
-        return data[i];
-    }
-
-    template<typename T>
-    T Vector<T,3>::operator[]( size_t i ) const
-    {
-        if( i >= 3 )
-        {
-            throw ChestnutException( "Vector index out of bounds!" );
-        }
-        
-        return data[i];
+        return &x;
     }
 
     template<typename T>
@@ -94,22 +47,17 @@ namespace chestnut
     }
 
     template<typename T>
-    Vector<T,3>& Vector<T,3>::operator*=( T s ) 
+    Vector<T,3>& Vector<T,3>::operator*=( const Vector<T,3>& v ) 
     {
-        *this = vecScalarProduct<T,3>( *this, s );
+        *this = vecComponentProduct<T,3>( *this, v );
         return *this;
     }
 
     template<typename T>
-    std::string Vector<T,3>::toString() const
+    Vector<T,3>& Vector<T,3>::operator*=( T s ) 
     {
-        std::string str;
-
-        str += "[ ";
-        str += std::to_string(data[0]) + ", " + std::to_string(data[1]) + ", " + std::to_string(data[2]);
-        str += " ]";
-        
-        return str;
+        *this = vecScalarProduct<T,3>( *this, s );
+        return *this;
     }
 
 
@@ -118,9 +66,10 @@ namespace chestnut
     Vector<T,3> vecCrossProduct( const Vector<T,2>& v1, const Vector<T,2>& v2 )
     {
         Vector<T,3> pv;
-        pv.data[0] = 0.0;
-        pv.data[1] = 0.0;
-        pv.data[2] = v1.x() * v2.y() - v1.y() * v2.x();
+
+        pv.x = 0.0;
+        pv.y = 0.0;
+        pv.z = v1.x * v2.y - v1.y * v2.x;
         return pv;   
     }
 
@@ -128,9 +77,9 @@ namespace chestnut
     Vector<T,3> vecCrossProduct( const Vector<T,3>& v1, const Vector<T,3>& v2 )
     {
         Vector<T,3> pv;
-        pv.data[0] = v1.y() * v2.z() - v1.z() * v2.y();
-        pv.data[1] = v1.z() * v2.x() - v1.x() * v2.z();
-        pv.data[2] = v1.x() * v2.y() - v1.y() * v2.x();
+        pv.x = v1.y * v2.z - v1.z * v2.y;
+        pv.y = v1.z * v2.x - v1.x * v2.z;
+        pv.z = v1.x * v2.y - v1.y * v2.x;
         return pv;
     }
 

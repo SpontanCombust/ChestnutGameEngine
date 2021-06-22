@@ -20,7 +20,7 @@ namespace chestnut
     Matrix<T,3> matMakeScale( T sx, T sy );
 
     template< typename T >
-    Matrix<T,3> matMakeRotation( double angleRad );
+    Matrix<T,3> matMakeRotation( float angleRad );
 
 } // namespace chestnut
 

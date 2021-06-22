@@ -63,7 +63,7 @@ namespace chestnut
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
-            glUniform2fv( loc, 1, val.data );
+            glUniform2fv( loc, 1, val.data() );
             return true;
         }
         else
@@ -77,7 +77,7 @@ namespace chestnut
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
-            glUniform3fv( loc, 1, val.data );
+            glUniform3fv( loc, 1, val.data() );
             return true;
         }
         else
@@ -91,7 +91,7 @@ namespace chestnut
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
-            glUniform4fv( loc, 1, val.data );
+            glUniform4fv( loc, 1, val.data() );
             return true;
         }
         else
@@ -105,7 +105,7 @@ namespace chestnut
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
-            glUniformMatrix3fv( loc, 1, GL_FALSE, val.data );
+            glUniformMatrix3fv( loc, 1, GL_FALSE, val.data() );
             return true;
         }
         else
@@ -119,7 +119,7 @@ namespace chestnut
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
         {
-            glUniformMatrix4fv( loc, 1, GL_FALSE, val.data ); 
+            glUniformMatrix4fv( loc, 1, GL_FALSE, val.data() ); 
             return true;  
         }
         else
@@ -128,34 +128,34 @@ namespace chestnut
         }
     }
 
-    void CShaderProgram::setInt( GLint loc, int val ) 
+    void CShaderProgram::setInt( GLint loc, GLint val ) 
     {
         glUniform1i( loc, val );
     }
 
     void CShaderProgram::setVector2f( GLint loc, const vec2f& val ) 
     {
-        glUniform2fv( loc, 1, val.data );
+        glUniform2fv( loc, 1, val.data() );
     }
 
     void CShaderProgram::setVector3f( GLint loc, const vec3f& val ) 
     {
-        glUniform3fv( loc, 1, val.data );
+        glUniform3fv( loc, 1, val.data() );
     }
 
     void CShaderProgram::setVector4f( GLint loc, const vec4f& val ) 
     {
-        glUniform4fv( loc, 1, val.data );
+        glUniform4fv( loc, 1, val.data() );
     }
 
     void CShaderProgram::setMatrix3f( GLint loc, const mat3f& val ) 
     {
-        glUniformMatrix3fv( loc, 1, GL_FALSE, val.data );
+        glUniformMatrix3fv( loc, 1, GL_FALSE, val.data() );
     }
 
     void CShaderProgram::setMatrix4f( GLint loc, const mat4f& val ) 
     {
-        glUniformMatrix4fv( loc, 1, GL_FALSE, val.data );
+        glUniformMatrix4fv( loc, 1, GL_FALSE, val.data() );
     }
 
 } // namespace chestnut

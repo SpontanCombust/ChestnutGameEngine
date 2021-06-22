@@ -11,11 +11,14 @@ namespace chestnut
         Vector<T,mn> cast = vecCastSize<mn>(v);
         Vector<T,mn> res;
 
+        T *datCast = cast.data();
+        T *datRes = res.data();
+
         for (size_t i = 0; i < mn; i++)
         {
             for (size_t j = 0; j < mn; j++)
             {
-                res.data[i] += m.get(i,j) * cast.data[j];
+                datRes[i] += m.get(i,j) * datCast[j];
             }
         }
 
@@ -27,11 +30,14 @@ namespace chestnut
     {
         Vector<T,n> res;
 
+        const T *dat = v.data();
+        T *datRes = res.data();
+
         for (size_t i = 0; i < n; i++)
         {
             for (size_t j = 0; j < n; j++)
             {
-                res.data[i] += m.get(i,j) * v.data[j];
+                datRes[i] += m.get(i,j) * dat[j];
             }
         }
 
@@ -61,7 +67,7 @@ namespace chestnut
     }
 
     template< typename T >
-    void vecRotate( Vector<T,2>& v, double angleRad )
+    void vecRotate( Vector<T,2>& v, float angleRad )
     {
         Matrix<T,3> m = matMakeRotation<T>( angleRad );
         v = m * v;
@@ -84,7 +90,7 @@ namespace chestnut
     }
 
     template< typename T >
-    void vecRotate( Vector<T,3>& v, const Vector<T,3>& axis, double angleRad )
+    void vecRotate( Vector<T,3>& v, const Vector<T,3>& axis, float angleRad )
     {
         Matrix<T,4> m = matMakeRotation<T>( axis, angleRad );
         v = m * v;
@@ -107,7 +113,7 @@ namespace chestnut
     }
 
     template< typename T >
-    void vecRotate( Vector<T,4>& v, const Vector<T,3>& axis, double angleRad )
+    void vecRotate( Vector<T,4>& v, const Vector<T,3>& axis, float angleRad )
     {
         Matrix<T,4> m = matMakeRotation<T>( axis, angleRad );
         v = m * v;

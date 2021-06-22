@@ -7,22 +7,34 @@ namespace chestnut
 {    
     template<typename T, size_t n>
     Matrix<T, n>::Matrix()
-    : data{ 0 }
+    : elements{ 0 }
     {
         for (size_t i = 0; i < n; i++)
         {
-            data[ i * n + i ] = (T)1;
+            elements[ i * n + i ] = (T)1;
         }        
     }
 
     template<typename T, size_t n>
     Matrix<T, n>::Matrix( T init )
-    : data{ 0 }
+    : elements{ 0 }
     {
         for (size_t i = 0; i < n; i++)
         {
-            data[ i * n + i ] = init;
+            elements[ i * n + i ] = init;
         }
+    }
+
+    template<typename T, size_t n>
+    const T* Matrix<T, n>::data() const
+    {
+        return elements;
+    }
+
+    template<typename T, size_t n>
+    T* Matrix<T, n>::data() 
+    {
+        return elements;
     }
 
     template<typename T, size_t n>
@@ -33,7 +45,7 @@ namespace chestnut
             throw ChestnutException( "Matrix index out of bounds!" );
         }
 
-        return data[ column * n + row ];
+        return elements[ column * n + row ];
     }
 
     template<typename T, size_t n>
@@ -44,7 +56,7 @@ namespace chestnut
             throw ChestnutException( "Matrix index out of bounds!" );
         }
 
-        data[ column * n + row ] = val;
+        elements[ column * n + row ] = val;
     }
 
     template<typename T, size_t n>
@@ -55,27 +67,9 @@ namespace chestnut
             throw ChestnutException( "Matrix index out of bounds!" );
         }
 
-        return data[ column * n + row ];
+        return elements[ column * n + row ];
     }
-
-    template<typename T, size_t n>
-    std::string Matrix<T, n>::toString() const
-    {
-        std::stringstream ss;
-
-        for (size_t i = 0; i < n; i++)
-        {
-            ss << "[ ";
-            ss << get(i,0);
-            for (size_t j = 1; j < n; j++)
-            {
-                ss << ",\t" << get(i,j);
-            }
-            ss << " ]\n";
-        }
-        
-        return ss.str();
-    }
+    
 
     
 
@@ -233,4 +227,25 @@ namespace chestnut
         return matScalarProduct(m,s);
     }
 
+
+
+    template< typename T, size_t n >
+    std::string matToString( const Matrix<T,n>& m )
+    {
+        std::stringstream ss;
+
+        for (size_t i = 0; i < n; i++)
+        {
+            ss << "[ ";
+            ss << m.get(i,0);
+            for (size_t j = 1; j < n; j++)
+            {
+                ss << ",\t" << m.get(i,j);
+            }
+            ss << " ]\n";
+        }
+        
+        return ss.str();
+    }
+    
 } // namespace chestnut

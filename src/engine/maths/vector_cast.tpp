@@ -5,7 +5,7 @@ namespace chestnut
     {
         Vector<T,targetN> res( initRemainVals ); // initialize with all ones
 
-        std::memcpy( res.data, v.data, sizeof( v.data ) );
+        std::memcpy( res.data(), v.data(), sizeof(T) * sourceN );
 
         return res;
     }
@@ -15,7 +15,7 @@ namespace chestnut
     {
         Vector<T,targetN> res;
 
-        std::memcpy( res.data, v.data, sizeof( res.data ) );
+        std::memcpy( res.data(), v.data(), sizeof(T) * targetN );
 
         return res;
     }
@@ -28,14 +28,14 @@ namespace chestnut
         size_t size;
         if( targetN >= sourceN )
         {
-            size = sizeof( v.data );
+            size = sizeof(T) * sourceN;
         }
         else
         {
-            size = sizeof( res.data );
+            size = sizeof(T) * targetN;
         }
         
-        std::memcpy( res.data, v.data, size );
+        std::memcpy( res.data(), v.data(), size );
         
         return res;
     }
@@ -45,9 +45,12 @@ namespace chestnut
     {
         Vector<targetT,n> res;
 
+        const sourceT *dat = v.data();
+        targetT *datRes = res.data();
+
         for (size_t i = 0; i < n; i++)
         {
-            res.data[i] = (targetT)v.data[i];   
+            datRes[i] = (targetT)dat[i];   
         }
 
         return res;

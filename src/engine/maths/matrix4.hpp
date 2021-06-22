@@ -33,16 +33,16 @@ namespace chestnut
 
 
     template< typename T >
-    Matrix<T,4> matMakeRotationX( double angleRad );
+    Matrix<T,4> matMakeRotationX( float angleRad );
 
     template< typename T >
-    Matrix<T,4> matMakeRotationY( double angleRad );
+    Matrix<T,4> matMakeRotationY( float angleRad );
 
     template< typename T >
-    Matrix<T,4> matMakeRotationZ( double angleRad );
+    Matrix<T,4> matMakeRotationZ( float angleRad );
 
     template< typename T >
-    Matrix<T,4> matMakeRotation( Vector<T,3> axis, double angleRad );
+    Matrix<T,4> matMakeRotation( Vector<T,3> axis, float angleRad );
 
 } // namespace chestnut
 

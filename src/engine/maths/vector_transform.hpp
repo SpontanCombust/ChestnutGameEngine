@@ -35,7 +35,7 @@ namespace chestnut
     void vecScale( Vector<T,2>& v, T sx, T sy );
 
     template< typename T >
-    void vecRotate( Vector<T,2>& v, double angleRad );
+    void vecRotate( Vector<T,2>& v, float angleRad );
 
 
     template< typename T >
@@ -45,7 +45,7 @@ namespace chestnut
     void vecScale( Vector<T,3>& v, T sx, T sy, T sz );
 
     template< typename T >
-    void vecRotate( Vector<T,3>& v, const Vector<T,3>& axis, double angleRad );
+    void vecRotate( Vector<T,3>& v, const Vector<T,3>& axis, float angleRad );
 
 
     template< typename T >
@@ -55,7 +55,7 @@ namespace chestnut
     void vecScale( Vector<T,4>& v, T sx, T sy, T sz );
 
     template< typename T >
-    void vecRotate( Vector<T,4>& v, const Vector<T,3>& axis, double angleRad );
+    void vecRotate( Vector<T,4>& v, const Vector<T,3>& axis, float angleRad );
 
 } // namespace chestnut
 

@@ -23,12 +23,12 @@ namespace chestnut
     }
 
     template< typename T >
-    Matrix<T,3> matMakeRotation( double angleRad )
+    Matrix<T,3> matMakeRotation( float angleRad )
     {
         Matrix<T,3> m;
 
-        double sine = std::sin( angleRad );
-        double cosine = std::cos( angleRad );
+        float sine = std::sin( angleRad );
+        float cosine = std::cos( angleRad );
 
         m(0,0) = cosine;
         m(0,1) = -sine;

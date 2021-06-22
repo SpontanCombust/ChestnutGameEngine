@@ -35,7 +35,7 @@ namespace chestnut
         // Returns -1 if doesn't find the location
         GLint getUniformLocation( std::string uniformName );
 
-        bool setInt( const std::string& unifName, int val );
+        bool setInt( const std::string& unifName, GLint val );
         bool setVector2f( const std::string& unifName, const vec2f& val );
         bool setVector3f( const std::string& unifName, const vec3f& val );
         bool setVector4f( const std::string& unifName, const vec4f& val );

@@ -11,31 +11,21 @@ namespace chestnut
     template< typename T >
     struct Vector<T,3>
     {
-        T data[3];
-
-        T& x(); 
-        const T& x() const;
-        T& y(); 
-        const T& y() const;
-        T& z();
-        const T& z() const;
+        T x, y, z;
 
         Vector();
         Vector( T init );
         Vector( T _x, T _y, T _z );
 
-        T& operator[]( size_t i );
-        T operator[]( size_t i ) const;
+        T *data();
+        const T *data() const;
+
         Vector& operator+=( const Vector& v );
         Vector& operator-=( const Vector& v );
+        Vector& operator*=( const Vector& v );
         Vector& operator*=( T s );
-
-        std::string toString() const;
     };
 
-
-    template< typename T >
-    using vec3 = Vector<T,3>;
 
     // predefined vectors //
     using vec3f = Vector<float,3>;

@@ -16,9 +16,9 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<<toString test>>" );
         {
-            LOG_CHANNEL( "TEST", "v1=" << v1.toString() );
-            LOG_CHANNEL( "TEST", "v2=" << v2.toString() );
-            LOG_CHANNEL( "TEST", "v3=" << v3.toString() );
+            LOG_CHANNEL( "TEST", "v1=" << vecToString(v1) );
+            LOG_CHANNEL( "TEST", "v2=" << vecToString(v2) );
+            LOG_CHANNEL( "TEST", "v3=" << vecToString(v3) );
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -30,17 +30,17 @@ namespace test
             mat3f m1 = matMakeRotation<float>( CHESTNUT_PI );
             mat4f m2 = matMakeRotation<float>( { 0, 0, 1 }, CHESTNUT_PI );
 
-            LOG_CHANNEL( "TEST", "v1=" << v1.toString() );
-            LOG_CHANNEL( "TEST", "m1=\n" << m1.toString() );
+            LOG_CHANNEL( "TEST", "v1=" << vecToString(v1) );
+            LOG_CHANNEL( "TEST", "m1=\n" << matToString(m1) );
 
-            LOG_CHANNEL( "TEST", "m1*v1=" << ( m1 * v1 ).toString() );
+            LOG_CHANNEL( "TEST", "m1*v1=" << vecToString( m1 * v1 ) );
 
             LOG_CHANNEL( "TEST", "" );
             
-            LOG_CHANNEL( "TEST", "v2=" << v2.toString() );
-            LOG_CHANNEL( "TEST", "m2=\n" << m2.toString() );
+            LOG_CHANNEL( "TEST", "v2=" << vecToString(v2) );
+            LOG_CHANNEL( "TEST", "m2=\n" << matToString(m2) );
 
-            LOG_CHANNEL( "TEST", "m2*v2=" << ( m2 * v2 ).toString() );
+            LOG_CHANNEL( "TEST", "m2*v2=" << vecToString( m2 * v2 ) );
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -50,14 +50,14 @@ namespace test
             vec3f v3 = { -1, 4, 0 };
             mat4f m4 = matMakeRotation<float>( { 0, 0, 1 }, CHESTNUT_PI );
 
-            LOG_CHANNEL( "TEST", "v3=" << v3.toString() );
-            LOG_CHANNEL( "TEST", "m4=\n" << m4.toString() );
+            LOG_CHANNEL( "TEST", "v3=" << vecToString(v3) );
+            LOG_CHANNEL( "TEST", "m4=\n" << matToString(m4) );
 
-            LOG_CHANNEL( "TEST", "m4*v3=" << ( m4 * v3 ).toString() );
+            LOG_CHANNEL( "TEST", "m4*v3=" << vecToString( m4 * v3 ) );
 
             // vec4f v4 = { 1, 2, 3, 4 };
             // mat3f m3 = matMakeTranslation<float>( 1.f, 2.f );
-            // LOG_CHANNEL( "TEST", "m3*v4=" << ( m3 * v4 ).toString() ); // compiler error
+            // LOG_CHANNEL( "TEST", "m3*v4=" << matToString( m3 * v4 ) ); // compiler error
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -65,11 +65,11 @@ namespace test
         LOG_CHANNEL( "TEST", "<<vec2 transform test>>" );
         {
             vecTranslate( v1, 1.f, 2.f );
-            LOG_CHANNEL( "TEST", "T(1,2)(v1)=" << v1.toString() );
+            LOG_CHANNEL( "TEST", "T(1,2)(v1)=" << vecToString(v1) );
             vecScale( v1, 3.f, 4.f );
-            LOG_CHANNEL( "TEST", "S(3,4)(v1)=" << v1.toString() );
+            LOG_CHANNEL( "TEST", "S(3,4)(v1)=" << vecToString(v1) );
             vecRotate( v1, CHESTNUT_PI );
-            LOG_CHANNEL( "TEST", "R(PI)(v1)=" << v1.toString() );
+            LOG_CHANNEL( "TEST", "R(PI)(v1)=" << vecToString(v1) );
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -77,11 +77,11 @@ namespace test
         LOG_CHANNEL( "TEST", "<<vec3 transform test>>" );
         {
             vecTranslate( v2, 1.f, 2.f, 3.f );
-            LOG_CHANNEL( "TEST", "T(1,2,3)(v2)=" << v2.toString() );
+            LOG_CHANNEL( "TEST", "T(1,2,3)(v2)=" << vecToString(v2) );
             vecScale( v2, 4.f, 5.f, 6.f );
-            LOG_CHANNEL( "TEST", "S(4,5,6)(v2)=" << v2.toString() );
+            LOG_CHANNEL( "TEST", "S(4,5,6)(v2)=" << vecToString(v2) );
             vecRotate( v2, { 0, 0, 1 }, CHESTNUT_PI );
-            LOG_CHANNEL( "TEST", "Rz(PI)(v2)=" << v2.toString() );
+            LOG_CHANNEL( "TEST", "Rz(PI)(v2)=" << vecToString(v2) );
         }
         LOG_CHANNEL( "TEST", "" );
 
@@ -89,11 +89,11 @@ namespace test
         LOG_CHANNEL( "TEST", "<<vec4 transform test>>" );
         {
             vecTranslate( v3, 1.f, 2.f, 3.f );
-            LOG_CHANNEL( "TEST", "T(1,2,3)(v3)=" << v3.toString() );
+            LOG_CHANNEL( "TEST", "T(1,2,3)(v3)=" << vecToString(v3) );
             vecScale( v3, 4.f, 5.f, 6.f );
-            LOG_CHANNEL( "TEST", "S(4,5,6)(v3)=" << v3.toString() );
+            LOG_CHANNEL( "TEST", "S(4,5,6)(v3)=" << vecToString(v3) );
             vecRotate( v3, { 0, 0, 1 }, CHESTNUT_PI );
-            LOG_CHANNEL( "TEST", "Rz(PI)(v3)=" << v3.toString() );
+            LOG_CHANNEL( "TEST", "Rz(PI)(v3)=" << vecToString(v3) );
         }
         LOG_CHANNEL( "TEST", "" );
 
