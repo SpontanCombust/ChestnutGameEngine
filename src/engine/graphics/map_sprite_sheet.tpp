@@ -17,7 +17,7 @@ namespace chestnut
     }
     
     template<typename KeyType, typename Compare>
-    SRectangle CMapSpriteSheetTexture2D<KeyType,Compare>::normalizeRectangle( const SRectangle& rect ) 
+    SRectangle CMapSpriteSheetTexture2D<KeyType,Compare>::normalizeRectangle( const SRectangle& rect ) const
     {
         SRectangle normalized;
 
@@ -33,32 +33,22 @@ namespace chestnut
     }
 
     template<typename KeyType, typename Compare>
-    void CMapSpriteSheetTexture2D<KeyType,Compare>::setFragment( KeyType spriteKey, SRectangle rect, bool normalize ) 
+    void CMapSpriteSheetTexture2D<KeyType,Compare>::setSheetFragment( KeyType spriteKey, const SRectangle& rect ) 
     {
-        if( normalize )
-        {
-            rect = normalizeRectangle( rect );
-        }
-
         m_mapKeyToClipRect[ spriteKey ] = rect;
     }
 
     template<typename KeyType, typename Compare>
-    void CMapSpriteSheetTexture2D<KeyType,Compare>::setFragments( const std::map< KeyType, SRectangle >& mapKeyToClipRect, bool normalize ) 
+    void CMapSpriteSheetTexture2D<KeyType,Compare>::setSheetFragments( const std::map< KeyType, SRectangle >& mapKeyToClipRect ) 
     {
         for( auto [ key, rect ] : mapKeyToClipRect )
         {
-            if( normalize )
-            {
-                rect = normalizeRectangle( rect );
-            }
-
             m_mapKeyToClipRect[ key ] = rect;
         }
     }
 
     template<typename KeyType, typename Compare>
-    const SRectangle& CMapSpriteSheetTexture2D<KeyType,Compare>::getFragment( KeyType spriteKey ) const
+    SRectangle CMapSpriteSheetTexture2D<KeyType,Compare>::getSheetFragment( KeyType spriteKey, bool normalize ) const
     {
         auto it = m_mapKeyToClipRect.find( spriteKey );
         auto end = m_mapKeyToClipRect.end();
@@ -69,12 +59,19 @@ namespace chestnut
         }
         else
         {
-            return it->second;
+            SRectangle rect = it->second;
+
+            if( normalize )
+            {
+                rect = normalizeRectangle( rect );
+            }
+
+            return rect;
         }
     }
 
     template<typename KeyType, typename Compare>
-    bool CMapSpriteSheetTexture2D<KeyType,Compare>::hasFragment( KeyType spriteKey ) const
+    bool CMapSpriteSheetTexture2D<KeyType,Compare>::hasSheetFragment( KeyType spriteKey ) const
     {
         auto it = m_mapKeyToClipRect.find( spriteKey );
         if( it != m_mapKeyToClipRect.end() )
@@ -85,28 +82,19 @@ namespace chestnut
     }
 
     template<typename KeyType, typename Compare>
-    void CMapSpriteSheetTexture2D<KeyType,Compare>::eraseFragment( KeyType spriteKey ) 
+    void CMapSpriteSheetTexture2D<KeyType,Compare>::eraseSheetFragment( KeyType spriteKey ) 
     {
         m_mapKeyToClipRect.erase( spriteKey );
     }
 
     template<typename KeyType, typename Compare>
-    void CMapSpriteSheetTexture2D<KeyType,Compare>::clearFragments() 
+    void CMapSpriteSheetTexture2D<KeyType,Compare>::clearSheetFragments() 
     {
         m_mapKeyToClipRect.clear();
     }
 
     template<typename KeyType, typename Compare>
-    void CMapSpriteSheetTexture2D<KeyType,Compare>::normalizeAllFragments() 
-    {
-        for( auto& [ key, rect ] : m_mapKeyToClipRect )
-        {
-            rect = normalizeRectangle( rect );
-        }
-    }
-
-    template<typename KeyType, typename Compare>
-    void CMapSpriteSheetTexture2D<KeyType,Compare>::setClippingRectUsingFragment( KeyType spriteKey ) 
+    void CMapSpriteSheetTexture2D<KeyType,Compare>::setClippingRectUsingSheetFragment( KeyType spriteKey ) 
     {
         auto it = m_mapKeyToClipRect.find( spriteKey );
         if( it != m_mapKeyToClipRect.end() )

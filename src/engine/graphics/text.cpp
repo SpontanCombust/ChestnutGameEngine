@@ -70,14 +70,14 @@ namespace chestnut
         for( wchar_t g : s )
         {
             const SGlyphMetrics& metrics = config.mapGlyphMetrics.at(g);
-            const SRectangle& clipRect = config.glyphSpriteSheet.getFragment( g );
+            const SRectangle& clipRect = config.glyphSpriteSheet.getSheetFragment( g, true );
 
             STextGlyph glyph;
             glyph.g = g;
             glyph.posOffset = m_currentGlyphOffset + vec2f( metrics.xMin, 0 );
             glyph.size = vec2f( metrics.width, metrics.height );
-            glyph.uvOffset = vec2f( clipRect.x, clipRect.y );
-            glyph.uvSize = vec2f( clipRect.w, clipRect.h );
+            glyph.uvOffsetNorm = vec2f( clipRect.x, clipRect.y );
+            glyph.uvSizeNorm = vec2f( clipRect.w, clipRect.h );
 
             fragment.vecGlyphs.push_back( glyph );
             

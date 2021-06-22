@@ -36,7 +36,7 @@ namespace chestnut
     };
 
     // Throws exception if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, unsigned int pixelFormat );
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, GLenum pixelFormat );
     // Throws exception if fails to load the texture
     std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& path );
 

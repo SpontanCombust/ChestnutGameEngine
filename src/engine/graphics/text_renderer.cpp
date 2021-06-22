@@ -172,22 +172,22 @@ namespace chestnut
 
                     // upper left
                     vertex.pos = textGlyph.posOffset;
-                    vertex.uv = textGlyph.uvOffset;
+                    vertex.uv = textGlyph.uvOffsetNorm;
                     vertexGroup.vecVertices.push_back( vertex );
                     
                     // upper right
                     vertex.pos = textGlyph.posOffset + vec2f( textGlyph.size.x(), 0 );
-                    vertex.uv = textGlyph.uvOffset + vec2f( textGlyph.uvSize.x(), 0 );
+                    vertex.uv = textGlyph.uvOffsetNorm + vec2f( textGlyph.uvSizeNorm.x(), 0 );
                     vertexGroup.vecVertices.push_back( vertex );
 
                     // lower right
                     vertex.pos = textGlyph.posOffset + textGlyph.size;
-                    vertex.uv = textGlyph.uvOffset + textGlyph.uvSize;
+                    vertex.uv = textGlyph.uvOffsetNorm + textGlyph.uvSizeNorm;
                     vertexGroup.vecVertices.push_back( vertex );
 
                     // lower left
                     vertex.pos = textGlyph.posOffset + vec2f( 0, textGlyph.size.y() );
-                    vertex.uv = textGlyph.uvOffset + vec2f( 0, textGlyph.uvSize.y() );
+                    vertex.uv = textGlyph.uvOffsetNorm + vec2f( 0, textGlyph.uvSizeNorm.y() );
                     vertexGroup.vecVertices.push_back( vertex );
                 }
 

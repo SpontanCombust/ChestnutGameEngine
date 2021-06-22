@@ -156,7 +156,7 @@ namespace chestnut
 
 
 
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, unsigned int pixelFormat )
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, GLenum pixelFormat )
     {
         // let the exception propagate if it happens
         GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat );

@@ -11,35 +11,37 @@ namespace chestnut
     class CMapSpriteSheetTexture2D : public CTexture2D
     {
     private:
+        // Coordinates and dimensions of rectangles in pixels
         std::map< KeyType, SRectangle, Compare > m_mapKeyToClipRect;
 
     public:
         CMapSpriteSheetTexture2D();
         CMapSpriteSheetTexture2D( std::shared_ptr<CTexture2DResource> resource );
 
-        void setFragment( KeyType spriteKey, SRectangle rect, bool normalize );
+        // Coordinates and dimensions of rectangle in pixels
+        void setSheetFragment( KeyType spriteKey, const SRectangle& rect );
 
         // Sets clipping rectanges using already existing map
         // Overwrites elements already existing
-        void setFragments( const std::map< KeyType, SRectangle >& mapKeyToClipRect, bool normalize );
+        // Coordinates and dimensions of rectangles in pixels
+        void setSheetFragments( const std::map< KeyType, SRectangle >& mapKeyToClipRect );
 
         // Throws exception if doesn't find the key
-        const SRectangle& getFragment( KeyType spriteKey ) const;
+        // Rectangle metrics eighter in pixels or normalized when normalize=true
+        SRectangle getSheetFragment( KeyType spriteKey, bool normalize ) const;
 
-        bool hasFragment( KeyType spriteKey ) const;
+        bool hasSheetFragment( KeyType spriteKey ) const;
 
-        void eraseFragment( KeyType spriteKey );
+        void eraseSheetFragment( KeyType spriteKey );
 
-        void clearFragments();
-
-        void normalizeAllFragments();
+        void clearSheetFragments();
 
         // Sets texture's clipping rectangle as the one established for sprite identified with 'spriteKey'
         // If doesn't find the key, doesn't do anything
-        void setClippingRectUsingFragment( KeyType spriteKey );
+        void setClippingRectUsingSheetFragment( KeyType spriteKey );
 
     private:
-        SRectangle normalizeRectangle( const SRectangle& rect );
+        SRectangle normalizeRectangle( const SRectangle& rect ) const;
     };
 
 } // namespace chestnut

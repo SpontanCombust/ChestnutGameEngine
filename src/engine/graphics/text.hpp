@@ -14,8 +14,8 @@ namespace chestnut
         wchar_t g;
         vec2f posOffset;
         vec2f size;
-        vec2f uvOffset;
-        vec2f uvSize;
+        vec2f uvOffsetNorm;
+        vec2f uvSizeNorm;
     };
 
     struct STextFragment

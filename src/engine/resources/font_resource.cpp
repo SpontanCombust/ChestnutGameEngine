@@ -170,7 +170,7 @@ namespace chestnut
         config.style = style;
         config.mapGlyphMetrics = mapGlyphMetrics;
         config.glyphSpriteSheet = CMapSpriteSheetTexture2D<wchar_t>( textureResource );
-        config.glyphSpriteSheet.setFragments( mapClippingRects, true );
+        config.glyphSpriteSheet.setSheetFragments( mapClippingRects );
 
 
         return config;
