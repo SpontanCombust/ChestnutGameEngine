@@ -10,25 +10,25 @@ namespace chestnut
     template<typename T, size_t n>
     Vector<T, n>::Vector()
     {
-        std::fill_n( data(), n, 0 );
+        std::fill_n( elements, n, 0 );
     }
 
     template<typename T, size_t n>
     Vector<T, n>::Vector( T init ) 
     {
-        std::fill_n( data(), n, init );
+        std::fill_n( elements, n, init );
     }
 
     template<typename T, size_t n>
     const T* Vector<T, n>::data() const
     {
-        return nullptr;
+        return elements;
     }
 
     template<typename T, size_t n>
     T* Vector<T, n>::data()
     {
-        return nullptr;
+        return elements;
     }
 
     template<typename T, size_t n>

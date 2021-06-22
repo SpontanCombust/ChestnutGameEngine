@@ -9,6 +9,8 @@ namespace chestnut
     template< typename T, size_t n >
     struct Vector
     {
+        T elements[n];
+
         Vector();
         Vector( T init );
 
