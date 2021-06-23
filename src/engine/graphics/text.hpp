@@ -20,21 +20,30 @@ namespace chestnut
 
     struct STextFragment
     {
-        std::wstring str; 
-        GLuint texID;
+        std::wstring str;
+        EFontStyle style; 
         vec4f color;
+        GLuint texID;
         std::vector< STextGlyph > vecGlyphs;
+    };
+
+    enum class ETextPositioningMode
+    {
+        TOP,
+        BASELINE,
+        BOTTOM
     };
 
     class CText
     {
     protected:
         std::shared_ptr<CFontResource> m_resource;
-
         int m_pointSize;
-        std::vector<STextFragment> m_vecFragments;
 
+        ETextPositioningMode m_positioningMode;
         vec2f m_currentGlyphOffset;
+
+        std::vector<STextFragment> m_vecFragments;
 
     public:
         CText();
@@ -44,17 +53,22 @@ namespace chestnut
 
         int getPointSize() const;
 
+        // Sets the relative positioning of glyphs for the text line
+        void setPositioningMode( ETextPositioningMode mode );
+        ETextPositioningMode getPositioningMode() const;
+
         void clear();
+        void append( std::wstring s, EFontStyle style = EFontStyle::NORMAL, vec4f color = { 1.f, 1.f, 1.f, 1.f } );
 
         std::wstring getString() const;
-
         bool isEmpty() const;
         int getLength() const;
 
+        float getWidth() const;
+        float getHeight() const;
+        vec2f getSize() const; 
+
         const std::vector< STextFragment >& getFragments() const;
-
-
-        virtual void appendString( std::wstring s, EFontStyle style = EFontStyle::NORMAL, vec4f color = { 1.f, 1.f, 1.f, 1.f } );
     };
 
 } // namespace chestnut

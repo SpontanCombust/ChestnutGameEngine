@@ -33,6 +33,8 @@ namespace chestnut
     {
         int pointSize;
         EFontStyle style;
+        int ascent;
+        int descent;
         CMapSpriteSheetTexture2D<wchar_t> glyphSpriteSheet; // all clipping rectangles are normalized
         std::unordered_map<wchar_t, SGlyphMetrics> mapGlyphMetrics;
     };

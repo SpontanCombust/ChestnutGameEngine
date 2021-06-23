@@ -168,6 +168,8 @@ namespace chestnut
         SFontConfig config;
         config.pointSize = pointSize;
         config.style = style;
+        config.ascent = TTF_FontAscent( font );
+        config.descent = TTF_FontDescent( font );
         config.mapGlyphMetrics = mapGlyphMetrics;
         config.glyphSpriteSheet = CMapSpriteSheetTexture2D<wchar_t>( textureResource );
         config.glyphSpriteSheet.setSheetFragments( mapClippingRects );
