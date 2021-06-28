@@ -22,6 +22,8 @@ namespace chestnut
         CShaderProgram() = default;
         CShaderProgram( std::shared_ptr<CShaderProgramResource> resource );
 
+        const std::shared_ptr<CShaderProgramResource>& getResource() const;
+
         GLuint getID() const;
         bool isValid() const;
         

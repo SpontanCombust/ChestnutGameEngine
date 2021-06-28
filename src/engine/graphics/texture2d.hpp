@@ -21,7 +21,10 @@ namespace chestnut
         CTexture2D();
         CTexture2D( std::shared_ptr<CTexture2DResource> resource );
 
+        const std::shared_ptr<CTexture2DResource>& getResource() const;
+
         GLuint getID() const;
+
         bool isValid() const;
 
         void bind() const;

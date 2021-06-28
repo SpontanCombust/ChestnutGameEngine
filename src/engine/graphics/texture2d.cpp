@@ -20,6 +20,11 @@ namespace chestnut
         m_tintFactor = 0.f;
     }
 
+    const std::shared_ptr<CTexture2DResource>& CTexture2D::getResource() const
+    {
+        return m_texResource;
+    }
+
     GLuint CTexture2D::getID() const
     {
         return m_texResource->texID;

@@ -10,6 +10,11 @@ namespace chestnut
         m_shaderResource = resource;
     }
 
+    const std::shared_ptr<CShaderProgramResource>& CShaderProgram::getResource() const
+    {
+        return m_shaderResource;
+    }
+
     GLuint CShaderProgram::getID() const
     {
         return m_shaderResource->programID;
