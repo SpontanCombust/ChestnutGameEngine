@@ -17,7 +17,7 @@ namespace chestnut
 
         // data
         GLuint texID;
-        vec4f color;
+        vec3f color;
         vec2i lineOffset;
         vec2i size;
         vec2f uvOffsetNorm;
@@ -32,6 +32,13 @@ namespace chestnut
         //data
         vec2i offset;
         std::vector< STextGlyph > vecGlyphs;
+    };
+
+    struct STextFragmentRaw
+    {
+        std::wstring str;
+        EFontStyle style;
+        vec3f color;
     };
 
     enum class ETextAlignment
@@ -51,6 +58,7 @@ namespace chestnut
         int m_maxWidth;
         float m_lineSpacing;
 
+        std::vector<STextFragmentRaw> m_vecRawFragments;
         std::vector<STextLine> m_vecLines;
 
     public:
@@ -77,7 +85,7 @@ namespace chestnut
 
         void clear();
         void newline();
-        void append( std::wstring str, EFontStyle style = EFontStyle::NORMAL, vec4f color = { 1.f, 1.f, 1.f, 1.f } );
+        void append( std::wstring str, EFontStyle style = EFontStyle::NORMAL, vec3f color = { 1.f, 1.f, 1.f } );
 
 
         std::wstring getString() const;
@@ -88,7 +96,9 @@ namespace chestnut
         vec2i getSizePixels() const;
 
 
-        const std::vector<STextLine>& getLines() const;
+        void clearData();
+        void generateData();
+        const std::vector<STextLine>& getData() const;
 
 
     protected:
@@ -100,8 +110,9 @@ namespace chestnut
 
         // If line with that index doesn't yet exist, it gets created
         void insertBackGlyphsIntoLineSafe( std::vector<STextGlyph> vecGlyphs, unsigned int lineIdx );
-        void appendWord( std::wstring str, const SFontConfig& fontConfig, vec4f color );
+        void appendWord( std::wstring str, const SFontConfig& fontConfig, vec3f color );
         void formatLines( unsigned int beginLineIdx = 0 );
+        void appendFragment( std::wstring str, EFontStyle style, vec3f color );
     };
 
 } // namespace chestnut

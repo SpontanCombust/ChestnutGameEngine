@@ -96,7 +96,7 @@ namespace chestnut
     }
 
     // For very long words that don't fit within maxWidth
-    std::vector< std::wstring > fragmentizeWord( std::wstring word, const SFontConfig& fontConfig, int maxFragmentWidth )
+    std::vector< std::wstring > partitionWord( std::wstring word, const SFontConfig& fontConfig, int maxFragmentWidth )
     {
         std::vector< std::wstring > vecWordFragments;
 
@@ -127,7 +127,7 @@ namespace chestnut
         return vecWordFragments;
     }
 
-    std::vector< STextGlyph > createWordTextGlyphs( std::wstring word, const SFontConfig& fontConfig, vec4f color, vec2i baseOffset = { 0, 0 } )
+    std::vector< STextGlyph > createWordTextGlyphs( std::wstring word, const SFontConfig& fontConfig, vec3f color, vec2i baseOffset = { 0, 0 } )
     {
         std::vector< STextGlyph > vecGlyphs;
 
@@ -207,7 +207,10 @@ namespace chestnut
             }
             
             // push one last remaining token
-            vecTokens.push_back( substr );
+            if( substr[0] != separator || includeSeparator )
+            {
+                vecTokens.push_back( substr );
+            }
         }
 
         return vecTokens;
@@ -303,7 +306,7 @@ namespace chestnut
         vecLineGlyphs.insert( vecLineGlyphs.end(), vecGlyphs.begin(), vecGlyphs.end() );
     }
 
-    void CText::appendWord( std::wstring word, const SFontConfig& fontConfig, vec4f color ) 
+    void CText::appendWord( std::wstring word, const SFontConfig& fontConfig, vec3f color ) 
     {
         if( m_vecLines.empty() )
         {
@@ -319,21 +322,23 @@ namespace chestnut
         // if the width of the text is limited
         if( m_maxWidth > 0 )
         {
+            int lineWidth = computeLineWidth( m_vecLines[ lastLineIdx ] );
             int wordWidth = computeWordWidth( word, fontConfig );
-            int totalWidth = computeLineWidth( m_vecLines[ lastLineIdx ] ) + wordWidth;
 
-            if( totalWidth > m_maxWidth )
+            // the word won't fit in current line, create a new one and move onto it
+            // also check if word is not a empty space word (a substring tokenizer returned that consists only of space(s))
+            // if it would be there is no need for moving into next line as it literally consists of no visible letters
+            if( lineWidth > 0 && lineWidth + wordWidth > m_maxWidth && word[0] != L' ' )
             {
-                // the word won't fit in current line, create a new one and move onto it
                 m_vecLines.emplace_back();
                 lastLineIdx++;
             }
 
             
+            // the word is too long to fit in a single line, divide it into fitting pieces
             if( wordWidth > m_maxWidth )
             {
-                // the word is too long to fit in a single line, divide it into fitting pieces
-                std::vector< std::wstring > vecWordFragments = fragmentizeWord( word, fontConfig, m_maxWidth );
+                std::vector< std::wstring > vecWordFragments = partitionWord( word, fontConfig, m_maxWidth );
 
                 offset = { computeLineWidth( m_vecLines[ lastLineIdx ] ), 0 };
                 vecGlyphs = createWordTextGlyphs( vecWordFragments[0], fontConfig, color, offset );
@@ -361,6 +366,44 @@ namespace chestnut
             offset = { computeLineWidth( m_vecLines[ lastLineIdx ] ), 0 };
             vecGlyphs = createWordTextGlyphs( word, fontConfig, color, offset );
             insertBackGlyphsIntoLineSafe( vecGlyphs, lastLineIdx );   
+        }
+    }
+
+    void CText::appendFragment( std::wstring str, EFontStyle style, vec3f color ) 
+    {
+        if( str == L"" )
+        {
+            return;
+        }
+
+        const SFontConfig& config = m_resource->getConfig( m_pointSize, style );
+
+        auto vecNewLines = tokenizeString( str, L'\n', true );
+
+        for( std::wstring newLine : vecNewLines )
+        {
+            if( newLine[0] == L'\n' )
+            {
+                // this new line token consists of only new line character(s)
+                // so we just append as many new empty lines as is the size of this token 
+
+                for(unsigned int i = 0; i < newLine.length(); i++)
+                {
+                    m_vecLines.emplace_back();
+                }
+            }
+            else
+            {
+                // this new line token consists of words seperated optionally by space
+                // we break it apart into these words and spaces and append them this way
+
+                auto vecWords = tokenizeString( newLine, L' ', true );
+                
+                for( std::wstring word : vecWords )
+                {
+                    appendWord( word, config, color );
+                }
+            }
         }
     }
 
@@ -429,36 +472,22 @@ namespace chestnut
 
     void CText::clear() 
     {
-        m_vecLines.clear();
+        m_vecRawFragments.clear();
+    }
+
+    void CText::append( std::wstring str, EFontStyle style, vec3f color ) 
+    {
+        STextFragmentRaw fragmRaw;
+        fragmRaw.str = str;
+        fragmRaw.style = style;
+        fragmRaw.color = color;
+
+        m_vecRawFragments.push_back( fragmRaw );
     }
 
     void CText::newline() 
     {
-        m_vecLines.emplace_back();
-    }
-
-    void CText::append( std::wstring str, EFontStyle style, vec4f color ) 
-    {
-        if( str == L"" )
-        {
-            return;
-        }
-
-        const SFontConfig& config = m_resource->getConfig( m_pointSize, style );
-
-        auto vecNewLinesStr = tokenizeString( str, L'\n', false );
-
-        for( std::wstring newLineStr : vecNewLinesStr )
-        {
-            auto vecWords = tokenizeString( newLineStr, L' ', true );
-            
-            for( std::wstring word : vecWords )
-            {
-                appendWord( word, config, color );
-            }
-        }
-
-        formatLines();
+        append( L"\n" );
     }
 
     
@@ -468,9 +497,9 @@ namespace chestnut
     std::wstring CText::getString() const
     {
         std::wstring str;
-        for( const STextLine& line : m_vecLines )
+        for( const STextFragmentRaw& fragmRaw : m_vecRawFragments )
         {
-            str += line.str;
+            str += fragmRaw.str;
         }
 
         return str;
@@ -478,7 +507,7 @@ namespace chestnut
 
     bool CText::isEmpty() const
     {
-        return m_vecLines.empty();
+        return m_vecRawFragments.empty();
     }
 
     int CText::getWidthPixels() const
@@ -534,7 +563,24 @@ namespace chestnut
 
 
 
-    const std::vector<STextLine>& CText::getLines() const
+    void CText::clearData() 
+    {
+        m_vecLines.clear();
+    }
+
+    void CText::generateData() 
+    {
+        m_vecLines.clear();
+
+        for( const STextFragmentRaw& fragmRaw : m_vecRawFragments )
+        {
+            appendFragment( fragmRaw.str, fragmRaw.style, fragmRaw.color );
+        }
+
+        formatLines();
+    }
+
+    const std::vector<STextLine>& CText::getData() const
     {
         return m_vecLines;
     }

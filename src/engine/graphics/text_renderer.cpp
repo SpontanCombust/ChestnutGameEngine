@@ -34,14 +34,14 @@ namespace chestnut
             glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
             glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
 
+            glEnableVertexAttribArray( m_attrVertColorLoc );
+            glVertexAttribPointer( m_attrVertColorLoc, 3, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, color ) );
+
             glEnableVertexAttribArray( m_attrVertPosLoc );
             glVertexAttribPointer( m_attrVertPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, pos ) );
 
             glEnableVertexAttribArray( m_attrVertUVLoc );
             glVertexAttribPointer( m_attrVertUVLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, uv ) );
-
-            glEnableVertexAttribArray( m_attrVertColorLoc );
-            glVertexAttribPointer( m_attrVertColorLoc, 4, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, color ) );
 
             glEnableVertexAttribArray( m_attrVertTranslationLoc );
             glVertexAttribPointer( m_attrVertTranslationLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, translation ) );
@@ -120,7 +120,7 @@ namespace chestnut
         {
             std::unordered_map< GLuint, STextRender_VertexGroup > mapTexIDToVertexGroup;
             
-            const auto& vecTextLines = text.getLines();
+            const auto& vecTextLines = text.getData();
             for( const STextLine& textLine : vecTextLines )
             {
                 for( const STextGlyph& textGlyph : textLine.vecGlyphs )

@@ -86,31 +86,34 @@ namespace test
             CText text = CText( fontResource, 32 );
             
             text.setAligment( ETextAlignment::CENTER );
-            text.setMaxWidthPixels( 100 );
-            text.append( L"Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
-            text.append( L"kotek ", EFontStyle::BOLD, { 1.f, 1.f, 0.0, 1.f } );
-            text.append( L"na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
-            text.append( L"płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f, 1.f } );
+            text.append( L"Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
+            text.append( L"kotek\n", EFontStyle::BOLD, { 1.f, 1.f, 0.0 } );
+            text.append( L"na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
+            text.append( L"płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f } );
             text.newline();
-            text.append( L"Pierdolnął go ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
-            text.append( L"młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f, 1.f } );
+            text.append( L"Pierdolnął go\n", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
+            text.append( L"młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f } );
 
 
             textRenderer.bindShader();
             textRenderer.setViewMatrix( mat4f() );
             textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
             
-            auto render = [&]()
-            {
-                window.clear();
-                    textRenderer.clear();
-                    textRenderer.submitText( text, { 50.f, 50.f } );
-                    textRenderer.render();
-                window.flipBuffer();
-            };
+            window.clear();
+                textRenderer.clear();
 
-            render();
-            SDL_Delay( 3000 );
+                text.generateData();
+                textRenderer.submitText( text, { 50.f, 50.f } );
+
+                text.setAligment( ETextAlignment::RIGHT );
+                text.setLineSpacing( 1.5f );
+                text.setMaxWidthPixels( 100 );
+                text.generateData();
+                textRenderer.submitText( text, { 650.f, 50.f }, { 1.5f, 1.5f } );
+
+                textRenderer.render();
+            window.flipBuffer();
+            SDL_Delay( 10000 );
         }
         catch(const std::exception& e)
         {

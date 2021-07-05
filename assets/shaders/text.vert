@@ -1,8 +1,8 @@
 #version 330
 
+in vec3 avColor;
 in vec2 avPos;
 in vec2 avUV;
-in vec4 avColor;
 in vec2 avTranslation;
 in vec2 avScale;
 
@@ -10,7 +10,7 @@ uniform mat4 uProjection;
 uniform mat4 uView;
 
 out vec2 uv;
-out vec4 color;
+out vec3 color;
 
 
 mat4 mat4Translation( vec2 t )

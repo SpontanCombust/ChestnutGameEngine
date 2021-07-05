@@ -1,7 +1,7 @@
 #version 330
 
 in vec2 uv;
-in vec4 color;
+in vec3 color;
 
 uniform sampler2D uTextureUnit;
 
@@ -11,5 +11,5 @@ void main()
 {
     float glyphAlpha = texture( uTextureUnit, uv ).r;
 
-    FragColor = color * vec4( 1.0, 1.0, 1.0, glyphAlpha );
+    FragColor = vec4( color, 1.0 ) * vec4( 1.0, 1.0, 1.0, glyphAlpha );
 }

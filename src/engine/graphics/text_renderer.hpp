@@ -12,9 +12,9 @@ namespace chestnut
     {
         struct STextRender_Vertex
         {
+            vec3f color;
             vec2f pos;
             vec2f uv;
-            vec4f color;
             vec2f translation;
             vec2f scale;
         };
