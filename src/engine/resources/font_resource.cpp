@@ -170,12 +170,23 @@ namespace chestnut
         config.style = style;
         config.ascent = TTF_FontAscent( font );
         config.descent = TTF_FontDescent( font );
+        config.height = TTF_FontHeight( font );
         config.mapGlyphMetrics = mapGlyphMetrics;
         config.glyphSpriteSheet = CMapSpriteSheetTexture2D<wchar_t>( textureResource );
         config.glyphSpriteSheet.setSheetFragments( mapClippingRects );
 
 
         return config;
+    }
+
+    size_t getConfigHashInternal( int pointSize, EFontStyle style ) 
+    {
+        std::hash<std::string> hasher;
+
+        size_t pointSizeHash = hasher( std::to_string( pointSize ) );
+        size_t styleHash = hasher( std::to_string( static_cast<int>( style ) ) );
+
+        return pointSizeHash ^ styleHash;
     }
 
     
@@ -194,7 +205,7 @@ namespace chestnut
 
     bool CFontResource::isValid() const
     {
-        if( fontPath != "" )
+        if( !mapConfigHashToConfig.empty() )
         {
             return true;
         }
@@ -243,6 +254,7 @@ namespace chestnut
     const SFontConfig& CFontResource::getConfig( int pointSize, EFontStyle style ) 
     {
         // let the exception propagate if it happens
+        // checks for whether config is already loaded are already in that function
         loadConfig( pointSize, style );
 
         size_t hash = getConfigHash( pointSize, style );
@@ -251,18 +263,14 @@ namespace chestnut
 
     size_t CFontResource::getConfigHash( int pointSize, EFontStyle style ) 
     {
-        std::hash<std::string> hasher;
-
-        size_t pointSizeHash = hasher( std::to_string( pointSize ) );
-        size_t styleHash = hasher( std::to_string( static_cast<int>( style ) ) );
-
-        return pointSizeHash ^ styleHash;
+        return getConfigHashInternal( pointSize, style );
     }
 
 
 
 
     #define INIT_FONT_POINT_SIZE 16
+    #define INIT_FONT_STYLE EFontStyle::NORMAL
 
     std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath ) 
     {
@@ -271,8 +279,21 @@ namespace chestnut
 
         if( font )
         {
+            auto unicodeValues = getUnicodeValueRanges();
+            SFontConfig initConfig = loadConfigInternal( font, INIT_FONT_POINT_SIZE, INIT_FONT_STYLE, unicodeValues );
+            size_t hash = getConfigHashInternal( INIT_FONT_POINT_SIZE, INIT_FONT_STYLE );
+
+            CFontResource *resource = new CFontResource();
+            resource->fontPath = fontPath;
+            resource->mapConfigHashToConfig[ hash ] = initConfig;
+            for( const auto& [ g, metrics ] : initConfig.mapGlyphMetrics )
+            {
+                resource->setAvailableGlyphs.insert(g);
+            }
+
             TTF_CloseFont( font );
-            return std::make_shared<CFontResource>( fontPath );
+
+            return std::shared_ptr<CFontResource>( resource );
         }        
         else
         {

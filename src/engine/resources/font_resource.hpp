@@ -5,6 +5,7 @@
 
 #include <string>
 #include <memory>
+#include <set>
 #include <unordered_map>
 
 namespace chestnut
@@ -35,14 +36,16 @@ namespace chestnut
         EFontStyle style;
         int ascent;
         int descent;
-        CMapSpriteSheetTexture2D<wchar_t> glyphSpriteSheet; // all clipping rectangles are normalized
+        int height;
+        CMapSpriteSheetTexture2D<wchar_t> glyphSpriteSheet;
         std::unordered_map<wchar_t, SGlyphMetrics> mapGlyphMetrics;
     };
 
     class CFontResource
     {
     public:
-        std::string fontPath; // decides whether resource is valid; if it's not an empty string, it's valid
+        std::string fontPath;
+        std::set< wchar_t > setAvailableGlyphs;
         std::unordered_map< size_t, SFontConfig > mapConfigHashToConfig;
 
         CFontResource();
