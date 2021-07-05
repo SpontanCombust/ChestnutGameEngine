@@ -1,6 +1,9 @@
 #include "text_renderer.hpp"
 
 #include "engine/debug/debug.hpp"
+#include "engine/maths/vector_cast.hpp"
+
+#include <unordered_map>
 
 #define INIT_GLYPH_CAPACITY 128
 
@@ -113,45 +116,47 @@ namespace chestnut
 
     void CTextRenderer::submitText( const CText& text, vec2f translation, vec2f scale ) 
     {
-        if( text.getLength() > 0 )
+        if( !text.isEmpty() )
         {
-            const auto& vecTextFragments = text.getFragments();
+            std::unordered_map< GLuint, STextRender_VertexGroup > mapTexIDToVertexGroup;
             
-            for( const STextFragment& textFragment : vecTextFragments )
+            const auto& vecTextLines = text.getLines();
+            for( const STextLine& textLine : vecTextLines )
             {
-                STextRender_VertexGroup vertexGroup;
-   
-                vertexGroup.texID = textFragment.texID;
-
-                for( const STextGlyph& textGlyph : textFragment.vecGlyphs )
+                for( const STextGlyph& textGlyph : textLine.vecGlyphs )
                 {
                     STextRender_Vertex vertex;
 
-                    vertex.color = textFragment.color;
+                    vertex.color = textGlyph.color;
                     vertex.translation = translation;
                     vertex.scale = scale;
 
                     // upper left
-                    vertex.pos = textGlyph.posOffset;
+                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset );
                     vertex.uv = textGlyph.uvOffsetNorm;
-                    vertexGroup.vecVertices.push_back( vertex );
+                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
                     
                     // upper right
-                    vertex.pos = textGlyph.posOffset + vec2f( textGlyph.size.x, 0 );
+                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + vec2i( textGlyph.size.x, 0 ) );
                     vertex.uv = textGlyph.uvOffsetNorm + vec2f( textGlyph.uvSizeNorm.x, 0 );
-                    vertexGroup.vecVertices.push_back( vertex );
+                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
 
                     // lower right
-                    vertex.pos = textGlyph.posOffset + textGlyph.size;
+                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + textGlyph.size );
                     vertex.uv = textGlyph.uvOffsetNorm + textGlyph.uvSizeNorm;
-                    vertexGroup.vecVertices.push_back( vertex );
+                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
 
                     // lower left
-                    vertex.pos = textGlyph.posOffset + vec2f( 0, textGlyph.size.y );
+                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + vec2i( 0, textGlyph.size.y ) );
                     vertex.uv = textGlyph.uvOffsetNorm + vec2f( 0, textGlyph.uvSizeNorm.y );
-                    vertexGroup.vecVertices.push_back( vertex );
+                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
                 }
+            }
 
+            for( auto& [ texID , vertexGroup ] : mapTexIDToVertexGroup )
+            {
+                // IDs weren't set before for actual vertex groups, so we're doing it now
+                vertexGroup.texID = texID;
                 m_vecVertexGroups.push_back( vertexGroup );
             }
         }       

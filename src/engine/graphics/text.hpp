@@ -10,28 +10,35 @@
 namespace chestnut
 {
     struct STextGlyph
-    {
+    {   
+        // debug
         wchar_t g;
-        vec2f posOffset;
-        vec2f size;
+        EFontStyle style;
+
+        // data
+        GLuint texID;
+        vec4f color;
+        vec2i lineOffset;
+        vec2i size;
         vec2f uvOffsetNorm;
         vec2f uvSizeNorm;
     };
 
-    struct STextFragment
+    struct STextLine
     {
+        // debug
         std::wstring str;
-        EFontStyle style; 
-        vec4f color;
-        GLuint texID;
+
+        //data
+        vec2i offset;
         std::vector< STextGlyph > vecGlyphs;
     };
 
-    enum class ETextPositioningMode
+    enum class ETextAlignment
     {
-        TOP,
-        BASELINE,
-        BOTTOM
+        LEFT,
+        CENTER,
+        RIGHT
     };
 
     class CText
@@ -40,35 +47,61 @@ namespace chestnut
         std::shared_ptr<CFontResource> m_resource;
         int m_pointSize;
 
-        ETextPositioningMode m_positioningMode;
-        vec2f m_currentGlyphOffset;
+        ETextAlignment m_alignment;
+        int m_maxWidth;
+        float m_lineSpacing;
 
-        std::vector<STextFragment> m_vecFragments;
+        std::vector<STextLine> m_vecLines;
 
     public:
         CText();
         CText( std::shared_ptr<CFontResource> fontResource, int pointSize );
 
+        const std::shared_ptr<CFontResource>& getResource() const;
         bool isValid() const;
 
         int getPointSize() const;
 
-        // Sets the relative positioning of glyphs for the text line
-        void setPositioningMode( ETextPositioningMode mode );
-        ETextPositioningMode getPositioningMode() const;
+
+        void setAligment( ETextAlignment alignment );
+        ETextAlignment getAlignment() const;
+
+        // Negative number for unlimited width
+        void setMaxWidthPixels( int w );
+        int getMaxWidthPixels() const;
+
+        // Set the factor of lineskip that gets multiplied by minimal line skip height
+        void setLineSpacing( float spacing );
+        float getLineSpacing() const;
+
 
         void clear();
-        void append( std::wstring s, EFontStyle style = EFontStyle::NORMAL, vec4f color = { 1.f, 1.f, 1.f, 1.f } );
+        void newline();
+        void append( std::wstring str, EFontStyle style = EFontStyle::NORMAL, vec4f color = { 1.f, 1.f, 1.f, 1.f } );
+
 
         std::wstring getString() const;
         bool isEmpty() const;
-        int getLength() const;
 
-        float getWidth() const;
-        float getHeight() const;
-        vec2f getSize() const; 
+        int getWidthPixels() const;
+        int getHeightPixels() const;
+        vec2i getSizePixels() const;
 
-        const std::vector< STextFragment >& getFragments() const;
+
+        const std::vector<STextLine>& getLines() const;
+
+
+    protected:
+        int computeLineHeight( const STextLine& line ) const;
+        int computeLineWidth( const STextLine& line ) const;
+        std::wstring computeLineString( const STextLine& line ) const;
+        int computeLineOffsetX( int maxWidth, int lineWidth ) const;
+        int computeWordWidth( std::wstring word, const SFontConfig& fontConfig ) const;
+
+        // If line with that index doesn't yet exist, it gets created
+        void insertBackGlyphsIntoLineSafe( std::vector<STextGlyph> vecGlyphs, unsigned int lineIdx );
+        void appendWord( std::wstring str, const SFontConfig& fontConfig, vec4f color );
+        void formatLines( unsigned int beginLineIdx = 0 );
     };
 
 } // namespace chestnut

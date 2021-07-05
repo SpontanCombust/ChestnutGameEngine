@@ -30,51 +30,51 @@ namespace test
 
 
 
-            const SFontConfig& normalConfig = fontResource->getConfig( 32, EFontStyle::NORMAL );
-            const CMapSpriteSheetTexture2D<wchar_t>& normalSheet = normalConfig.glyphSpriteSheet;
+            // const SFontConfig& normalConfig = fontResource->getConfig( 32, EFontStyle::NORMAL );
+            // const CMapSpriteSheetTexture2D<wchar_t>& normalSheet = normalConfig.glyphSpriteSheet;
 
-            const SFontConfig& boldConfig = fontResource->getConfig( 32, EFontStyle::BOLD );
-            const CMapSpriteSheetTexture2D<wchar_t>& boldSheet = boldConfig.glyphSpriteSheet;
+            // const SFontConfig& boldConfig = fontResource->getConfig( 32, EFontStyle::BOLD );
+            // const CMapSpriteSheetTexture2D<wchar_t>& boldSheet = boldConfig.glyphSpriteSheet;
 
-            const SFontConfig& italicConfig = fontResource->getConfig( 33, EFontStyle::ITALIC );
-            const CMapSpriteSheetTexture2D<wchar_t>& italicSheet = italicConfig.glyphSpriteSheet;
+            // const SFontConfig& italicConfig = fontResource->getConfig( 33, EFontStyle::ITALIC );
+            // const CMapSpriteSheetTexture2D<wchar_t>& italicSheet = italicConfig.glyphSpriteSheet;
 
-            const SFontConfig& underlineConfig = fontResource->getConfig( 33, EFontStyle::UNDERLINE );
-            const CMapSpriteSheetTexture2D<wchar_t>& underlineSheet = underlineConfig.glyphSpriteSheet;
+            // const SFontConfig& underlineConfig = fontResource->getConfig( 33, EFontStyle::UNDERLINE );
+            // const CMapSpriteSheetTexture2D<wchar_t>& underlineSheet = underlineConfig.glyphSpriteSheet;
 
 
 
-            spriteRenderer.bindShader();
-            spriteRenderer.setViewMatrix( mat4f() );
-            spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
+            // spriteRenderer.bindShader();
+            // spriteRenderer.setViewMatrix( mat4f() );
+            // spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
-            window.clear();
-                spriteRenderer.clear();
-                spriteRenderer.submitSprite( normalSheet, { 0.f, 0.f } );
-                spriteRenderer.render();
-            window.flipBuffer();
-            SDL_Delay( 2000 );
+            // window.clear();
+            //     spriteRenderer.clear();
+            //     spriteRenderer.submitSprite( normalSheet, { 0.f, 0.f } );
+            //     spriteRenderer.render();
+            // window.flipBuffer();
+            // SDL_Delay( 2000 );
 
-            window.clear();
-                spriteRenderer.clear();
-                spriteRenderer.submitSprite( boldSheet, { 0.f, 0.f } );
-                spriteRenderer.render();
-            window.flipBuffer();
-            SDL_Delay( 2000 );
+            // window.clear();
+            //     spriteRenderer.clear();
+            //     spriteRenderer.submitSprite( boldSheet, { 0.f, 0.f } );
+            //     spriteRenderer.render();
+            // window.flipBuffer();
+            // SDL_Delay( 2000 );
 
-            window.clear();
-                spriteRenderer.clear();
-                spriteRenderer.submitSprite( italicSheet, { 0.f, 0.f } );
-                spriteRenderer.render();
-            window.flipBuffer();
-            SDL_Delay( 2000 );
+            // window.clear();
+            //     spriteRenderer.clear();
+            //     spriteRenderer.submitSprite( italicSheet, { 0.f, 0.f } );
+            //     spriteRenderer.render();
+            // window.flipBuffer();
+            // SDL_Delay( 2000 );
 
-            window.clear();
-                spriteRenderer.clear();
-                spriteRenderer.submitSprite( underlineSheet, { 0.f, 0.f } );
-                spriteRenderer.render();
-            window.flipBuffer();
-            SDL_Delay( 2000 );
+            // window.clear();
+            //     spriteRenderer.clear();
+            //     spriteRenderer.submitSprite( underlineSheet, { 0.f, 0.f } );
+            //     spriteRenderer.render();
+            // window.flipBuffer();
+            // SDL_Delay( 2000 );
 
 
 
@@ -83,17 +83,17 @@ namespace test
             CTextRenderer textRenderer;
             textRenderer.init( textShader );
 
-            CText text1 = CText( fontResource, 32 );
-            CText text2 = CText( fontResource, 33 );
+            CText text = CText( fontResource, 32 );
             
-            text1.append( L"Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
-            text1.append( L"kotek ", EFontStyle::BOLD, { 1.f, 1.f, 0.0, 1.f } );
-            text1.append( L"na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
-            text1.append( L"płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f, 1.f } );
-
-            text2.append( L"Pierdolnął go ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
-            text2.append( L"młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f, 1.f } );
-
+            text.setAligment( ETextAlignment::CENTER );
+            text.setMaxWidthPixels( 100 );
+            text.append( L"Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
+            text.append( L"kotek ", EFontStyle::BOLD, { 1.f, 1.f, 0.0, 1.f } );
+            text.append( L"na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
+            text.append( L"płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f, 1.f } );
+            text.newline();
+            text.append( L"Pierdolnął go ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f, 1.f } );
+            text.append( L"młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f, 1.f } );
 
 
             textRenderer.bindShader();
@@ -104,26 +104,13 @@ namespace test
             {
                 window.clear();
                     textRenderer.clear();
-                    textRenderer.submitText( text1, { 50.f, 50.f } );
-                    textRenderer.submitText( text2, { 50.f, 200.f }, { 2.0f, 2.0f } );
+                    textRenderer.submitText( text, { 50.f, 50.f } );
                     textRenderer.render();
                 window.flipBuffer();
             };
 
-            text1.setPositioningMode( ETextPositioningMode::TOP );
-            text2.setPositioningMode( ETextPositioningMode::TOP );
             render();
-            SDL_Delay(2000);
-
-            text1.setPositioningMode( ETextPositioningMode::BASELINE );
-            text2.setPositioningMode( ETextPositioningMode::BASELINE );
-            render();
-            SDL_Delay(2000);
-
-            text1.setPositioningMode( ETextPositioningMode::BOTTOM );
-            text2.setPositioningMode( ETextPositioningMode::BOTTOM );
-            render();
-            SDL_Delay(2000);
+            SDL_Delay( 3000 );
         }
         catch(const std::exception& e)
         {

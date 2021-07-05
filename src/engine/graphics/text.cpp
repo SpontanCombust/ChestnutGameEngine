@@ -2,25 +2,28 @@
 
 #include "engine/debug/debug.hpp"
 
-#include <algorithm>
-#include <codecvt>
-#include <locale>
-
 namespace chestnut
-{    
+{
     CText::CText() 
     {
         m_pointSize = 0;
-        m_positioningMode = ETextPositioningMode::BASELINE;
-        m_currentGlyphOffset = { 0, 0 };
+        m_alignment = ETextAlignment::LEFT;
+        m_maxWidth = -1.f;
+        m_lineSpacing = 1.f;
     }
 
     CText::CText( std::shared_ptr<CFontResource> fontResource, int pointSize ) 
     {
         m_resource = fontResource;
         m_pointSize = pointSize;
-        m_positioningMode = ETextPositioningMode::BASELINE;
-        m_currentGlyphOffset = { 0, 0 };
+        m_alignment = ETextAlignment::LEFT;
+        m_maxWidth = -1.f;
+        m_lineSpacing = 1.f;
+    }
+
+    const std::shared_ptr<CFontResource>& CText::getResource() const
+    {
+        return m_resource;
     }
 
     bool CText::isValid() const
@@ -37,187 +40,503 @@ namespace chestnut
         return m_pointSize;
     }
 
+    
 
 
-    void CText::setPositioningMode( ETextPositioningMode mode ) 
+    void CText::setAligment( ETextAlignment alignment ) 
     {
-        m_positioningMode = mode;
+        m_alignment = alignment;
+    }
 
-        // copy all stored fragments
-        std::vector< STextFragment > prevFragments = m_vecFragments;
+    ETextAlignment CText::getAlignment() const
+    {
+        return m_alignment;
+    }
 
-        // clear them
-        clear();
+    void CText::setMaxWidthPixels( int w ) 
+    {
+        m_maxWidth = w;
+    }
 
-        // reappend them but this time with different positioning
-        // because it's easier than writing a lot of conditionals for offset changing
-        // based on from which and to which positioning mode we're transitioning
-        for( const STextFragment& frag : prevFragments )
+    int CText::getMaxWidthPixels() const
+    {
+        return m_maxWidth;
+    }
+
+    void CText::setLineSpacing( float linespacing ) 
+    {
+        m_lineSpacing = linespacing;
+    }
+
+    float CText::getLineSpacing() const
+    {
+        return m_lineSpacing;
+    }
+
+
+
+
+
+    const wchar_t UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR = L' ';
+
+    // If metrics doesn't have that glyph returns replacement metrics
+    const SGlyphMetrics& getGlyphMetricsSafe( const SFontConfig& config, wchar_t g )
+    {
+        auto it = config.mapGlyphMetrics.find(g);
+        auto end = config.mapGlyphMetrics.end();
+
+        if( it != end )
         {
-            append( frag.str, frag.style, frag.color );
+            return config.mapGlyphMetrics.at(g);
+        }
+        else
+        {
+            return config.mapGlyphMetrics.at( UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR );
         }
     }
 
-    ETextPositioningMode CText::getPositioningMode() const
+    // For very long words that don't fit within maxWidth
+    std::vector< std::wstring > fragmentizeWord( std::wstring word, const SFontConfig& fontConfig, int maxFragmentWidth )
     {
-        return m_positioningMode;
+        std::vector< std::wstring > vecWordFragments;
+
+        int width = 0;
+        std::wstring frag = L"";
+        
+        for(unsigned int i = 0; i < word.length(); i++)
+        {
+            const SGlyphMetrics& metrics = getGlyphMetricsSafe( fontConfig, word[i] );
+
+            width += metrics.advance;
+            frag += word[i];
+
+            if( width > maxFragmentWidth )
+            {
+                vecWordFragments.push_back( frag );
+                width = 0.f;
+                frag = L"";
+            }
+        }
+
+        // push back remaining fragment if there is one
+        if( frag != L"" )
+        {
+            vecWordFragments.push_back( frag );
+        }
+
+        return vecWordFragments;
     }
 
-    void CText::clear() 
+    std::vector< STextGlyph > createWordTextGlyphs( std::wstring word, const SFontConfig& fontConfig, vec4f color, vec2i baseOffset = { 0, 0 } )
     {
-        m_vecFragments.clear();
-        m_currentGlyphOffset = {0};
-    }
+        std::vector< STextGlyph > vecGlyphs;
 
-    void CText::append( std::wstring s, EFontStyle style, vec4f color ) 
-    {
-        const SFontConfig& config = m_resource->getConfig( m_pointSize, style );
+        STextGlyph glyph;
+        vec2i offset = baseOffset;
 
-        STextFragment fragment;
-        fragment.str = s;
-        fragment.style = style;
-        fragment.color = color;
-        fragment.texID = config.glyphSpriteSheet.getID();
-
-        bool allGlyphsAvailable = true;
-        for( wchar_t g : s )
+        for( wchar_t g : word )
         {
             SGlyphMetrics metrics;
-            SRectangle clipRect;
-            if( config.glyphSpriteSheet.hasSheetFragment(g) )
+            SRectangle rectNorm;
+            if( fontConfig.glyphSpriteSheet.hasSheetFragment(g) )
             {
-                metrics = config.mapGlyphMetrics.at(g);
-                clipRect = config.glyphSpriteSheet.getSheetFragment( g, true );
+                metrics = fontConfig.mapGlyphMetrics.at(g);
+                rectNorm = fontConfig.glyphSpriteSheet.getSheetFragment( g, true );
             }
             else
             {
-                // config doesn't have that glyph, have to use some sort of replacement, e.g. a simple space
-                metrics = config.mapGlyphMetrics.at( L' ' );
-                clipRect = config.glyphSpriteSheet.getSheetFragment( L' ', true );
-                allGlyphsAvailable = false;
+                metrics = fontConfig.mapGlyphMetrics.at( UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR );
+                rectNorm = fontConfig.glyphSpriteSheet.getSheetFragment( UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR, true );
             }
+            
 
-            STextGlyph glyph;
             glyph.g = g;
-            glyph.size = vec2f( metrics.width, metrics.height );
-            glyph.uvOffsetNorm = vec2f( clipRect.x, clipRect.y );
-            glyph.uvSizeNorm = vec2f( clipRect.w, clipRect.h );
+            glyph.style = fontConfig.style;
+            glyph.color = color;
 
-            switch( m_positioningMode )
+            glyph.texID = fontConfig.glyphSpriteSheet.getID();
+            glyph.lineOffset = { offset.x + metrics.xMin, offset.y };
+            glyph.size = { metrics.width, metrics.height };
+            glyph.uvOffsetNorm = { rectNorm.x, rectNorm.y };
+            glyph.uvSizeNorm = { rectNorm.w, rectNorm.h };
+
+            vecGlyphs.push_back( glyph );
+
+            offset += { metrics.advance, 0 };
+        } 
+
+        return vecGlyphs;       
+    }
+
+    std::vector< std::wstring > tokenizeString( std::wstring str, wchar_t separator, bool includeSeparator = false )
+    {
+        // size_t separatorPos;
+        bool isSeparatorPrev = false, isSeparatorCurrent = false;
+        std::wstring substr;
+        std::vector< std::wstring > vecTokens;
+
+        if( str != L"" )
+        {
+            for (unsigned int i = 0; i < str.length(); i++)
             {
-                case ETextPositioningMode::TOP:
-                    glyph.posOffset = m_currentGlyphOffset + vec2f( metrics.xMin, 0 );
-                    break;
-                case ETextPositioningMode::BASELINE:
-                    glyph.posOffset = m_currentGlyphOffset + vec2f( metrics.xMin, -config.ascent );
-                    break;
-                default: // BOTTOM
-                    glyph.posOffset = m_currentGlyphOffset + vec2f( metrics.xMin, -metrics.height );
-                    break;
+                if( str[i] == separator )
+                {
+                    isSeparatorCurrent = true;
+                }
+                else
+                {
+                    isSeparatorCurrent = false;
+                }
+
+                if( isSeparatorCurrent != isSeparatorPrev )
+                {
+                    if( substr != L"" )
+                    {
+                        if( substr[0] != separator || includeSeparator )
+                        {
+                            vecTokens.push_back( substr );
+                        }
+
+                        substr = L"";
+                    }
+                }
+
+                substr += str[i];
+
+                isSeparatorPrev = isSeparatorCurrent;
             }
             
-            fragment.vecGlyphs.push_back( glyph );
-            
-            m_currentGlyphOffset.x += metrics.advance;
+            // push one last remaining token
+            vecTokens.push_back( substr );
         }
 
-        if( !allGlyphsAvailable )
-        {
-            std::wstring_convert< std::codecvt_utf8<wchar_t> > conv;
-            LOG_CHANNEL( "TEXT", "Some characters from string \"" << conv.to_bytes(s) << "\" are not available in font " << m_resource->fontPath );
-        }
-
-        m_vecFragments.push_back( fragment );
+        return vecTokens;
     }
 
-    bool CText::isEmpty() const
+
+
+
+    
+
+    int CText::computeLineHeight( const STextLine& line ) const
     {
-        return m_vecFragments.empty();
+        int height = 0;
+        if( !line.vecGlyphs.empty() )
+        {
+            for( const STextGlyph& glyph : line.vecGlyphs )
+            {
+                if( glyph.lineOffset.y + glyph.size.y > height )
+                {
+                    height = glyph.lineOffset.y + glyph.size.y;
+                }
+            }
+        }
+
+        return height;
     }
 
-    std::wstring CText::getString() const
+    int CText::computeLineWidth( const STextLine& line ) const
+    {
+        int width = 0;
+        if( !line.vecGlyphs.empty() )
+        {
+            const STextGlyph& lastGlyph = line.vecGlyphs.back();
+            const SFontConfig& lastGlyphConfig = m_resource->getConfig( m_pointSize, lastGlyph.style );
+            const SGlyphMetrics& lastGlyphMetrics = getGlyphMetricsSafe( lastGlyphConfig, lastGlyph.g );
+
+            width = lastGlyph.lineOffset.x + lastGlyphMetrics.advance;
+        }
+
+        return width;
+    }
+
+    std::wstring CText::computeLineString( const STextLine& line ) const
     {
         std::wstring str;
-        for( const STextFragment& frag : m_vecFragments )
+
+        for( const auto& glyph : line.vecGlyphs )
         {
-            str += frag.str;
+            str += glyph.g;
         }
 
         return str;
     }
 
-    int CText::getLength() const
+    int CText::computeLineOffsetX( int lineWidth, int maxWidth ) const
     {
-        return getString().length();
+        switch( m_alignment )
+        {
+            case ETextAlignment::CENTER:
+                return ( maxWidth - lineWidth ) / 2;
+            case ETextAlignment::RIGHT:
+                return maxWidth - lineWidth;
+            default:
+                return 0;
+        }
     }
 
-    float CText::getWidth() const
+    int CText::computeWordWidth( std::wstring word, const SFontConfig& fontConfig ) const
+    {
+        int width = 0;
+
+        for( wchar_t g : word )
+        {
+            const SGlyphMetrics& metrics = getGlyphMetricsSafe( fontConfig, g );
+
+            width += metrics.advance;
+        }
+
+        return width;
+    }
+
+
+
+
+    void CText::insertBackGlyphsIntoLineSafe( std::vector<STextGlyph> vecGlyphs, unsigned int lineIdx ) 
+    {
+        if( lineIdx >= vecGlyphs.size() )
+        {
+            m_vecLines.resize( lineIdx + 1 );
+        }
+
+        auto& vecLineGlyphs = m_vecLines[ lineIdx ].vecGlyphs;
+        vecLineGlyphs.insert( vecLineGlyphs.end(), vecGlyphs.begin(), vecGlyphs.end() );
+    }
+
+    void CText::appendWord( std::wstring word, const SFontConfig& fontConfig, vec4f color ) 
+    {
+        if( m_vecLines.empty() )
+        {
+            // make sure that there is at least one available line to write into
+            m_vecLines.emplace_back();
+        }
+        
+        int lastLineIdx = m_vecLines.size() - 1;
+
+        std::vector< STextGlyph > vecGlyphs;
+        vec2i offset;
+
+        // if the width of the text is limited
+        if( m_maxWidth > 0 )
+        {
+            int wordWidth = computeWordWidth( word, fontConfig );
+            int totalWidth = computeLineWidth( m_vecLines[ lastLineIdx ] ) + wordWidth;
+
+            if( totalWidth > m_maxWidth )
+            {
+                // the word won't fit in current line, create a new one and move onto it
+                m_vecLines.emplace_back();
+                lastLineIdx++;
+            }
+
+            
+            if( wordWidth > m_maxWidth )
+            {
+                // the word is too long to fit in a single line, divide it into fitting pieces
+                std::vector< std::wstring > vecWordFragments = fragmentizeWord( word, fontConfig, m_maxWidth );
+
+                offset = { computeLineWidth( m_vecLines[ lastLineIdx ] ), 0 };
+                vecGlyphs = createWordTextGlyphs( vecWordFragments[0], fontConfig, color, offset );
+                insertBackGlyphsIntoLineSafe( vecGlyphs, lastLineIdx );
+
+                for (unsigned int i = 1; i < vecWordFragments.size(); i++)
+                {
+                    m_vecLines.emplace_back();
+                    lastLineIdx++;
+
+                    offset = { computeLineWidth( m_vecLines[ lastLineIdx ] ), 0 };
+                    vecGlyphs = createWordTextGlyphs( vecWordFragments[i], fontConfig, color, offset );
+                    insertBackGlyphsIntoLineSafe( vecGlyphs, lastLineIdx );
+                }
+            }
+            else
+            {
+                offset = { computeLineWidth( m_vecLines[ lastLineIdx ] ), 0 };
+                vecGlyphs = createWordTextGlyphs( word, fontConfig, color, offset );
+                insertBackGlyphsIntoLineSafe( vecGlyphs, lastLineIdx );
+            }
+        }
+        else
+        {
+            offset = { computeLineWidth( m_vecLines[ lastLineIdx ] ), 0 };
+            vecGlyphs = createWordTextGlyphs( word, fontConfig, color, offset );
+            insertBackGlyphsIntoLineSafe( vecGlyphs, lastLineIdx );   
+        }
+    }
+
+    void CText::formatLines( unsigned int beginLineIdx ) 
+    {
+        int currLineWidth;
+        int maxWidth = 0;
+
+        // there is no limit to actual width, so we need to calculate it based on max width of all lines
+        if( m_maxWidth < 0 )
+        {
+            maxWidth = getWidthPixels();
+        }
+        else
+        {
+            maxWidth = m_maxWidth;
+        }
+        
+
+        // first line is a special case as it doesn't need to calculate its Y offset - it's always 0
+        if( beginLineIdx == 0 )
+        {
+            if( !m_vecLines[0].vecGlyphs.empty() )
+            {
+                currLineWidth = computeLineWidth( m_vecLines[0] );
+
+                m_vecLines[0].str = computeLineString( m_vecLines[0] );
+                m_vecLines[0].offset.x = computeLineOffsetX( currLineWidth, maxWidth );
+                m_vecLines[0].offset.y = 0;
+            }
+
+            beginLineIdx++;
+        }
+
+
+        int prevLineHeight;
+        int initHeight = m_resource->getConfig( m_pointSize, EFontStyle::NORMAL ).height;
+
+        // for every line adjust its Y offset based on offset of previous line and X offset based on total width of its glyphs
+        for (unsigned int i = beginLineIdx; i < m_vecLines.size(); i++)
+        {
+            const STextLine& prevLine = m_vecLines[ i - 1 ];
+            STextLine& currLine = m_vecLines[i];
+
+            currLineWidth = computeLineWidth( currLine );
+
+            if( !prevLine.vecGlyphs.empty() )
+            {
+                prevLineHeight = computeLineHeight( prevLine );
+            }
+            else
+            {
+                prevLineHeight = initHeight;
+            }
+
+            currLine.str = computeLineString( currLine );
+            currLine.offset.x = computeLineOffsetX( currLineWidth, maxWidth );
+            currLine.offset.y = prevLine.offset.y + prevLineHeight * m_lineSpacing;
+        }
+    }
+
+
+
+
+
+
+    void CText::clear() 
+    {
+        m_vecLines.clear();
+    }
+
+    void CText::newline() 
+    {
+        m_vecLines.emplace_back();
+    }
+
+    void CText::append( std::wstring str, EFontStyle style, vec4f color ) 
+    {
+        if( str == L"" )
+        {
+            return;
+        }
+
+        const SFontConfig& config = m_resource->getConfig( m_pointSize, style );
+
+        auto vecNewLinesStr = tokenizeString( str, L'\n', false );
+
+        for( std::wstring newLineStr : vecNewLinesStr )
+        {
+            auto vecWords = tokenizeString( newLineStr, L' ', true );
+            
+            for( std::wstring word : vecWords )
+            {
+                appendWord( word, config, color );
+            }
+        }
+
+        formatLines();
+    }
+
+    
+
+
+
+    std::wstring CText::getString() const
+    {
+        std::wstring str;
+        for( const STextLine& line : m_vecLines )
+        {
+            str += line.str;
+        }
+
+        return str;
+    }
+
+    bool CText::isEmpty() const
+    {
+        return m_vecLines.empty();
+    }
+
+    int CText::getWidthPixels() const
+    {
+        if( isEmpty() )
+        {
+            return 0;
+        }
+
+        int width, maxWidth = 0;
+
+        for( const STextLine& line : m_vecLines )
+        {
+            width = computeLineWidth( line );
+
+            if( width > maxWidth )
+            {
+                maxWidth = width;
+            }
+        }
+
+        return maxWidth;
+    }
+
+    int CText::getHeightPixels() const
     {
         if( isEmpty() )
         {
             return 0.f;
         }
 
-        const STextFragment& lastFrag = m_vecFragments.back();
-        const STextGlyph& lastGlyph = lastFrag.vecGlyphs.back();
+        int height;
+        const STextLine& lastLine = m_vecLines.back();
+        height = lastLine.offset.y + computeLineHeight( lastLine );
 
-        // since we always start at zero we just need total offset plus size of the last glyph
-        float endPos = lastGlyph.posOffset.x + lastGlyph.size.x;
-
-        return endPos;
+        return height;
     }
 
-    float CText::getHeight() const
+    vec2i CText::getSizePixels() const
     {
         if( isEmpty() )
         {
-            return 0.f;
+            return { 0, 0 };
         }
 
-        float maxHeight = 0.f;
-
-        for( const STextFragment& frag : m_vecFragments )
-        {
-            for( const STextGlyph& glyph : frag.vecGlyphs )
-            {
-                if( glyph.size.y > maxHeight )
-                {
-                    maxHeight = glyph.size.y;
-                }
-            }
-        }
-
-        return maxHeight;
-    }
-
-    vec2f CText::getSize() const
-    {
-        if( isEmpty() )
-        {
-            return { 0.f, 0.f };
-        }
-
-        vec2f size = { 0.f, 0.f };
-
-        for( const STextFragment& frag : m_vecFragments )
-        {
-            for( const STextGlyph& glyph : frag.vecGlyphs )
-            {
-                size.x = glyph.posOffset.x + glyph.size.x;
-
-                if( glyph.size.y > size.y )
-                {
-                    size.y = glyph.size.y;
-                }
-            }
-        }
+        vec2i size;
+        size.x = getWidthPixels();
+        size.y = getHeightPixels();
 
         return size;
     }
 
-    const std::vector< STextFragment >& CText::getFragments() const
+
+
+
+    const std::vector<STextLine>& CText::getLines() const
     {
-        return m_vecFragments;
+        return m_vecLines;
     }
 
 } // namespace chestnut
