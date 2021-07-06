@@ -23,6 +23,7 @@ namespace chestnut
         Vector& operator+=( const Vector& v );
         Vector& operator-=( const Vector& v );
         Vector& operator*=( const Vector& v );
+        Vector& operator/=( const Vector& v );
         Vector& operator*=( T s );
     };
 

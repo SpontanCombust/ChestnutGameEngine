@@ -20,6 +20,7 @@ namespace chestnut
         Vector& operator+=( const Vector& v );
         Vector& operator-=( const Vector& v );
         Vector& operator*=( const Vector& v );
+        Vector& operator/=( const Vector& v );
         Vector& operator*=( T s );
     };
 
@@ -72,6 +73,13 @@ namespace chestnut
 
     template< typename T, size_t n >
     Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecComponentQuotient( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+    template< typename T, size_t n >
+    Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
 
     template< typename T, size_t n >

@@ -56,6 +56,13 @@ namespace chestnut
     }
 
     template<typename T>
+    Vector<T,2>& Vector<T,2>::operator/=( const Vector<T,2>& v ) 
+    {
+        *this = vecComponentQuotient<T,2>( *this, v );
+        return *this;
+    }
+
+    template<typename T>
     Vector<T,2>& Vector<T,2>::operator*=( T s ) 
     {
         *this = vecScalarProduct<T,2>( *this, s );

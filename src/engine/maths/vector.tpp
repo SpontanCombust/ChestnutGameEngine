@@ -46,18 +46,26 @@ namespace chestnut
     }
 
     template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator*=( const Vector<T,n>& v ) 
+    {
+        *this = vecComponentProduct<T,n>( *this, v );
+        return *this;
+    }
+
+    template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator/=( const Vector<T,n>& v ) 
+    {
+        *this = vecComponentQuotient<T,n>( *this, v );
+        return *this;
+    }
+
+    template<typename T, size_t n>
     Vector<T,n>& Vector<T, n>::operator*=( T s ) 
     {
         *this = vecScalarProduct<T,n>( *this, s );
         return *this;
     }
 
-    template<typename T, size_t n>
-    Vector<T,n>& Vector<T, n>::operator*=( const Vector<T,n>& v ) 
-    {
-        *this = vecComponentProduct<T,n>( *this, v );
-        return *this;
-    }
 
 
 
@@ -239,6 +247,31 @@ namespace chestnut
 
 
     
+    template< typename T, size_t n >
+    Vector<T,n> vecComponentQuotient( const Vector<T,n>& v1, const Vector<T,n>& v2 )
+    {
+        Vector<T,n> quot;
+
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+        T *datQuot = quot.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datQuot[i] = dat1[i] / dat2[i];
+        }
+
+        return quot;
+    }
+
+    template< typename T, size_t n >
+    Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 )
+    {
+        return vecComponentQuotient( v1, v2 );
+    }
+
+
+
     template< typename T, size_t n >
     std::string vecToString( const Vector<T,n>& v )
     {
