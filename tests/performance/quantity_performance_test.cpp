@@ -41,8 +41,8 @@ namespace test
     {
         srand( time(nullptr) );
 
-        lol = theResourceManager.loadTexture( "../_media_test/awesomeface.png" );
-        gatsu = theResourceManager.loadTexture( "../_media_test/berk.jpg" );
+        lol = theResourceManager.getTexture2DResource( "../_media_test/awesomeface.png" );
+        gatsu = theResourceManager.getTexture2DResource( "../_media_test/berk.jpg" );
 
         SComponentSetSignature sign;
         sign.add<STransformComponent>()
