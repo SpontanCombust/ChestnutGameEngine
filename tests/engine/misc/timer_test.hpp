@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_TIMER_TEST_H__
-#define __CHESTNUT_TIMER_TEST_H__
+#include "misc_tests.hpp"
 
 #include "engine/misc/timers/auto_timer.hpp"
 #include "engine/misc/timers/locked_auto_timer.hpp"
@@ -99,5 +98,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_TIMER_TEST_H__

@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENTITY_REGISTRY_TEST_H__
-#define __CHESTNUT_ENTITY_REGISTRY_TEST_H__
+#include "ecs_tests.hpp"
 
 #include "engine/ecs/management/entity_registry.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -88,5 +87,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_ENTITY_REGISTRY_TEST_H__

@@ -1,6 +1,6 @@
-#ifndef __CHESTNUT_VECTOR4_TEST_H__
-#define __CHESTNUT_VECTOR4_TEST_H__
+#include "maths_tests.hpp"
 
+#include "engine/constants.hpp"
 #include "engine/maths/vector_transform.hpp"
 #include "engine/debug/debug.hpp"
 
@@ -102,5 +102,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_VECTOR4_TEST_H__

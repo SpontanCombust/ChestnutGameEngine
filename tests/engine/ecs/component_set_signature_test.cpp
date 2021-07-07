@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_COMPONENT_SET_SIGNATURE_TEST_H__
-#define __CHESTNUT_COMPONENT_SET_SIGNATURE_TEST_H__
+#include "ecs_tests.hpp"
 
 #include "engine/ecs/management/component_set_signature.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -44,5 +43,3 @@ namespace test
 } // namespace test
     
 } // namespace chestnut
-
-#endif // __CHESTNUT_COMPONENT_SET_SIGNATURE_TEST_H__

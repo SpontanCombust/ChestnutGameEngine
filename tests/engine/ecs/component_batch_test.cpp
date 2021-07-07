@@ -1,8 +1,8 @@
-#ifndef __CHESTNUT_COMPONENT_BATCH_TEST_H__
-#define __CHESTNUT_COMPONENT_BATCH_TEST_H__
+#include "ecs_tests.hpp"
 
 #include "engine/ecs/management/component_batch.hpp"
 #include "engine/ecs/components/components.hpp"
+#include "engine/constants.hpp"
 
 namespace chestnut
 {
@@ -14,9 +14,9 @@ namespace test
         STextureComponent textComp1, textComp2;
         SKinematicsComponent kinemComp1, kinemComp2;
 
-        transfComp1 = STransformComponent( vec2f( 1, 1 ), vec2f( 2, 2 ), vec2f( 3, 3 ) );
+        transfComp1 = STransformComponent( vec2f( 1, 1 ), vec2f( 2, 2 ), CHESTNUT_PI / 2 );
         kinemComp1 = SKinematicsComponent( vec2f( 4, 4 ), vec2f( 5, 5 ) );
-        transfComp2 = STransformComponent( vec2f( 6, 6 ), vec2f( 7, 7 ), vec2f( 8, 8 ) );
+        transfComp2 = STransformComponent( vec2f( 6, 6 ), vec2f( 7, 7 ), CHESTNUT_PI * 3 / 4 );
         kinemComp2 = SKinematicsComponent( vec2f( 9, 9 ), vec2f( 0, 0 ) );
 
         transfComp1.ownerID = textComp1.ownerID = kinemComp1.ownerID = 1;
@@ -89,16 +89,16 @@ namespace test
         for( auto comp : transfComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->position.toString() );
-            LOG_CHANNEL( "TEST", comp->rotation.toString() );
-            LOG_CHANNEL( "TEST", comp->scale.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp->position ) );
+            LOG_CHANNEL( "TEST", comp->rotation );
+            LOG_CHANNEL( "TEST", vecToString( comp->scale ) );
         }
         LOG_CHANNEL( "TEST", "");
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->linearVelocity.toString() );
-            LOG_CHANNEL( "TEST", comp->linearAcceleration.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp->linearVelocity ) );
+            LOG_CHANNEL( "TEST", vecToString( comp->linearAcceleration ) );
         }
         LOG_CHANNEL( "TEST", "");
 
@@ -125,16 +125,16 @@ namespace test
         for( auto comp : transfComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->position.toString() );
-            LOG_CHANNEL( "TEST", comp->rotation.toString() );
-            LOG_CHANNEL( "TEST", comp->scale.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp->position ) );
+            LOG_CHANNEL( "TEST", comp->rotation );
+            LOG_CHANNEL( "TEST", vecToString( comp->scale ) );
         }
         LOG_CHANNEL( "TEST", "");
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->linearVelocity.toString() );
-            LOG_CHANNEL( "TEST", comp->linearAcceleration.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp->linearVelocity ) );
+            LOG_CHANNEL( "TEST", vecToString( comp->linearAcceleration ) );
         }
         LOG_CHANNEL( "TEST", "");
 
@@ -155,16 +155,16 @@ namespace test
         for( auto comp : transfComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->position.toString() );
-            LOG_CHANNEL( "TEST", comp->rotation.toString() );
-            LOG_CHANNEL( "TEST", comp->scale.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp->position ) );
+            LOG_CHANNEL( "TEST", comp->rotation );
+            LOG_CHANNEL( "TEST", vecToString( comp->scale ) );
         }
         LOG_CHANNEL( "TEST", "");
         for( auto comp : kinemComps )
         {
             LOG_CHANNEL( "TEST", comp->ownerID );
-            LOG_CHANNEL( "TEST", comp->linearVelocity.toString() );
-            LOG_CHANNEL( "TEST", comp->linearAcceleration.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp->linearVelocity ) );
+            LOG_CHANNEL( "TEST", vecToString( comp->linearAcceleration ) );
         }
         LOG_CHANNEL( "TEST", "");
     }
@@ -173,6 +173,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-
-#endif // __CHESTNUT_COMPONENT_BATCH_TEST_H__

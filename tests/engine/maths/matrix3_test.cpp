@@ -1,6 +1,6 @@
-#ifndef __CHESTNUT_MATRIX3_TEST_H__
-#define __CHESTNUT_MATRIX3_TEST_H__
+#include "maths_tests.hpp"
 
+#include "engine/constants.hpp"
 #include "engine/maths/vector3.hpp"
 #include "engine/maths/matrix3.hpp"
 #include "engine/debug/debug.hpp"
@@ -68,5 +68,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_MATRIX3_TEST_H__

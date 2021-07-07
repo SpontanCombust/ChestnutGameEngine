@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_COMPONENT_VECTOR_WRAPPER_TEST_H__
-#define __CHESTNUT_COMPONENT_VECTOR_WRAPPER_TEST_H__
+#include "ecs_tests.hpp"
 
 #include "engine/ecs/management/component_vector_wrapper.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -13,9 +12,9 @@ namespace test
         for( const STransformComponent& comp : transfVec.vec )
         {
             LOG_CHANNEL( "TEST", comp.ownerID );
-            LOG_CHANNEL( "TEST", comp.position.toString() );
-            LOG_CHANNEL( "TEST", comp.rotation.toString()  );
-            LOG_CHANNEL( "TEST", comp.scale.toString() );
+            LOG_CHANNEL( "TEST", vecToString( comp.position ) );
+            LOG_CHANNEL( "TEST", comp.rotation );
+            LOG_CHANNEL( "TEST", vecToString( comp.scale ) );
             LOG_CHANNEL( "TEST", "" );
         }
     }
@@ -66,5 +65,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_COMPONENT_VECTOR_WRAPPER_TEST_H__

@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_VECTORN_TEST_H__
-#define __CHESTNUT_VECTORN_TEST_H__
+#include "maths_tests.hpp"
 
 #include "engine/maths/vector.hpp"
 #include "engine/maths/vector2.hpp"
@@ -47,5 +46,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_VECTORN_TEST_H__

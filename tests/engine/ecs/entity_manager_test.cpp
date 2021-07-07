@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENTITY_MANAGER_TEST_H__
-#define __CHESTNUT_ENTITY_MANAGER_TEST_H__
+#include "ecs_tests.hpp"
 
 #include "engine/ecs/management/entity_manager.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -101,19 +100,19 @@ namespace test
             if( transfComp )
             {
                 transfComp->position = vec2f( 1, 2 );
-                LOG_CHANNEL( "TEST", transfComp->position.toString() );
+                LOG_CHANNEL( "TEST", vecToString( transfComp->position ) );
             }
 
             if( kinemComp )
             {
                 kinemComp->linearVelocity = vec2f( 3, 4 );
-                LOG_CHANNEL( "TEST", kinemComp->linearVelocity.toString() );
+                LOG_CHANNEL( "TEST", vecToString( kinemComp->linearVelocity ) );
             }
 
             if( textComp )
             {
-                textComp->scaleOffset = vec2f( 5, 6 );
-                LOG_CHANNEL( "TEST", textComp->scaleOffset.toString() );
+                textComp->origin = vec2f( 0.5, 0.5 );
+                LOG_CHANNEL( "TEST", vecToString( textComp->origin ) );
             }
         }
         LOG_CHANNEL( "TEST", "");
@@ -172,5 +171,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_ENTITY_MANAGER_TEST_H__

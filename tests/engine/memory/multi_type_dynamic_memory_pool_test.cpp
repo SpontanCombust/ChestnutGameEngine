@@ -1,3 +1,5 @@
+#include "memory_tests.hpp"
+
 #include "engine/memory/multi_type_dynamic_memory_pool.hpp"
 
 #include "engine/debug/debug.hpp"

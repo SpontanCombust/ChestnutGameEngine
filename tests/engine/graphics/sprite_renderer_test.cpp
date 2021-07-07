@@ -1,10 +1,9 @@
-#ifndef __CHESTNUT_SPRITE_RENDERER_TEST_H__
-#define __CHESTNUT_SPRITE_RENDERER_TEST_H__
-
 #include "engine/main/window.hpp"
 #include "engine/resources/shader_program_resource.hpp"
 #include "engine/resources/texture2d_resource.hpp"
 #include "engine/graphics/sprite_renderer.hpp"
+#include "engine/misc/timers/auto_timer.hpp"
+#include "engine/constants.hpp"
 
 #include <cassert>
 
@@ -56,5 +55,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_SPRITE_RENDERER_TEST_H__

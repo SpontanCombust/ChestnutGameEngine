@@ -1,13 +1,12 @@
-#ifndef __CHESTNUT_TEXT_RENDERER_TEST_H__
-#define __CHESTNUT_TEXT_RENDERER_TEST_H__
-
 #include "engine/main/window.hpp"
 #include "engine/resources/shader_program_resource.hpp"
 #include "engine/graphics/sprite_renderer.hpp"
 #include "engine/resources/font_resource.hpp"
 #include "engine/graphics/text_renderer.hpp"
+#include "engine/misc/timers/auto_timer.hpp"
 
 #include <cassert>
+#include <iostream>
 
 namespace chestnut
 {
@@ -30,51 +29,51 @@ namespace test
 
 
 
-            // const SFontConfig& normalConfig = fontResource->getConfig( 32, EFontStyle::NORMAL );
-            // const CMapSpriteSheetTexture2D<wchar_t>& normalSheet = normalConfig.glyphSpriteSheet;
+            const SFontConfig& normalConfig = fontResource->getConfig( 32, EFontStyle::NORMAL );
+            const CMapSpriteSheetTexture2D<wchar_t>& normalSheet = normalConfig.glyphSpriteSheet;
 
-            // const SFontConfig& boldConfig = fontResource->getConfig( 32, EFontStyle::BOLD );
-            // const CMapSpriteSheetTexture2D<wchar_t>& boldSheet = boldConfig.glyphSpriteSheet;
+            const SFontConfig& boldConfig = fontResource->getConfig( 32, EFontStyle::BOLD );
+            const CMapSpriteSheetTexture2D<wchar_t>& boldSheet = boldConfig.glyphSpriteSheet;
 
-            // const SFontConfig& italicConfig = fontResource->getConfig( 33, EFontStyle::ITALIC );
-            // const CMapSpriteSheetTexture2D<wchar_t>& italicSheet = italicConfig.glyphSpriteSheet;
+            const SFontConfig& italicConfig = fontResource->getConfig( 33, EFontStyle::ITALIC );
+            const CMapSpriteSheetTexture2D<wchar_t>& italicSheet = italicConfig.glyphSpriteSheet;
 
-            // const SFontConfig& underlineConfig = fontResource->getConfig( 33, EFontStyle::UNDERLINE );
-            // const CMapSpriteSheetTexture2D<wchar_t>& underlineSheet = underlineConfig.glyphSpriteSheet;
+            const SFontConfig& underlineConfig = fontResource->getConfig( 33, EFontStyle::UNDERLINE );
+            const CMapSpriteSheetTexture2D<wchar_t>& underlineSheet = underlineConfig.glyphSpriteSheet;
 
 
 
-            // spriteRenderer.bindShader();
-            // spriteRenderer.setViewMatrix( mat4f() );
-            // spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
+            spriteRenderer.bindShader();
+            spriteRenderer.setViewMatrix( mat4f() );
+            spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
-            // window.clear();
-            //     spriteRenderer.clear();
-            //     spriteRenderer.submitSprite( normalSheet, { 0.f, 0.f } );
-            //     spriteRenderer.render();
-            // window.flipBuffer();
-            // SDL_Delay( 2000 );
+            window.clear();
+                spriteRenderer.clear();
+                spriteRenderer.submitSprite( normalSheet, { 0.f, 0.f } );
+                spriteRenderer.render();
+            window.flipBuffer();
+            SDL_Delay( 2000 );
 
-            // window.clear();
-            //     spriteRenderer.clear();
-            //     spriteRenderer.submitSprite( boldSheet, { 0.f, 0.f } );
-            //     spriteRenderer.render();
-            // window.flipBuffer();
-            // SDL_Delay( 2000 );
+            window.clear();
+                spriteRenderer.clear();
+                spriteRenderer.submitSprite( boldSheet, { 0.f, 0.f } );
+                spriteRenderer.render();
+            window.flipBuffer();
+            SDL_Delay( 2000 );
 
-            // window.clear();
-            //     spriteRenderer.clear();
-            //     spriteRenderer.submitSprite( italicSheet, { 0.f, 0.f } );
-            //     spriteRenderer.render();
-            // window.flipBuffer();
-            // SDL_Delay( 2000 );
+            window.clear();
+                spriteRenderer.clear();
+                spriteRenderer.submitSprite( italicSheet, { 0.f, 0.f } );
+                spriteRenderer.render();
+            window.flipBuffer();
+            SDL_Delay( 2000 );
 
-            // window.clear();
-            //     spriteRenderer.clear();
-            //     spriteRenderer.submitSprite( underlineSheet, { 0.f, 0.f } );
-            //     spriteRenderer.render();
-            // window.flipBuffer();
-            // SDL_Delay( 2000 );
+            window.clear();
+                spriteRenderer.clear();
+                spriteRenderer.submitSprite( underlineSheet, { 0.f, 0.f } );
+                spriteRenderer.render();
+            window.flipBuffer();
+            SDL_Delay( 2000 );
 
 
 
@@ -125,6 +124,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-
-#endif // __CHESTNUT_TEXT_RENDERER_TEST_H__

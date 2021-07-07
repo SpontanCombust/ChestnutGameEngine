@@ -1,6 +1,6 @@
-#ifndef __CHESTNUT_MATRIX4_TEST_H__
-#define __CHESTNUT_MATRIX4_TEST_H__
+#include "maths_tests.hpp"
 
+#include "engine/constants.hpp"
 #include "engine/maths/vector4.hpp"
 #include "engine/maths/matrix4.hpp"
 #include "engine/debug/debug.hpp"
@@ -86,5 +86,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_MATRIX4_TEST_H__

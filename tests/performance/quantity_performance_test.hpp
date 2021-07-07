@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_QUANTITY_PERFORMANCE_TEST_H__
-#define __CHESTNUT_QUANTITY_PERFORMANCE_TEST_H__
+#include "performance_tests.hpp"
 
 #include "engine/globals.hpp"
 #include "engine/ecs/components/components.hpp"
@@ -75,5 +74,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_QUANTITY_PERFORMANCE_TEST_H__

@@ -14,6 +14,7 @@ namespace chestnut
         double angularAcceleration;
 
         SKinematicsComponent();
+        SKinematicsComponent( vec2f _linearVelocity, vec2f _linearAcceleration );
         SKinematicsComponent( vec2f _linearVelocity, vec2f _linearAcceleration, double _angularVelocity, double _angularAcceleration );
     };
 

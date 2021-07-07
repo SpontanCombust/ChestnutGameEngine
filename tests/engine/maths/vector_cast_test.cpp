@@ -1,6 +1,7 @@
-#ifndef __CHESTNUT_VECTOR_CAST_TEST_H__
-#define __CHESTNUT_VECTOR_CAST_TEST_H__
+#include "maths_tests.hpp"
 
+#include "engine/maths/vector2.hpp"
+#include "engine/maths/vector3.hpp"
 #include "engine/maths/vector_cast.hpp"
 #include "engine/debug/debug.hpp"
 
@@ -42,5 +43,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_VECTOR_CAST_TEST_H__

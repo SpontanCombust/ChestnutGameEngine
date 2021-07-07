@@ -1,6 +1,7 @@
-#ifndef __CHESTNUT_COLORED_POLYGON2D_RENDERER_TEST_H__
-#define __CHESTNUT_COLORED_POLYGON2D_RENDERER_TEST_H__
+#include "graphics_tests.hpp"
 
+#include "engine/constants.hpp"
+#include "engine/misc/timers/auto_timer.hpp"
 #include "engine/graphics/colored_polygon2d_renderer.hpp"
 #include "engine/main/window.hpp"
 
@@ -45,7 +46,7 @@ namespace test
                     window.clear();
                         renderer.clear();
                         renderer.submitPolygon( square, {0,0} );
-                        renderer.submitPolygon( triangle, {200,200}, {0,0}, {2,2}, CHESTNUT_PI/2 );
+                        renderer.submitPolygon( triangle, {200,200}, {2,2}, CHESTNUT_PI/2 );
                         renderer.render();
                     window.flipBuffer();
                 }
@@ -57,5 +58,3 @@ namespace test
 } // namespace test
 
 } // namespace chestnut
-
-#endif // __CHESTNUT_COLORED_POLYGON2D_RENDERER_TEST_H__
