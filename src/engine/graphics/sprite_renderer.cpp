@@ -155,7 +155,7 @@ namespace chestnut
         m_vecBatches.clear();
     }
 
-    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& position, const vec2f& origin, const vec2f& scale, double rotation ) 
+    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& translation, const vec2f& origin, const vec2f& scale, double rotation ) 
     {
         GLuint id;
         int w, h;
@@ -168,7 +168,7 @@ namespace chestnut
 
         SSpriteRender_Instance instance;
         instance.origin = origin;
-        instance.transl = position;
+        instance.transl = translation;
         instance.scale = scale;
         instance.rot = (float)rotation;
         instance.clipRect = vec4f( rect.x, rect.y, rect.w, rect.h );    
