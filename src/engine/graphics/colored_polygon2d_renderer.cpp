@@ -26,14 +26,12 @@ namespace chestnut
     {
         m_attrVertPosLoc = m_shader.getAttributeLocation( "avPos" );
         m_attrVertColorLoc = m_shader.getAttributeLocation( "avColor" );
-        m_attrVertOriginLoc = m_shader.getAttributeLocation( "avOrigin" );
         m_attrVertTranslLoc = m_shader.getAttributeLocation( "avTransl" );
         m_attrVertScaleLoc = m_shader.getAttributeLocation( "avScale" );
         m_attrVertRotLoc = m_shader.getAttributeLocation( "avRot" );
 
         if(    m_attrVertPosLoc     == -1
             || m_attrVertColorLoc   == -1
-            || m_attrVertOriginLoc  == -1 
             || m_attrVertTranslLoc  == -1
             || m_attrVertScaleLoc   == -1
             || m_attrVertRotLoc     == -1 )
@@ -60,9 +58,6 @@ namespace chestnut
 
             glEnableVertexAttribArray( m_attrVertColorLoc );
             glVertexAttribPointer( m_attrVertColorLoc, 4, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, color ) );
-
-            glEnableVertexAttribArray( m_attrVertOriginLoc );
-            glVertexAttribPointer( m_attrVertOriginLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, origin ) );
 
             glEnableVertexAttribArray( m_attrVertTranslLoc );
             glVertexAttribPointer( m_attrVertTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, translation ) );
@@ -104,7 +99,7 @@ namespace chestnut
         m_vecIndices.clear();
     }
 
-    void CColoredPolygon2DRenderer::submitPolygon( const CColoredPolygon2D& polygon, const vec2f& translation, const vec2f& origin, const vec2f& scale, float rotation ) 
+    void CColoredPolygon2DRenderer::submitPolygon( const CColoredPolygon2D& polygon, const vec2f& translation, const vec2f& scale, float rotation ) 
     {
         if( !polygon.isRenderable() )
         {
@@ -115,12 +110,11 @@ namespace chestnut
         GLuint indexOffset = m_vecColoredVertices.size();
 
         SColoredPolygon2DRender_Vertex renderVertex;
-        for( const SColoredVertex& vertex : polygon.vecVertices )
+        for( const SColoredVertex& vertex : polygon.getVertices() )
         {
             renderVertex.position = vertex.position;
             renderVertex.color = vertex.color;
 
-            renderVertex.origin = origin;
             renderVertex.translation = translation;
             renderVertex.scale = scale;
             renderVertex.rotation = rotation;
@@ -128,7 +122,7 @@ namespace chestnut
             m_vecColoredVertices.push_back( renderVertex );
         }
 
-        for( const GLuint& index : polygon.vecIndices )
+        for( const GLuint& index : polygon.getIndices() )
         {
             m_vecIndices.push_back( index + indexOffset );
         }

@@ -2,7 +2,6 @@
 
 in vec2 avPos;
 in vec4 avColor;
-in vec2 avOrigin;
 in vec2 avTransl;
 in vec2 avScale;
 in float avRot;
@@ -47,15 +46,13 @@ mat4 mat4Rotation( float angle )
 
 mat4 makeModel()
 {
-    mat4 origin = mat4Translation( -avOrigin );
-    
     mat4 scale = mat4Scale( avScale );
     
     mat4 rotation = mat4Rotation( avRot );
 
     mat4 translation = mat4Translation( avTransl );
 
-    return translation * rotation * scale * origin;
+    return translation * rotation * scale;
 }
 
 void main()

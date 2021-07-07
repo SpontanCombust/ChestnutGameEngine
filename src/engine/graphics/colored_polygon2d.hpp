@@ -18,10 +18,11 @@ namespace chestnut
 
     class CColoredPolygon2D
     {
-    public:
-        std::vector< SColoredVertex > vecVertices;
-        std::vector< GLuint > vecIndices;
+    private:
+        std::vector< SColoredVertex > m_vecVertices;
+        std::vector< GLuint > m_vecIndices;
 
+    public:
         void addVertex( vec2f position, vec4f color );
         void addVertex( vec2f position, float r, float g, float b, float a );
         void addVertex( vec2f position, char r, char g, char b, char a );
@@ -29,6 +30,9 @@ namespace chestnut
         void addIndices( GLuint i1, GLuint i2, GLuint i3 );
 
         bool isRenderable() const;
+
+        const std::vector< SColoredVertex >& getVertices() const;
+        const std::vector< GLuint >& getIndices() const;
     };
 
 } // namespace chestnut

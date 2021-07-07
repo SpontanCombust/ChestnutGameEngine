@@ -11,7 +11,6 @@ namespace chestnut
     struct SPolygonCanvasComponent : IComponent
     {
         std::vector< CColoredPolygon2D > vecPolygons;
-        vec2f origin;
 
         SPolygonCanvasComponent() = default;
     };

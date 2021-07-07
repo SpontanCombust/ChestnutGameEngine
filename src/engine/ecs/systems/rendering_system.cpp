@@ -89,7 +89,7 @@ namespace chestnut
 
             for( const CColoredPolygon2D& polygon : polygonCanvasComp->vecPolygons )
             {
-                m_polygonRenderer->submitPolygon( polygon, transfComp->position, polygonCanvasComp->origin, transfComp->scale, transfComp->rotation );
+                m_polygonRenderer->submitPolygon( polygon, transfComp->position, transfComp->scale, transfComp->rotation );
             }
         }
     }
