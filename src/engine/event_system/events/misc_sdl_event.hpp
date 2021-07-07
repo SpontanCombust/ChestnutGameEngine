@@ -2,8 +2,7 @@
 #define __CHESTNUT_MISC_SDL_EVENT_H__
 
 #include "../event_base.hpp"
-
-#include <SDL2/SDL_events.h>
+#include "engine/libs.hpp"
 
 namespace chestnut
 {

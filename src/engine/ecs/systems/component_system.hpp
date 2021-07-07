@@ -13,9 +13,9 @@ namespace chestnut
     {
     public:
         // A method that passes a component batch to the system. It's performed on every tick.
-        virtual void submitBatch( CComponentBatch *batch ) = 0;
+        virtual void submitComponents( CComponentBatch *batch ) = 0;
         // A method that is supposed to clear batches that were passed to the system. It's performed at the end of every tick (after update). 
-        virtual void clearBatches() = 0;
+        virtual void clearComponents() = 0;
     };
     
 } // namespace chestnut

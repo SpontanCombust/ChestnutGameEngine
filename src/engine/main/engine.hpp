@@ -8,6 +8,7 @@
 #include "engine/ecs/systems/systems.hpp"
 #include "engine/misc/timers/auto_timer.hpp"
 #include "engine/misc/timers/locked_auto_timer.hpp"
+#include "engine/resources/resource_manager.hpp"
 
 #include <vector>
 
@@ -18,6 +19,8 @@ namespace chestnut
     public:
         CEntityManager entityManager;
         CEventManager eventManager;
+        CResourceManager resourceManager;
+
 
     private:
         bool m_wasInit;
@@ -30,6 +33,7 @@ namespace chestnut
 
         CSDLEventDispatchSystem *m_sdlEventDispatchSystem;
         CTimerSystem *m_timerSystem;
+        CKinematicsSystem *m_kinematicsSystem;
         CRenderingSystem *m_renderingSystem;
 
         std::list< ISystem* > m_systemsList;

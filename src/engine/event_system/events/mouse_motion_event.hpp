@@ -2,16 +2,15 @@
 #define __CHESTNUT_MOUSE_MOTION_EVENT_H__
 
 #include "../event_base.hpp"
-#include "engine/maths/vector.hpp"
-
-#include <SDL2/SDL_events.h>
+#include "engine/maths/vector2.hpp"
+#include "engine/libs.hpp"
 
 namespace chestnut
 {
     struct SMouseMotionEvent : SEvent
     {
-        Vector2i pos;
-        Vector2i motion;
+        vec2i pos;
+        vec2i motion;
 
         const std::string getName() override { return "MouseMotionEvent"; }
     };

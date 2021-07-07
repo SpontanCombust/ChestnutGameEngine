@@ -2,18 +2,18 @@
 #define __CHESTNUT_TRANSFORM_COMPONENT_H__
 
 #include "../component.hpp"
-#include "engine/maths/vector.hpp"
+#include "engine/maths/vector2.hpp"
 
 namespace chestnut
 {
     struct STransformComponent : IComponent
     {
-        Vector2f position;
-        Vector2f rotation;
-        Vector2f scale;
+        vec2f position;
+        vec2f scale;
+        double rotation;
 
         STransformComponent();
-        STransformComponent( Vector2f _position, Vector2f _rotation, Vector2f _scale );
+        STransformComponent( vec2f _position, vec2f _scale, double _rotation );
     };
 
 } // namespace chestnut 

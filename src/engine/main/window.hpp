@@ -1,40 +1,54 @@
 #ifndef __CHESTNUT_WINDOW_H__
 #define __CHESTNUT_WINDOW_H__
 
-#include "engine/maths/vector.hpp"
+#include "engine/maths/vector2.hpp"
+#include "engine/libs.hpp"
 
-#include <SDL2/SDL.h>
+#include <string>
 
 namespace chestnut
 {
+    struct SWindowProperties
+    {
+        int sdlWindowFlags;
+        int sdlGLContextVersionMajor;
+        int sdlGLContextVersionMinor;
+        int sdlGLContextFlags;
+        int sdlGLContextProfileMask;
+    };
+
+    SWindowProperties windowPropertiesDefault( int glVersionMajor, int glVersionMinor );
+
+
     class CWindow
     {
     private:
         SDL_Window *m_sdlWindow;
-        SDL_Renderer *m_sdlRenderer;
+        SDL_GLContext m_sdlGLContext;
 
     public:
         CWindow();
         ~CWindow();
 
-        bool create( const char *title, int width = 800, int height = 600, int x = 0, int y = 0,
-                            int windowFlags = SDL_WINDOW_SHOWN, int rendererFlags = SDL_RENDERER_ACCELERATED );
+        bool create( const SWindowProperties& windowProperties, const std::string& title, int width, int height, int x = 0, int y = 0, bool useVsync = false );
 
         void destroy();
 
-        void setTitle( const char *title );
-        const char *getTitle();
+        void setTitle( const std::string& title );
+        std::string getTitle();
 
         void setSize( int w, int h );
-        Vector2i getSize();
+        int getWidth();
+        int getHeight();
 
         void setPosition( int x, int y );
-        Vector2i getPosition();
+        int getPositionX();
+        int getPositionY();
 
-        void setWindowRendererAsGlobalRenderer();
-        SDL_Renderer *getSDLRenderer();
+        void toggleVsync( bool toggle );
 
-        //TODO flipBuffer()
+        void clear();
+        void flipBuffer();
     };
 
 } // namespace chestnut

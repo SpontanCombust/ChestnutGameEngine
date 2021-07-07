@@ -72,6 +72,18 @@ namespace chestnut
         return vec.size();
     }
 
+    template<typename T>
+    size_t CComponentVectorWrapper<T>::capacity() 
+    {
+        return vec.capacity();
+    }
+
+    template<typename T>
+    void CComponentVectorWrapper<T>::reserve( size_t newCapacity ) 
+    {
+        vec.reserve( newCapacity );
+    }
+
 
     template<typename T>
     const std::string CComponentVectorWrapper<T>::toString() const 

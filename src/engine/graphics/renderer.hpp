@@ -1,26 +1,53 @@
 #ifndef __CHESTNUT_RENDERER_H__
 #define __CHESTNUT_RENDERER_H__
 
-#include "texture.hpp"
-
-#include <SDL2/SDL.h>
+#include "engine/libs.hpp"
+#include "shader_program.hpp"
+#include "engine/maths/matrix4.hpp"
 
 namespace chestnut
 {
-    class CRenderer
+    class IRenderer
     {
-    private:
-        static SDL_Renderer *m_sdlRenderer;
+    protected:
+        CShaderProgram m_shader;
+
+        GLint m_unifViewLoc;
+        GLint m_unifProjectionLoc;
 
     public:
-        static void setSDLRenderer( SDL_Renderer *renderer );
-        static SDL_Renderer *getSDLRenderer();
+        virtual ~IRenderer();
 
-        // Throws an exception if pointer to SDL_Texture in texture is null
-        static void renderTexture( const CTexture& texture );
+        void init( const CShaderProgram& shader );
 
-        static void renderPresent();
-        static void renderClear();
+        void bindShader();
+        void unbindShader();
+
+        // requires bound renderer shader
+        void setProjectionMatrix( const mat4f& mat );
+        // requires bound renderer shader
+        void setViewMatrix( const mat4f& mat );
+
+    protected:
+        // Set variable locations for view and projection matrices
+        virtual bool setProjectionAndViewMatrixLocations();
+
+    public:
+        // Method called to clear all the data used to render stuff
+        virtual void clear() = 0;
+        // Method called to render stuff with gathered data
+        virtual void render() = 0;
+
+
+    protected:
+        // Called in init method
+        virtual bool onInitCustom() = 0;
+        // Called on initialization to fetch custom shader variables' locations
+        virtual bool setShaderVariableLocations() = 0;
+        // Called on initialization to setup buffers for further use
+        virtual void initBuffers() = 0;
+        // Called on renderer destruction
+        virtual void deleteBuffers() {};
     };
 
 } // namespace chestnut

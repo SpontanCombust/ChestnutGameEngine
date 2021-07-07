@@ -1,177 +1,292 @@
+#include "engine/misc/exception.hpp"
+
+#include <algorithm>
+#include <cmath>
+#include <cstring>
+#include <sstream>
+
 namespace chestnut
-{
-    template< typename T >
-    T Vector2<T>::getMagnitude() const
+{    
+    template<typename T, size_t n>
+    Vector<T, n>::Vector()
     {
-        return sqrt( x * x + y * y );
+        std::fill_n( elements, n, 0 );
+    }
+
+    template<typename T, size_t n>
+    Vector<T, n>::Vector( T init ) 
+    {
+        std::fill_n( elements, n, init );
+    }
+
+    template<typename T, size_t n>
+    const T* Vector<T, n>::data() const
+    {
+        return elements;
+    }
+
+    template<typename T, size_t n>
+    T* Vector<T, n>::data()
+    {
+        return elements;
+    }
+
+    template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator+=( const Vector<T,n>& v ) 
+    {
+        *this = vecSum<T,n>( *this, v );
+        return *this;
+    }
+
+    template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator-=( const Vector<T,n>& v ) 
+    {
+        *this = vecDifference<T,n>( *this, v );
+        return *this;
+    }
+
+    template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator*=( const Vector<T,n>& v ) 
+    {
+        *this = vecComponentProduct<T,n>( *this, v );
+        return *this;
+    }
+
+    template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator/=( const Vector<T,n>& v ) 
+    {
+        *this = vecComponentQuotient<T,n>( *this, v );
+        return *this;
+    }
+
+    template<typename T, size_t n>
+    Vector<T,n>& Vector<T, n>::operator*=( T s ) 
+    {
+        *this = vecScalarProduct<T,n>( *this, s );
+        return *this;
     }
 
 
 
-    template< typename T >
-    void Vector2<T>::normalize() 
+
+
+    template< typename T, size_t n >
+    T vecMagnitude( const Vector<T,n>& v )
     {
-        if( x != 0 && y != 0 )
+        T prod = 0;
+        const T *dat = v.data();
+
+        for (size_t i = 0; i < n; i++)
         {
-            T mag = getMagnitude();
-            x /= mag;
-            y /= mag;
+            prod += dat[i] * dat[i];
         }
+        
+        return std::sqrt( prod );
     }
 
-    template< typename T >
-    Vector2<T> vec2GetNormalized( const Vector2<T>& v ) 
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecNormalized( const Vector<T,n>& v )
     {
-        Vector2<T> vCopy = v;
-        vCopy.normalize();
-        return vCopy;
+        T mag = vecMagnitude<T,n>(v);
+
+        Vector<T,n> other;
+        const T *dat = v.data();
+        T *datOther = other.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datOther[i] = dat[i] / mag;
+        }
+        
+        return other;
     }
 
 
 
-    template< typename T >
-    void Vector2<T>::negate() 
+    template< typename T, size_t n >
+    Vector<T,n> vecNegated( const Vector<T,n>& v )
     {
-        x = -x;
-        y = -y;
+        Vector<T,n> other;
+        const T *dat = v.data();
+        T *datOther = other.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datOther[i] = -dat[i];
+        }
+
+        return other;
     }
 
-    template< typename T >
-    Vector2<T> vec2GetNegated( const Vector2<T>& v ) 
+    template< typename T, size_t n >
+    Vector<T,n> operator-( const Vector<T,n>& v )
     {
-        Vector2<T> vCopy = v;
-        vCopy.negate();
-        return vCopy;
+        return vecNegated<T,n>(v);
     }
 
-    template< typename T >
-    Vector2<T> operator-( const Vector2<T>& v ) 
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecSum( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        Vector2<T> vCopy = v;
-        vCopy.negate();
-        return vCopy;
+        Vector<T,n> sum;
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+        T *datSum = sum.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datSum[i] = dat1[i] + dat2[i];
+        }
+
+        return sum;
     }
 
-
-
-    template< typename T >
-    void Vector2<T>::add( const Vector2<T>& other ) 
+    template< typename T, size_t n >
+    Vector<T,n> operator+( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        x += other.x;
-        y += other.y;
+        return vecSum<T,n>(v1,v2);
     }
 
-    template< typename T >
-    void Vector2<T>::operator+=( const Vector2<T>& other ) 
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecDifference( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        add(other);
+        Vector<T,n> diff;
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+        T *datDiff = diff.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datDiff[i] = dat1[i] - dat2[i];
+        }
+
+        return diff;
     }
 
-    template< typename T >
-    Vector2<T> vec2GetSum( const Vector2<T>& v1, const Vector2<T>& v2 ) 
+    template<typename T, size_t n>
+    Vector<T,n> operator-( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        Vector2<T> v1Copy = v1;
-        v1Copy.add(v2);
-        return v1Copy;
+        return vecDifference<T,n>(v1,v2);
     }
 
-    template< typename T >
-    Vector2<T> operator+( const Vector2<T>& v1, const Vector2<T>& v2 ) 
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecScalarProduct( const Vector<T,n>& v, T s )
     {
-        Vector2<T> v1Copy = v1;
-        v1Copy.add(v2);
-        return v1Copy;
+        Vector<T,n> scaled;
+        const T *dat = v.data();
+        T *datScaled = scaled.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datScaled[i] = dat[i] * s;
+        }
+
+        return scaled;
     }
 
-
-
-    template< typename T >
-    void Vector2<T>::subtract( const Vector2<T>& other ) 
+    template< typename T, size_t n >
+    Vector<T,n> operator*( T s, const Vector<T,n>& v )
     {
-        x -= other.x;
-        y -= other.y;
+        return vecScalarProduct<T,n>(v,s);
     }
 
-    template< typename T >
-    void Vector2<T>::operator-=( const Vector2<T>& other ) 
+    template< typename T, size_t n >
+    Vector<T,n> operator*( const Vector<T,n>& v, T s )
     {
-        subtract(other);
+        return vecScalarProduct<T,n>(v,s);
     }
 
-    template< typename T >
-    Vector2<T> vec2GetDifference( const Vector2<T>& v1, const Vector2<T>& v2 ) 
+
+
+    template< typename T, size_t n >
+    T vecDotProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        Vector2<T> v1Copy = v1;
-        v1Copy.subtract(v2);
-        return v1Copy;
+        T prod = 0;
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            prod += dat1[i] * dat2[i];
+        }
+        
+        return prod;
     }
 
-    template<typename T>
-    Vector2<T> operator-( const Vector2<T>& v1, const Vector2<T>& v2 )
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecComponentProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        Vector2<T> v1Copy = v1;
-        v1Copy.subtract(v2);
-        return v1Copy;
+        Vector<T,n> prod;
+
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+        T *datProd = prod.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datProd[i] = dat1[i] * dat2[i];
+        }
+
+        return prod;
     }
 
-
-
-    template< typename T >
-    void Vector2<T>::multiplyByScalar( const T s ) 
+    template< typename T, size_t n >
+    Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
-        x *= s;
-        y *= s;
-    }
-
-    template< typename T >
-    void Vector2<T>::operator*=( const T s ) 
-    {
-        multiplyByScalar(s);
-    }
-
-    template< typename T >
-    Vector2<T> vec2GetScaled( const Vector2<T>& v, T s ) 
-    {
-        Vector2<T> vCopy = v;
-        vCopy.multiplyByScalar(s);
-        return vCopy;
-    }
-
-    template< typename T >
-    Vector2<T> operator*( T s, const Vector2<T>& v ) 
-    {
-        Vector2<T> vCopy = v;
-        vCopy.multiplyByScalar(s);
-        return vCopy;
-    }
-
-    template< typename T >
-    Vector2<T> operator*( const Vector2<T>& v, T s ) 
-    {
-        Vector2<T> vCopy = v;
-        vCopy.multiplyByScalar(s);
-        return vCopy;
+        return vecComponentProduct<T,n>(v1,v2);
     }
 
 
-
-    template< typename T >
-    T Vector2<T>::multiplyByVecDot( const Vector2<T>& other ) const
-    {
-        return x * other.x + y * other.y;
-    }
-
-    template< typename T >
-    T vec2GetDotProduct( const Vector2<T>& v1, const Vector2<T>& v2 ) 
-    {
-        return v1.multiplyByVecDot(v2);
-    }
-
-    template< typename T >
-    template< typename U >
-    Vector2<T>::operator Vector2<U>() const
-    {
-        return { static_cast<U>(x), static_cast<U>(y) };
-    }
     
+    template< typename T, size_t n >
+    Vector<T,n> vecComponentQuotient( const Vector<T,n>& v1, const Vector<T,n>& v2 )
+    {
+        Vector<T,n> quot;
+
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+        T *datQuot = quot.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datQuot[i] = dat1[i] / dat2[i];
+        }
+
+        return quot;
+    }
+
+    template< typename T, size_t n >
+    Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 )
+    {
+        return vecComponentQuotient( v1, v2 );
+    }
+
+
+
+    template< typename T, size_t n >
+    std::string vecToString( const Vector<T,n>& v )
+    {
+        std::stringstream ss;
+        const T *dat = v.data();
+
+        ss << "[ ";
+        ss << dat[0];
+        for (size_t i = 1; i < n; i++)
+        {
+            ss <<  ", " << dat[i];
+        }
+        ss << " ]";
+        
+        return ss.str();
+    }
+
 } // namespace chestnut

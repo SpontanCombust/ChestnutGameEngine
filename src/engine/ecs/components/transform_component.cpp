@@ -3,15 +3,17 @@
 namespace chestnut
 {
     STransformComponent::STransformComponent()
-    : position( {0, 0} ), rotation( {1, 0} ), scale( {1, 1} )
     {
-
+        position = vec2f(0, 0);
+        scale = vec2f(1, 1);
+        rotation = 0.0;
     }
 
-    STransformComponent::STransformComponent(Vector2f _position, Vector2f _rotation, Vector2f _scale)
-    : position( _position ), rotation( _rotation ), scale( _scale )
+    STransformComponent::STransformComponent(vec2f _position, vec2f _scale, double _rotation )
     {
-
+        position = _position;
+        scale = _scale;
+        rotation = _rotation;
     }
 
 } // namespace chestnut

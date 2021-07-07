@@ -1,81 +1,59 @@
 #include "renderer.hpp"
 
-#include "engine/maths/angles.hpp"
-#include "engine/misc/exception.hpp"
+#include "engine/debug/debug.hpp"
+
+#include <cassert>
 
 namespace chestnut
-{
-    SDL_Renderer *CRenderer::m_sdlRenderer = nullptr;
-    
-    void CRenderer::setSDLRenderer( SDL_Renderer *renderer ) 
+{    
+    void IRenderer::init( const CShaderProgram& shader ) 
     {
-        m_sdlRenderer = renderer;
+        m_shader = shader;
+        assert( m_shader.isValid() );
+
+        m_shader.bind();
+        assert( setProjectionAndViewMatrixLocations() );
+        assert( setShaderVariableLocations() );
+        initBuffers();
+
+        assert( onInitCustom() );
     }
 
-
-    SDL_Renderer* CRenderer::getSDLRenderer() 
+    IRenderer::~IRenderer() 
     {
-        return m_sdlRenderer;
+        deleteBuffers();
     }
 
-    void CRenderer::renderTexture( const CTexture& texture ) 
+    void IRenderer::bindShader() 
     {
-        if( !texture.getSDLTexturePtr() )
+        m_shader.bind();
+    }
+
+    void IRenderer::unbindShader() 
+    {
+        m_shader.unbind();
+    }
+
+    bool IRenderer::setProjectionAndViewMatrixLocations() 
+    {
+        m_unifViewLoc       = m_shader.getUniformLocation( "uView" );
+        m_unifProjectionLoc = m_shader.getUniformLocation( "uProjection" );
+
+        if( m_unifViewLoc == -1 || m_unifProjectionLoc  == -1 )
         {
-            throw ChestnutException( "A texture with nullptr to SDL_Texture can't be rendered!" );
+            return false;
         }
-
-        SDL_Rect srcRect;
-        SDL_FRect dstRect;
-        double angle;
-        SDL_FPoint center;
-        SDL_RendererFlip flip;
-
-        srcRect = 
-        { 
-            texture.getClippingRectPos().x,
-            texture.getClippingRectPos().y,
-            texture.getClippingRectSize().x,
-            texture.getClippingRectSize().y
-        };
-
-        dstRect =
-        {
-            texture.getPosition().x,
-            texture.getPosition().y,
-            texture.getSize().x,
-            texture.getSize().y
-        };
-
-        // negative because positive rotation in SDL means clockwise as opposed to the rotation in traditional cartesian system
-        angle = -radiansToDegrees( texture.getRotationRad() );
-
-        center =
-        {
-            (float)( texture.getRotationPoint().x * texture.getSize().x ),
-            (float)( texture.getRotationPoint().y * texture.getSize().y )
-        };
-
-        flip = texture.getFlip();
-
-        SDL_RenderCopyExF( m_sdlRenderer,
-                            texture.getSDLTexturePtr(),
-                            &srcRect, 
-                            &dstRect, 
-                            angle, 
-                            &center, 
-                            flip 
-                        );
+        return true;
     }
 
-    void CRenderer::renderPresent() 
+    void IRenderer::setProjectionMatrix( const mat4f& mat ) 
     {
-        SDL_RenderPresent( m_sdlRenderer );
+        m_shader.setMatrix4f( m_unifProjectionLoc, mat );
     }
 
-    void CRenderer::renderClear() 
+    void IRenderer::setViewMatrix( const mat4f& mat ) 
     {
-        SDL_RenderClear( m_sdlRenderer );
+        m_shader.setMatrix4f( m_unifViewLoc, mat );
     }
-    
-} // namespace chestnut
+
+} // namespace chesntut

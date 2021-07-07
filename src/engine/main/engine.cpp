@@ -13,6 +13,7 @@ namespace chestnut
 
         m_sdlEventDispatchSystem    = nullptr;
         m_timerSystem               = nullptr;
+        m_kinematicsSystem          = nullptr;
         m_renderingSystem           = nullptr;
     }
 
@@ -49,13 +50,16 @@ namespace chestnut
 
             m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
             m_timerSystem = new CTimerSystem();
+            m_kinematicsSystem = new CKinematicsSystem();
             m_renderingSystem = new CRenderingSystem();
 
             m_systemsList.push_back( m_sdlEventDispatchSystem );
             m_systemsList.push_back( m_timerSystem );
+            m_systemsList.push_back( m_kinematicsSystem );
             m_systemsList.push_back( m_renderingSystem );
 
             m_componentSystemsList.push_back( m_timerSystem );
+            m_componentSystemsList.push_back( m_kinematicsSystem );
             m_componentSystemsList.push_back( m_renderingSystem );
 
             registerQuitEvent();
@@ -85,36 +89,41 @@ namespace chestnut
     {
         while( m_isRunning )
         {
+            uint32_t dt = m_logicUpdateTimer->getDeltaTime();
+            
             if( m_logicUpdateTimer->tick() )
             {
-                update( m_logicUpdateTimer->getDeltaTime() );
+                update(dt);
             }
 
             if( m_renderTimer->tick() )
             {
-                m_renderingSystem->draw();
+                m_renderingSystem->render();
             }
         }
     }
 
     void CEngine::update( uint32_t deltaTime ) 
     {
-        std::vector< CComponentBatch * > vecComponentBatches;
-
-        // clearing outdated batches from systems
-        for( IComponentSystem *compSys : m_componentSystemsList )
+        if( entityManager.processEntityRequests() )
         {
-            compSys->clearBatches();
-        }    
+            std::vector< CComponentBatch * > vecComponentBatches;
 
-        vecComponentBatches = entityManager.getComponentBatches();
-        
-        // fetching components to component systems
-        for( CComponentBatch *batch : vecComponentBatches )
-        {
+            // clearing outdated batches from systems
             for( IComponentSystem *compSys : m_componentSystemsList )
             {
-                compSys->submitBatch( batch );
+                compSys->clearComponents();
+            }    
+
+            vecComponentBatches = entityManager.getComponentBatches();
+            
+            // fetching components to component systems
+            for( CComponentBatch *batch : vecComponentBatches )
+            {
+                for( IComponentSystem *compSys : m_componentSystemsList )
+                {
+                    compSys->submitComponents( batch );
+                }
             }
         }
 
@@ -127,8 +136,6 @@ namespace chestnut
 
         // updating event manager
         eventManager.delegateEvents();
-
-        entityManager.processEntityRequests();
     }
 
     void CEngine::suspend() 

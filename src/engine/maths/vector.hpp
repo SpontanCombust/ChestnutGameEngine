@@ -1,90 +1,89 @@
 #ifndef __CHESTNUT_VECTOR_H__
 #define __CHESTNUT_VECTOR_H__
 
-#include <cmath>
 #include <string>
 
 namespace chestnut
 {
-    template< typename T >
-    struct Vector2
+    // A mathematical vector with data of type T and size n
+    template< typename T, size_t n >
+    struct Vector
     {
-        T x, y;
+        T elements[n];
 
-        Vector2() : x(0), y(0) {}
-        Vector2( T _x, T _y ) : x(_x), y(_y) {} 
+        Vector();
+        Vector( T init );
 
-        T getMagnitude() const;
+        const T* data() const;
+        T* data();
 
-        void normalize();
-
-        void negate();
-
-        void add( const Vector2& other );
-        void operator+=( const Vector2& other );
-
-        void subtract( const Vector2& other );
-        void operator-=( const Vector2& other );
-
-        void multiplyByScalar( const T s );
-        void operator*=( const T s );
-
-        T multiplyByVecDot( const Vector2<T>& other ) const;
-
-        template< typename U >
-        operator Vector2<U>() const;
+        Vector& operator+=( const Vector& v );
+        Vector& operator-=( const Vector& v );
+        Vector& operator*=( const Vector& v );
+        Vector& operator/=( const Vector& v );
+        Vector& operator*=( T s );
     };
 
-    template< typename T >
-    Vector2<T> vec2GetNormalized( const Vector2<T>& v );
+
+    template< typename T, size_t n >
+    T vecMagnitude( const Vector<T,n>& v );
 
 
-    template< typename T >
-    Vector2<T> vec2GetNegated( const Vector2<T>& v );
-
-    template< typename T >
-    Vector2<T> operator-( const Vector2<T>& v );
+    template< typename T, size_t n >
+    Vector<T,n> vecNormalized( const Vector<T,n>& v );
 
 
-    template< typename T >
-    Vector2<T> vec2GetSum( const Vector2<T>& v1, const Vector2<T>& v2 );
+    template< typename T, size_t n >
+    Vector<T,n> vecNegated( const Vector<T,n>& v );
 
-    template< typename T >
-    Vector2<T> operator+( const Vector2<T>& v1, const Vector2<T>& v2 );
-
-
-    template< typename T >
-    Vector2<T> vec2GetDifference( const Vector2<T>& v1, const Vector2<T>& v2 );
-
-    template<typename T>
-    Vector2<T> operator-( const Vector2<T>& v1, const Vector2<T>& v2 );
+    template< typename T, size_t n >
+    Vector<T,n> operator-( const Vector<T,n>& v );
 
 
-    template< typename T >
-    Vector2<T> vec2GetScaled( const Vector2<T>& v, T s );
+    template< typename T, size_t n >
+    Vector<T,n> vecSum( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
-    template< typename T >
-    Vector2<T> operator*( T s, const Vector2<T>& v );
-
-    template< typename T >
-    Vector2<T> operator*( const Vector2<T>& v, T s );
+    template< typename T, size_t n >
+    Vector<T,n> operator+( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
 
-    template< typename T >
-    T vec2GetDotProduct( const Vector2<T>& v1, const Vector2<T>& v2 );
+    template< typename T, size_t n >
+    Vector<T,n> vecDifference( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
-    template< typename T >
-    T operator*( Vector2<T> v1, Vector2<T> v2 ) = delete; // forbidden due to ambiguity between dot and cross product
-
-
-    // predefined vectors //
-    typedef Vector2<float> Vector2f;
-    typedef Vector2<int> Vector2i;
-    typedef Vector2<double> Vector2lf;
+    template<typename T, size_t n>
+    Vector<T,n> operator-( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
 
-    #define VEC_TO_STR( v ) ( "[ " + std::to_string( v.x ) + ", " + std::to_string( v.y ) + " ]" )
+    template< typename T, size_t n >
+    Vector<T,n> vecScalarProduct( const Vector<T,n>& v, T s );
 
+    template< typename T, size_t n >
+    Vector<T,n> operator*( T s, const Vector<T,n>& v );
+
+    template< typename T, size_t n >
+    Vector<T,n> operator*( const Vector<T,n>& v, T s );
+
+
+    template< typename T, size_t n >
+    T vecDotProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecComponentProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+    template< typename T, size_t n >
+    Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecComponentQuotient( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+    template< typename T, size_t n >
+    Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+
+    template< typename T, size_t n >
+    std::string vecToString( const Vector<T,n>& v );
 
 } // namespace chestnut
 

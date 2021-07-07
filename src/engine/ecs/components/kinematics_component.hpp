@@ -2,17 +2,20 @@
 #define __CHESTNUT_KINEMATICS_COMPONENT_H__
 
 #include "../component.hpp"
-#include "engine/maths/vector.hpp"
+#include "engine/maths/vector2.hpp"
 
 namespace chestnut
 {
     struct SKinematicsComponent : IComponent
     {
-        Vector2f velocity;
-        Vector2f acceleration;
+        vec2f linearVelocity;
+        vec2f linearAcceleration;
+        double angularVelocity;
+        double angularAcceleration;
 
         SKinematicsComponent();
-        SKinematicsComponent( Vector2f _velocity, Vector2f _acceleration );
+        SKinematicsComponent( vec2f _linearVelocity, vec2f _linearAcceleration );
+        SKinematicsComponent( vec2f _linearVelocity, vec2f _linearAcceleration, double _angularVelocity, double _angularAcceleration );
     };
 
 } // namespace chestnut 

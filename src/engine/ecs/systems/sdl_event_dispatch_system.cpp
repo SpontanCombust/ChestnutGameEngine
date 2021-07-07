@@ -29,7 +29,7 @@ namespace chestnut
                     SMouseButtonEvent *mouseBtnEvent = theEventManager.raiseEvent<SMouseButtonEvent>();
                     mouseBtnEvent->isPressed = ( sdlEvent.button.type == SDL_MOUSEBUTTONDOWN ) ? true : false;
                     mouseBtnEvent->button = sdlEvent.button.button;
-                    mouseBtnEvent->clickPos = Vector2i( sdlEvent.button.x, sdlEvent.button.y );
+                    mouseBtnEvent->clickPos = vec2i( sdlEvent.button.x, sdlEvent.button.y );
                     mouseBtnEvent->clicksNum = sdlEvent.button.clicks;
                     break;
                 }
@@ -44,7 +44,7 @@ namespace chestnut
                     }
 
                     SMouseWheelEvent *mouseWheelEvent = theEventManager.raiseEvent<SMouseWheelEvent>();
-                    mouseWheelEvent->scrollAmount = Vector2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
+                    mouseWheelEvent->scrollAmount = vec2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
                     break;
                 }
 
@@ -57,8 +57,8 @@ namespace chestnut
                     }
 
                     SMouseMotionEvent *mouseMotionEvent = theEventManager.raiseEvent<SMouseMotionEvent>();
-                    mouseMotionEvent->pos = Vector2i( sdlEvent.motion.x, sdlEvent.motion.y );
-                    mouseMotionEvent->motion = Vector2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
+                    mouseMotionEvent->pos = vec2i( sdlEvent.motion.x, sdlEvent.motion.y );
+                    mouseMotionEvent->motion = vec2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
                     break;
                 }
 

@@ -48,7 +48,13 @@ namespace chestnut
         const std::vector< entityid_t >& getEntities() const;
 
         template< typename T >
-        std::vector< T * > getComponents();
+        std::vector<IComponent*> getComponentsRaw() const;
+
+        template< typename T >
+        std::vector<T*> getComponents() const;
+
+        template< typename T >
+        void getComponentsAppendToVec( std::vector<T*>& vec ) const;
 
         bool submitComponentSet( const SComponentSet& compSet );
 

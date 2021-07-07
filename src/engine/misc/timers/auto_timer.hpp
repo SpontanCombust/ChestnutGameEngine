@@ -3,8 +3,7 @@
 
 #include "timer.hpp"
 #include "engine/types.hpp"
-
-#include <SDL2/SDL_timer.h>
+#include "engine/libs.hpp"
 
 namespace chestnut
 {
