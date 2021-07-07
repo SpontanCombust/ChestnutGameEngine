@@ -3,8 +3,6 @@
 
 #include "vector.hpp"
 
-#include <string>
-
 namespace chestnut
 {
     template< typename T >

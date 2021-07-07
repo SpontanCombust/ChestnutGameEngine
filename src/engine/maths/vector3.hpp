@@ -4,8 +4,6 @@
 #include "vector.hpp"
 #include "vector2.hpp"
 
-#include <string>
-
 namespace chestnut
 {
     template< typename T >
@@ -30,7 +28,6 @@ namespace chestnut
 
     // predefined vectors //
     using vec3f = Vector<float,3>;
-    using vec3i = Vector<int,3>;
 
 
     template< typename T >

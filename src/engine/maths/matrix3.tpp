@@ -1,3 +1,5 @@
+#include <cmath>
+
 namespace chestnut
 {
     template< typename T >

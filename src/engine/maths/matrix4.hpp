@@ -8,9 +8,6 @@
 
 namespace chestnut
 {
-    template< typename T, size_t n >
-    using mat4 = Matrix<T,n>;
-    
     using mat4f = Matrix<float,4>;
 
 

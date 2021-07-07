@@ -7,9 +7,6 @@
 
 namespace chestnut
 {
-    template< typename T >
-    using mat3 = Matrix<T,3>;
-
     using mat3f = Matrix<float,3>;
 
 
