@@ -13,7 +13,7 @@ namespace chestnut
     {   
         // debug
         wchar_t g;
-        EFontStyle style;
+        EFontStyle styleMask;
 
         // data
         GLuint texID;
@@ -37,7 +37,7 @@ namespace chestnut
     struct STextFragmentRaw
     {
         std::wstring str;
-        EFontStyle style;
+        EFontStyle styleMask;
         vec3f color;
     };
 
@@ -85,7 +85,7 @@ namespace chestnut
 
         void clear();
         void newline();
-        void append( std::wstring str, EFontStyle style = EFontStyle::NORMAL, vec3f color = { 1.f, 1.f, 1.f } );
+        void append( std::wstring str, EFontStyle styleMask = EFontStyle::NORMAL, vec3f color = { 1.f, 1.f, 1.f } );
 
 
         std::wstring getString() const;
@@ -112,7 +112,7 @@ namespace chestnut
         void insertBackGlyphsIntoLineSafe( std::vector<STextGlyph> vecGlyphs, unsigned int lineIdx );
         void appendWord( std::wstring str, const SFontConfig& fontConfig, vec3f color );
         void formatLines( unsigned int beginLineIdx = 0 );
-        void appendFragment( std::wstring str, EFontStyle style, vec3f color );
+        void appendFragment( std::wstring str, EFontStyle styleMask, vec3f color );
     };
 
 } // namespace chestnut

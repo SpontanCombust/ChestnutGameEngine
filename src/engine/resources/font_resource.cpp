@@ -13,31 +13,34 @@
 
 namespace chestnut
 {
-    int convertToSDLFontStyle( EFontStyle style )
+    DEFINE_ENUM_FLAG_OPERATORS(EFontStyle)
+
+
+    int convertToSDLFontStyle( EFontStyle styleMask )
     {
         int sdlStyle = 0;
 
-        switch( style )
+        if( ( styleMask & EFontStyle::NORMAL ) == EFontStyle::NORMAL )
         {
-            case EFontStyle::NORMAL:
-                sdlStyle = TTF_STYLE_NORMAL;
-                break;
-            case EFontStyle::BOLD:
-                sdlStyle = TTF_STYLE_BOLD;
-                break;
-            case EFontStyle::ITALIC:
-                sdlStyle = TTF_STYLE_ITALIC;
-                break;
-            case EFontStyle::UNDERLINE:
-                sdlStyle = TTF_STYLE_UNDERLINE;
-                break;
-            case EFontStyle::STRIKETHROUGH:
-                sdlStyle = TTF_STYLE_STRIKETHROUGH;
-                break;
-            default:
-                sdlStyle = TTF_STYLE_NORMAL;
+            sdlStyle |= TTF_STYLE_NORMAL;   
         }
-
+        if( ( styleMask & EFontStyle::BOLD ) == EFontStyle::BOLD )
+        {
+            sdlStyle |= TTF_STYLE_BOLD;   
+        }
+        if( ( styleMask & EFontStyle::ITALIC ) == EFontStyle::ITALIC )
+        {
+            sdlStyle |= TTF_STYLE_ITALIC;   
+        }
+        if( ( styleMask & EFontStyle::UNDERLINE ) == EFontStyle::UNDERLINE )
+        {
+            sdlStyle |= TTF_STYLE_UNDERLINE;   
+        }
+        if( ( styleMask & EFontStyle::STRIKETHROUGH ) == EFontStyle::STRIKETHROUGH )
+        {
+            sdlStyle |= TTF_STYLE_STRIKETHROUGH;   
+        }
+        
         return sdlStyle;
     }
 
@@ -57,9 +60,9 @@ namespace chestnut
         return vecValueRanges;
     }
 
-    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle style, const std::vector< std::pair< wchar_t, wchar_t > >& vecUnicodeRanges )
+    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask, const std::vector< std::pair< wchar_t, wchar_t > >& vecUnicodeRanges )
     {
-        int sdlStyle = convertToSDLFontStyle( style );
+        int sdlStyle = convertToSDLFontStyle( styleMask );
         TTF_SetFontStyle( font, sdlStyle );
 
 
@@ -167,7 +170,7 @@ namespace chestnut
 
         SFontConfig config;
         config.pointSize = pointSize;
-        config.style = style;
+        config.styleMask = styleMask;
         config.ascent = TTF_FontAscent( font );
         config.descent = TTF_FontDescent( font );
         config.height = TTF_FontHeight( font );
@@ -179,12 +182,12 @@ namespace chestnut
         return config;
     }
 
-    size_t getConfigHashInternal( int pointSize, EFontStyle style ) 
+    size_t getConfigHashInternal( int pointSize, EFontStyle styleMask ) 
     {
         std::hash<std::string> hasher;
 
         size_t pointSizeHash = hasher( std::to_string( pointSize ) );
-        size_t styleHash = hasher( std::to_string( static_cast<int>( style ) ) );
+        size_t styleHash = hasher( std::to_string( static_cast<int>( styleMask ) ) );
 
         return pointSizeHash ^ styleHash;
     }
@@ -212,34 +215,34 @@ namespace chestnut
         return false;
     }
 
-    void CFontResource::loadConfig( int pointSize, EFontStyle style ) 
+    void CFontResource::loadConfig( int pointSize, EFontStyle styleMask ) 
     {
         if( !isValid() )
         {
             throw ChestnutException( "Font resource is not valid!" );
         }
 
-        if( !hasConfig( pointSize, style ) )
+        if( !hasConfig( pointSize, styleMask ) )
         {
             TTF_Font *font = TTF_OpenFont( fontPath.c_str(), pointSize );
             auto unicodeValues = getUnicodeValueRanges();
 
-            SFontConfig config = loadConfigInternal( font, pointSize, style, unicodeValues );
-            size_t hash = getConfigHash( pointSize, style );
+            SFontConfig config = loadConfigInternal( font, pointSize, styleMask, unicodeValues );
+            size_t hash = getConfigHash( pointSize, styleMask );
             mapConfigHashToConfig[ hash ] = config;
 
             TTF_CloseFont( font );
         }
     }
 
-    bool CFontResource::hasConfig( int pointSize, EFontStyle style ) 
+    bool CFontResource::hasConfig( int pointSize, EFontStyle styleMask ) 
     {
         if( !isValid() )
         {
             return false;
         }
 
-        size_t hash = getConfigHash( pointSize, style );
+        size_t hash = getConfigHash( pointSize, styleMask );
 
         auto it = mapConfigHashToConfig.find( hash );
         auto end = mapConfigHashToConfig.end();
@@ -251,19 +254,19 @@ namespace chestnut
         return false;
     }
 
-    const SFontConfig& CFontResource::getConfig( int pointSize, EFontStyle style ) 
+    const SFontConfig& CFontResource::getConfig( int pointSize, EFontStyle styleMask ) 
     {
         // let the exception propagate if it happens
         // checks for whether config is already loaded are already in that function
-        loadConfig( pointSize, style );
+        loadConfig( pointSize, styleMask );
 
-        size_t hash = getConfigHash( pointSize, style );
+        size_t hash = getConfigHash( pointSize, styleMask );
         return mapConfigHashToConfig[ hash ];
     }
 
-    size_t CFontResource::getConfigHash( int pointSize, EFontStyle style ) 
+    size_t CFontResource::getConfigHash( int pointSize, EFontStyle styleMask ) 
     {
-        return getConfigHashInternal( pointSize, style );
+        return getConfigHashInternal( pointSize, styleMask );
     }
 
 

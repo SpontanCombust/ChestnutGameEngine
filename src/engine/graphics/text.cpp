@@ -151,7 +151,7 @@ namespace chestnut
             
 
             glyph.g = g;
-            glyph.style = fontConfig.style;
+            glyph.styleMask = fontConfig.styleMask;
             glyph.color = color;
 
             glyph.texID = fontConfig.glyphSpriteSheet.getID();
@@ -244,7 +244,7 @@ namespace chestnut
         if( !line.vecGlyphs.empty() )
         {
             const STextGlyph& lastGlyph = line.vecGlyphs.back();
-            const SFontConfig& lastGlyphConfig = m_resource->getConfig( m_pointSize, lastGlyph.style );
+            const SFontConfig& lastGlyphConfig = m_resource->getConfig( m_pointSize, lastGlyph.styleMask );
             const SGlyphMetrics& lastGlyphMetrics = getGlyphMetricsSafe( lastGlyphConfig, lastGlyph.g );
 
             width = lastGlyph.lineOffset.x + lastGlyphMetrics.advance;
@@ -369,14 +369,14 @@ namespace chestnut
         }
     }
 
-    void CText::appendFragment( std::wstring str, EFontStyle style, vec3f color ) 
+    void CText::appendFragment( std::wstring str, EFontStyle styleMask, vec3f color ) 
     {
         if( str == L"" )
         {
             return;
         }
 
-        const SFontConfig& config = m_resource->getConfig( m_pointSize, style );
+        const SFontConfig& config = m_resource->getConfig( m_pointSize, styleMask );
 
         auto vecNewLines = tokenizeString( str, L'\n', true );
 
@@ -475,11 +475,11 @@ namespace chestnut
         m_vecRawFragments.clear();
     }
 
-    void CText::append( std::wstring str, EFontStyle style, vec3f color ) 
+    void CText::append( std::wstring str, EFontStyle styleMask, vec3f color ) 
     {
         STextFragmentRaw fragmRaw;
         fragmRaw.str = str;
-        fragmRaw.style = style;
+        fragmRaw.styleMask = styleMask;
         fragmRaw.color = color;
 
         m_vecRawFragments.push_back( fragmRaw );
@@ -574,7 +574,7 @@ namespace chestnut
 
         for( const STextFragmentRaw& fragmRaw : m_vecRawFragments )
         {
-            appendFragment( fragmRaw.str, fragmRaw.style, fragmRaw.color );
+            appendFragment( fragmRaw.str, fragmRaw.styleMask, fragmRaw.color );
         }
 
         formatLines();

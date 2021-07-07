@@ -38,8 +38,8 @@ namespace test
             const SFontConfig& italicConfig = fontResource->getConfig( 33, EFontStyle::ITALIC );
             const CMapSpriteSheetTexture2D<wchar_t>& italicSheet = italicConfig.glyphSpriteSheet;
 
-            const SFontConfig& underlineConfig = fontResource->getConfig( 33, EFontStyle::UNDERLINE );
-            const CMapSpriteSheetTexture2D<wchar_t>& underlineSheet = underlineConfig.glyphSpriteSheet;
+            const SFontConfig& underlineStrikethroughConfig = fontResource->getConfig( 33, EFontStyle::UNDERLINE | EFontStyle::STRIKETHROUGH );
+            const CMapSpriteSheetTexture2D<wchar_t>& underlineStrikethroughSheet = underlineStrikethroughConfig.glyphSpriteSheet;
 
 
 
@@ -70,7 +70,7 @@ namespace test
 
             window.clear();
                 spriteRenderer.clear();
-                spriteRenderer.submitSprite( underlineSheet, { 0.f, 0.f } );
+                spriteRenderer.submitSprite( underlineStrikethroughSheet, { 0.f, 0.f } );
                 spriteRenderer.render();
             window.flipBuffer();
             SDL_Delay( 2000 );

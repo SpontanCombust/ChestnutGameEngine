@@ -2,6 +2,7 @@
 #define __CHESTNUT_FONT_RESOURCE_H__
 
 #include "engine/graphics/map_sprite_sheet.hpp"
+#include "engine/misc/flags.hpp"
 
 #include <string>
 #include <memory>
@@ -19,6 +20,9 @@ namespace chestnut
         STRIKETHROUGH
     };
 
+    DECLARE_ENUM_FLAG_OPERATORS(EFontStyle)
+
+
     struct SGlyphMetrics
     {
         int width;
@@ -33,7 +37,7 @@ namespace chestnut
     struct SFontConfig
     {
         int pointSize;
-        EFontStyle style;
+        EFontStyle styleMask;
         int ascent;
         int descent;
         int height;
@@ -56,15 +60,15 @@ namespace chestnut
         bool isValid() const;
 
         // Throws an exception if resource is not valid
-        void loadConfig( int pointSize, EFontStyle style );
+        void loadConfig( int pointSize, EFontStyle styleMask );
 
-        bool hasConfig( int pointSize, EFontStyle style );
+        bool hasConfig( int pointSize, EFontStyle styleMask );
         
         // Throws an exception if resource is not valid
         // Otherwise, if doesn't find a config, loads it and then returns it
-        const SFontConfig& getConfig( int pointSize, EFontStyle style );
+        const SFontConfig& getConfig( int pointSize, EFontStyle styleMask );
 
-        size_t getConfigHash( int pointSize, EFontStyle style );
+        size_t getConfigHash( int pointSize, EFontStyle styleMask );
     };
 
 
