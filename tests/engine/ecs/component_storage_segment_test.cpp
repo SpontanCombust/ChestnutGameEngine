@@ -10,7 +10,7 @@ namespace test
 {
     void componentStorageSegmentTest()
     {
-        CComponentStorageSegment<STransformComponent> transfCompSegment(5);
+        CComponentStorageSegment<STransformComponent> transfCompSegment(0, 5);
 
         LOG_CHANNEL( "TEST", "<<< Take up slot test >>>" );
         {

@@ -13,6 +13,8 @@ namespace chestnut
     class CComponentStorageSegment
     {
     private:
+        unsigned int m_id;
+
         size_t m_size;
         C *m_arrComponentSlots;
 
@@ -20,8 +22,10 @@ namespace chestnut
         std::unordered_map< entityid_t, size_t > m_mapEntityIDToSlot;
 
     public:
-        CComponentStorageSegment( size_t size );
+        CComponentStorageSegment( unsigned int id, size_t size );
         ~CComponentStorageSegment();
+
+        unsigned int getID() const;
 
         size_t getSize() const;
 
@@ -30,6 +34,7 @@ namespace chestnut
         size_t getFreeComponentSlotCount() const;
 
         // Returns null if no slots are available
+        // If entity already has taken up a slot, no action is taken aside from returning its component
         C *takeUpComponentSlot( entityid_t entityID );
 
         bool hasSlottedComponent( entityid_t entityID ) const;
@@ -42,9 +47,6 @@ namespace chestnut
         void clearComponentSlots();
         // Returns a string with IDs of all entities that take up a slot in the segment
         std::string toString() const;
-
-    private:
-
     };
 
 } // namespace chestnut

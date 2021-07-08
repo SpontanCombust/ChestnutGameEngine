@@ -3,8 +3,10 @@
 namespace chestnut
 {    
     template<typename C>
-    CComponentStorageSegment<C>::CComponentStorageSegment( size_t size ) 
+    CComponentStorageSegment<C>::CComponentStorageSegment( unsigned int id, size_t size ) 
     {
+        m_id = id;
+
         m_size = size;
 
         m_arrComponentSlots = new C[ size ];
@@ -18,6 +20,12 @@ namespace chestnut
     CComponentStorageSegment<C>::~CComponentStorageSegment() 
     {
         delete[] m_arrComponentSlots;
+    }
+
+    template<typename C>
+    unsigned int CComponentStorageSegment<C>::getID() const
+    {
+        return m_id;
     }
 
     template<typename C>
@@ -52,6 +60,10 @@ namespace chestnut
         {
             return nullptr;
         }
+        else if( hasSlottedComponent( entityID ) )
+        {
+            return getSlottedComponent( entityID );
+        }
 
         size_t slot = m_vecAvailableSlots.back();
         m_vecAvailableSlots.pop_back();
@@ -85,8 +97,7 @@ namespace chestnut
 
         if( it != m_mapEntityIDToSlot.end() )
         {
-            C *comp = &m_arrComponentSlots[ it->second ];
-            return comp;
+            return &m_arrComponentSlots[ it->second ];
         }
         else
         {
