@@ -7,6 +7,7 @@ namespace test
 {
     void componentVectorWrapperTest();
     void componentStorageSegmentTest();
+    void componentStorageTest();
     void componentSetSignatureTest();
     void componentSetTest();
     void entityRegistryTest();

@@ -6,6 +6,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/management/component_batch.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/management/component_set_signature.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/management/component_set.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/management/component_storage.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/management/entity_manager.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/management/entity_registry.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/systems/kinematics_system.cpp
