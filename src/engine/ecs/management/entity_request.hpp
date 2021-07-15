@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENTITY_REQUEST_H__
 #define __CHESTNUT_ENTITY_REQUEST_H__
 
-#include "component_set_signature.hpp"
+#include "entity_signature.hpp"
 
 namespace chestnut
 {
@@ -17,8 +17,8 @@ namespace chestnut
     {
         EEntityRequestType type;
         entityid_t id;
-        SComponentSetSignature oldSignature;
-        SComponentSetSignature newSignature;
+        CEntitySignature oldSignature;
+        CEntitySignature newSignature;
     };
     
 } // namespace chestnut

@@ -39,9 +39,9 @@ namespace chestnut
         mapTindexToComponent.erase( compTindex );
     }
 
-    SComponentSetSignature SComponentSet::getSignature() const
+    CEntitySignature SComponentSet::getSignature() const
     {
-        SComponentSetSignature signature;
+        CEntitySignature signature;
 
         for( const auto& [ tindex, comp ] : mapTindexToComponent )
         {

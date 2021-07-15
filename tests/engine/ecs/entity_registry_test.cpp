@@ -12,7 +12,7 @@ namespace test
     {
         CEntityRegistry registry;
 
-        SComponentSetSignature testSign;
+        CEntitySignature testSign;
 
 
         LOG_CHANNEL( "TEST", "<<Add and get entity without signature test>>");
@@ -26,7 +26,7 @@ namespace test
 
         LOG_CHANNEL( "TEST", "<<Add and get entity with signature test>>");
         
-        SComponentSetSignature sign1;
+        CEntitySignature sign1;
         sign1.add<STransformComponent>();
         sign1.add<SKinematicsComponent>();
 
@@ -61,7 +61,7 @@ namespace test
 
 
         LOG_CHANNEL( "TEST", "<<Update entity test>>");
-        SComponentSetSignature sign2, sign3;
+        CEntitySignature sign2, sign3;
         sign2.add<STimerComponent>();
         sign3.add<STransformComponent>();
         sign3.add<STextureComponent>();

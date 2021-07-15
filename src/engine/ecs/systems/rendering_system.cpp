@@ -36,7 +36,7 @@ namespace chestnut
 
     void CRenderingSystem::submitComponents( CComponentBatch *batch ) 
     {
-        SComponentSetSignature signature;
+        CEntitySignature signature;
 
         signature = batch->getSignature();
 

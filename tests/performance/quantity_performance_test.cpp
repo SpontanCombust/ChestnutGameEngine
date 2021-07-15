@@ -44,7 +44,7 @@ namespace test
         lol = theResourceManager.getTexture2DResource( "../_media_test/awesomeface.png" );
         gatsu = theResourceManager.getTexture2DResource( "../_media_test/berk.jpg" );
 
-        SComponentSetSignature sign;
+        CEntitySignature sign;
         sign.add<STransformComponent>()
             .add<SKinematicsComponent>()
             .add<STextureComponent>();

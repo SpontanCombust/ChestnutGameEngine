@@ -4,7 +4,7 @@ namespace chestnut
 {
     void CKinematicsSystem::submitComponents( CComponentBatch *batch ) 
     {
-        SComponentSetSignature sign = batch->getSignature();
+        CEntitySignature sign = batch->getSignature();
 
         if( sign.includes<STransformComponent>() && sign.includes<SKinematicsComponent>() )
         {

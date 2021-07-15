@@ -46,10 +46,10 @@ namespace chestnut
         return ids;
     }
 
-    entityid_t CEntityManager::createEntity( SComponentSetSignature signature ) 
+    entityid_t CEntityManager::createEntity( CEntitySignature signature ) 
     {
         // validation stage
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             if( !isPreparedForComponentType( compTindex ) )
             {
@@ -68,7 +68,7 @@ namespace chestnut
         m_entityRegistry.addEntity( id, signature );
 
 
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             // create an instance of the component //
             wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
@@ -91,7 +91,7 @@ namespace chestnut
         return id;
     }
 
-    std::vector< entityid_t > CEntityManager::createEntities( SComponentSetSignature signature, int amount ) 
+    std::vector< entityid_t > CEntityManager::createEntities( CEntitySignature signature, int amount ) 
     {
         std::vector< entityid_t > ids;
 
@@ -104,7 +104,7 @@ namespace chestnut
         {
             return ids;
         }
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             if( !isPreparedForComponentType( compTindex ) )
             {
@@ -118,7 +118,7 @@ namespace chestnut
         // get all needed component vectors
         std::vector< IComponentVectorWrapper *> vecWrappers;
         IComponentVectorWrapper *wrapper;
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
             wrapper->reserve( wrapper->capacity() + amount );
@@ -157,7 +157,7 @@ namespace chestnut
         return ids;
     }
 
-    std::vector< SComponentSet > CEntityManager::createEntitiesReturnSets( SComponentSetSignature signature, int amount )
+    std::vector< SComponentSet > CEntityManager::createEntitiesReturnSets( CEntitySignature signature, int amount )
     {
         std::vector< SComponentSet > vecCompSets;
 
@@ -170,7 +170,7 @@ namespace chestnut
         {
             return vecCompSets;
         }
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             if( !isPreparedForComponentType( compTindex ) )
             {
@@ -184,7 +184,7 @@ namespace chestnut
         // get all needed component vectors
         std::vector< IComponentVectorWrapper *> vecWrappers;
         IComponentVectorWrapper *wrapper;
-        for( const componenttindex_t& compTindex : signature.componentTindexes )
+        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
             wrapper->reserve( wrapper->capacity() + amount );
@@ -241,7 +241,7 @@ namespace chestnut
             return;
         }
 
-        SComponentSetSignature signature;
+        CEntitySignature signature;
         SEntityRequest request;
 
 
@@ -308,8 +308,8 @@ namespace chestnut
 
         IComponentVectorWrapper *wrapper;
         IComponent *uncastedComp;
-        SComponentSetSignature oldSignature;
-        SComponentSetSignature newSignature;
+        CEntitySignature oldSignature;
+        CEntitySignature newSignature;
         SEntityRequest request;
 
 
@@ -357,7 +357,7 @@ namespace chestnut
             return false;
         }
         
-        SComponentSetSignature signature;
+        CEntitySignature signature;
 
         signature = m_entityRegistry.getEntitySignature( id ); // hasEntity() assures entity exists
         return signature.includes( compTindex );
@@ -387,8 +387,8 @@ namespace chestnut
             return;
         }
 
-        SComponentSetSignature oldSignature;
-        SComponentSetSignature newSignature;
+        CEntitySignature oldSignature;
+        CEntitySignature newSignature;
         SEntityRequest request;
 
 
@@ -429,7 +429,7 @@ namespace chestnut
         
         compSet.componentOwnerID = id;
 
-        SComponentSetSignature sign = m_entityRegistry.getEntitySignature( id );
+        CEntitySignature sign = m_entityRegistry.getEntitySignature( id );
         if( sign.isEmpty() )
         {
             // return empty set
@@ -527,7 +527,7 @@ namespace chestnut
 
 
 
-    bool CEntityManager::existsBatchWithSignature( SComponentSetSignature signature ) const
+    bool CEntityManager::existsBatchWithSignature( CEntitySignature signature ) const
     {
         // we don't make batches for empty signatures
         if( signature.isEmpty() )
@@ -546,7 +546,7 @@ namespace chestnut
         return false;
     }
 
-    CComponentBatch *CEntityManager::getBatchWithSignature( SComponentSetSignature signature ) 
+    CComponentBatch *CEntityManager::getBatchWithSignature( CEntitySignature signature ) 
     {
         // we don't make batches for empty signatures
         if( signature.isEmpty() )
@@ -565,14 +565,14 @@ namespace chestnut
         return nullptr;
     }
 
-    void CEntityManager::createBatchWithSignature( SComponentSetSignature signature ) 
+    void CEntityManager::createBatchWithSignature( CEntitySignature signature ) 
     {
         CComponentBatch batch;
         batch.setSignature( signature );
         m_vecCompBatches.push_back( batch );
     }
 
-    void CEntityManager::destroyBatchWithSignature( SComponentSetSignature signature ) 
+    void CEntityManager::destroyBatchWithSignature( CEntitySignature signature ) 
     {
         for( auto it = m_vecCompBatches.begin(); it != m_vecCompBatches.end(); ++it )
         {
@@ -586,7 +586,7 @@ namespace chestnut
 
 
 
-    SComponentSet CEntityManager::buildComponentSetForEntity( entityid_t id, SComponentSetSignature signature ) 
+    SComponentSet CEntityManager::buildComponentSetForEntity( entityid_t id, CEntitySignature signature ) 
     {
         SComponentSet compSet;
         IComponentVectorWrapper *wrapper;
@@ -594,7 +594,7 @@ namespace chestnut
 
         compSet.componentOwnerID = id;
 
-        for( const std::type_index& tindex : signature.componentTindexes )
+        for( const std::type_index& tindex : signature.m_setComponentTindexes )
         {
             wrapper = getComponentVectorWrapper( tindex );
 
@@ -612,7 +612,7 @@ namespace chestnut
         return compSet;
     }
 
-    bool CEntityManager::moveEntityAccrossBatches( entityid_t id, SComponentSetSignature oldSignature, SComponentSetSignature newSignature ) 
+    bool CEntityManager::moveEntityAccrossBatches( entityid_t id, CEntitySignature oldSignature, CEntitySignature newSignature ) 
     {
         CComponentBatch *oldBatch;
         CComponentBatch *newBatch;
@@ -663,12 +663,12 @@ namespace chestnut
     void CEntityManager::processPostTickCreateEntityRequest( const SEntityRequest& request ) 
     {
         // empty old signature means it won't attempt to remove components from old one, because it hasn't been assigned to one yet
-        if( !moveEntityAccrossBatches( request.id, SComponentSetSignature(), request.newSignature ) )
+        if( !moveEntityAccrossBatches( request.id, CEntitySignature(), request.newSignature ) )
         {
             LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity " << request.id << " with signature " << request.newSignature.toString() << " ! Reverting entity creation..." );
 
             IComponentVectorWrapper *vecWrapper;
-            for( const std::type_index& tindex : request.newSignature.componentTindexes )
+            for( const std::type_index& tindex : request.newSignature.m_setComponentTindexes )
             {
                 vecWrapper = getComponentVectorWrapper( tindex );
                 vecWrapper->erase( request.id );
@@ -683,14 +683,14 @@ namespace chestnut
         IComponentVectorWrapper *vecWrapper;
 
         // remove actual components belonging to entity
-        for( const std::type_index& tindex : request.oldSignature.componentTindexes )
+        for( const std::type_index& tindex : request.oldSignature.m_setComponentTindexes )
         {
             vecWrapper = getComponentVectorWrapper( tindex );
             vecWrapper->erase( request.id );
         }
 
         // empty new signature means it will get removed from new one and not assigned to any new
-        moveEntityAccrossBatches( request.id, request.oldSignature, SComponentSetSignature() );
+        moveEntityAccrossBatches( request.id, request.oldSignature, CEntitySignature() );
     }
 
     void CEntityManager::processPostTickCreateComponentRequest( const SEntityRequest& request ) 
@@ -699,8 +699,8 @@ namespace chestnut
         {
             LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity with signature: " << request.newSignature.toString() << " ! Reverting component creation!" );
 
-            SComponentSetSignature signDiff = request.newSignature - request.oldSignature;
-            componenttindex_t createdCompTindex = *( signDiff.componentTindexes.begin() );
+            CEntitySignature signDiff = request.newSignature - request.oldSignature;
+            componenttindex_t createdCompTindex = *( signDiff.m_setComponentTindexes.begin() );
             IComponentVectorWrapper *vecWrapper = getComponentVectorWrapper( createdCompTindex );
             
             vecWrapper->erase( request.id );
@@ -711,8 +711,8 @@ namespace chestnut
 
     void CEntityManager::processPostTickDestroyComponentRequest( const SEntityRequest& request ) 
     {
-        SComponentSetSignature signDiff = request.oldSignature - request.newSignature;
-        componenttindex_t destroyedCompTindex = *( signDiff.componentTindexes.begin() );
+        CEntitySignature signDiff = request.oldSignature - request.newSignature;
+        componenttindex_t destroyedCompTindex = *( signDiff.m_setComponentTindexes.begin() );
         IComponentVectorWrapper *vecWrapper = getComponentVectorWrapper( destroyedCompTindex );
 
         vecWrapper->erase( request.id );

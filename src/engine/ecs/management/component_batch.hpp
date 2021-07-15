@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_COMPONENT_BATCH_H__
 #define __CHESTNUT_COMPONENT_BATCH_H__
 
-#include "component_set_signature.hpp"
+#include "entity_signature.hpp"
 #include "component_set.hpp"
 #include "engine/ecs/component.hpp"
 #include "engine/types.hpp"
@@ -26,7 +26,7 @@ namespace chestnut
     class CComponentBatch
     {
     private:
-        SComponentSetSignature m_signature;
+        CEntitySignature m_signature;
         
         std::vector< entityid_t > m_entityIDs;
         std::unordered_map< componenttindex_t, std::vector<IComponent *> > m_mapTindexToCompVec;
@@ -34,14 +34,14 @@ namespace chestnut
     public:
         CComponentBatch() = default;
 
-        CComponentBatch( const SComponentSetSignature& signature );
+        CComponentBatch( const CEntitySignature& signature );
 
         ~CComponentBatch();
 
 
-        void setSignature( const SComponentSetSignature& signature );
+        void setSignature( const CEntitySignature& signature );
 
-        const SComponentSetSignature& getSignature() const;
+        const CEntitySignature& getSignature() const;
 
         const int getEntityCount() const;
 

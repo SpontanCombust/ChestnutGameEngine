@@ -10,7 +10,7 @@
 #include "engine/misc/timers/locked_auto_timer.hpp"
 #include "engine/resources/resource_manager.hpp"
 
-#include <vector>
+#include <list>
 
 namespace chestnut
 {

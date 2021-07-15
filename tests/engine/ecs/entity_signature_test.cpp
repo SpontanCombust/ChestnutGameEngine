@@ -1,15 +1,15 @@
 #include "ecs_tests.hpp"
 
-#include "engine/ecs/management/component_set_signature.hpp"
+#include "engine/ecs/management/entity_signature.hpp"
 #include "engine/ecs/components/components.hpp"
 
 namespace chestnut 
 { 
 namespace test 
 {
-    void componentSetSignatureTest()
+    void entitySignatureTest()
     {
-        SComponentSetSignature signature1;
+        CEntitySignature signature1;
 
         LOG_CHANNEL( "TEST", "<<Add to signature test>>" );
         signature1.add<STransformComponent>();
@@ -32,7 +32,7 @@ namespace test
 
 
         LOG_CHANNEL( "TEST", "<<Signature equality test>>" );
-        SComponentSetSignature signature2;
+        CEntitySignature signature2;
 
         signature2.add( TINDEX( STextureComponent ) );
 

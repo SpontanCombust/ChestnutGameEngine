@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_COMPONENT_SET_H__
 #define __CHESTNUT_COMPONENT_SET_H__
 
-#include "component_set_signature.hpp"
+#include "entity_signature.hpp"
 #include "../component.hpp"
 
 #include <unordered_map>
@@ -27,7 +27,7 @@ namespace chestnut
         bool addComponent( IComponent *component );
         void removeComponent( componenttindex_t compTindex );
 
-        SComponentSetSignature getSignature() const;
+        CEntitySignature getSignature() const;
     };
     
 } // namespace chestnut

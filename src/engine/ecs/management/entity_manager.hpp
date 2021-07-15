@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENTITY_MANAGER_H__
 #define __CHESTNUT_ENTITY_MANAGER_H__
 
-#include "component_set_signature.hpp"
+#include "entity_signature.hpp"
 #include "component_set.hpp"
 #include "entity_registry.hpp"
 #include "component_batch.hpp"
@@ -51,12 +51,12 @@ namespace chestnut
         std::vector< entityid_t > createEntities( int amount );
 
         // Returns ENTITY_ID_INVALID if manager was not prepared for component type
-        entityid_t createEntity( SComponentSetSignature signature );
+        entityid_t createEntity( CEntitySignature signature );
 
         // Returns empty vector if manager was not prepared for component type
-        std::vector< entityid_t > createEntities( SComponentSetSignature signature, int amount );
+        std::vector< entityid_t > createEntities( CEntitySignature signature, int amount );
         // temporary name
-        std::vector< SComponentSet > createEntitiesReturnSets( SComponentSetSignature signature, int amount );
+        std::vector< SComponentSet > createEntitiesReturnSets( CEntitySignature signature, int amount );
 
         bool hasEntity( entityid_t id ) const;
 
@@ -109,19 +109,19 @@ namespace chestnut
         IComponentVectorWrapper *getComponentVectorWrapper( componenttindex_t compTindex ) const;
 
 
-        bool existsBatchWithSignature( SComponentSetSignature signature ) const;
+        bool existsBatchWithSignature( CEntitySignature signature ) const;
 
         // Returns null if doesn't find one
-        CComponentBatch *getBatchWithSignature( SComponentSetSignature signature );
+        CComponentBatch *getBatchWithSignature( CEntitySignature signature );
 
-        void createBatchWithSignature( SComponentSetSignature signature );
+        void createBatchWithSignature( CEntitySignature signature );
 
-        void destroyBatchWithSignature( SComponentSetSignature signature );
+        void destroyBatchWithSignature( CEntitySignature signature );
 
 
-        SComponentSet buildComponentSetForEntity( entityid_t id, SComponentSetSignature signature );
+        SComponentSet buildComponentSetForEntity( entityid_t id, CEntitySignature signature );
 
-        bool moveEntityAccrossBatches( entityid_t id, SComponentSetSignature oldSignature, SComponentSetSignature newSignature );
+        bool moveEntityAccrossBatches( entityid_t id, CEntitySignature oldSignature, CEntitySignature newSignature );
 
 
         void processPostTickCreateComponentRequest( const SEntityRequest& request );

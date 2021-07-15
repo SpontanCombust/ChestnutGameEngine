@@ -23,6 +23,7 @@ namespace chestnut
 
     public:
         CComponentStorageSegment( unsigned int id, size_t size );
+        CComponentStorageSegment( const CComponentStorageSegment& ) = delete; // we don't copy segments
         ~CComponentStorageSegment();
 
         unsigned int getID() const;

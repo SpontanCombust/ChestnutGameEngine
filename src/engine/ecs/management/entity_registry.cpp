@@ -13,16 +13,16 @@ namespace chestnut
             return false;
         }
 
-        std::pair< entityid_t, SComponentSetSignature > newRecord;
+        std::pair< entityid_t, CEntitySignature > newRecord;
         newRecord.first = id;
-        newRecord.second = SComponentSetSignature();
+        newRecord.second = CEntitySignature();
 
         m_entityRecords.push_back( newRecord );
 
         return true;
     }
 
-    bool CEntityRegistry::addEntity( entityid_t id, const SComponentSetSignature& signature ) 
+    bool CEntityRegistry::addEntity( entityid_t id, const CEntitySignature& signature ) 
     {
         if( hasEntity( id ) )
         {
@@ -30,7 +30,7 @@ namespace chestnut
             return false;
         }
 
-        std::pair< entityid_t, SComponentSetSignature > newRecord;
+        std::pair< entityid_t, CEntitySignature > newRecord;
         newRecord.first = id;
         newRecord.second = signature;
 
@@ -39,7 +39,7 @@ namespace chestnut
         return true;
     }
 
-    void CEntityRegistry::updateEntity( entityid_t id, const SComponentSetSignature& newSignature ) 
+    void CEntityRegistry::updateEntity( entityid_t id, const CEntitySignature& newSignature ) 
     {
         bool entityFound;
         entityid_t testId;
@@ -104,10 +104,10 @@ namespace chestnut
         return false;
     }
 
-    const SComponentSetSignature CEntityRegistry::getEntitySignature( entityid_t id ) const
+    const CEntitySignature CEntityRegistry::getEntitySignature( entityid_t id ) const
     {
         entityid_t testId;
-        SComponentSetSignature testSignature;
+        CEntitySignature testSignature;
 
         for( const auto& record : m_entityRecords )
         {

@@ -68,8 +68,8 @@ namespace test
         {
             std::vector< entityid_t > tmp;
 
-            SComponentSetSignature sign1;
-            SComponentSetSignature sign2;
+            CEntitySignature sign1;
+            CEntitySignature sign2;
 
             sign1.add<STransformComponent>();
 

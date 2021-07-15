@@ -6,7 +6,7 @@
 
 namespace chestnut
 {
-    CComponentBatch::CComponentBatch( const SComponentSetSignature& signature ) 
+    CComponentBatch::CComponentBatch( const CEntitySignature& signature ) 
     {
         m_signature = signature;
     }
@@ -17,7 +17,7 @@ namespace chestnut
         m_mapTindexToCompVec.clear();
     }
 
-    void CComponentBatch::setSignature( const SComponentSetSignature& signature ) 
+    void CComponentBatch::setSignature( const CEntitySignature& signature ) 
     {
         m_signature = signature;
 
@@ -31,7 +31,7 @@ namespace chestnut
         }
     }
 
-    const SComponentSetSignature& CComponentBatch::getSignature() const
+    const CEntitySignature& CComponentBatch::getSignature() const
     {
         return m_signature;
     }

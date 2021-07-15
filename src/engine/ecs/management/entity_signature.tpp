@@ -1,19 +1,19 @@
 namespace chestnut
 {    
     template< typename T >
-    SComponentSetSignature& SComponentSetSignature::add() 
+    CEntitySignature& CEntitySignature::add() 
     {
         return add( TINDEX(T) );
     }
 
     template< typename T >
-    SComponentSetSignature& SComponentSetSignature::remove() 
+    CEntitySignature& CEntitySignature::remove() 
     {
         return remove( TINDEX(T) );
     }
 
     template< typename T >
-    bool SComponentSetSignature::includes() const
+    bool CEntitySignature::includes() const
     {
         return includes( TINDEX(T) );
     }

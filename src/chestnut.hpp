@@ -47,7 +47,7 @@
 
 #include "engine/ecs/component.hpp"
 #include "engine/ecs/system.hpp"
-#include "engine/ecs/management/component_set_signature.hpp"
+#include "engine/ecs/management/entity_signature.hpp"
 #include "engine/ecs/management/component_batch.hpp"
 #include "engine/ecs/management/entity_manager.hpp"
 #include "engine/ecs/components/components.hpp"

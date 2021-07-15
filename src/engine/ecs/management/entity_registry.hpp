@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENTITY_REGISTRY_H__
 #define __CHESTNUT_ENTITY_REGISTRY_H__
 
-#include "component_set_signature.hpp"
+#include "entity_signature.hpp"
 #include "engine/types.hpp"
 
 #include <utility>
@@ -12,14 +12,15 @@ namespace chestnut
     class CEntityRegistry
     {
     private:
-        std::vector< std::pair< entityid_t, SComponentSetSignature > > m_entityRecords;
+        //TODO replace with a map (why TF did I do it like this?!)
+        std::vector< std::pair< entityid_t, CEntitySignature > > m_entityRecords;
 
     public:
         bool addEntity( entityid_t id );
 
-        bool addEntity( entityid_t id, const SComponentSetSignature& signature );
+        bool addEntity( entityid_t id, const CEntitySignature& signature );
 
-        void updateEntity( entityid_t id, const SComponentSetSignature& newSignature );
+        void updateEntity( entityid_t id, const CEntitySignature& newSignature );
 
         bool hasEntity( entityid_t id ) const;
 
@@ -28,7 +29,7 @@ namespace chestnut
         void removeAllEntities();
 
         // Throws exception on not finding the entity
-        const SComponentSetSignature getEntitySignature( entityid_t id ) const;
+        const CEntitySignature getEntitySignature( entityid_t id ) const;
 
 
         const std::string toString() const;

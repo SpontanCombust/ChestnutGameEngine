@@ -2,10 +2,7 @@
 #define __CHESTNUT_COMPONENT_SYSTEM_H__
 
 #include "../system.hpp"
-#include "../management/component_set_signature.hpp"
 #include "../management/component_batch.hpp"
-
-#include <list>
 
 namespace chestnut
 {
