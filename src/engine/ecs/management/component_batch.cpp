@@ -17,20 +17,6 @@ namespace chestnut
         m_mapTindexToCompVec.clear();
     }
 
-    void CComponentBatch::setSignature( const CEntitySignature& signature ) 
-    {
-        m_signature = signature;
-
-        // remove components that don't belong to new signature
-        for( const auto& [ tindex, vec ] : m_mapTindexToCompVec )
-        {
-            if( !signature.includes( tindex ) )
-            {
-                m_mapTindexToCompVec.erase( tindex );
-            }
-        }
-    }
-
     const CEntitySignature& CComponentBatch::getSignature() const
     {
         return m_signature;

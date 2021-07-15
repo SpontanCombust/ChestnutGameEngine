@@ -5,7 +5,6 @@ namespace chestnut
 {
 namespace test
 {
-    void componentVectorWrapperTest();
     void componentStorageSegmentTest();
     void componentStorageTest();
     void entitySignatureTest();

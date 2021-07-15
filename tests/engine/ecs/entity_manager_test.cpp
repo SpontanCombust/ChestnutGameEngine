@@ -37,6 +37,10 @@ namespace test
         }
         LOG_CHANNEL( "TEST", "" );
 
+        manager.setupComponentType<STransformComponent>( 10 );
+        manager.setupComponentType<SKinematicsComponent>( 10 );
+        manager.setupComponentType<STimerComponent>( 10 );
+        manager.setupComponentType<STextureComponent>( 10 );
 
         LOG_CHANNEL( "TEST", "<< Create/has component test >>");
         {

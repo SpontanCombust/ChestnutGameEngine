@@ -13,13 +13,13 @@ namespace chestnut
     {
         destroyAllEntities();
 
-        for( auto& [ tindex, wrapper ] : m_mapComponentVecWrappers )
+        for( auto& [ tindex, storage ] : m_mapCompTypeToStorage )
         {
-            delete wrapper;
-            wrapper = nullptr;
+            delete storage;
+            storage = nullptr;
         }
 
-        m_mapComponentVecWrappers.clear();
+        m_mapCompTypeToStorage.clear();
     }
 
 
@@ -32,11 +32,11 @@ namespace chestnut
         return m_idCounter;
     }
 
-    std::vector< entityid_t > CEntityManager::createEntities( int amount ) 
+    std::vector< entityid_t > CEntityManager::createEntities( unsigned int amount ) 
     {
         std::vector< entityid_t > ids;
 
-        for (int i = 0; i < amount; i++)
+        for (unsigned int i = 0; i < amount; i++)
         {
             ++m_idCounter;
             m_entityRegistry.addEntity( m_idCounter );
@@ -48,19 +48,9 @@ namespace chestnut
 
     entityid_t CEntityManager::createEntity( CEntitySignature signature ) 
     {
-        // validation stage
-        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
-        {
-            if( !isPreparedForComponentType( compTindex ) )
-            {
-                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-                return ENTITY_ID_INVALID;
-            }
-        }
-
         // creation stage
         entityid_t id;
-        IComponentVectorWrapper *wrapper;
+        IComponentStorage *storage;
         SEntityRequest request;
 
 
@@ -71,8 +61,8 @@ namespace chestnut
         for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
             // create an instance of the component //
-            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
-            wrapper->push_back( id );
+            storage = getComponentStorage( compTindex ); // let the exception propagate if happens
+            storage->createComponent( id );
         }
 
 
@@ -91,52 +81,40 @@ namespace chestnut
         return id;
     }
 
-    std::vector< entityid_t > CEntityManager::createEntities( CEntitySignature signature, int amount ) 
+    std::vector< entityid_t > CEntityManager::createEntities( CEntitySignature signature, unsigned int amount ) 
     {
         std::vector< entityid_t > ids;
 
         // validation stage
-        if( amount <= 0 )
-        {
-            return ids;
-        }
         if( signature.isEmpty() )
         {
             return ids;
-        }
-        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
-        {
-            if( !isPreparedForComponentType( compTindex ) )
-            {
-                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-                return ids; // returns empty vector
-            }
         }
 
         // creation stage
 
         // get all needed component vectors
-        std::vector< IComponentVectorWrapper *> vecWrappers;
-        IComponentVectorWrapper *wrapper;
+        std::vector< IComponentStorage * > vecStorages;
         for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
-            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
-            wrapper->reserve( wrapper->capacity() + amount );
-            vecWrappers.push_back( wrapper ); 
+            IComponentStorage *storage;
+            storage = getComponentStorage( compTindex ); // let the exception propagate if happens
+            storage->reserveMoreComponents( amount );
+            vecStorages.push_back( storage ); 
         }
 
         entityid_t id;
         SEntityRequest request;
 
-        for (int i = 0; i < amount; i++)
+        for (unsigned int i = 0; i < amount; i++)
         {
             id = ++m_idCounter;
             m_entityRegistry.addEntity( id, signature );
 
-            for( IComponentVectorWrapper *wrapper : vecWrappers )
+            for( IComponentStorage *storage : vecStorages )
             {
                 // create an instance of the component //
-                wrapper->push_back( id );
+                storage->createComponent( id );
             }
 
             // request post tick handling of batches //
@@ -157,45 +135,33 @@ namespace chestnut
         return ids;
     }
 
-    std::vector< SComponentSet > CEntityManager::createEntitiesReturnSets( CEntitySignature signature, int amount )
+    std::vector< SComponentSet > CEntityManager::createEntitiesReturnSets( CEntitySignature signature, unsigned int amount )
     {
         std::vector< SComponentSet > vecCompSets;
 
         // validation stage
-        if( amount <= 0 )
-        {
-            return vecCompSets;
-        }
         if( signature.isEmpty() )
         {
             return vecCompSets;
-        }
-        for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
-        {
-            if( !isPreparedForComponentType( compTindex ) )
-            {
-                LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-                return vecCompSets; // returns empty vector
-            }
         }
 
         // creation stage
 
         // get all needed component vectors
-        std::vector< IComponentVectorWrapper *> vecWrappers;
-        IComponentVectorWrapper *wrapper;
+        std::vector< IComponentStorage *> vecStorages;
         for( const componenttindex_t& compTindex : signature.m_setComponentTindexes )
         {
-            wrapper = getComponentVectorWrapper( compTindex ); // validation stage with isPreparedForComponentType() assures wrapper exists
-            wrapper->reserve( wrapper->capacity() + amount );
-            vecWrappers.push_back( wrapper ); 
+            IComponentStorage *storage;
+            storage = getComponentStorage( compTindex ); // let the exception propagate if happens
+            storage->reserveMoreComponents( amount );
+            vecStorages.push_back( storage ); 
         }
 
         entityid_t id;    
         IComponent *comp;
         SEntityRequest request;
 
-        for (int i = 0; i < amount; i++)
+        for (unsigned int i = 0; i < amount; i++)
         {
             SComponentSet compSet;
 
@@ -203,10 +169,10 @@ namespace chestnut
             m_entityRegistry.addEntity( id, signature );
             compSet.componentOwnerID = id;
     
-            for( IComponentVectorWrapper *wrapper : vecWrappers )
+            for( IComponentStorage *storage : vecStorages )
             {
                 // create an instance of the component //
-                comp = wrapper->push_back( id );
+                comp = storage->createComponent( id );
                 compSet.addComponent( comp );
             }
 
@@ -276,9 +242,9 @@ namespace chestnut
 
     void CEntityManager::destroyAllEntities() 
     {
-        for( auto& [ tindex, wrapper ] : m_mapComponentVecWrappers )
+        for( auto& [ tindex, storage ] : m_mapCompTypeToStorage )
         {
-            wrapper->clear();
+            storage->clearComponents();
         }
 
         m_vecCompBatches.clear();
@@ -290,11 +256,6 @@ namespace chestnut
 
     IComponent* CEntityManager::createComponent( componenttindex_t compTindex, entityid_t id ) 
     {
-        if( !isPreparedForComponentType( compTindex ) )
-        {
-            LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-            return nullptr;
-        }
         if( !hasEntity( id ) )
         {
             LOG_CHANNEL( "ENTITY_MANAGER", "Entity " << id << " doesn't exist!" );
@@ -306,7 +267,7 @@ namespace chestnut
             return getComponent( compTindex, id );
         }
 
-        IComponentVectorWrapper *wrapper;
+        IComponentStorage *storage;
         IComponent *uncastedComp;
         CEntitySignature oldSignature;
         CEntitySignature newSignature;
@@ -320,8 +281,8 @@ namespace chestnut
 
 
         // create an instance of the component //
-        wrapper = getComponentVectorWrapper( compTindex ); // isPreparedForComponentType() assures wrapper exists
-        uncastedComp = wrapper->push_back( id );
+        storage = getComponentStorage( compTindex ); // let the exception propagate if happens
+        uncastedComp = storage->createComponent( id );
 
 
         // update entity registry - apply new signature to entity //
@@ -351,30 +312,25 @@ namespace chestnut
         {
             return false;
         }
-        if( !isPreparedForComponentType( compTindex ) )
-        {
-            LOG_CHANNEL( "ENTITY_MANAGER", "Entity manager hasn't yet been prepared for this component type: " << compTindex.name() << " !" );
-            return false;
-        }
-        
+
         CEntitySignature signature;
 
         signature = m_entityRegistry.getEntitySignature( id ); // hasEntity() assures entity exists
         return signature.includes( compTindex );
     }
 
-    IComponent* CEntityManager::getComponent( componenttindex_t compTindex, entityid_t id ) 
+    IComponent* CEntityManager::getComponent( componenttindex_t compTindex, entityid_t id ) const
     {
         if( !hasComponent( compTindex, id ) )
         {
             return nullptr;
         }
 
-        IComponentVectorWrapper *wrapper;
+        IComponentStorage *storage;
         IComponent *uncastedComp;
 
-        wrapper = m_mapComponentVecWrappers[ compTindex ]; // hasComponent() assures wrapper exists 
-        uncastedComp = wrapper->find( id );
+        storage = getComponentStorage( compTindex );
+        uncastedComp = storage->getComponent( id );
 
         return uncastedComp;
     }
@@ -495,34 +451,18 @@ namespace chestnut
 
     // ========================= PRIVATE ========================= //
 
-    bool CEntityManager::isPreparedForComponentType( componenttindex_t compTindex ) const
+    IComponentStorage* CEntityManager::getComponentStorage( componenttindex_t compTypeTindex ) const
     {
-        auto it = m_mapComponentVecWrappers.find( compTindex );
-        // if vector wrapper doesn't yet exist for this type
-        if( it != m_mapComponentVecWrappers.end() )
+        auto it = m_mapCompTypeToStorage.find( compTypeTindex );
+        // if storage exists for that type
+        if( it != m_mapCompTypeToStorage.end() )
         {
-            return true;
+            return it->second;
         }
-        
-        return false;
-    }
-
-
-
-    IComponentVectorWrapper* CEntityManager::getComponentVectorWrapper( componenttindex_t compTypeTindex ) const
-    {
-        IComponentVectorWrapper *wrapper;
-
-        wrapper = nullptr;
-
-        auto it = m_mapComponentVecWrappers.find( compTypeTindex );
-        // vector wrapper doesn't yet exist for this type
-        if( it != m_mapComponentVecWrappers.end() )
+        else
         {
-            wrapper = m_mapComponentVecWrappers.at( compTypeTindex );
+            throw ChestnutException( "Component type has not been set up in the entity manager: " + std::string( compTypeTindex.name() ) );
         }
-
-        return wrapper;
     }
 
 
@@ -567,9 +507,7 @@ namespace chestnut
 
     void CEntityManager::createBatchWithSignature( CEntitySignature signature ) 
     {
-        CComponentBatch batch;
-        batch.setSignature( signature );
-        m_vecCompBatches.push_back( batch );
+        m_vecCompBatches.push_back( CComponentBatch( signature ) );
     }
 
     void CEntityManager::destroyBatchWithSignature( CEntitySignature signature ) 
@@ -589,24 +527,17 @@ namespace chestnut
     SComponentSet CEntityManager::buildComponentSetForEntity( entityid_t id, CEntitySignature signature ) 
     {
         SComponentSet compSet;
-        IComponentVectorWrapper *wrapper;
+        IComponentStorage *storage;
         IComponent *comp;
 
         compSet.componentOwnerID = id;
 
         for( const std::type_index& tindex : signature.m_setComponentTindexes )
         {
-            wrapper = getComponentVectorWrapper( tindex );
+            storage = getComponentStorage( tindex );
 
-            if( wrapper )
-            {
-                comp = wrapper->find( id );
-
-                if( comp )
-                {
-                    compSet.addComponent( comp );
-                }
-            }
+            comp = storage->getComponent( id );
+            compSet.addComponent( comp );
         }
 
         return compSet;
@@ -663,30 +594,18 @@ namespace chestnut
     void CEntityManager::processPostTickCreateEntityRequest( const SEntityRequest& request ) 
     {
         // empty old signature means it won't attempt to remove components from old one, because it hasn't been assigned to one yet
-        if( !moveEntityAccrossBatches( request.id, CEntitySignature(), request.newSignature ) )
-        {
-            LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity " << request.id << " with signature " << request.newSignature.toString() << " ! Reverting entity creation..." );
-
-            IComponentVectorWrapper *vecWrapper;
-            for( const std::type_index& tindex : request.newSignature.m_setComponentTindexes )
-            {
-                vecWrapper = getComponentVectorWrapper( tindex );
-                vecWrapper->erase( request.id );
-            }
-
-            m_entityRegistry.removeEntity( request.id );
-        }
+        moveEntityAccrossBatches( request.id, CEntitySignature(), request.newSignature );
     }
 
     void CEntityManager::processPostTickDestroyEntityRequest( const SEntityRequest& request ) 
     {
-        IComponentVectorWrapper *vecWrapper;
+        IComponentStorage *storage;
 
         // remove actual components belonging to entity
         for( const std::type_index& tindex : request.oldSignature.m_setComponentTindexes )
         {
-            vecWrapper = getComponentVectorWrapper( tindex );
-            vecWrapper->erase( request.id );
+            storage = getComponentStorage( tindex );
+            storage->eraseComponent( request.id );
         }
 
         // empty new signature means it will get removed from new one and not assigned to any new
@@ -695,27 +614,16 @@ namespace chestnut
 
     void CEntityManager::processPostTickCreateComponentRequest( const SEntityRequest& request ) 
     {
-        if( !moveEntityAccrossBatches( request.id, request.oldSignature, request.newSignature ) )
-        {
-            LOG_CHANNEL( "ENTITY_MANAGER", "Error occured while processing batch for entity with signature: " << request.newSignature.toString() << " ! Reverting component creation!" );
-
-            CEntitySignature signDiff = request.newSignature - request.oldSignature;
-            componenttindex_t createdCompTindex = *( signDiff.m_setComponentTindexes.begin() );
-            IComponentVectorWrapper *vecWrapper = getComponentVectorWrapper( createdCompTindex );
-            
-            vecWrapper->erase( request.id );
-
-            m_entityRegistry.updateEntity( request.id, request.oldSignature );
-        }
+        moveEntityAccrossBatches( request.id, request.oldSignature, request.newSignature );
     }
 
     void CEntityManager::processPostTickDestroyComponentRequest( const SEntityRequest& request ) 
     {
         CEntitySignature signDiff = request.oldSignature - request.newSignature;
         componenttindex_t destroyedCompTindex = *( signDiff.m_setComponentTindexes.begin() );
-        IComponentVectorWrapper *vecWrapper = getComponentVectorWrapper( destroyedCompTindex );
+        IComponentStorage *storage = getComponentStorage( destroyedCompTindex );
 
-        vecWrapper->erase( request.id );
+        storage->eraseComponent( request.id );
 
         moveEntityAccrossBatches( request.id, request.oldSignature, request.newSignature );
     }

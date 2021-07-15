@@ -41,12 +41,9 @@ namespace test
         compSet3.addComponent( &textComp1 );
 
 
-        CComponentBatch batch = CComponentBatch();
-
-
 
         LOG_CHANNEL( "TEST", "<<Batch signature test>>" );
-        batch.setSignature( compSet1.getSignature() );
+        CComponentBatch batch = CComponentBatch( compSet1.getSignature() );
 
         LOG_CHANNEL( "TEST", batch.getSignature().toString() );
         LOG_CHANNEL( "TEST", "");

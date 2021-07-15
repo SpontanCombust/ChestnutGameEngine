@@ -5,7 +5,7 @@
 #include "component_set.hpp"
 #include "entity_registry.hpp"
 #include "component_batch.hpp"
-#include "component_vector_wrapper.hpp"
+#include "component_storage.hpp"
 #include "entity_request.hpp"
 
 #include <queue>
@@ -24,8 +24,8 @@ namespace chestnut
         // A bookkeeping object used to keep track of created entities and their signatures
         CEntityRegistry m_entityRegistry;
 
-        // A map pointing to direct component storages (vector wrappers)
-        std::unordered_map< componenttindex_t, IComponentVectorWrapper * > m_mapComponentVecWrappers;
+        // A map pointing to direct component storages
+        std::unordered_map< componenttindex_t, IComponentStorage * > m_mapCompTypeToStorage;
 
         // A vector of component batches, which reference components from the component map
         std::vector< CComponentBatch > m_vecCompBatches;
@@ -43,20 +43,20 @@ namespace chestnut
 
 
         template< typename T >
-        CEntityManager& prepareForComponentType();
+        void setupComponentType( size_t segmentSize );
 
 
         entityid_t createEntity();
 
-        std::vector< entityid_t > createEntities( int amount );
+        std::vector< entityid_t > createEntities( unsigned int amount );
 
-        // Returns ENTITY_ID_INVALID if manager was not prepared for component type
+        // Throws an exception if any of component types in signature have not been set up for the manager
         entityid_t createEntity( CEntitySignature signature );
 
-        // Returns empty vector if manager was not prepared for component type
-        std::vector< entityid_t > createEntities( CEntitySignature signature, int amount );
-        // temporary name
-        std::vector< SComponentSet > createEntitiesReturnSets( CEntitySignature signature, int amount );
+        // Throws an exception if any of component types in signature have not been set up for the manager
+        std::vector< entityid_t > createEntities( CEntitySignature signature, unsigned int amount );
+        // Throws an exception if any of component types in signature have not been set up for the manager
+        std::vector< SComponentSet > createEntitiesReturnSets( CEntitySignature signature, unsigned int amount );
 
         bool hasEntity( entityid_t id ) const;
 
@@ -66,31 +66,36 @@ namespace chestnut
 
         void destroyAllEntities();
 
+        //TODO hide functions with tindices as arguments
 
-        // Returns null if manager was not prepared for component type
+        // Throws an exception if component type has not been set up for the manager
         IComponent *createComponent( componenttindex_t compTindex, entityid_t id );
 
         bool hasComponent( componenttindex_t compTindex, entityid_t id ) const;
 
-        // Returns null if manager was not prepared for component type
-        IComponent *getComponent( componenttindex_t compTindex, entityid_t id );
+        // Throws an exception if component type has not been set up for the manager
+        IComponent *getComponent( componenttindex_t compTindex, entityid_t id ) const;
 
         void destroyComponent( componenttindex_t compTindex, entityid_t id );
 
         SComponentSet getComponentSet( entityid_t id );
 
 
-        // Returns null on error. Additionally prepares manager for given component type.
+        // Throws an exception if component type has not been set up for the manager
+        // Returns null on error
         template< typename T >
         T *createComponent( entityid_t id );
 
+        // Throws an exception if component type has not been set up for the manager
         template< typename T >
         bool hasComponent( entityid_t id ) const;
 
+        // Throws an exception if component type has not been set up for the manager
         // Returns null on error
         template< typename T >
-        T *getComponent( entityid_t id );
+        T *getComponent( entityid_t id ) const;
 
+        // Throws an exception if component type has not been set up for the manager
         template< typename T >
         void destroyComponent( entityid_t id );
 
@@ -102,11 +107,8 @@ namespace chestnut
 
 
     private:
-        bool isPreparedForComponentType( componenttindex_t compTindex ) const;
-
-
-        // Returns null if doesn't find one
-        IComponentVectorWrapper *getComponentVectorWrapper( componenttindex_t compTindex ) const;
+        // Throws exception if doesn't find the storage (manager was not prepared for specified type)
+        IComponentStorage *getComponentStorage( componenttindex_t compTindex ) const;
 
 
         bool existsBatchWithSignature( CEntitySignature signature ) const;

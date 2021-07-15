@@ -5,18 +5,16 @@ namespace chestnut
     // ========================= PUBLIC ========================= //
 
     template< typename T >
-    CEntityManager& CEntityManager::prepareForComponentType() 
+    void CEntityManager::setupComponentType( size_t segmentSize ) 
     {
         componenttindex_t tindex = TINDEX(T);
 
-        auto it = m_mapComponentVecWrappers.find( tindex );
-        // if vector wrapper doesn't yet exist for this type, create it
-        if( it == m_mapComponentVecWrappers.end() )
+        auto it = m_mapCompTypeToStorage.find( tindex );
+        // if storage doesn't yet exist for this type, create it
+        if( it == m_mapCompTypeToStorage.end() )
         {
-            m_mapComponentVecWrappers[ tindex ] = new CComponentVectorWrapper<T>();
+            m_mapCompTypeToStorage[ tindex ] = new CComponentStorage<T>( segmentSize );
         }
-
-        return *this;
     }
 
 
@@ -24,8 +22,6 @@ namespace chestnut
     template< typename T >
     T* CEntityManager::createComponent( entityid_t id ) 
     {
-        prepareForComponentType<T>();
-
         IComponent *uncastedComp;
         T *castedComp;
 
@@ -42,7 +38,7 @@ namespace chestnut
     }
 
     template< typename T >
-    T* CEntityManager::getComponent( entityid_t id ) 
+    T* CEntityManager::getComponent( entityid_t id ) const
     {
         IComponent *uncastedComp;
         T *castedComp;

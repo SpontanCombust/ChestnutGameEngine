@@ -32,14 +32,10 @@ namespace chestnut
         std::unordered_map< componenttindex_t, std::vector<IComponent *> > m_mapTindexToCompVec;
 
     public:
-        CComponentBatch() = default;
-
         CComponentBatch( const CEntitySignature& signature );
 
         ~CComponentBatch();
 
-
-        void setSignature( const CEntitySignature& signature );
 
         const CEntitySignature& getSignature() const;
 
