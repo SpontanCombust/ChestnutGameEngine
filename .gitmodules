@@ -1,0 +1,6 @@
+[submodule "dependencies/cmake/sdl2"]
+	path = dependencies/cmake/sdl2
+	url = https://github.com/aminosbh/sdl2-cmake-modules.git
+[submodule "dependencies/ChestnutECSCore"]
+	path = dependencies/ChestnutECSCore
+	url = https://github.com/SpontanCombust/ChestnutECSCore.git
