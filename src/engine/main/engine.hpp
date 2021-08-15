@@ -4,11 +4,12 @@
 #include "engine/event_system/event_manager.hpp"
 #include "engine/event_system/events/events.hpp"
 #include "engine/ecs/components/components.hpp"
-#include "engine/ecs/management/entity_manager.hpp"
 #include "engine/ecs/systems/systems.hpp"
 #include "engine/misc/timers/auto_timer.hpp"
 #include "engine/misc/timers/locked_auto_timer.hpp"
 #include "engine/resources/resource_manager.hpp"
+
+#include <chestnut/ecs/entity_world.hpp>
 
 #include <list>
 
@@ -17,7 +18,7 @@ namespace chestnut
     class CEngine
     {
     public:
-        CEntityManager entityManager;
+        ecs::CEntityWorld entityWorld;
         CEventManager eventManager;
         CResourceManager resourceManager;
 

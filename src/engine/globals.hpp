@@ -11,7 +11,7 @@ namespace chestnut
 
     #define theEngine CApplication::getInstance()->engine
 
-    #define theEntityManager CApplication::getInstance()->engine.entityManager
+    #define theEntityWorld CApplication::getInstance()->engine.entityWorld
 
     #define theEventManager CApplication::getInstance()->engine.eventManager
 

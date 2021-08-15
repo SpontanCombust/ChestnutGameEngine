@@ -47,7 +47,7 @@ namespace chestnut
             }
             
 
-
+            //TODO do system submition mechanism to engine
             m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
             m_timerSystem = new CTimerSystem();
             m_kinematicsSystem = new CKinematicsSystem();
@@ -72,6 +72,11 @@ namespace chestnut
     {
         m_isRunning = true;
         m_isSuspended = false;
+
+        for( IComponentSystem *compSys : m_componentSystemsList )
+        {
+            compSys->initQueries();
+        } 
         
         if( m_wasInit )
         {
@@ -105,27 +110,16 @@ namespace chestnut
 
     void CEngine::update( uint32_t deltaTime ) 
     {
-        if( entityManager.processEntityRequests() )
+        // clearing outdated batches from systems
+        std::vector< ecs::SEntityQuery * > vecQueries;
+        for( IComponentSystem *compSys : m_componentSystemsList )
         {
-            std::vector< CComponentBatch * > vecComponentBatches;
-
-            // clearing outdated batches from systems
-            for( IComponentSystem *compSys : m_componentSystemsList )
+            vecQueries = compSys->getEntityQueries();
+            for( ecs::SEntityQuery *query : vecQueries )
             {
-                compSys->clearComponents();
-            }    
-
-            vecComponentBatches = entityManager.getComponentBatches();
-            
-            // fetching components to component systems
-            for( CComponentBatch *batch : vecComponentBatches )
-            {
-                for( IComponentSystem *compSys : m_componentSystemsList )
-                {
-                    compSys->submitComponents( batch );
-                }
+                entityWorld.queryEntities( *query );
             }
-        }
+        }    
 
         // updating systems
         for( ISystem *sys : m_systemsList )
@@ -161,8 +155,6 @@ namespace chestnut
 
         unregisterQuitEvent();
         eventManager.clearListeners();
-        
-        entityManager.destroyAllEntities();
     }
 
     float CEngine::getGameUpdatesPerSecond() 
