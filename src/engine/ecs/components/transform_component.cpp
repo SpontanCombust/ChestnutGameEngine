@@ -2,18 +2,11 @@
 
 namespace chestnut
 {
-    STransformComponent::STransformComponent()
+    CTransformComponent::CTransformComponent()
     {
-        position = vec2f(0, 0);
-        scale = vec2f(1, 1);
-        rotation = 0.0;
-    }
-
-    STransformComponent::STransformComponent(vec2f _position, vec2f _scale, double _rotation )
-    {
-        position = _position;
-        scale = _scale;
-        rotation = _rotation;
+        position = vec2f(0.f);
+        scale = vec2f(1.f);
+        rotation = 0.f;
     }
 
 } // namespace chestnut

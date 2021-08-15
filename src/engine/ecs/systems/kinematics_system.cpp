@@ -2,42 +2,29 @@
 
 namespace chestnut
 {
-    void CKinematicsSystem::submitComponents( CComponentBatch *batch ) 
+    void CKinematicsSystem::initQueries() 
     {
-        CEntitySignature sign = batch->getSignature();
-
-        if( sign.includes<STransformComponent>() && sign.includes<SKinematicsComponent>() )
+        m_transformKinematicQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
         {
-            batch->getComponentsAppendToVec( m_vecTransformComps );
-            batch->getComponentsAppendToVec( m_vecKinematicComps );
-        }
-    }
+            return sign.has<CTransformComponent>() && sign.has<CKinematicsComponent>();
+        };
 
-    void CKinematicsSystem::clearComponents() 
-    {
-        m_vecTransformComps.clear();
-        m_vecKinematicComps.clear();
+        getEntityQueries().push_back( &m_transformKinematicQuery );
     }
 
     void CKinematicsSystem::update( uint32_t deltaTime ) 
     {
-        STransformComponent *transfComp;
-        SKinematicsComponent *kinemComp;
-
         float dt = (float)deltaTime / 1000.f;
 
-        size_t entityCount = m_vecTransformComps.size();
-        for (size_t i = 0; i < entityCount; i++)
+        ecs::forEachEntityInQuery< CTransformComponent, CKinematicsComponent >( m_transformKinematicQuery,
+        [dt]( CTransformComponent& transform, CKinematicsComponent& kinematic )
         {
-            transfComp = m_vecTransformComps[i];
-            kinemComp = m_vecKinematicComps[i];
+            kinematic.linearVelocity += dt * kinematic.linearAcceleration;
+            kinematic.angularVelocity += dt * kinematic.angularAcceleration;
 
-            kinemComp->linearVelocity += dt * kinemComp->linearAcceleration;
-            kinemComp->angularVelocity += dt * kinemComp->angularAcceleration;
-
-            transfComp->position += dt * kinemComp->linearVelocity;
-            transfComp->rotation += dt * kinemComp->angularVelocity;
-        }
+            transform.position += dt * kinematic.linearVelocity;
+            transform.rotation += dt * kinematic.angularVelocity; 
+        });
     }
 
 } // namespace chestnut

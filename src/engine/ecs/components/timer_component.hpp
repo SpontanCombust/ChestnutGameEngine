@@ -1,19 +1,20 @@
 #ifndef __CHESTNUT_TIMER_COMPONENT_H__
 #define __CHESTNUT_TIMER_COMPONENT_H__
 
-#include "../component.hpp"
-#include "engine/misc/timers/locked_manual_timer.hpp"
-#include "engine/event_system/event_manager.hpp"
+#include "../../misc/timers/locked_manual_timer.hpp"
+#include "../../event_system/event_manager.hpp"
+
+#include <chestnut/ecs/component.hpp>
 
 #include <vector>
 
 namespace chestnut
 {
-    struct STimerComponent : IComponent
+    struct CTimerComponent : public ecs::CComponent
     {
         std::vector< CLockedManualTimer > vTimers;
 
-        ~STimerComponent();
+        ~CTimerComponent();
 
         timerid_t addTimer( float updateIntervalSec, bool isRepeating = false );
         bool removeTimer( timerid_t id );

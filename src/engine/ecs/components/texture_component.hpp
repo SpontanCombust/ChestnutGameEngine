@@ -1,20 +1,20 @@
 #ifndef __CHESTNUT_TEXTURE_COMPONENT_H__
 #define __CHESTNUT_TEXTURE_COMPONENT_H__
 
-#include "../component.hpp"
-#include "engine/maths/vector2.hpp"
-#include "engine/graphics/texture2d.hpp"
+#include "../../maths/vector2.hpp"
+#include "../../graphics/texture2d.hpp"
+
+#include <chestnut/ecs/component.hpp>
 
 namespace chestnut
 {
-    struct STextureComponent : IComponent
+    struct CTextureComponent : public ecs::CComponent
     {
         CTexture2D texture;
         vec2f origin; // values typically in range (0;1) where 0 = left/top and 1 = right/bottom
         
         //TODO create "missing texture" for default constructor
-        STextureComponent() = default;
-        STextureComponent( CTexture2D _texture );
+        CTextureComponent() = default;
     };
 
 } // namespace chestnut 

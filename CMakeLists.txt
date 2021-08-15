@@ -18,12 +18,17 @@ install(TARGETS ${PROJECT_NAME} CONFIGURATIONS Debug RUNTIME DESTINATION ${PROJE
 install(TARGETS ${PROJECT_NAME} CONFIGURATIONS Release RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/lib)
 
 
+find_library(ECS NAMES ChestnutECSCore PATHS lib)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${ECS})
+
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIRS})
 
 find_package(GLEW REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRECTORIES})
+
+#FIXME why is SDL2 not gettign linked to the engine library?
 
 # ====================================== Tests executable ======================================
 

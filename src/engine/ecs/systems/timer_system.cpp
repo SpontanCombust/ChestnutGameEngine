@@ -1,30 +1,26 @@
 #include "timer_system.hpp"
 
-#include "engine/globals.hpp"
+#include "../../event_system/events/timer_event.hpp"
+#include "../../globals.hpp"
 
 #include <algorithm>
 
 namespace chestnut
 {
-
-    void CTimerSystem::submitComponents( CComponentBatch *batch ) 
+    void CTimerSystem::initQueries()
     {
-        if( batch->getSignature().includes<STimerComponent>() )
+        m_timerQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
         {
-            batch->getComponentsAppendToVec( m_vecTimerComps );
-        }
-    }
-
-    void CTimerSystem::clearComponents() 
-    {
-        m_vecTimerComps.clear();
+            return sign.has<CTimerComponent>();
+        };
     }
 
     void CTimerSystem::update( uint32_t deltaTime ) 
     {
-        for( STimerComponent *timerComp : m_vecTimerComps )
-        {     
-            for( CLockedManualTimer& timer : timerComp->vTimers )
+        ecs::forEachEntityInQuery< CTimerComponent >( m_timerQuery,
+        [deltaTime]( CTimerComponent& timerComp )
+        {
+            for( CLockedManualTimer& timer : timerComp.vTimers )
             {
                 if( timer.tick( deltaTime ) )
                 {
@@ -37,11 +33,11 @@ namespace chestnut
                     // if a timer is supposed to tick only once
                     if( !timer.getIsRepeating() )
                     {
-                        timerComp->removeTimer( timer.getID() );
+                        timerComp.removeTimer( timer.getID() );
                     }
                 }
             }
-        }
+        });
     }
 
 } // namespace chestnut

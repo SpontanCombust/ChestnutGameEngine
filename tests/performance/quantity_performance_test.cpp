@@ -9,7 +9,7 @@ namespace test
 {
     using namespace chestnut;
 
-    static void randTransf( STransformComponent *comp )
+    static void randTransf( CTransformComponent *comp )
     {
         int x = rand() % theWindow.getWidth() + 1;
         int y = rand() % theWindow.getHeight() + 1;
@@ -19,7 +19,7 @@ namespace test
         comp->scale = { 0.05f, 0.05f };
     }
 
-    static void randRot( SKinematicsComponent *comp )
+    static void randRot( CKinematicsComponent *comp )
     {
         double rot = (double)rand() / (double)( RAND_MAX / 6.f );
         comp->angularVelocity = rot;
@@ -28,7 +28,7 @@ namespace test
     CTexture2D lol;
     CTexture2D gatsu;
 
-    static void randTex( STextureComponent *comp )
+    static void randTex( CTextureComponent *comp )
     {
         // unsigned int r = rand() % 2;
         // if( r == 0 )
@@ -45,9 +45,9 @@ namespace test
         gatsu = theResourceManager.getTexture2DResource( "../_media_test/berk.jpg" );
 
         CEntitySignature sign;
-        sign.add<STransformComponent>()
-            .add<SKinematicsComponent>()
-            .add<STextureComponent>();
+        sign.add<CTransformComponent>()
+            .add<CKinematicsComponent>()
+            .add<CTextureComponent>();
 
         int amount = 10000;
         std::vector<SComponentSet> vecCompSets = theEntityManager.createEntitiesReturnSets( sign, amount );
@@ -58,12 +58,12 @@ namespace test
             
             IComponent *c;
 
-            c = compSet.mapTindexToComponent[ TINDEX( STransformComponent ) ];
-            STransformComponent *transf = ( STransformComponent* )c;
-            c = compSet.mapTindexToComponent[ TINDEX( SKinematicsComponent ) ];
-            SKinematicsComponent *kinem = ( SKinematicsComponent* )c;
-            c = compSet.mapTindexToComponent[ TINDEX( STextureComponent ) ];
-            STextureComponent *tex = ( STextureComponent* )c;
+            c = compSet.mapTindexToComponent[ TINDEX( CTransformComponent ) ];
+            CTransformComponent *transf = ( CTransformComponent* )c;
+            c = compSet.mapTindexToComponent[ TINDEX( CKinematicsComponent ) ];
+            CKinematicsComponent *kinem = ( CKinematicsComponent* )c;
+            c = compSet.mapTindexToComponent[ TINDEX( CTextureComponent ) ];
+            CTextureComponent *tex = ( CTextureComponent* )c;
 
             randTransf( transf );
             randRot( kinem );

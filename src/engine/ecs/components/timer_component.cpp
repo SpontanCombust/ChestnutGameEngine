@@ -2,14 +2,14 @@
 
 namespace chestnut
 {   
-    timerid_t STimerComponent::m_timerIDAccumulator = 0;
+    timerid_t CTimerComponent::m_timerIDAccumulator = 0;
     
-    STimerComponent::~STimerComponent() 
+    CTimerComponent::~CTimerComponent() 
     {
         vTimers.clear();
     }
 
-    timerid_t STimerComponent::addTimer( float updateIntervalSec, bool isRepeating ) 
+    timerid_t CTimerComponent::addTimer( float updateIntervalSec, bool isRepeating ) 
     {
         ++m_timerIDAccumulator;
         CLockedManualTimer timer = CLockedManualTimer( m_timerIDAccumulator, updateIntervalSec, isRepeating );
@@ -18,7 +18,7 @@ namespace chestnut
         return m_timerIDAccumulator;
     }
 
-    bool STimerComponent::removeTimer( timerid_t id ) 
+    bool CTimerComponent::removeTimer( timerid_t id ) 
     {
         auto it = vTimers.begin();
         for(; it != vTimers.end(); ++it )
@@ -32,7 +32,7 @@ namespace chestnut
         return false;
     }
 
-    void STimerComponent::removeTimers() 
+    void CTimerComponent::removeTimers() 
     {
         vTimers.clear();
     }
