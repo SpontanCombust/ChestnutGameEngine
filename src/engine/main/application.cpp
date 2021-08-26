@@ -1,6 +1,6 @@
 #include "application.hpp"
 
-#include "engine/globals.hpp"
+#include "../globals.hpp"
 
 namespace chestnut
 {

@@ -1,6 +1,6 @@
 #include "window.hpp"
 
-#include "engine/debug/debug.hpp"
+#include "../debug/debug.hpp"
 
 #include <cassert>
 

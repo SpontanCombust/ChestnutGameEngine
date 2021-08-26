@@ -1,8 +1,8 @@
 #ifndef __CHESTNUT_FONT_RESOURCE_H__
 #define __CHESTNUT_FONT_RESOURCE_H__
 
-#include "engine/graphics/map_sprite_sheet.hpp"
-#include "engine/misc/flags.hpp"
+#include "../graphics/map_sprite_sheet.hpp"
+#include "../misc/flags.hpp"
 
 #include <string>
 #include <memory>

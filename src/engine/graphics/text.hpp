@@ -1,9 +1,9 @@
 #ifndef __CHESTNUT_TEXT_H__
 #define __CHESTNUT_TEXT_H__
 
-#include "engine/maths/vector2.hpp"
-#include "engine/maths/vector4.hpp"
-#include "engine/resources/font_resource.hpp"
+#include "../maths/vector2.hpp"
+#include "../maths/vector4.hpp"
+#include "../resources/font_resource.hpp"
 
 #include <vector>
 

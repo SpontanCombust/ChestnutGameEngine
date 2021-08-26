@@ -2,8 +2,8 @@
 #define __CHESTNUT_COLORED_POLYGON_RENDERER_H__
 
 #include "renderer.hpp"
-#include "engine/maths/vector2.hpp"
-#include "engine/maths/vector4.hpp"
+#include "../maths/vector2.hpp"
+#include "../maths/vector4.hpp"
 #include "colored_polygon2d.hpp"
 
 #include <vector>

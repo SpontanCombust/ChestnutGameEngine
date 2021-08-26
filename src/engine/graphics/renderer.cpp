@@ -1,6 +1,6 @@
 #include "renderer.hpp"
 
-#include "engine/debug/debug.hpp"
+#include "../debug/debug.hpp"
 
 #include <cassert>
 

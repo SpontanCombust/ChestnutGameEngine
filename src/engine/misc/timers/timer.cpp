@@ -1,6 +1,6 @@
 #include "timer.hpp"
 
-#include "engine/debug/debug.hpp"
+#include "../../debug/debug.hpp"
 
 namespace chestnut
 {

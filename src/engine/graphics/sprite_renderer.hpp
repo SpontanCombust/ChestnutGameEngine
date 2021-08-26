@@ -3,8 +3,8 @@
 
 #include "renderer.hpp"
 #include "texture2d.hpp"
-#include "engine/maths/vector2.hpp"
-#include "engine/maths/matrix3.hpp"
+#include "../maths/vector2.hpp"
+#include "../maths/matrix3.hpp"
 
 #include <vector>
 #include <unordered_map>

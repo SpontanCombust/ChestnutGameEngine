@@ -1,6 +1,6 @@
 #include "colored_polygon2d.hpp"
 
-#include "engine/misc/exception.hpp"
+#include "../misc/exception.hpp"
 
 namespace chestnut
 {    

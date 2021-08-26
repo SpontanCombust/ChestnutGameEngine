@@ -2,7 +2,7 @@
 #define __CHESTNUT_SDL_EVENT_DISPATCH_SYSTEM_H__
 
 #include "../system.hpp"
-#include "engine/event_system/event_manager.hpp"
+#include "../../event_system/event_manager.hpp"
 
 namespace chestnut
 {

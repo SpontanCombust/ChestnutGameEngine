@@ -1,7 +1,7 @@
 #include "sdl_event_dispatch_system.hpp"
 
-#include "engine/event_system/events/events.hpp"
-#include "engine/globals.hpp"
+#include "../../event_system/events/events.hpp"
+#include "../../globals.hpp"
 
 namespace chestnut
 {      

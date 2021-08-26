@@ -1,7 +1,7 @@
 #include "shader_program_resource.hpp"
 
-#include "engine/debug/debug.hpp"
-#include "engine/misc/exception.hpp"
+#include "../debug/debug.hpp"
+#include "../misc/exception.hpp"
 
 #include <fstream>
 #include <sstream>

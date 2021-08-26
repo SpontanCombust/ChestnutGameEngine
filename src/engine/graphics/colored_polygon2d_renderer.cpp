@@ -1,6 +1,6 @@
 #include "colored_polygon2d_renderer.hpp"
 
-#include "engine/debug/debug.hpp"
+#include "../debug/debug.hpp"
 
 #define INIT_POLYGON_VERTEX_CAPACITY 100
 #define INIT_VERTEX_INDEX_CAPACITY 150

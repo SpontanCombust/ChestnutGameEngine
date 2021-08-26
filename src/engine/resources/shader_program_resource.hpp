@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_SHADER_PROGRAM_RESOURCE_H__
 #define __CHESTNUT_SHADER_PROGRAM_RESOURCE_H__
 
-#include "engine/libs.hpp"
+#include "../libs.hpp"
 
 #include <memory>
 #include <unordered_map>

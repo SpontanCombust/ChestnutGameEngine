@@ -1,10 +1,10 @@
 #ifndef __CHESTNUT_APPLICATION_H__
 #define __CHESTNUT_APPLICATION_H__
 
-#include "engine/libs.hpp"
+#include "../libs.hpp"
 #include "window.hpp"
 #include "engine.hpp"
-#include "engine/debug/debug.hpp"
+#include "../debug/debug.hpp"
 
 #include <string>
 

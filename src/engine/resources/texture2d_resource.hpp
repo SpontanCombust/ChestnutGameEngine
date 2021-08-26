@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_TEXTURE2D_RESOURCE_H__
 #define __CHESTNUT_TEXTURE2D_RESOURCE_H__
 
-#include "engine/libs.hpp"
+#include "../libs.hpp"
 
 #include <memory>
 #include <string>

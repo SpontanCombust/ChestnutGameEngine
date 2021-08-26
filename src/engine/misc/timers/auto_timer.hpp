@@ -2,8 +2,8 @@
 #define __CHESTNUT_AUTO_TIMER_H__
 
 #include "timer.hpp"
-#include "engine/types.hpp"
-#include "engine/libs.hpp"
+#include "../../types.hpp"
+#include "../../libs.hpp"
 
 namespace chestnut
 {

@@ -2,8 +2,8 @@
 #define __CHESTNUT_MOUSE_WHEEL_EVENY_H__
 
 #include "../event_base.hpp"
-#include "engine/maths/vector2.hpp"
-#include "engine/libs.hpp"
+#include "../../maths/vector2.hpp"
+#include "../../libs.hpp"
 
 namespace chestnut
 {

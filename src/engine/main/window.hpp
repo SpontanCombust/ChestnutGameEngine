@@ -1,8 +1,7 @@
 #ifndef __CHESTNUT_WINDOW_H__
 #define __CHESTNUT_WINDOW_H__
 
-#include "engine/maths/vector2.hpp"
-#include "engine/libs.hpp"
+#include "../libs.hpp"
 
 #include <string>
 

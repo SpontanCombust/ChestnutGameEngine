@@ -1,7 +1,7 @@
 #include "text_renderer.hpp"
 
-#include "engine/debug/debug.hpp"
-#include "engine/maths/vector_cast.hpp"
+#include "../debug/debug.hpp"
+#include "../maths/vector_cast.hpp"
 
 #include <unordered_map>
 

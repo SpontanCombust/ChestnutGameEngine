@@ -1,9 +1,9 @@
 #ifndef __CHESTNUT_COLORED_POLYGON2D_H__
 #define __CHESTNUT_COLORED_POLYGON2D_H__
 
-#include "engine/libs.hpp"
-#include "engine/maths/vector2.hpp"
-#include "engine/maths/vector4.hpp"
+#include "../libs.hpp"
+#include "../maths/vector2.hpp"
+#include "../maths/vector4.hpp"
 
 namespace chestnut
 {

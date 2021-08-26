@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_POLYGON_CANVAS_COMPONENT_H__
 #define __CHESTNUT_POLYGON_CANVAS_COMPONENT_H__
 
-#include "engine/graphics/colored_polygon2d.hpp"
+#include "../../graphics/colored_polygon2d.hpp"
 
 #include <chestnut/ecs/component.hpp>
 

@@ -2,11 +2,11 @@
 #define __CHESTNUT_EVENT_MANAGER_H__
 
 #include "event_listener.hpp"
-#include "engine/debug/debug.hpp"
-#include "engine/misc/tindex.hpp"
-#include "engine/types.hpp"
-#include "engine/constants.hpp"
-#include "engine/memory/multi_type_dynamic_memory_pool.hpp"
+#include "../debug/debug.hpp"
+#include "../misc/tindex.hpp"
+#include "../types.hpp"
+#include "../constants.hpp"
+#include "../memory/multi_type_dynamic_memory_pool.hpp"
 
 #include <unordered_map>
 #include <vector>

@@ -1,13 +1,13 @@
 #ifndef __CHESTNUT_ENGINE_H__
 #define __CHESTNUT_ENGINE_H__
 
-#include "engine/event_system/event_manager.hpp"
-#include "engine/event_system/events/events.hpp"
-#include "engine/ecs/components/components.hpp"
-#include "engine/ecs/systems/systems.hpp"
-#include "engine/misc/timers/auto_timer.hpp"
-#include "engine/misc/timers/locked_auto_timer.hpp"
-#include "engine/resources/resource_manager.hpp"
+#include "../event_system/event_manager.hpp"
+#include "../event_system/events/events.hpp"
+#include "../ecs/components/components.hpp"
+#include "../ecs/systems/systems.hpp"
+#include "../misc/timers/auto_timer.hpp"
+#include "../misc/timers/locked_auto_timer.hpp"
+#include "../resources/resource_manager.hpp"
 
 #include <chestnut/ecs/entity_world.hpp>
 

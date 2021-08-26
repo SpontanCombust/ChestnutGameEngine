@@ -3,8 +3,6 @@
 #include "../../event_system/events/timer_event.hpp"
 #include "../../globals.hpp"
 
-#include <algorithm>
-
 namespace chestnut
 {
     void CTimerSystem::initQueries()
