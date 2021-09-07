@@ -122,23 +122,17 @@ namespace chestnut
 
     CTexture2DResource::CTexture2DResource() 
     {
-        this->texID = 0;
-        this->pixelFormat = 0;
-        this->width = 0;
-        this->height = 0;
-    }
-
-    CTexture2DResource::CTexture2DResource( GLuint texID, GLenum pixelFormat, int width, int height ) 
-    {
-        this->texID = texID;
-        this->pixelFormat = pixelFormat;
-        this->width = width;
-        this->height = height;
+        m_texID = 0;
+        m_texturePath = "";
+        m_wasLoadedFromFile = false;
+        m_pixelFormat = 0;
+        m_width = 0;
+        m_height = 0;
     }
 
     bool CTexture2DResource::isValid() const
     {
-        if( texID != 0 )
+        if( m_texID != 0 )
         {
             return true;
         }
@@ -149,7 +143,7 @@ namespace chestnut
     {
         if( isValid() )
         {
-            glDeleteTextures( 1, &texID );
+            glDeleteTextures( 1, &m_texID );
         }
     }
 
@@ -161,18 +155,34 @@ namespace chestnut
         // let the exception propagate if it happens
         GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat );
 
-        return std::make_shared< CTexture2DResource >( texID, pixelFormat, width, height );
+        CTexture2DResource *resource = new CTexture2DResource();
+        resource->m_texID = texID;
+        resource->m_texturePath = "";
+        resource->m_wasLoadedFromFile = false;
+        resource->m_pixelFormat = pixelFormat;
+        resource->m_width = width;
+        resource->m_height = height;
+
+        return std::shared_ptr<CTexture2DResource>( resource );
     }
 
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& path )
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath )
     {
         int width, height;
         GLenum pixelFormat;
 
         // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTexture2DFromFile( path, width, height, pixelFormat );
+        GLuint texID = loadOpenGLTexture2DFromFile( texturePath, width, height, pixelFormat );
 
-        return std::make_shared< CTexture2DResource >( texID, pixelFormat, width, height );        
+        CTexture2DResource *resource = new CTexture2DResource();
+        resource->m_texID = texID;
+        resource->m_texturePath = texturePath;
+        resource->m_wasLoadedFromFile = true;
+        resource->m_pixelFormat = pixelFormat;
+        resource->m_width = width;
+        resource->m_height = height;
+
+        return std::shared_ptr<CTexture2DResource>( resource );
     }
 
 } // namespace chestnut

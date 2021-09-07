@@ -17,7 +17,7 @@ namespace chestnut
 
     GLuint CShaderProgram::getID() const
     {
-        return m_shaderResource->programID;
+        return m_shaderResource->m_programID;
     }
 
     bool CShaderProgram::isValid() const
@@ -31,7 +31,7 @@ namespace chestnut
 
     void CShaderProgram::bind()
     {
-        glUseProgram( m_shaderResource->programID );
+        glUseProgram( m_shaderResource->m_programID );
     }
 
     void CShaderProgram::unbind()

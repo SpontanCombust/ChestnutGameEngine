@@ -1,11 +1,12 @@
 #ifndef __CHESTNUT_FONT_RESOURCE_H__
 #define __CHESTNUT_FONT_RESOURCE_H__
 
+#include "resource.hpp"
 #include "../graphics/map_sprite_sheet.hpp"
 #include "../misc/flags.hpp"
 
 #include <string>
-#include <memory>
+#include <memory> // std::shared_ptr
 #include <set>
 #include <unordered_map>
 
@@ -45,19 +46,20 @@ namespace chestnut
         std::unordered_map<wchar_t, SGlyphMetrics> mapGlyphMetrics;
     };
 
-    class CFontResource
+    class CFontResource : public IResource
     {
     public:
-        std::string fontPath;
-        std::set< wchar_t > setAvailableGlyphs;
-        std::unordered_map< size_t, SFontConfig > mapConfigHashToConfig;
+        std::string m_fontPath;
+        
+        std::set< wchar_t > m_setAvailableGlyphs;
+        std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
+    public:
         CFontResource();
+        
+        
+        bool isValid() const override;
 
-        CFontResource( const std::string& fontPath );
-
-
-        bool isValid() const;
 
         // Throws an exception if resource is not valid
         void loadConfig( int pointSize, EFontStyle styleMask );

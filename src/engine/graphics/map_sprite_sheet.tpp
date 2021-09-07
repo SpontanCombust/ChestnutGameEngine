@@ -21,8 +21,8 @@ namespace chestnut
     {
         SRectangle normalized;
 
-        int w = m_texResource->width;
-        int h = m_texResource->height;
+        int w = m_texResource->m_width;
+        int h = m_texResource->m_height;
 
         normalized.x = rect.x / w;
         normalized.y = rect.y / w;

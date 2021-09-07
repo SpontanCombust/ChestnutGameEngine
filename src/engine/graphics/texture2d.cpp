@@ -15,7 +15,7 @@ namespace chestnut
     {
         m_texResource = resource;
         
-        m_clipRect = { 0.f, 0.f, (float)resource->width, (float)resource->height };
+        m_clipRect = { 0.f, 0.f, (float)resource->m_width, (float)resource->m_height };
         m_tint = { 1.f, 1.f, 1.f };
         m_tintFactor = 0.f;
     }
@@ -27,12 +27,12 @@ namespace chestnut
 
     GLuint CTexture2D::getID() const
     {
-        return m_texResource->texID;
+        return m_texResource->m_texID;
     }
     
     bool CTexture2D::isValid() const
     {
-        if( m_texResource && m_texResource->texID != 0 )
+        if( m_texResource && m_texResource->m_texID != 0 )
         {
             return true;
         }
@@ -41,7 +41,7 @@ namespace chestnut
     
     void CTexture2D::bind() const
     {
-        glBindTexture( GL_TEXTURE_2D, m_texResource->texID );
+        glBindTexture( GL_TEXTURE_2D, m_texResource->m_texID );
     }
 
     void CTexture2D::unbind() const
@@ -51,22 +51,22 @@ namespace chestnut
 
     GLenum CTexture2D::getPixelFormat() const
     {
-        return m_texResource->pixelFormat;
+        return m_texResource->m_pixelFormat;
     }
 
     int CTexture2D::getWidth() const
     {
-        return m_texResource->width;
+        return m_texResource->m_width;
     }
 
     int CTexture2D::getHeight() const
     {
-        return m_texResource->height;
+        return m_texResource->m_height;
     }
 
     vec2i CTexture2D::getSize() const
     {
-        return { m_texResource->width, m_texResource->height };
+        return { m_texResource->m_width, m_texResource->m_height };
     }
 
     SRectangle CTexture2D::getClippingRect() const

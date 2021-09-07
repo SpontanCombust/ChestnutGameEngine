@@ -5,10 +5,9 @@
 #include "../debug/debug.hpp"
 #include "../resources/texture2d_resource.hpp"
 
-#include <cmath>
-#include <functional>
+#include <cmath> // ceil, sqrt
 #include <map>
-#include <utility>
+#include <utility> // pair
 #include <vector>
 
 namespace chestnut
@@ -198,17 +197,12 @@ namespace chestnut
 
     CFontResource::CFontResource() 
     {
-        this->fontPath = "";
-    }
-
-    CFontResource::CFontResource( const std::string& fontPath ) 
-    {
-        this->fontPath = fontPath; 
+        m_fontPath = "";
     }
 
     bool CFontResource::isValid() const
     {
-        if( !mapConfigHashToConfig.empty() )
+        if( !m_mapConfigHashToConfig.empty() )
         {
             return true;
         }
@@ -224,12 +218,12 @@ namespace chestnut
 
         if( !hasConfig( pointSize, styleMask ) )
         {
-            TTF_Font *font = TTF_OpenFont( fontPath.c_str(), pointSize );
+            TTF_Font *font = TTF_OpenFont( m_fontPath.c_str(), pointSize );
             auto unicodeValues = getUnicodeValueRanges();
 
             SFontConfig config = loadConfigInternal( font, pointSize, styleMask, unicodeValues );
             size_t hash = getConfigHash( pointSize, styleMask );
-            mapConfigHashToConfig[ hash ] = config;
+            m_mapConfigHashToConfig[ hash ] = config;
 
             TTF_CloseFont( font );
         }
@@ -244,8 +238,8 @@ namespace chestnut
 
         size_t hash = getConfigHash( pointSize, styleMask );
 
-        auto it = mapConfigHashToConfig.find( hash );
-        auto end = mapConfigHashToConfig.end();
+        auto it = m_mapConfigHashToConfig.find( hash );
+        auto end = m_mapConfigHashToConfig.end();
 
         if( it != end )
         {
@@ -261,7 +255,7 @@ namespace chestnut
         loadConfig( pointSize, styleMask );
 
         size_t hash = getConfigHash( pointSize, styleMask );
-        return mapConfigHashToConfig[ hash ];
+        return m_mapConfigHashToConfig[ hash ];
     }
 
     size_t CFontResource::getConfigHash( int pointSize, EFontStyle styleMask ) 
@@ -277,7 +271,6 @@ namespace chestnut
 
     std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath ) 
     {
-        // perform font file check
         TTF_Font *font = TTF_OpenFont( fontPath.c_str(), INIT_FONT_POINT_SIZE );
 
         if( font )
@@ -287,11 +280,11 @@ namespace chestnut
             size_t hash = getConfigHashInternal( INIT_FONT_POINT_SIZE, INIT_FONT_STYLE );
 
             CFontResource *resource = new CFontResource();
-            resource->fontPath = fontPath;
-            resource->mapConfigHashToConfig[ hash ] = initConfig;
+            resource->m_fontPath = fontPath;
+            resource->m_mapConfigHashToConfig[ hash ] = initConfig;
             for( const auto& [ g, metrics ] : initConfig.mapGlyphMetrics )
             {
-                resource->setAvailableGlyphs.insert(g);
+                resource->m_setAvailableGlyphs.insert(g);
             }
 
             TTF_CloseFont( font );

@@ -157,17 +157,14 @@ namespace chestnut
 
     CShaderProgramResource::CShaderProgramResource() 
     {
-        this->programID = 0;
-    }
-
-    CShaderProgramResource::CShaderProgramResource( GLuint programID ) 
-    {
-        this->programID = programID;
+        m_programID = 0;
+        m_vertexShaderPath = "";
+        m_fragmentShaderPath = "";
     }
 
     bool CShaderProgramResource::isValid() const
     {
-        if( programID != 0 )
+        if( m_programID != 0 )
         {
             return true;
         }
@@ -178,7 +175,7 @@ namespace chestnut
     {
         if( isValid() )
         {
-            glDeleteProgram( programID );
+            glDeleteProgram( m_programID );
         }
     }
 
@@ -186,21 +183,21 @@ namespace chestnut
     {
         GLint loc;
 
-        if( mapAttributeNameToLocation.find( attrName ) != mapAttributeNameToLocation.end() )
+        if( m_mapAttributeNameToLocation.find( attrName ) != m_mapAttributeNameToLocation.end() )
         {
-            loc = mapAttributeNameToLocation[ attrName ];
+            loc = m_mapAttributeNameToLocation[ attrName ];
         }
         else
         {
-            loc = glGetAttribLocation( programID, attrName.c_str() );
+            loc = glGetAttribLocation( m_programID, attrName.c_str() );
 
             if( loc == -1 )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find attribute with name " << attrName << " in program " << programID );
+                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find attribute with name " << attrName << " in program " << m_programID );
             }
             else
             {
-                mapAttributeNameToLocation[ attrName ] = loc;   
+                m_mapAttributeNameToLocation[ attrName ] = loc;   
             }
         }
 
@@ -211,21 +208,21 @@ namespace chestnut
     {
         GLint loc;
 
-        if( mapUniformNameToLocation.find( uniformName ) != mapUniformNameToLocation.end() )
+        if( m_mapUniformNameToLocation.find( uniformName ) != m_mapUniformNameToLocation.end() )
         {
-            loc = mapUniformNameToLocation[ uniformName ];
+            loc = m_mapUniformNameToLocation[ uniformName ];
         }
         else
         {
-            loc = glGetUniformLocation( programID, uniformName.c_str() );
+            loc = glGetUniformLocation( m_programID, uniformName.c_str() );
 
             if( loc == -1 )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find uniform with name " << uniformName << " in program " << programID );
+                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find uniform with name " << uniformName << " in program " << m_programID );
             }
             else
             {
-                mapUniformNameToLocation[ uniformName ] = loc;   
+                m_mapUniformNameToLocation[ uniformName ] = loc;   
             }
         }
         
@@ -237,10 +234,15 @@ namespace chestnut
 
     std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath )
     {
-        // let the eventual exception propagate
+        // let the possible exception propagate
         GLuint program = loadOpenGLShaderProgramFromFiles( vertPath, fragPath );
 
-        return std::make_shared<CShaderProgramResource>( program );
+        CShaderProgramResource *resource = new CShaderProgramResource();
+        resource->m_programID = program;
+        resource->m_vertexShaderPath = vertPath;
+        resource->m_fragmentShaderPath = fragPath;
+
+        return std::shared_ptr<CShaderProgramResource>( resource );
     }
 
 } // namespace chestnut
