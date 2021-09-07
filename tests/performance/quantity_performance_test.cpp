@@ -41,8 +41,8 @@ namespace test
     {
         srand( time(nullptr) );
 
-        lol = theResourceManager.getTexture2DResource( "../_media_test/awesomeface.png" );
-        gatsu = theResourceManager.getTexture2DResource( "../_media_test/berk.jpg" );
+        lol = CResourceManager::getTexture2DResource( "../_media_test/awesomeface.png" );
+        gatsu = CResourceManager::getTexture2DResource( "../_media_test/berk.jpg" );
 
         CEntitySignature sign;
         sign.add<CTransformComponent>()

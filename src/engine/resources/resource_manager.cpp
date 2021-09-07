@@ -2,74 +2,163 @@
 
 namespace chestnut
 {
-    size_t CResourceManager::strHash(const std::string& str) 
+    // instantiate static variables
+    std::unordered_map< size_t, CResourceManager::ResourceVariant > CResourceManager::m_mapHashToResourceVariant;
+    std::hash< std::string > CResourceManager::m_hasher;
+
+
+    std::shared_ptr<CShaderProgramResource> CResourceManager::loadShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
     {
-        return std::hash< std::string >()( str );
+        // a hash created from 2 other hashes (by using XOR)
+        size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
+
+        std::shared_ptr<CShaderProgramResource> resource;
+        // let the exception propagate if it happens
+        resource = loadShaderProgramResourceFromFiles( vertShaderPath, fragShaderPath );
+        
+        m_mapHashToResourceVariant[ hash ] = resource;
+
+        return resource;
     }
 
-    std::shared_ptr<CShaderProgramResource> CResourceManager::getShaderProgramResource( const std::string& vertPath, const std::string& fragPath ) 
+    std::shared_ptr<CShaderProgramResource> CResourceManager::getShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
     {
+        size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
+
         std::shared_ptr<CShaderProgramResource> resource;
 
-        // a hash created from 2 other hashes (by using XOR)
-        size_t hash = strHash( vertPath ) ^ strHash( fragPath );
-
-        auto it = m_mapPathHashToShaderResource.find( hash );
-        auto end = m_mapPathHashToShaderResource.end();
-        if( it != end )
+        auto it = m_mapHashToResourceVariant.find( hash );
+        if( it != m_mapHashToResourceVariant.end() )
         {
-            resource = it->second;
+            ResourceVariant variant = it->second;
+            resource = std::get< std::shared_ptr<CShaderProgramResource> >( variant );
         }
-        else
-        {
-            // let the eventual exception propagate
-            resource = loadShaderProgramResourceFromFiles( vertPath, fragPath );
-            m_mapPathHashToShaderResource[ hash ] = resource;
-        }
+        // otherwise the resource will stay invalid and will be returned as such
 
         return resource;
     }
 
-    std::shared_ptr<CTexture2DResource> CResourceManager::getTexture2DResource( const std::string& path ) 
+    bool CResourceManager::isShaderProgramResourceLoaded(const std::string& vertShaderPath, const std::string& fragShaderPath) 
     {
+        size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
+
+        if( m_mapHashToResourceVariant.find( hash ) != m_mapHashToResourceVariant.end() )
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    void CResourceManager::freeShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
+    {
+        size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
+
+        m_mapHashToResourceVariant.erase( hash );
+    }
+
+
+
+
+    std::shared_ptr<CTexture2DResource> CResourceManager::loadTexture2DResource( const std::string& texturePath ) 
+    {
+        size_t hash = m_hasher( texturePath );
+
+        std::shared_ptr<CTexture2DResource> resource;
+        // let the exception propagate if it happens
+        resource = loadTexture2DResourceFromFile( texturePath );
+
+        m_mapHashToResourceVariant[ hash ] = resource;
+
+        return resource;
+    }
+
+    std::shared_ptr<CTexture2DResource> CResourceManager::getTexture2DResource( const std::string& texturePath ) 
+    {
+        size_t hash = m_hasher( texturePath );
+
         std::shared_ptr<CTexture2DResource> resource;
 
-        size_t hash = strHash( path );
+        auto it = m_mapHashToResourceVariant.find( hash );
+        if( it != m_mapHashToResourceVariant.end() )
+        {
+            ResourceVariant variant = it->second;
+            resource = std::get< std::shared_ptr<CTexture2DResource> >( variant );
+        }
+        // otherwise the resource will stay invalid and will be returned as such
 
-        auto it = m_mapPathHashToTextureResource.find( hash );
-        auto end = m_mapPathHashToTextureResource.end();
-        if( it != end )
-        {
-            resource = it->second;
-        }
-        else
-        {
-            resource = loadTexture2DResourceFromFile( path );
-            m_mapPathHashToTextureResource[ hash ] = resource;
-        }
-     
         return resource;
     }
 
-    std::shared_ptr<CFontResource> CResourceManager::getFontResource( const std::string& path ) 
+    bool CResourceManager::isTexture2DResourceLoaded( const std::string& texturePath ) 
     {
+        size_t hash = m_hasher( texturePath );
+
+        if( m_mapHashToResourceVariant.find( hash ) != m_mapHashToResourceVariant.end() )
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    void CResourceManager::freeTexture2DResource( std::string& texturePath ) 
+    {
+        size_t hash = m_hasher( texturePath );
+
+        m_mapHashToResourceVariant.erase( hash );
+    }
+
+
+
+
+    std::shared_ptr<CFontResource> CResourceManager::loadFontResource( const std::string& fontPath ) 
+    {
+        size_t hash = m_hasher( fontPath );
+
         std::shared_ptr<CFontResource> resource;
+        // let the exception propagate if it happens
+        resource = loadFontResourceFromFile( fontPath );
 
-        size_t hash = strHash( path );
-
-        auto it = m_mapPathHashToFontResource.find( hash );
-        auto end = m_mapPathHashToFontResource.end();
-        if( it != end )
-        {
-            resource = it->second;
-        }
-        else
-        {
-            resource = loadFontResourceFromFile( path );
-            m_mapPathHashToFontResource[ hash ] = resource;
-        }
+        m_mapHashToResourceVariant[ hash ] = resource;
 
         return resource;
+    }
+
+    std::shared_ptr<CFontResource> CResourceManager::getFontResource( const std::string& fontPath ) 
+    {
+        size_t hash = m_hasher( fontPath );
+
+        std::shared_ptr<CFontResource> resource;
+
+        auto it = m_mapHashToResourceVariant.find( hash );
+        if( it != m_mapHashToResourceVariant.end() )
+        {
+            ResourceVariant variant = it->second;
+            resource = std::get< std::shared_ptr<CFontResource> >( variant );
+        }
+        // otherwise the resource will stay invalid and will be returned as such
+
+        return resource;
+    }
+
+    bool CResourceManager::isFontResourceLoaded( const std::string& fontPath ) 
+    {
+        size_t hash = m_hasher( fontPath );
+
+        if( m_mapHashToResourceVariant.find( hash ) != m_mapHashToResourceVariant.end() )
+        {
+            return true;
+        }
+        
+        return false;
+    }
+
+    void CResourceManager::freeFontResource( std::string& fontPath ) 
+    {
+        size_t hash = m_hasher( fontPath );
+
+        m_mapHashToResourceVariant.erase( hash );
     }
 
 } // namespace chestnut

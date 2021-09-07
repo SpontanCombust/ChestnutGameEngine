@@ -15,8 +15,6 @@ namespace chestnut
 
     #define theEventManager CApplication::getInstance()->engine.eventManager
 
-    #define theResourceManager CApplication::getInstance()->engine.resourceManager
-
 } // namespace chestnut
 
 #endif // __CHESTNUT_GLOBALS_H__

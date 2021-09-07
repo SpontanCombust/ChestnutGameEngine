@@ -20,7 +20,6 @@ namespace chestnut
     public:
         ecs::CEntityWorld entityWorld;
         CEventManager eventManager;
-        CResourceManager resourceManager;
 
 
     private:
