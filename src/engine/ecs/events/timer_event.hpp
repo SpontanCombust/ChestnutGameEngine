@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_TIMER_EVENT_H__
 #define __CHESTNUT_TIMER_EVENT_H__
 
-#include "../event_base.hpp"
+#include "../event.hpp"
 #include "../../types.hpp"
 
 namespace chestnut
@@ -12,8 +12,6 @@ namespace chestnut
         float timerTimeInSeconds;
         float timerIntervalInSeconds;
         bool isTimerRepeating;
-
-        const std::string getName() override { return "TimerEvent"; }
     };
 
 } // namespace chestnut

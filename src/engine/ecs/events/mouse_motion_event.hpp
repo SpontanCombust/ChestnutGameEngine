@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_MOUSE_MOTION_EVENT_H__
 #define __CHESTNUT_MOUSE_MOTION_EVENT_H__
 
-#include "../event_base.hpp"
+#include "../event.hpp"
 #include "../../maths/vector2.hpp"
 #include "../../libs.hpp"
 
@@ -11,8 +11,6 @@ namespace chestnut
     {
         vec2i pos;
         vec2i motion;
-
-        const std::string getName() override { return "MouseMotionEvent"; }
     };
 
 } // namespace chestnut

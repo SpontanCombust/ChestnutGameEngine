@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_KEYBOARD_EVENT_H__
 #define __CHESTNUT_KEYBOARD_EVENT_H__
 
-#include "../event_base.hpp"
+#include "../event.hpp"
 #include "../../libs.hpp"
 
 namespace chestnut
@@ -11,8 +11,6 @@ namespace chestnut
         bool isPressed;
         SDL_Keycode button;
         uint16_t modifiers;
-
-        const std::string getName() override { return "KeyboardEvent"; }
     };
     
 } // namespace chestnut

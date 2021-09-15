@@ -1,5 +1,4 @@
-# add_subdirectory(engine/ecs)
-add_subdirectory(engine/event_system)
+add_subdirectory(engine/ecs)
 add_subdirectory(engine/graphics)
 add_subdirectory(engine/main)
 add_subdirectory(engine/maths)

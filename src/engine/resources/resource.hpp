@@ -6,7 +6,7 @@ namespace chestnut
     class IResource
     {
     public:
-        virtual ~IResource() = 0;
+        virtual ~IResource() = default;
 
         virtual bool isValid() const = 0;
     };

@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_MISC_SDL_EVENT_H__
 #define __CHESTNUT_MISC_SDL_EVENT_H__
 
-#include "../event_base.hpp"
+#include "../event.hpp"
 #include "../../libs.hpp"
 
 namespace chestnut
@@ -10,8 +10,6 @@ namespace chestnut
     struct SMiscSDLEvent : SEvent
     {
         SDL_Event sdlEvent;
-
-        const std::string getName() override { return "SDLEvent"; }
     };
 
 } // namespace chestnut
