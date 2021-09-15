@@ -1,7 +1,5 @@
 #include "texture2d.hpp"
 
-#include "../libs.hpp"
-
 namespace chestnut 
 {
     CTexture2D::CTexture2D() 

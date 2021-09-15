@@ -1,7 +1,9 @@
 #ifndef __CHESTNUT_WINDOW_H__
 #define __CHESTNUT_WINDOW_H__
 
-#include "../libs.hpp"
+#include <SDL2/SDL.h>
+#include <GL/glew.h>
+#include <SDL2/SDL_opengl.h>
 
 #include <string>
 

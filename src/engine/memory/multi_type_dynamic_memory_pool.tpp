@@ -3,7 +3,7 @@ namespace chestnut
     template< typename T >
     T* CMultiTypeDynamicMemoryPool::create() 
     {
-        std::stack< void * >& ptrStack = m_mapTypeToPtrStack[ TINDEX(T) ];
+        std::stack< void * >& ptrStack = m_mapTypeToPtrStack[ typeid(T) ];
         void *uncastedPtr;
         T *castedPtr;
 
@@ -25,7 +25,7 @@ namespace chestnut
     template<typename T>
     void CMultiTypeDynamicMemoryPool::remove( T *ptr ) 
     {
-        std::stack< void * >& ptrStack = m_mapTypeToPtrStack[ TINDEX( *ptr ) ];
+        std::stack< void * >& ptrStack = m_mapTypeToPtrStack[ typeid( *ptr ) ];
         ptrStack.push( static_cast< void * >( ptr ) );
     }
 

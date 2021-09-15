@@ -1,6 +1,5 @@
 #include "shader_program.hpp"
 
-#include "../libs.hpp"
 #include "../debug/debug.hpp"
 
 namespace chestnut

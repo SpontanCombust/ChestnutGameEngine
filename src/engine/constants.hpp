@@ -5,10 +5,6 @@
 
 namespace chestnut
 {
-    const entityid_t ENTITY_ID_INVALID = 0;
-
-    const listenerid_t LISTENER_ID_INVALID = 0;
-
     const double CHESTNUT_PI = 3.14159265359;
 
 } // namespace chestnut

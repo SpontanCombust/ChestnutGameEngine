@@ -2,7 +2,8 @@
 #define __CHESTNUT_KEYBOARD_EVENT_H__
 
 #include "../event.hpp"
-#include "../../libs.hpp"
+
+#include <SDL2/SDL_keyboard.h>
 
 namespace chestnut
 {

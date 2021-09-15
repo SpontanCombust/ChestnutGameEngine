@@ -1,9 +1,10 @@
 #ifndef __CHESTNUT_COLORED_POLYGON2D_H__
 #define __CHESTNUT_COLORED_POLYGON2D_H__
 
-#include "../libs.hpp"
 #include "../maths/vector2.hpp"
 #include "../maths/vector4.hpp"
+
+#include <GL/glew.h>
 
 namespace chestnut
 {

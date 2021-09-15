@@ -3,6 +3,8 @@
 #include "../debug/debug.hpp"
 #include "../misc/exception.hpp"
 
+#include <SDL2/SDL_image.h>
+
 namespace chestnut
 {
     GLuint loadOpenGLTexture2DFromPixels( void *pixels, int width, int height, GLenum pixelFormat )

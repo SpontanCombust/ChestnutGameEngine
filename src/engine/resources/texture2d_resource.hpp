@@ -2,7 +2,8 @@
 #define __CHESTNUT_TEXTURE2D_RESOURCE_H__
 
 #include "resource.hpp"
-#include "../libs.hpp"
+
+#include <GL/glew.h>
 
 #include <memory>
 #include <string>

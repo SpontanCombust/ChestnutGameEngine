@@ -2,6 +2,8 @@
 
 #include "../../debug/debug.hpp"
 
+#include <SDL2/SDL_timer.h>
+
 namespace chestnut
 {
     CLockedAutoTimer::CLockedAutoTimer( timerid_t id, float updateIntervalInSeconds, bool isRepeating )

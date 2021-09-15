@@ -2,7 +2,8 @@
 #define __CHESTNUT_SHADER_PROGRAM_RESOURCE_H__
 
 #include "resource.hpp"
-#include "../libs.hpp"
+
+#include <GL/glew.h>
 
 #include <memory>
 #include <unordered_map>

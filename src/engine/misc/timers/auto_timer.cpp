@@ -2,6 +2,8 @@
 
 #include "../../debug/debug.hpp"
 
+#include <SDL2/SDL_timer.h>
+
 namespace chestnut
 {
     CAutoTimer::CAutoTimer( timerid_t id ) 

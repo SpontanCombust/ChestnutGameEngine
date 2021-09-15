@@ -1,9 +1,10 @@
 #ifndef __CHESTNUT_RENDERER_H__
 #define __CHESTNUT_RENDERER_H__
 
-#include "../libs.hpp"
 #include "shader_program.hpp"
 #include "../maths/matrix4.hpp"
+
+#include <GL/glew.h>
 
 namespace chestnut
 {

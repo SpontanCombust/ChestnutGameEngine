@@ -1,9 +1,8 @@
 #ifndef __CHESTNUT_MULTI_TYPE_FLEXIBLE_MEMORY_POOL_H__
 #define __CHESTNUT_MULTI_TYPE_FLEXIBLE_MEMORY_POOL_H__
 
-#include "../misc/tindex.hpp"
-
 #include <stack>
+#include <typeindex>
 #include <unordered_map>
 
 namespace chestnut
