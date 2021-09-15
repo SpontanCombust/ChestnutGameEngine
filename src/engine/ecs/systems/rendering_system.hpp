@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_RENDERING_SYSTEM_H__
 #define __CHESTNUT_RENDERING_SYSTEM_H__
 
-#include "../component_system.hpp"
+#include "../system.hpp"
 #include "../components/transform_component.hpp"
 #include "../components/texture_component.hpp"
 #include "../components/polygon_canvas_component.hpp"
@@ -10,7 +10,7 @@
 
 namespace chestnut
 {
-    class CRenderingSystem : public IComponentSystem
+    class CRenderingSystem : public ISystem
     {
     private:
         ecs::SEntityQuery m_textureQuery;
@@ -20,9 +20,7 @@ namespace chestnut
         CColoredPolygon2DRenderer m_polygonRenderer;
 
     public:
-        CRenderingSystem();
-
-        void initQueries() override;
+        CRenderingSystem( CEngine& engine );
 
         void update( uint32_t deltaTime ) override;
 

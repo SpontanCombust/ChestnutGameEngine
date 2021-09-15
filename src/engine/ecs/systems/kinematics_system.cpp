@@ -2,19 +2,20 @@
 
 namespace chestnut
 {
-    void CKinematicsSystem::initQueries() 
+    CKinematicsSystem::CKinematicsSystem(CEngine& engine ) 
+    : ISystem( engine ) 
     {
         m_transformKinematicQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
         {
             return sign.has<CTransformComponent>() && sign.has<CKinematicsComponent>();
         };
-
-        getEntityQueries().push_back( &m_transformKinematicQuery );
     }
 
     void CKinematicsSystem::update( uint32_t deltaTime ) 
     {
         float dt = (float)deltaTime / 1000.f;
+
+        getEngine().getEntityWorld().queryEntities( m_transformKinematicQuery );
 
         ecs::forEachEntityInQuery< CTransformComponent, CKinematicsComponent >( m_transformKinematicQuery,
         [dt]( CTransformComponent& transform, CKinematicsComponent& kinematic )

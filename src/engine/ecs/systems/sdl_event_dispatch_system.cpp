@@ -1,10 +1,19 @@
 #include "sdl_event_dispatch_system.hpp"
 
-#include "../../event_system/events/events.hpp"
-#include "../../globals.hpp"
+#include "../events/keyboard_event.hpp"
+#include "../events/mouse_button_event.hpp"
+#include "../events/mouse_wheel_event.hpp"
+#include "../events/mouse_motion_event.hpp"
+#include "../events/quit_request_event.hpp"
+#include "../events/misc_sdl_event.hpp"
 
 namespace chestnut
 {      
+    CSDLEventDispatchSystem::CSDLEventDispatchSystem( CEngine& engine ) : ISystem( engine )
+    {
+
+    }
+
     void CSDLEventDispatchSystem::update( uint32_t deltaTime ) 
     {
         SDL_Event sdlEvent;
@@ -16,21 +25,23 @@ namespace chestnut
                 case SDL_KEYDOWN:
                 case SDL_KEYUP:
                 {
-                    SKeyboardEvent *keyboardEvent = theEventManager.raiseEvent<SKeyboardEvent>();
-                    keyboardEvent->isPressed = ( sdlEvent.key.type == SDL_KEYDOWN ) ? true : false;
-                    keyboardEvent->button = sdlEvent.key.keysym.sym;
-                    keyboardEvent->modifiers = sdlEvent.key.keysym.mod;
+                    SKeyboardEvent keyboardEvent;
+                    keyboardEvent.isPressed = ( sdlEvent.key.type == SDL_KEYDOWN ) ? true : false;
+                    keyboardEvent.button = sdlEvent.key.keysym.sym;
+                    keyboardEvent.modifiers = sdlEvent.key.keysym.mod;
+                    getEngine().getEventManager().raiseEvent( keyboardEvent );
                     break;
                 }
 
                 case SDL_MOUSEBUTTONDOWN:
                 case SDL_MOUSEBUTTONUP:
                 {
-                    SMouseButtonEvent *mouseBtnEvent = theEventManager.raiseEvent<SMouseButtonEvent>();
-                    mouseBtnEvent->isPressed = ( sdlEvent.button.type == SDL_MOUSEBUTTONDOWN ) ? true : false;
-                    mouseBtnEvent->button = sdlEvent.button.button;
-                    mouseBtnEvent->clickPos = vec2i( sdlEvent.button.x, sdlEvent.button.y );
-                    mouseBtnEvent->clicksNum = sdlEvent.button.clicks;
+                    SMouseButtonEvent mouseBtnEvent;
+                    mouseBtnEvent.isPressed = ( sdlEvent.button.type == SDL_MOUSEBUTTONDOWN ) ? true : false;
+                    mouseBtnEvent.button = sdlEvent.button.button;
+                    mouseBtnEvent.clickPos = vec2i( sdlEvent.button.x, sdlEvent.button.y );
+                    mouseBtnEvent.clicksNum = sdlEvent.button.clicks;
+                    getEngine().getEventManager().raiseEvent( mouseBtnEvent );
                     break;
                 }
 
@@ -43,8 +54,9 @@ namespace chestnut
                         break;
                     }
 
-                    SMouseWheelEvent *mouseWheelEvent = theEventManager.raiseEvent<SMouseWheelEvent>();
-                    mouseWheelEvent->scrollAmount = vec2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
+                    SMouseWheelEvent mouseWheelEvent;
+                    mouseWheelEvent.scrollAmount = vec2i( sdlEvent.wheel.x, sdlEvent.wheel.y );
+                    getEngine().getEventManager().raiseEvent( mouseWheelEvent );
                     break;
                 }
 
@@ -56,22 +68,24 @@ namespace chestnut
                         break;
                     }
 
-                    SMouseMotionEvent *mouseMotionEvent = theEventManager.raiseEvent<SMouseMotionEvent>();
-                    mouseMotionEvent->pos = vec2i( sdlEvent.motion.x, sdlEvent.motion.y );
-                    mouseMotionEvent->motion = vec2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
+                    SMouseMotionEvent mouseMotionEvent;
+                    mouseMotionEvent.pos = vec2i( sdlEvent.motion.x, sdlEvent.motion.y );
+                    mouseMotionEvent.motion = vec2i( sdlEvent.motion.xrel, sdlEvent.motion.yrel );
+                    getEngine().getEventManager().raiseEvent( mouseMotionEvent );
                     break;
                 }
 
                 case SDL_QUIT:
                 {
-                    theEventManager.raiseEvent<SQuitRequestEvent>();
+                    getEngine().getEventManager().raiseEvent( SQuitRequestEvent() );
                     break;
                 }
 
                 default:
                 {
-                    SMiscSDLEvent *miscEvent = theEventManager.raiseEvent<SMiscSDLEvent>();
-                    miscEvent->sdlEvent = sdlEvent;
+                    SMiscSDLEvent miscEvent;
+                    miscEvent.sdlEvent = sdlEvent;
+                    getEngine().getEventManager().raiseEvent( miscEvent );
                 }
             }
         }

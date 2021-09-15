@@ -2,7 +2,6 @@
 #define __CHESTNUT_TIMER_COMPONENT_H__
 
 #include "../../misc/timers/locked_manual_timer.hpp"
-#include "../../event_system/event_manager.hpp"
 
 #include <chestnut/ecs/component.hpp>
 

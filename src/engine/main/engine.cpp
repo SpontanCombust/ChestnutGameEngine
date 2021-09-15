@@ -1,20 +1,19 @@
 #include "engine.hpp"
 
+#include "../misc/timers/locked_auto_timer.hpp"
+#include "../debug/debug.hpp"
+#include "../ecs/systems/systems.hpp"
+#include "../ecs/events/quit_request_event.hpp"
+
 namespace chestnut
 {    
-    CEngine::CEngine()
+    CEngine::CEngine( CWindow& window ) : m_window( window )
     {
-        m_wasInit                   = false;
+        m_wasInit       = false;
+        m_isRunning     = false;
+        m_isSuspended   = true;
 
-        m_logicUpdateTimer          = nullptr;
-
-        m_isRunning                 = false;
-        m_isSuspended               = true;
-
-        m_sdlEventDispatchSystem    = nullptr;
-        m_timerSystem               = nullptr;
-        m_kinematicsSystem          = nullptr;
-        m_renderingSystem           = nullptr;
+        m_updateTimer   = nullptr;
     }
 
     CEngine::~CEngine() 
@@ -22,45 +21,41 @@ namespace chestnut
         destroy();
     }
 
-    void CEngine::init( float renderInterval, float updateInterval ) 
+    CWindow& CEngine::getWindow() 
+    {
+        return m_window;
+    }
+
+    ecs::CEntityWorld& CEngine::getEntityWorld() 
+    {
+        return m_entityWorld;
+    }
+
+    CEventManager& CEngine::getEventManager() 
+    {
+        return m_eventManager;
+    }
+
+    void CEngine::init( float updateInterval ) 
     {
         if( !m_wasInit )
         {
-            if( updateInterval < 0 )
+            if( updateInterval <= 0 )
             {
-                m_logicUpdateTimer = new CAutoTimer(0);
+                m_updateTimer = new CAutoTimer(0);
             }
             else
             {
                 CLockedAutoTimer *lockedTimer = new CLockedAutoTimer( 0, updateInterval, true );
                 lockedTimer->toggleThreadWaitingForTimerInterval( true );
-                m_logicUpdateTimer = lockedTimer;
+                m_updateTimer = lockedTimer;
             }
-
-            if( renderInterval < 0 )
-            {
-                m_renderTimer = new CAutoTimer(1);
-            }
-            else
-            {
-                m_renderTimer = new CLockedAutoTimer( 1, renderInterval, true );
-            }
-            
 
             //TODO do system submition mechanism to engine
-            m_sdlEventDispatchSystem = new CSDLEventDispatchSystem();
-            m_timerSystem = new CTimerSystem();
-            m_kinematicsSystem = new CKinematicsSystem();
-            m_renderingSystem = new CRenderingSystem();
-
-            m_systemsList.push_back( m_sdlEventDispatchSystem );
-            m_systemsList.push_back( m_timerSystem );
-            m_systemsList.push_back( m_kinematicsSystem );
-            m_systemsList.push_back( m_renderingSystem );
-
-            m_componentSystemsList.push_back( m_timerSystem );
-            m_componentSystemsList.push_back( m_kinematicsSystem );
-            m_componentSystemsList.push_back( m_renderingSystem );
+            m_systemsList.push_back( new CSDLEventDispatchSystem( *this ) );
+            m_systemsList.push_back( new CTimerSystem( *this ) );
+            m_systemsList.push_back( new CKinematicsSystem( *this ) );
+            m_systemsList.push_back( new CRenderingSystem( *this ) );
 
             registerQuitEvent();
 
@@ -73,15 +68,9 @@ namespace chestnut
         m_isRunning = true;
         m_isSuspended = false;
 
-        for( IComponentSystem *compSys : m_componentSystemsList )
-        {
-            compSys->initQueries();
-        } 
-        
         if( m_wasInit )
         {
-            m_logicUpdateTimer->start();
-            m_renderTimer->start();   
+            m_updateTimer->start();  
             gameLoop();
         }
         else
@@ -94,42 +83,17 @@ namespace chestnut
     {
         while( m_isRunning )
         {
-            uint32_t dt = m_logicUpdateTimer->getDeltaTime();
+            uint32_t dt = m_updateTimer->getDeltaTime();
             
-            if( m_logicUpdateTimer->tick() )
+            if( m_updateTimer->tick() )
             {
-                update(dt);
-            }
-
-            if( m_renderTimer->tick() )
-            {
-                m_renderingSystem->render();
+                for( ISystem *sys : m_systemsList )
+                {
+                    // TODO implement system pipeline configuration
+                    sys->update( dt );
+                }
             }
         }
-    }
-
-    void CEngine::update( uint32_t deltaTime ) 
-    {
-        // clearing outdated batches from systems
-        std::vector< ecs::SEntityQuery * > vecQueries;
-        for( IComponentSystem *compSys : m_componentSystemsList )
-        {
-            vecQueries = compSys->getEntityQueries();
-            for( ecs::SEntityQuery *query : vecQueries )
-            {
-                entityWorld.queryEntities( *query );
-            }
-        }    
-
-        // updating systems
-        for( ISystem *sys : m_systemsList )
-        {
-            // TODO exclude rendering system
-            sys->update( deltaTime );
-        }
-
-        // updating event manager
-        eventManager.delegateEvents();
     }
 
     void CEngine::suspend() 
@@ -144,44 +108,38 @@ namespace chestnut
 
     void CEngine::destroy() 
     {
-        delete m_logicUpdateTimer;
+        delete m_updateTimer;
 
-        delete m_renderingSystem;
-        delete m_timerSystem;
-        delete m_sdlEventDispatchSystem;
-
-        m_systemsList.clear();
-        m_componentSystemsList.clear();
-
-        unregisterQuitEvent();
-        eventManager.clearListeners();
+        for( ISystem *system : m_systemsList )
+        {
+            delete system;
+        }
     }
 
     float CEngine::getGameUpdatesPerSecond() 
     {
-        return m_logicUpdateTimer->getAvgUpdatesPerSec();
+        return m_updateTimer->getAvgUpdatesPerSec();
     }
 
     float CEngine::getGameTimeInSeconds() 
     {
-        return m_logicUpdateTimer->getCurrentTimeInSeconds();
+        return m_updateTimer->getCurrentTimeInSeconds();
     }
 
 
-
-    event_function CEngine::onQuitEvent( const SQuitRequestEvent& event ) 
-    {
-        stop();
-    }
 
     void CEngine::registerQuitEvent() 
     {
-        m_quitListenerID = eventManager.registerListener( this, &CEngine::onQuitEvent );
-    }
+        auto quitEventListener = new CEventListener<SQuitRequestEvent>(
+            [this]( const SQuitRequestEvent& e ) 
+            { 
+                stop(); 
+            }
+        );
 
-    void CEngine::unregisterQuitEvent() 
-    {
-        eventManager.unregisterListenerByID< SQuitRequestEvent >( m_quitListenerID );
+        m_quitEventListener = std::shared_ptr<IEventListener>( quitEventListener );
+
+        m_eventManager.registerListener( m_quitEventListener );
     }
 
 } // namespace chestnut
