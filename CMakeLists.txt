@@ -50,9 +50,18 @@ target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
 
 # ====================================== Tests executable ======================================
 
-add_executable(Tests ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+add_executable(${PROJECT_NAME}_Test)
 
-target_link_libraries(Tests ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
 
 add_subdirectory(tests)
+
+find_package(Catch2)
+
+target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_Test Catch2::Catch2)
+
+include(CTest)
+include(Catch)
+catch_discover_tests(${PROJECT_NAME}_Test)
 
