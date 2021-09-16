@@ -1,3 +1,5 @@
+#include <cstring> // memcpy
+
 namespace chestnut
 {
     template< size_t targetN, typename T, size_t sourceN, typename = typename std::enable_if< ( targetN > sourceN ) >::type >
@@ -23,10 +25,10 @@ namespace chestnut
     template< size_t targetN, typename T, size_t sourceN >
     Vector<T,targetN> vecCastSize( const Vector<T,sourceN>& v, T initNewVals )
     {
-        Vector<T,targetN> res(initNewVals);
+        Vector<T,targetN> res( initNewVals );
 
         size_t size;
-        if( targetN >= sourceN )
+        if constexpr( targetN >= sourceN )
         {
             size = sizeof(T) * sourceN;
         }
@@ -56,4 +58,30 @@ namespace chestnut
         return res;
     }
 
+    template< typename targetT, size_t targetN, typename sourceT, size_t sourceN >
+    Vector<targetT,targetN> vecCast( const Vector<sourceT,sourceN>& v, targetT initRemainVals )
+    {
+        Vector<targetT,targetN> res( initRemainVals );
+
+        const sourceT *dat = v.data();
+        targetT *datRes = res.data();
+
+        size_t size;
+        if constexpr( targetN >= sourceN )
+        {
+            size = sourceN;
+        }
+        else
+        {
+            size = targetN;
+        }
+
+        for (size_t i = 0; i < size; i++)
+        {
+            datRes[i] = (targetT)dat[i];
+        }
+
+        return res;
+    }
+    
 } // namespace chestnut

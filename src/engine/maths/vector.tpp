@@ -1,8 +1,7 @@
 #include "../misc/exception.hpp"
 
-#include <algorithm>
-#include <cmath>
-#include <cstring>
+#include <algorithm> // fill_n
+#include <cmath> // sqrt
 #include <sstream>
 
 namespace chestnut

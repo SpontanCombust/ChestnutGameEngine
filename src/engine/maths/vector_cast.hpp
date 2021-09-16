@@ -44,12 +44,12 @@ namespace chestnut
      * @tparam sourceN size of source vector
      * 
      * @param v source vector
-     * @param newVals value of new vector fields, if the cast was made to bigger size
+     * @param initRemainVals value of new vector fields, if the cast was made to bigger size
      * 
      * @return size-casted vector of type T 
      */
     template< size_t targetN, typename T, size_t sourceN >
-    Vector<T,targetN> vecCastSize( const Vector<T,sourceN>& v, T initNewVals = 1 );
+    Vector<T,targetN> vecCastSize( const Vector<T,sourceN>& v, T initRemainVals = 1 );
 
     /**
      * @brief Returns vector with data of type targetT created from vector v
@@ -63,6 +63,21 @@ namespace chestnut
      */
     template< typename targetT, typename sourceT, size_t n >
     Vector<targetT,n> vecCastType( const Vector<sourceT,n>& v );
+
+    /**
+     * @brief Returns vector with data of type targetT and size targetN created from vector v
+     * 
+     * @tparam targetT target vector data type
+     * @tparam targetN target vector size
+     * @tparam sourceT source vector data type
+     * @tparam sourceN source vector size
+     * @param v source vector
+     * @param initRemainVals value of new vector fields, if the cast was made to bigger size
+     * 
+     * @return data- and size-casted vector
+     */
+    template< typename targetT, size_t targetN, typename sourceT, size_t sourceN >
+    Vector<targetT,targetN> vecCast( const Vector<sourceT,sourceN>& v, targetT initRemainVals = 1 );
 
 } // namespace chestnut
 
