@@ -12,7 +12,7 @@ namespace chestnut
         };
     }
 
-    void CTimerSystem::update( uint32_t deltaTime ) 
+    void CTimerSystem::update( float deltaTime ) 
     {
         getEngine().getEntityWorld().queryEntities( m_timerQuery );
 
@@ -25,7 +25,7 @@ namespace chestnut
                 {
                     STimerEvent event;
                     event.timerID = timer.getID();
-                    event.timerTimeInSeconds = timer.getCurrentTimeInSeconds();
+                    event.timerTimeInSeconds = timer.getElapsedTimeInSeconds();
                     event.timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
                     event.isTimerRepeating = timer.getIsRepeating();
                     getEngine().getEventManager().raiseEvent( event );

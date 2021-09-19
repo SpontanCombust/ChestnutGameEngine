@@ -13,12 +13,10 @@ namespace chestnut
     protected:
         // inner state vars //
 
-        // the number of timer ticks performed on the timer
-        uint64_t m_tickCount;
-        // relative tick value from the latest successful timer tick
-        uint32_t m_currentRelativeTick;
-        // relative tick value from the timer tick before the last successful one
-        uint32_t m_lastRelativeTick;
+        // number of microseconds since the start of the timer to the current tick
+        uint64_t m_currentRelativeTick;
+        // number of microseconds since the start of the timer to the tick before the current tick
+        uint64_t m_lastRelativeTick;
 
         bool m_wasStarted;
 
@@ -30,24 +28,25 @@ namespace chestnut
 
     public:
         ITimer( timerid_t id );
+        virtual ~ITimer() = default;
 
         timerid_t getID();
 
         void start();
-        void resetAndStart();
 
+        virtual void reset() = 0;
+
+
+        // Get number of microseconds since timer start
+        uint64_t getElapsedTimeInMicroseconds();
         // Get number of miliseconds since timer start
-        uint32_t getCurrentTimeInMiliseconds();
+        uint64_t getElapsedTimeInMiliseconds();
         // Get number of seconds since timer start
-        float getCurrentTimeInSeconds();
-        // Return time between current and previous successful tick in miliseconds
-        uint32_t getDeltaTime();
-        // Return average number of updates per second
-        float getAvgUpdatesPerSec();
-
-        virtual void reset( bool init = false ) = 0;
-
-        virtual ~ITimer() = default;
+        double getElapsedTimeInSeconds();
+        // Return time between current and previous successful tick in seconds
+        float getDeltaTime();
+        // Inverse of the delta time
+        float getUpdatesPerSec();
     };
     
 } // namespace chestnut

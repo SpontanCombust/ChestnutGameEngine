@@ -11,20 +11,18 @@ namespace chestnut
         };
     }
 
-    void CKinematicsSystem::update( uint32_t deltaTime ) 
+    void CKinematicsSystem::update( float deltaTime ) 
     {
-        float dt = (float)deltaTime / 1000.f;
-
         getEngine().getEntityWorld().queryEntities( m_transformKinematicQuery );
 
         ecs::forEachEntityInQuery< CTransformComponent, CKinematicsComponent >( m_transformKinematicQuery,
-        [dt]( CTransformComponent& transform, CKinematicsComponent& kinematic )
+        [deltaTime]( CTransformComponent& transform, CKinematicsComponent& kinematic )
         {
-            kinematic.linearVelocity += dt * kinematic.linearAcceleration;
-            kinematic.angularVelocity += dt * kinematic.angularAcceleration;
+            kinematic.linearVelocity  += deltaTime * kinematic.linearAcceleration;
+            kinematic.angularVelocity += deltaTime * kinematic.angularAcceleration;
 
-            transform.position += dt * kinematic.linearVelocity;
-            transform.rotation += dt * kinematic.angularVelocity; 
+            transform.position += deltaTime * kinematic.linearVelocity;
+            transform.rotation += deltaTime * kinematic.angularVelocity; 
         });
     }
 

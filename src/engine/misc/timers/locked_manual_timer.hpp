@@ -17,13 +17,15 @@ namespace chestnut
     {
     protected:
         // planned next interval tick of the timer
-        uint32_t m_nextRelativeTick;
+        uint64_t m_nextRelativeTick;
         // a tick obtained from latest tick() call which may or may not have been reached the interval
-        uint32_t m_currentIntermediaryRelativeTick;
+        uint64_t m_currentIntermediaryRelativeTick;
 
-        // timer alarm interval in seconds
+        // desired interval between ticks in seconds
         float m_updateIntervalInSeconds;
-        // whether alarm should be raised multiple times
+        // desired interval between ticks in microseconds
+        uint32_t m_updateIntervalInMicroseconds;
+        // a flag to tell whether user wants this timer to tick only once or more
         bool m_isRepeating;
 
     public:
@@ -39,7 +41,7 @@ namespace chestnut
         float getUpdateIntervalInSeconds();
         bool getIsRepeating();
 
-        void reset( bool init = false ) override;
+        void reset() override;
 
         /* Tick the timer using delta time in miliseconds. Returns true if managed to perform a tick i.e. if timer
          * was started
@@ -47,7 +49,7 @@ namespace chestnut
          * is a repeating timer OR isn't repeating, but there hasn't been a successful tick yet 
          * AND
          * the time since the previous successful tick is equal to or greater than the timer interval */
-        bool tick( uint32_t dt ) override;
+        bool tick( float dt ) override;
     };
     
 } // namespace chestnut

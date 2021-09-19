@@ -7,20 +7,15 @@ namespace chestnut
     CManualTimer::CManualTimer( timerid_t id ) 
     : ITimer( id ) 
     {
-        reset( true );
-        m_wasStarted = false;
+        
     }
 
-    void CManualTimer::reset( bool init ) 
+    void CManualTimer::reset() 
     {
-        if( !init )
-        {
-            m_currentRelativeTick = m_lastRelativeTick = 0;
-        }
-        m_tickCount = 0;
+        m_currentRelativeTick = m_lastRelativeTick = 0;
     }
 
-    bool CManualTimer::tick( uint32_t dt ) 
+    bool CManualTimer::tick( float dt ) 
     {
         if( !m_wasStarted )
         {
@@ -28,16 +23,10 @@ namespace chestnut
             return false;
         }
 
-        if( dt > 0 )
-        {
-            m_lastRelativeTick = m_currentRelativeTick;
-            m_currentRelativeTick += dt;
-            m_tickCount++;
+        m_lastRelativeTick = m_currentRelativeTick;
+        m_currentRelativeTick += static_cast<uint64_t>( dt * 1000000.f );
 
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
 } // namespace chestnut

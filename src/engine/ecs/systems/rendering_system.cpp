@@ -39,7 +39,7 @@ namespace chestnut
         };
     }
 
-    void CRenderingSystem::update( uint32_t deltaTime ) 
+    void CRenderingSystem::update( float deltaTime ) 
     {
         getEngine().getEntityWorld().queryEntities( m_textureQuery );
 

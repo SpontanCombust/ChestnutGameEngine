@@ -7,17 +7,11 @@ namespace chestnut
     CLockedManualTimer::CLockedManualTimer( timerid_t id, float updateIntervalInSeconds, bool isRepeating )
     : CManualTimer( id ) 
     {
-        reset( true );
+        m_nextRelativeTick = 0;
+        m_currentIntermediaryRelativeTick = 0;
 
-        if( updateIntervalInSeconds >= 0.001f )
-        {
-            m_updateIntervalInSeconds = updateIntervalInSeconds;
-        }
-        else
-        {
-            m_updateIntervalInSeconds = 0.001f;
-        }
-        
+        m_updateIntervalInSeconds = updateIntervalInSeconds;
+        m_updateIntervalInMicroseconds = static_cast<uint32_t>( updateIntervalInSeconds * 1000000.f );
         m_isRepeating = isRepeating;
     }
 
@@ -31,18 +25,14 @@ namespace chestnut
         return m_isRepeating;
     }
 
-    void CLockedManualTimer::reset( bool init ) 
+    void CLockedManualTimer::reset() 
     {
-        if( !init )
-        {
-            m_currentRelativeTick = m_lastRelativeTick = 0;
-            m_nextRelativeTick = static_cast<uint32_t>( m_updateIntervalInSeconds * 1000.f );
-            m_currentIntermediaryRelativeTick = 0;
-        }
-        m_tickCount = 0;
+        m_currentRelativeTick = m_lastRelativeTick = 0;
+        m_currentIntermediaryRelativeTick = 0;
+        m_nextRelativeTick = m_updateIntervalInMicroseconds;
     }
 
-    bool CLockedManualTimer::tick( uint32_t dt ) 
+    bool CLockedManualTimer::tick( float dt ) 
     {
         if( !m_wasStarted )
         {
@@ -50,20 +40,15 @@ namespace chestnut
             return false;
         }
         
-        if( dt > 0 && ( m_isRepeating || ( !m_isRepeating && m_tickCount == 0 ) ) )
+        if( m_isRepeating || ( !m_isRepeating && m_currentRelativeTick == 0 ) )
         {
-            uint32_t updateIntervalInMs;
-
-            updateIntervalInMs = static_cast<uint32_t>( m_updateIntervalInSeconds * 1000.f );
-
-            m_currentIntermediaryRelativeTick += dt;
+            m_currentIntermediaryRelativeTick += static_cast<uint64_t>( dt * 1000000.f );
 
             if( m_currentIntermediaryRelativeTick >= m_nextRelativeTick )
             {
                 m_lastRelativeTick = m_currentRelativeTick;
                 m_currentRelativeTick = m_currentIntermediaryRelativeTick;
-                m_nextRelativeTick += updateIntervalInMs;
-                m_tickCount++;
+                m_nextRelativeTick += m_updateIntervalInMicroseconds;
                 return true;
             }
         }

@@ -7,7 +7,7 @@
 namespace chestnut
 {
     /**
-     * @brief A timer class which objects get updated (ticked) using SDL timer functionality
+     * @brief A timer class which objects get updated (ticked) using std::chrono functionality
      * 
      * @details
      * The timer counts time starting from the point of calling start(). To update it call tick().
@@ -18,15 +18,19 @@ namespace chestnut
     {
     protected:
         // tick value when timer was started
-        uint32_t m_startTick;
+        uint64_t m_startAbsoluteTick;
         
     public:
         CAutoTimer( timerid_t id );
 
-        void reset( bool init = false ) override;
+        void reset() override;
 
-        // Returns true if managed to perform a tick (here: if timer was started)
+        // Returns true if managed to perform a tick
+        // here it's true if timer was started
         virtual bool tick();
+
+    protected:
+        uint64_t getAbsoluteTimeInMicroseconds() const;
     };
     
 } // namespace chestnut

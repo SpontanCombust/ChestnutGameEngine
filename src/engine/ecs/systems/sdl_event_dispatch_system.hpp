@@ -10,7 +10,7 @@ namespace chestnut
     public:
         CSDLEventDispatchSystem( CEngine& engine );
 
-        void update( uint32_t deltaTime ) override;   
+        void update( float deltaTime ) override;   
     };
 
 } // namespace chestnut

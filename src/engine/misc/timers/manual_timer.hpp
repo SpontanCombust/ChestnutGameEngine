@@ -6,7 +6,7 @@
 namespace chestnut
 {
     /**
-     * @brief A timer class, which objects get updated (ticked) using extrnal delta time value
+     * @brief A timer class, which objects get updated (ticked) using external delta time value
      * 
      * @details
      * The timer counts time starting from the point of calling start(). To update it call tick()
@@ -18,11 +18,11 @@ namespace chestnut
     public:
         CManualTimer( timerid_t id );
 
-        void reset( bool init = false ) override;
+        void reset() override;
 
-        // Tick the timer using delta time in miliseconds. 
-        // Returns true only if detected time advancing since last tick.
-        virtual bool tick( uint32_t dt );
+        // Tick the timer using delta time in seconds. 
+        // Returns true only if performed a tick successfuly; here always if timer was started
+        virtual bool tick( float dt );
     };
     
 } // namespace chestnut

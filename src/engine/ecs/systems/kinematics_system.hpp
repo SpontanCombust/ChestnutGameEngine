@@ -17,7 +17,7 @@ namespace chestnut
     public:
         CKinematicsSystem( CEngine& engine );
 
-        void update( uint32_t deltaTime ) override;
+        void update( float deltaTime ) override;
     };
 
 } // namespace chestnut

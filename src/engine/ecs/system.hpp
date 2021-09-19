@@ -22,7 +22,7 @@ namespace chestnut
         ISystem( CEngine& engine );
         virtual ~ISystem() = default;
 
-        virtual void update( uint32_t deltaTime ) = 0;
+        virtual void update( float deltaTime ) = 0;
     };
     
 } // namespace chestnut

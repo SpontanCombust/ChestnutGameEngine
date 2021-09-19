@@ -22,7 +22,7 @@ namespace chestnut
     public:
         CRenderingSystem( CEngine& engine );
 
-        void update( uint32_t deltaTime ) override;
+        void update( float deltaTime ) override;
 
         void render();
 

@@ -2,26 +2,20 @@
 
 #include "../../debug/debug.hpp"
 
-#include <SDL2/SDL_timer.h>
+#include <thread>
 
 namespace chestnut
 {
     CLockedAutoTimer::CLockedAutoTimer( timerid_t id, float updateIntervalInSeconds, bool isRepeating )
     : CAutoTimer( id )
     {
-        reset( true );
-        
-        if( updateIntervalInSeconds >= 0.001f )
-        {
-            m_updateIntervalInSeconds = updateIntervalInSeconds;
-        }
-        else
-        {
-            m_updateIntervalInSeconds = 0.001f;
-        }
+        m_updateIntervalInSeconds = updateIntervalInSeconds;
+        m_updateIntervalInMicroseconds = static_cast<uint32_t>( updateIntervalInSeconds * 1000000.f );
         
         m_isRepeating = isRepeating;
         m_shouldThreadWaitForTimer = false;
+
+        m_nextRelativeTick = 0;
     }
 
     float CLockedAutoTimer::getUpdateIntervalInSeconds() 
@@ -34,15 +28,11 @@ namespace chestnut
         return m_isRepeating;
     }
 
-    void CLockedAutoTimer::reset( bool init )
+    void CLockedAutoTimer::reset()
     {
-        if( !init )
-        {
-            m_startTick = SDL_GetTicks();
-            m_currentRelativeTick = m_lastRelativeTick = 0;
-            m_nextRelativeTick = static_cast<uint32_t>( m_updateIntervalInSeconds * 1000.f );
-        }
-        m_tickCount = 0;
+        m_startAbsoluteTick = getAbsoluteTimeInMicroseconds();
+        m_currentRelativeTick = m_lastRelativeTick = 0;
+        m_nextRelativeTick = m_updateIntervalInMicroseconds;
     }
 
     void CLockedAutoTimer::toggleThreadWaitingForTimerInterval( bool toggle ) 
@@ -52,45 +42,44 @@ namespace chestnut
 
     bool CLockedAutoTimer::tick() 
     {
+        uint64_t measure = getAbsoluteTimeInMicroseconds();
+
         if( !m_wasStarted )
         {
             LOG_CHANNEL( "LOCKED_AUTO_TIMER", "Warning! Trying to update a timer that wasn't started yet! ID: " << m_timerID );
             return false;
         }
         
-        if( m_isRepeating || ( !m_isRepeating && m_tickCount == 0 ) )
+        if( m_isRepeating || ( !m_isRepeating && m_currentRelativeTick == 0 ) )
         {
-            uint32_t currentIntermediaryRelativeTick;
-            uint32_t updateIntervalInMs;
-            uint32_t timeToNextUpdate;
-            bool shouldDelay;
-
-            currentIntermediaryRelativeTick = SDL_GetTicks() - m_startTick;
-            updateIntervalInMs = static_cast<uint32_t>( m_updateIntervalInSeconds * 1000.f );
-
-            timeToNextUpdate = 0;
-            shouldDelay = false;
-
-            if( m_shouldThreadWaitForTimer && currentIntermediaryRelativeTick < m_nextRelativeTick )
-            {
-                shouldDelay = true;
-                // it's bound to be a positive number
-                timeToNextUpdate = m_nextRelativeTick - currentIntermediaryRelativeTick;
-            }
-
-            if( shouldDelay )
-            {
-                SDL_Delay( timeToNextUpdate );
-                currentIntermediaryRelativeTick += timeToNextUpdate;
-            }
+            uint64_t currentIntermediaryRelativeTick = measure - m_startAbsoluteTick;
 
             if( currentIntermediaryRelativeTick >= m_nextRelativeTick )
             {
                 m_lastRelativeTick = m_currentRelativeTick;
                 m_currentRelativeTick = currentIntermediaryRelativeTick;
-                m_nextRelativeTick = currentIntermediaryRelativeTick + updateIntervalInMs;
-                m_tickCount++;
+                m_nextRelativeTick = currentIntermediaryRelativeTick + m_updateIntervalInMicroseconds;
+
                 return true;
+            }
+            else
+            {
+                if( m_shouldThreadWaitForTimer )
+                {
+                    uint32_t timeToNextTick = static_cast<uint32_t>( m_nextRelativeTick - currentIntermediaryRelativeTick );
+
+                    std::this_thread::sleep_for( std::chrono::microseconds( timeToNextTick ) );
+
+                    m_lastRelativeTick = m_currentRelativeTick;
+                    m_currentRelativeTick = m_nextRelativeTick;
+                    m_nextRelativeTick += m_updateIntervalInMicroseconds;
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
         }
         

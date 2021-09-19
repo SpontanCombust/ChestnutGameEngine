@@ -2,46 +2,40 @@
 
 #include "../../debug/debug.hpp"
 
-#include <SDL2/SDL_timer.h>
+#include <chrono>
 
 namespace chestnut
 {
     CAutoTimer::CAutoTimer( timerid_t id ) 
     : ITimer( id )
     {
-        reset( true );
-        m_wasStarted = false;
+        m_startAbsoluteTick = 0;
     }
 
-    void CAutoTimer::reset( bool init )
+    uint64_t CAutoTimer::getAbsoluteTimeInMicroseconds() const
     {
-        if( !init )
-        {
-            m_startTick = SDL_GetTicks();
-            m_currentRelativeTick = m_lastRelativeTick = 0;
-        }
-        m_tickCount = 0;
+        return static_cast<uint64_t>( std::chrono::duration_cast< std::chrono::microseconds >( std::chrono::steady_clock::now().time_since_epoch() ).count() );
+    }
+
+    void CAutoTimer::reset()
+    {
+        m_startAbsoluteTick = getAbsoluteTimeInMicroseconds();
+        m_currentRelativeTick = m_lastRelativeTick = 0;
     }
 
     bool CAutoTimer::tick() 
     {
+        uint64_t measure = getAbsoluteTimeInMicroseconds();
+
         if( !m_wasStarted )
         {
             LOG_CHANNEL( "AUTO_TIMER", "Warning! Trying to update a timer that wasn't started yet! ID: " << m_timerID );
             return false;
         }
 
-        uint32_t currentRelativeTick = SDL_GetTicks() - m_startTick;
-
-        if( currentRelativeTick > m_currentRelativeTick )
-        {
-            m_lastRelativeTick = m_currentRelativeTick;
-            m_currentRelativeTick = currentRelativeTick;
-            m_tickCount++;
-            return true;
-        }
-
-        return false;
+        m_lastRelativeTick = m_currentRelativeTick;
+        m_currentRelativeTick = measure - m_startAbsoluteTick;
+        return true;
     }
 
 } // namespace chestnut

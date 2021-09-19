@@ -1,12 +1,15 @@
 #include "timer.hpp"
 
-#include "../../debug/debug.hpp"
-
 namespace chestnut
 {
     ITimer::ITimer( timerid_t id )
     {
         m_timerID = id;
+
+        m_currentRelativeTick = 0;
+        m_lastRelativeTick = 0;
+
+        m_wasStarted = false;
     }
 
     timerid_t ITimer::getID()
@@ -16,41 +19,38 @@ namespace chestnut
 
     void ITimer::start() 
     {
-        if( !m_wasStarted )
-        {
-            reset( false );
-        }
         m_wasStarted = true;
+        reset();
     }
 
-    void ITimer::resetAndStart() 
-    {
-        reset( false );
-        start();
-    }
-
-    uint32_t ITimer::getCurrentTimeInMiliseconds() 
+    uint64_t ITimer::getElapsedTimeInMicroseconds() 
     {
         return m_currentRelativeTick;
     }
 
-    float ITimer::getCurrentTimeInSeconds() 
+    uint64_t ITimer::getElapsedTimeInMiliseconds() 
     {
-        return (float)m_currentRelativeTick / 1000.f;
+        return m_currentRelativeTick / 1000;
     }
 
-    uint32_t ITimer::getDeltaTime() 
+    double ITimer::getElapsedTimeInSeconds() 
     {
-        uint32_t dt = m_currentRelativeTick - m_lastRelativeTick;
-
-        return dt;
+        return static_cast<double>( m_currentRelativeTick ) / 1000000.0;
     }
 
-    float ITimer::getAvgUpdatesPerSec() 
+    float ITimer::getDeltaTime() 
     {
-        if( m_currentRelativeTick > 0 )
-            return (float)m_tickCount / (float)m_currentRelativeTick * 1000.f;
-        return 0;
+        return static_cast<float>( m_currentRelativeTick - m_lastRelativeTick ) / 1000000.f;
+    }
+
+    float ITimer::getUpdatesPerSec() 
+    {
+        if( m_currentRelativeTick > 0)
+        {
+            return 1000000.f / static_cast<float>( m_currentRelativeTick - m_lastRelativeTick );
+        }
+
+        return 0.f;
     }
 
 } // namespace chestnut
