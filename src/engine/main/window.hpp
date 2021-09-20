@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 
+#include <memory>
 #include <string>
 
 namespace chestnut
@@ -16,9 +17,18 @@ namespace chestnut
         int sdlGLContextVersionMinor;
         int sdlGLContextFlags;
         int sdlGLContextProfileMask;
+
+        SWindowProperties() = default;
+        SWindowProperties( int glVersionMajor, int glVersionMinor );
     };
 
-    SWindowProperties windowPropertiesDefault( int glVersionMajor, int glVersionMinor );
+
+    enum class EWindowDisplayMode
+    {
+        WINDOWED,
+        WINDOWED_BORDLERLESS,
+        FULLSCREEN
+    };
 
 
     class CWindow
@@ -28,19 +38,21 @@ namespace chestnut
         SDL_GLContext m_sdlGLContext;
 
     public:
-        CWindow();
+        CWindow( SDL_Window *window, SDL_GLContext context );
         ~CWindow();
-
-        bool create( const SWindowProperties& windowProperties, const std::string& title, int width, int height, int x = 0, int y = 0, bool useVsync = false );
-
-        void destroy();
 
         void setTitle( const std::string& title );
         std::string getTitle();
 
+        void setDisplayMode( EWindowDisplayMode displayMode );
+        EWindowDisplayMode getDisplayMode() const;
+
+        void setResizable( bool resizable );
+        bool isResizable() const;
+
         void setSize( int w, int h );
-        int getWidth();
-        int getHeight();
+        int getSizeWidth();
+        int getSizeHeight();
 
         void setPosition( int x, int y );
         int getPositionX();
@@ -51,6 +63,10 @@ namespace chestnut
         void clear();
         void flipBuffer();
     };
+
+    // -1 for x and/or y to position the window on the center of the screen
+    std::shared_ptr<CWindow> createWindow( const SWindowProperties& windowProperties, const std::string& title, int width = 800, int height = 600, int x = -1, int y = -1, bool useVsync = false );
+
 
 } // namespace chestnut
 

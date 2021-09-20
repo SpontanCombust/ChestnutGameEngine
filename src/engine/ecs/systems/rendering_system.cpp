@@ -8,7 +8,7 @@ namespace chestnut
     CRenderingSystem::CRenderingSystem( CEngine& engine ) : ISystem( engine )
     {
         CShaderProgram shader;
-        mat4f projection = matMakeOrthographic<float>( 0.f, getEngine().getWindow().getWidth(), getEngine().getWindow().getHeight(), 0.f, 1.f, -1.f );
+        mat4f projection = matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f );
 
         shader = CResourceManager::loadShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" );
         m_spriteRenderer.init( shader );
