@@ -21,6 +21,8 @@ namespace chestnut
 
         void registerListener( std::weak_ptr<IEventListener> listener );
 
+        void unregisterListener( std::weak_ptr<IEventListener> listener );
+
         template< typename EventType >
         void raiseEvent( const EventType& event );
     };
