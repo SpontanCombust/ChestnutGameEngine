@@ -2,6 +2,9 @@
 
 #include "../src/engine/ecs/event_manager.hpp"
 
+#include <string>
+
+
 using namespace chestnut;
 
 struct MyEvent
@@ -9,7 +12,7 @@ struct MyEvent
     int i;
 };
 
-TEST_CASE( "Event manager test" )
+TEST_CASE( "Event manager test - general" )
 {
     int n1;
     auto l1 = std::make_shared< CEventListener<MyEvent> >( 
@@ -87,5 +90,69 @@ TEST_CASE( "Event manager test" )
             REQUIRE( n1 == 1 );
             REQUIRE( n2 == 4 );
         }
+    }
+}
+
+
+TEST_CASE( "Event manager test - listener priority order" )
+{
+    CEventManager manager;
+
+    std::string s;
+
+    auto la = std::make_shared< CEventListener<MyEvent> >(
+        [&s]( const MyEvent& e )
+        {
+            s += 'a';  
+        }
+    );
+
+    auto lb = std::make_shared< CEventListener<MyEvent> >(
+        [&s]( const MyEvent& e )
+        {
+            s += 'b';
+        }
+    );
+
+    auto lc = std::make_shared< CEventListener<MyEvent> >(
+        [&s]( const MyEvent& e )
+        {
+            s += 'c';
+        }
+    );
+
+
+
+    SECTION( "a -> b -> c" )
+    {
+        manager.registerListener( la, 0 );
+        manager.registerListener( lb, 1 );
+        manager.registerListener( lc, 2 );
+
+        manager.raiseEvent( MyEvent() );
+
+        REQUIRE( s == "abc" );
+    }
+
+    SECTION( "c -> a -> b" )
+    {
+        manager.registerListener( la, 1 );
+        manager.registerListener( lb, 2 );
+        manager.registerListener( lc, 0 );
+
+        manager.raiseEvent( MyEvent() );
+
+        REQUIRE( s == "cab" ); 
+    }
+
+    SECTION( "b -> c -> a" )
+    {
+        manager.registerListener( la, 2 );
+        manager.registerListener( lb, 0 );
+        manager.registerListener( lc, 1 );
+
+        manager.raiseEvent( MyEvent() );
+
+        REQUIRE( s == "bca" );
     }
 }

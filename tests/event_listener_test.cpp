@@ -52,51 +52,51 @@ TEST_CASE( "Event listener test" )
         REQUIRE( l3.m_eventType == typeid(SNumSwitchEvent) );
     }
 
-    SECTION( "Pure function consumer" )
+    SECTION( "Pure function handler" )
     {
         CEventListener<SNumSwitchEvent> listener;
 
-        listener.setConsumer( pureFunc );
+        listener.setHandler( pureFunc );
 
         testNum = 0;
 
         SNumSwitchEvent e;
         e.val = 5;
-        listener.invokeConsumer(e);
+        listener.invokeHandler(e);
         e.val = 2;
-        listener.invokeConsumer(e);
+        listener.invokeHandler(e);
 
         REQUIRE( testNum == 7 );
     }
 
-    SECTION( "Member function consumer" )
+    SECTION( "Member function handler" )
     {
         CEventListener<SNumSwitchEvent> listener;
         Foo foo;
         
-        listener.setConsumer( &Foo::membFunc, &foo );
+        listener.setHandler( &Foo::membFunc, &foo );
 
         testNum = 0;
 
         SNumSwitchEvent e;
         e.val = 2;
-        listener.invokeConsumer(e);
+        listener.invokeHandler(e);
         
         REQUIRE( testNum == -2 );
     }
 
-    SECTION( "Lambda function consumer" )
+    SECTION( "Lambda function handler" )
     {
         CEventListener<SNumSwitchEvent> listener;
 
-        listener.setConsumer( lambdaFunc );
+        listener.setHandler( lambdaFunc );
 
         testNum = 0;
 
         SNumSwitchEvent e;
         testNum = 1;
         e.val = 10;
-        listener.invokeConsumer(e);
+        listener.invokeHandler(e);
 
         REQUIRE( testNum == 10 );
     }
@@ -128,18 +128,18 @@ TEST_CASE( "Event listener test" )
     {
         CEventListener<SNumSwitchEvent> listener;
 
-        listener.setConsumer( pureFunc );
+        listener.setHandler( pureFunc );
         listener.setFilter( filter );
 
         testNum = 0;
 
         SNumSwitchEvent e1{1}, e2{-2}, e3{3};
 
-        listener.invokeConsumerIfFilterAccepts(e1);
+        listener.invokeHandlerIfFilterAccepts(e1);
         REQUIRE( testNum == 1 );
-        listener.invokeConsumerIfFilterAccepts(e2);
+        listener.invokeHandlerIfFilterAccepts(e2);
         REQUIRE( testNum == 1 );
-        listener.invokeConsumerIfFilterAccepts(e3);
+        listener.invokeHandlerIfFilterAccepts(e3);
         REQUIRE( testNum == 4 );
     }
 }

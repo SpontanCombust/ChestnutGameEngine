@@ -7,7 +7,7 @@ namespace chestnut
 
         m_isEnabled = true;
 
-        m_consumer = []( const EventType& ) -> event_function
+        m_handler = []( const EventType& ) -> event_function
         {
             //NOP
         };
@@ -20,13 +20,13 @@ namespace chestnut
     }
 
     template<typename EventType>
-    CEventListener<EventType>::CEventListener( std::function< event_function( const EventType& ) > consumer ) 
+    CEventListener<EventType>::CEventListener( std::function< event_function( const EventType& ) > handler ) 
     {
         m_eventType = typeid(EventType);
 
         m_isEnabled = true;
 
-        m_consumer = consumer;
+        m_handler = handler;
 
         m_filter = []( const EventType& ) -> bool
         {
@@ -36,34 +36,28 @@ namespace chestnut
     }
 
     template<typename EventType>
-    CEventListener<EventType>::CEventListener( std::function< event_function( const EventType& ) > consumer, std::function< bool( const EventType& ) > filter ) 
+    CEventListener<EventType>::CEventListener( std::function< event_function( const EventType& ) > handler, std::function< bool( const EventType& ) > filter ) 
     {
         m_eventType = typeid(EventType);
 
         m_isEnabled = true;
         
-        m_consumer = consumer;
+        m_handler = handler;
 
         m_filter = filter;
     }
 
     template<typename EventType>
-    void CEventListener<EventType>::setConsumer( std::function< event_function( const EventType& ) > consumer ) 
+    void CEventListener<EventType>::setHandler( std::function< event_function( const EventType& ) > handler ) 
     {
-        m_consumer = consumer;
+        m_handler = handler;
     }
-
-    // template<typename EventType>
-    // void CEventListener<EventType>::setConsumer( event_function( *consumer )( const EventType& ) ) 
-    // {
-    //     m_consumer = std::bind( consumer, std::placeholders::_1 );
-    // }
 
     template<typename EventType>
     template<typename T>
-    void CEventListener<EventType>::setConsumer( event_function ( T::*consumer )( const EventType& ), T *obj ) 
+    void CEventListener<EventType>::setHandler( event_function ( T::*handler )( const EventType& ), T *obj ) 
     {
-        m_consumer = std::bind( consumer, obj, std::placeholders::_1 );
+        m_handler = std::bind( handler, obj, std::placeholders::_1 );
     }
 
     template<typename EventType>
@@ -73,9 +67,9 @@ namespace chestnut
     }
 
     template<typename EventType>
-    void CEventListener<EventType>::invokeConsumer( const EventType& event ) 
+    void CEventListener<EventType>::invokeHandler( const EventType& event ) 
     {
-        m_consumer( event );
+        m_handler( event );
     }
 
     template<typename EventType>
@@ -85,11 +79,11 @@ namespace chestnut
     }
 
     template<typename EventType>
-    void CEventListener<EventType>::invokeConsumerIfFilterAccepts( const EventType& event ) 
+    void CEventListener<EventType>::invokeHandlerIfFilterAccepts( const EventType& event ) 
     {
         if( m_filter( event ) )
         {
-            m_consumer( event );
+            m_handler( event );
         }
     }
 

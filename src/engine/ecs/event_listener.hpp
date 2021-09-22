@@ -16,7 +16,6 @@ namespace chestnut
 	protected:
 		bool m_isEnabled;
 
-
 	public:
 		void setEnabled( bool enable );
 		bool isEnabled() const;
@@ -28,30 +27,28 @@ namespace chestnut
     class CEventListener : public IEventListener
     { 
 	protected:
-		std::function< event_function ( const EventType& ) > m_consumer;
+		std::function< event_function ( const EventType& ) > m_handler;
 		std::function< bool ( const EventType& ) > m_filter;
 
     public:
 		CEventListener();
-		CEventListener( std::function< event_function( const EventType& ) > consumer );
-		CEventListener( std::function< event_function( const EventType& ) > consumer, std::function< bool( const EventType& ) > filter );
+		CEventListener( std::function< event_function( const EventType& ) > handler );
+		CEventListener( std::function< event_function( const EventType& ) > handler, std::function< bool( const EventType& ) > filter );
 
 
-		void setConsumer( std::function< event_function( const EventType& ) > consumer );
-
-		// void setConsumer( event_function ( *consumer )( const EventType& ) );
+		void setHandler( std::function< event_function( const EventType& ) > handler );
 
 		template< typename T >
-		void setConsumer( event_function ( T::*consumer )( const EventType& ), T *obj );
+		void setHandler( event_function ( T::*handler )( const EventType& ), T *obj );
 
 
 		void setFilter( std::function< bool ( const EventType& ) > filter );
 
-		void invokeConsumer( const EventType& event );
+		void invokeHandler( const EventType& event );
 
 		bool testFilter( const EventType& event );
 
-		void invokeConsumerIfFilterAccepts( const EventType& event );
+		void invokeHandlerIfFilterAccepts( const EventType& event );
     };
 
 } // namespace chestnut

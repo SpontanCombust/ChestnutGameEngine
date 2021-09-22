@@ -10,6 +10,8 @@ namespace chestnut
 
     typedef unsigned int timerid_t;
 
+    typedef unsigned short listenerpriority_t;
+
 } // namespace chestnut
 
 

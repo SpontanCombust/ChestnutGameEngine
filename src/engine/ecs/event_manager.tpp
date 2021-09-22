@@ -5,30 +5,27 @@ namespace chestnut
     {
         std::type_index type = typeid(EventType);
 
-        auto& vecListeners = m_mapEventTypeToVecListeners[ type ];
+        auto& listNodes = m_mapEventTypeToListListenerNodes[ type ];
 
-        if( !vecListeners.empty() )
+        if( !listNodes.empty() )
         {
             // iterate using iterator type so we can erase a listener if its pointer is exprired
-            for( auto weakIt = vecListeners.begin(); weakIt != vecListeners.end(); /*NOP*/ )
+            for( auto it = listNodes.begin(); it != listNodes.end(); /*NOP*/ )
             {
-                if( auto shared = weakIt->lock() )
+                if( auto itShared = it->weakPtr.lock() )
                 {
-                    if( shared->isEnabled() )
+                    if( itShared->isEnabled() )
                     {
-                        CEventListener<EventType> *listenerCasted = static_cast< CEventListener<EventType> * >( shared.get() );
+                        CEventListener<EventType> *listenerCasted = static_cast< CEventListener<EventType> * >( itShared.get() );
 
-                        if( listenerCasted->testFilter( event ) )
-                        {
-                            listenerCasted->invokeConsumer( event );
-                        }
+                        listenerCasted->invokeHandlerIfFilterAccepts( event );
                     }
 
-                    weakIt++;
+                    it++;
                 }
                 else
                 {
-                    weakIt = vecListeners.erase( weakIt );
+                    it = listNodes.erase( it );
                 }
             }
         }
