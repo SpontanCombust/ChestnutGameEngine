@@ -32,6 +32,7 @@ namespace chestnut
         T get( size_t row, size_t column ) const;
         void set( size_t row, size_t column, T val );
         T& operator()( size_t row, size_t column );
+        T operator()( size_t row, size_t column ) const;
     };
 
 

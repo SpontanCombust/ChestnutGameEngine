@@ -1,6 +1,5 @@
 #include "../misc/exception.hpp"
 
-#include <cstring>
 #include <sstream>
 
 namespace chestnut
@@ -69,6 +68,18 @@ namespace chestnut
 
         return elements[ column * n + row ];
     }
+
+    template<typename T, size_t n>
+    T Matrix<T, n>::operator()(size_t row, size_t column) const
+    {
+        if( row >= n || column >= n )
+        {
+            throw ChestnutException( "Matrix index out of bounds!" );
+        }
+
+        return elements[ column * n + row ];
+    }
+
     
 
     
@@ -91,7 +102,7 @@ namespace chestnut
         {
             for (size_t j = 0; j < n; j++)
             {
-                tm( i, j ) = m.get( j, i );
+                tm( i, j ) = m( j, i );
             }
         }
         
@@ -105,12 +116,9 @@ namespace chestnut
     {
         Matrix<T,n> nm;
 
-        for (size_t i = 0; i < n; i++)
+        for (size_t i = 0; i < n * n; i++)
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                nm( i, j ) = -m.get( i, j );
-            }
+            nm.elements[i] = -m.elements[i];
         }
         
         return nm;
@@ -129,12 +137,9 @@ namespace chestnut
     {
         Matrix<T,n> sm;
 
-        for (size_t i = 0; i < n; i++)
+        for (size_t i = 0; i < n * n; i++)
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                sm( i, j ) = m1.get( i, j ) + m2.get( i, j );
-            }
+            sm.elements[i] = m1.elements[i] + m2.elements[i];
         }
 
         return sm;        
@@ -153,12 +158,9 @@ namespace chestnut
     {
         Matrix<T,n> dm;
 
-        for (size_t i = 0; i < n; i++)
+        for (size_t i = 0; i < n * n; i++)
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                dm( i, j ) = m1.get( i, j ) - m2.get( i, j );
-            }
+            dm.elements[i] = m1.elements[i] - m2.elements[i];
         }
 
         return dm;
@@ -183,7 +185,7 @@ namespace chestnut
             {
                 for (size_t k = 0; k < n; k++)
                 {
-                    pm( i, j ) += m1.get( i, k ) * m2.get( k, j );
+                    pm( i, j ) += m1( i, k ) * m2( k, j );
                 }
             }
         }
@@ -202,17 +204,14 @@ namespace chestnut
     template< typename T, size_t n >
     Matrix<T,n> matScalarProduct( const Matrix<T,n>& m, T s )
     {
-        Matrix<T,n> sm;
+        Matrix<T,n> pm;
 
-        for (size_t i = 0; i < n; i++)
+        for (size_t i = 0; i < n * n; i++)
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                sm( i, j ) = m.get( i, j ) * s;
-            }
+            pm.elements[i] = m.elements[i] * s;
         }
 
-        return sm;        
+        return pm;        
     }
 
     template< typename T, size_t n >
@@ -240,7 +239,7 @@ namespace chestnut
             ss << m.get(i,0);
             for (size_t j = 1; j < n; j++)
             {
-                ss << ",\t" << m.get(i,j);
+                ss << ",\t" << m(i,j);
             }
             ss << " ]\n";
         }

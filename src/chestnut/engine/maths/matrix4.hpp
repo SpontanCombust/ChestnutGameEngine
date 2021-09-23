@@ -20,6 +20,9 @@ namespace chestnut
     template< typename T >
     Matrix<T,4> matMakePerspective( T fovy, T aspect, T near, T far );
 
+    template< typename T >
+    Matrix<T,4> matMakeLookAt( const Vector<T,3>& camera, const Vector<T,3>& target, const Vector<T,3>& up = { 0.0, 1.0, 0.0 } );
+
 
     template< typename T >
     Matrix<T,4> matMakeTranslation( T tx, T ty, T tz );

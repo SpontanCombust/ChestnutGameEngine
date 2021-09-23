@@ -5,6 +5,7 @@
 #include "matrix.hpp"
 #include "vector2.hpp"
 #include "vector3.hpp"
+#include "vector4.hpp"
 
 namespace chestnut
 {
@@ -19,10 +20,6 @@ namespace chestnut
      */
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
     Vector<T,vn> vecLeftMultiplyByMatrix( const Matrix<T,mn>& m, const Vector<T,vn>& v );
-
-    // specialization of above function for same size matrix and vector
-    template< typename T, size_t n >
-    Vector<T,n> vecLeftMultiplyByMatrix( const Matrix<T,n>& m, const Vector<T,n>& v );
 
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
     Vector<T,vn> operator*( const Matrix<T,mn>& m, const Vector<T,vn>& v );

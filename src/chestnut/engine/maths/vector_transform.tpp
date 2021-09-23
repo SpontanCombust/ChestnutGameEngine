@@ -8,40 +8,38 @@ namespace chestnut
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
     Vector<T,vn> vecLeftMultiplyByMatrix( const Matrix<T,mn>& m, const Vector<T,vn>& v )
     {
-        Vector<T,mn> cast = vecCastSize<mn>(v);
         Vector<T,mn> res;
-
-        T *datCast = cast.data();
         T *datRes = res.data();
 
-        for (size_t i = 0; i < mn; i++)
+        if constexpr( mn == vn )
         {
-            for (size_t j = 0; j < mn; j++)
+            const T *dat = v.data();
+
+            for (size_t i = 0; i < mn; i++)
             {
-                datRes[i] += m.get(i,j) * datCast[j];
+                for (size_t j = 0; j < mn; j++)
+                {
+                    datRes[i] += m(i,j) * dat[j];
+                }
             }
+
+            return res;
         }
-
-        return vecCastSize<vn>(res);
-    }
-
-    template< typename T, size_t n >
-    Vector<T,n> vecLeftMultiplyByMatrix( const Matrix<T,n>& m, const Vector<T,n>& v )
-    {
-        Vector<T,n> res;
-
-        const T *dat = v.data();
-        T *datRes = res.data();
-
-        for (size_t i = 0; i < n; i++)
+        else
         {
-            for (size_t j = 0; j < n; j++)
-            {
-                datRes[i] += m.get(i,j) * dat[j];
-            }
-        }
+            Vector<T,mn> cast = vecCastSize<mn>(v);
+            T *datCast = cast.data();
 
-        return res;
+            for (size_t i = 0; i < mn; i++)
+            {
+                for (size_t j = 0; j < mn; j++)
+                {
+                    datRes[i] += m(i,j) * datCast[j];
+                }
+            }
+
+            return vecCastSize<vn>(res);
+        }
     }
 
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
