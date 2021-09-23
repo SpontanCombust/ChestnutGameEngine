@@ -4,6 +4,8 @@
 #include "../system.hpp"
 #include "../components/timer_component.hpp"
 
+#include <chestnut/ecs/entity_query.hpp>
+
 namespace chestnut
 {
     class CTimerSystem : public ISystem

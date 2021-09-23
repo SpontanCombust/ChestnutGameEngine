@@ -1,16 +1,18 @@
-#ifndef __CHESTNUT_RENDERING_SYSTEM_H__
-#define __CHESTNUT_RENDERING_SYSTEM_H__
+#ifndef __CHESTNUT_CRENDERING_SYSTEM_H__
+#define __CHESTNUT_CRENDERING_SYSTEM_H__
 
-#include "../system.hpp"
+#include "../rendering_system.hpp"
 #include "../components/transform_component.hpp"
 #include "../components/texture_component.hpp"
 #include "../components/polygon_canvas_component.hpp"
 #include "../../graphics/sprite_renderer.hpp"
 #include "../../graphics/colored_polygon2d_renderer.hpp"
 
+#include <chestnut/ecs/entity_query.hpp>
+
 namespace chestnut
 {
-    class CRenderingSystem : public ISystem
+    class CRenderingSystem : public IRenderingSystem
     {
     private:
         ecs::SEntityQuery m_textureQuery;
@@ -24,7 +26,7 @@ namespace chestnut
 
         void update( float deltaTime ) override;
 
-        void render();
+        void render() override;
 
     private:
         void renderTextures();

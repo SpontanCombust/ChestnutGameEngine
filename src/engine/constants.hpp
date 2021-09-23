@@ -15,6 +15,14 @@ namespace chestnut
 
     const listenerpriority_t LISTENER_PRIORITY_ANY = LISTENER_PRIORITY_LOWEST;
 
+    const systempriority_t SYSTEM_PRIORITY_HIGHEST = 0;
+
+    const systempriority_t SYSTEM_PRIORITY_LOWEST = std::numeric_limits<systempriority_t>::max();
+
+    const systempriority_t SYSTEM_PRIORITY_ANY = SYSTEM_PRIORITY_LOWEST;
+
+    const systempriority_t SYSTEM_PRIORITY_INVALID = -1;
+
 } // namespace chestnut
 
 

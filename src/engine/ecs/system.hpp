@@ -1,14 +1,9 @@
 #ifndef __CHESTNUT_SYSTEM_H__
 #define __CHESTNUT_SYSTEM_H__
 
-#include "../main/engine.hpp"
-
-#include <cstdint>
-
 namespace chestnut
 {
-    // forward declare
-    class CEngine;
+    class CEngine; // forward declaration
     
     class ISystem
     {

@@ -1,11 +1,12 @@
 #include "rendering_system.hpp"
 
+#include "../../main/engine.hpp"
 #include "../../resources/resource_manager.hpp"
 #include "../../maths/matrix4.hpp"
 
 namespace chestnut
 {
-    CRenderingSystem::CRenderingSystem( CEngine& engine ) : ISystem( engine )
+    CRenderingSystem::CRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
     {
         CShaderProgram shader;
         mat4f projection = matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f );

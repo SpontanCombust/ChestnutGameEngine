@@ -1,5 +1,6 @@
 #include "sdl_event_dispatch_system.hpp"
 
+#include "../../main/engine.hpp"
 #include "../events/keyboard_event.hpp"
 #include "../events/mouse_button_event.hpp"
 #include "../events/mouse_wheel_event.hpp"

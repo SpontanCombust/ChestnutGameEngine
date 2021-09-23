@@ -1,8 +1,10 @@
 #include "kinematics_system.hpp"
 
+#include "../../main/engine.hpp"
+
 namespace chestnut
 {
-    CKinematicsSystem::CKinematicsSystem(CEngine& engine ) 
+    CKinematicsSystem::CKinematicsSystem( CEngine& engine ) 
     : ISystem( engine ) 
     {
         m_transformKinematicQuery.entitySignCond = []( const ecs::CEntitySignature& sign )

@@ -12,6 +12,8 @@ namespace chestnut
 
     typedef unsigned short listenerpriority_t;
 
+    typedef signed short systempriority_t;
+
 } // namespace chestnut
 
 

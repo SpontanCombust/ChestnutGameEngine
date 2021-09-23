@@ -1,5 +1,6 @@
 #include "timer_system.hpp"
 
+#include "../../main/engine.hpp"
 #include "../events/timer_event.hpp"
 
 namespace chestnut

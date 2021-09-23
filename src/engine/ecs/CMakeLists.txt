@@ -10,5 +10,6 @@ target_sources(${PROJECT_NAME} PRIVATE
 
     ${CMAKE_CURRENT_SOURCE_DIR}/event_listener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/event_manager.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/rendering_system.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/system.cpp
 )
