@@ -1,9 +1,9 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/misc/timers/auto_timer.hpp"
-#include "../src/engine/misc/timers/locked_auto_timer.hpp"
-#include "../src/engine/misc/timers/manual_timer.hpp"
-#include "../src/engine/misc/timers/locked_manual_timer.hpp"
+#include "../src/chestnut/engine/misc/auto_timer.hpp"
+#include "../src/chestnut/engine/misc/locked_auto_timer.hpp"
+#include "../src/chestnut/engine/misc/manual_timer.hpp"
+#include "../src/chestnut/engine/misc/locked_manual_timer.hpp"
 
 #include <chrono>
 #include <thread>

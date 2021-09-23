@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/ecs/event_manager.hpp"
+#include "../src/chestnut/engine/ecs_impl/event_manager.hpp"
 
 #include <string>
 

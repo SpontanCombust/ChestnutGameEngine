@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/maths/vector4.hpp"
+#include "../src/chestnut/engine/maths/vector4.hpp"
 
 #include <cmath>
 

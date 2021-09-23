@@ -1,8 +1,8 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/maths/vector_cast.hpp"
-#include "../src/engine/maths/vector2.hpp"
-#include "../src/engine/maths/vector3.hpp"
+#include "../src/chestnut/engine/maths/vector_cast.hpp"
+#include "../src/chestnut/engine/maths/vector2.hpp"
+#include "../src/chestnut/engine/maths/vector3.hpp"
 
 
 using namespace chestnut;

@@ -1,0 +1,7 @@
+add_subdirectory(ecs_impl)
+add_subdirectory(graphics)
+add_subdirectory(main)
+add_subdirectory(maths)
+add_subdirectory(memory)
+add_subdirectory(misc)
+add_subdirectory(resources)

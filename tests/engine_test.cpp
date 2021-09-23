@@ -1,7 +1,7 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/ecs/system.hpp"
-#include "../src/engine/main/engine.hpp"
+#include "../src/chestnut/engine/ecs_impl/system.hpp"
+#include "../src/chestnut/engine/main/engine.hpp"
 
 #include <string>
 

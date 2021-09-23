@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/maths/vector.hpp"
+#include "../src/chestnut/engine/maths/vector.hpp"
 
 #include <cmath>
 

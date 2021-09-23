@@ -27,7 +27,7 @@ find_package(GLEW REQUIRED)
 
 add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
-add_subdirectory(src)
+add_subdirectory(src/chestnut/engine)
 
 target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
 

@@ -1,6 +1,6 @@
 #include <catch2/catch.hpp>
 
-#include "../src/engine/main/window.hpp"
+#include "../src/chestnut/engine/main/window.hpp"
 
 #include <SDL2/SDL_video.h>
 
