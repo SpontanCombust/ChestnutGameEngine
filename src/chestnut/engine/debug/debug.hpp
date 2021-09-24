@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_DEBUG_H__
-#define __CHESTNUT_DEBUG_H__
+#ifndef __CHESTNUT_ENGINE_DEBUG_H__
+#define __CHESTNUT_ENGINE_DEBUG_H__
 
 #include <cassert>
 #include <iostream>
@@ -14,4 +14,4 @@
     #define LOG_ASSERT( s, expr )
 #endif
 
-#endif // __CHESTNUT_DEBUG_H__
+#endif // __CHESTNUT_ENGINE_DEBUG_H__

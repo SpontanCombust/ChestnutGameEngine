@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_H__
-#define __CHESTNUT_ENGINE_H__
+#ifndef __CHESTNUT_ENGINE_ENGINE_H__
+#define __CHESTNUT_ENGINE_ENGINE_H__
 
 #include "window.hpp"
 #include "../types.hpp"
@@ -114,4 +114,4 @@ namespace chestnut
 #include "engine.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_H__
+#endif // __CHESTNUT_ENGINE_ENGINE_H__

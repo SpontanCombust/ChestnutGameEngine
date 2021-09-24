@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_FONT_RESOURCE_H__
-#define __CHESTNUT_FONT_RESOURCE_H__
+#ifndef __CHESTNUT_ENGINE_FONT_RESOURCE_H__
+#define __CHESTNUT_ENGINE_FONT_RESOURCE_H__
 
 #include "resource.hpp"
 #include "../graphics/map_sprite_sheet.hpp"
@@ -79,4 +79,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_FONT_RESOURCE_H__
+#endif // __CHESTNUT_ENGINE_FONT_RESOURCE_H__

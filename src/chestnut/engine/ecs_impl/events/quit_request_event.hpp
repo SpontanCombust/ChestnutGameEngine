@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_QUIT_REQUEST_EVENT_H__
-#define __CHESTNUT_QUIT_REQUEST_EVENT_H__
+#ifndef __CHESTNUT_ENGINE_QUIT_REQUEST_EVENT_H__
+#define __CHESTNUT_ENGINE_QUIT_REQUEST_EVENT_H__
 
 #include "../event.hpp"
 
@@ -13,4 +13,4 @@ namespace chestnut
 } // namespace chestnut
 
 
-#endif // __CHESTNUT_QUIT_REQUEST_EVENT_H__
+#endif // __CHESTNUT_ENGINE_QUIT_REQUEST_EVENT_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_MAP_SPRITE_SHEET_H__
-#define __CHESTNUT_MAP_SPRITE_SHEET_H__
+#ifndef __CHESTNUT_ENGINE_MAP_SPRITE_SHEET_H__
+#define __CHESTNUT_ENGINE_MAP_SPRITE_SHEET_H__
 
 #include "texture2d.hpp"
 
@@ -50,4 +50,4 @@ namespace chestnut
 #include "map_sprite_sheet.tpp"
 
 
-#endif // __CHESTNUT_MAP_SPRITE_SHEET_H__
+#endif // __CHESTNUT_ENGINE_MAP_SPRITE_SHEET_H__

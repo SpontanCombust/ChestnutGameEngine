@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_COLORED_POLYGON_RENDERER_H__
-#define __CHESTNUT_COLORED_POLYGON_RENDERER_H__
+#ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
+#define __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
 
 #include "renderer.hpp"
 #include "../maths/vector2.hpp"
@@ -87,4 +87,4 @@ namespace chestnut
 } // namespace chestnut
 
 
-#endif // __CHESTNUT_COLORED_POLYGON_RENDERER_H__
+#endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__

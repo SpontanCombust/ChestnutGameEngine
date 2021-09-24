@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_COLORED_POLYGON2D_H__
-#define __CHESTNUT_COLORED_POLYGON2D_H__
+#ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
+#define __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
 
 #include "../maths/vector2.hpp"
 #include "../maths/vector4.hpp"
@@ -38,4 +38,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_COLORED_POLYGON2D_H__
+#endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__

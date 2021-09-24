@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_POLYGON2D_CANVAS_COMPONENT_H__
-#define __CHESTNUT_POLYGON2D_CANVAS_COMPONENT_H__
+#ifndef __CHESTNUT_ENGINE_POLYGON2D_CANVAS_COMPONENT_H__
+#define __CHESTNUT_ENGINE_POLYGON2D_CANVAS_COMPONENT_H__
 
 #include "../../graphics/colored_polygon2d.hpp"
 
@@ -18,4 +18,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_POLYGON2D_CANVAS_COMPONENT_H__
+#endif // __CHESTNUT_ENGINE_POLYGON2D_CANVAS_COMPONENT_H__

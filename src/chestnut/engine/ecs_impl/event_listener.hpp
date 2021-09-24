@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_EVENT_LISTENER_H__
-#define __CHESTNUT_EVENT_LISTENER_H__
+#ifndef __CHESTNUT_ENGINE_EVENT_LISTENER_H__
+#define __CHESTNUT_ENGINE_EVENT_LISTENER_H__
 
 #include "../types.hpp"
 
@@ -57,4 +57,4 @@ namespace chestnut
 #include "event_listener.tpp"
 
 
-#endif // __CHESTNUT_EVENT_LISTENER_H__
+#endif // __CHESTNUT_ENGINE_EVENT_LISTENER_H__

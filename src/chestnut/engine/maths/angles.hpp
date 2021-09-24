@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ANGLES_H__
-#define __CHESTNUT_ANGLES_H__
+#ifndef __CHESTNUT_ENGINE_ANGLES_H__
+#define __CHESTNUT_ENGINE_ANGLES_H__
 
 #include "vector2.hpp"
 #include "../constants.hpp"
@@ -40,4 +40,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_ANGLES_H__
+#endif // __CHESTNUT_ENGINE_ANGLES_H__

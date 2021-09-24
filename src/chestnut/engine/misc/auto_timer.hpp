@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_AUTO_TIMER_H__
-#define __CHESTNUT_AUTO_TIMER_H__
+#ifndef __CHESTNUT_ENGINE_AUTO_TIMER_H__
+#define __CHESTNUT_ENGINE_AUTO_TIMER_H__
 
 #include "timer.hpp"
 #include "../types.hpp"
@@ -35,4 +35,4 @@ namespace chestnut
     
 } // namespace chestnut
 
-#endif // __CHESTNUT_AUTO_TIMER_H__
+#endif // __CHESTNUT_ENGINE_AUTO_TIMER_H__

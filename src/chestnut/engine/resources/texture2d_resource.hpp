@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_TEXTURE2D_RESOURCE_H__
-#define __CHESTNUT_TEXTURE2D_RESOURCE_H__
+#ifndef __CHESTNUT_ENGINE_TEXTURE2D_RESOURCE_H__
+#define __CHESTNUT_ENGINE_TEXTURE2D_RESOURCE_H__
 
 #include "resource.hpp"
 
@@ -39,4 +39,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_TEXTURE2D_RESOURCE_H__
+#endif // __CHESTNUT_ENGINE_TEXTURE2D_RESOURCE_H__

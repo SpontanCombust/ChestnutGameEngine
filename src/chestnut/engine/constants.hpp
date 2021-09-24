@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_CONSTANTS_H__
-#define __CHESTNUT_CONSTANTS_H__
+#ifndef __CHESTNUT_ENGINE_CONSTANTS_H__
+#define __CHESTNUT_ENGINE_CONSTANTS_H__
 
 #include "types.hpp"
 
@@ -25,5 +25,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-
-#endif // __CHESTNUT_CONSTANTS_H__
+#endif // __CHESTNUT_ENGINE_CONSTANTS_H__

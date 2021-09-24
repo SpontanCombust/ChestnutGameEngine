@@ -4,6 +4,6 @@
     "files.associations": {
         "*.tpp" : "cpp"
     },
-    "CppHelper.HeaderGuardPattern": "__CHESTNUT_{FILE}_H__",
+    "CppHelper.HeaderGuardPattern": "__CHESTNUT_ENGINE_{FILE}_H__",
     "discord.enabled": false
 }

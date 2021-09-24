@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_TIMER_H__
-#define __CHESTNUT_TIMER_H__
+#ifndef __CHESTNUT_ENGINE_TIMER_H__
+#define __CHESTNUT_ENGINE_TIMER_H__
 
 #include "../types.hpp"
 
@@ -51,4 +51,4 @@ namespace chestnut
     
 } // namespace chestnut
 
-#endif // __CHESTNUT_TIMER_H__
+#endif // __CHESTNUT_ENGINE_TIMER_H__

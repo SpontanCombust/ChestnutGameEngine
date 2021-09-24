@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_SPRITE_RENDERER_H__
-#define __CHESTNUT_SPRITE_RENDERER_H__
+#ifndef __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
+#define __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 
 #include "renderer.hpp"
 #include "texture2d.hpp"
@@ -119,4 +119,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_SPRITE_RENDERER_H__
+#endif // __CHESTNUT_ENGINE_SPRITE_RENDERER_H__

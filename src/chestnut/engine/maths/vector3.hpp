@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_VECTOR3_H__
-#define __CHESTNUT_VECTOR3_H__
+#ifndef __CHESTNUT_ENGINE_VECTOR3_H__
+#define __CHESTNUT_ENGINE_VECTOR3_H__
 
 #include "vector.hpp"
 #include "vector2.hpp"
@@ -42,4 +42,4 @@ namespace chestnut
 #include "vector3.tpp"
 
 
-#endif // __CHESTNUT_VECTOR3_H__
+#endif // __CHESTNUT_ENGINE_VECTOR3_H__

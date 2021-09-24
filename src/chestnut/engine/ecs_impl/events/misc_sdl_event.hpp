@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_MISC_SDL_EVENT_H__
-#define __CHESTNUT_MISC_SDL_EVENT_H__
+#ifndef __CHESTNUT_ENGINE_MISC_SDL_EVENT_H__
+#define __CHESTNUT_ENGINE_MISC_SDL_EVENT_H__
 
 #include "../event.hpp"
 
@@ -15,4 +15,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_MISC_SDL_EVENT_H__
+#endif // __CHESTNUT_ENGINE_MISC_SDL_EVENT_H__

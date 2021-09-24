@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_EVENT_MANAGER_H__
-#define __CHESTNUT_EVENT_MANAGER_H__
+#ifndef __CHESTNUT_ENGINE_EVENT_MANAGER_H__
+#define __CHESTNUT_ENGINE_EVENT_MANAGER_H__
 
 #include "../types.hpp"
 #include "../constants.hpp"
@@ -41,4 +41,4 @@ namespace chestnut
 #include "event_manager.tpp"
 
 
-#endif // __CHESTNUT_EVENT_MANAGER_H__
+#endif // __CHESTNUT_ENGINE_EVENT_MANAGER_H__

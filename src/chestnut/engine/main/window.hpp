@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_WINDOW_H__
-#define __CHESTNUT_WINDOW_H__
+#ifndef __CHESTNUT_ENGINE_WINDOW_H__
+#define __CHESTNUT_ENGINE_WINDOW_H__
 
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
@@ -70,4 +70,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_WINDOW_H__
+#endif // __CHESTNUT_ENGINE_WINDOW_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_RESOURCE_MANAGER_H__
-#define __CHESTNUT_RESOURCE_MANAGER_H__
+#ifndef __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
+#define __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
 
 #include "resource.hpp"
 #include "texture2d_resource.hpp"
@@ -48,4 +48,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_RESOURCE_MANAGER_H__
+#endif // __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__

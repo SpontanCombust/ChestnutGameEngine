@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_H__
-#define __CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_H__
+#ifndef __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
+#define __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
 
 #include "../rendering_system.hpp"
 #include "../../graphics/sprite_renderer.hpp"
@@ -32,4 +32,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_H__
+#endif // __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__

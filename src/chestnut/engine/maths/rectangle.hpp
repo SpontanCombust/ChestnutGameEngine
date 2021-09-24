@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_RECTANGLE_H__
-#define __CHESTNUT_RECTANGLE_H__
+#ifndef __CHESTNUT_ENGINE_RECTANGLE_H__
+#define __CHESTNUT_ENGINE_RECTANGLE_H__
 
 namespace chestnut
 {
@@ -13,4 +13,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_RECTANGLE_H__
+#endif // __CHESTNUT_ENGINE_RECTANGLE_H__

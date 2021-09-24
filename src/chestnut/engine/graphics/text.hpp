@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_TEXT_H__
-#define __CHESTNUT_TEXT_H__
+#ifndef __CHESTNUT_ENGINE_TEXT_H__
+#define __CHESTNUT_ENGINE_TEXT_H__
 
 #include "../maths/vector2.hpp"
 #include "../maths/vector4.hpp"
@@ -117,4 +117,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_TEXT_H__
+#endif // __CHESTNUT_ENGINE_TEXT_H__

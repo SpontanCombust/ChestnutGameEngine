@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_KINEMATICS2D_COMPONENT_H__
-#define __CHESTNUT_KINEMATICS2D_COMPONENT_H__
+#ifndef __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__
+#define __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__
 
 #include "../../maths/vector2.hpp"
 
@@ -19,4 +19,4 @@ namespace chestnut
 
 } // namespace chestnut 
 
-#endif // __CHESTNUT_KINEMATICS2D_COMPONENT_H__
+#endif // __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__

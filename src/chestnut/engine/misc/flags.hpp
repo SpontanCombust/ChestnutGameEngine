@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_FLAGS_H__
-#define __CHESTNUT_FLAGS_H__
+#ifndef __CHESTNUT_ENGINE_FLAGS_H__
+#define __CHESTNUT_ENGINE_FLAGS_H__
 
 #define DECLARE_ENUM_FLAG_OPERATORS(T) \
     T operator|( const T& lhs, const T& rhs ); \
@@ -46,4 +46,4 @@
         return static_cast<T>( ~ static_cast<int>(rhs) ); \
     }
 
-#endif // __CHESTNUT_FLAGS_H__
+#endif // __CHESTNUT_ENGINE_FLAGS_H__

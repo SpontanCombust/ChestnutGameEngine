@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_TEXTURE2D_H__
-#define __CHESTNUT_TEXTURE2D_H__
+#ifndef __CHESTNUT_ENGINE_TEXTURE2D_H__
+#define __CHESTNUT_ENGINE_TEXTURE2D_H__
 
 #include "../resources/texture2d_resource.hpp"
 #include "../maths/rectangle.hpp"
@@ -53,4 +53,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_TEXTURE2D_H__
+#endif // __CHESTNUT_ENGINE_TEXTURE2D_H__

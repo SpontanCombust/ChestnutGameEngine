@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_EXCEPTION_H__
-#define __CHESTNUT_EXCEPTION_H__
+#ifndef __CHESTNUT_ENGINE_EXCEPTION_H__
+#define __CHESTNUT_ENGINE_EXCEPTION_H__
 
 #include <exception>
 #include <string>
@@ -22,5 +22,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-
-#endif // __CHESTNUT_EXCEPTION_H__
+#endif // __CHESTNUT_ENGINE_EXCEPTION_H__

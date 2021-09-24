@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_MOUSE_WHEEL_EVENY_H__
-#define __CHESTNUT_MOUSE_WHEEL_EVENY_H__
+#ifndef __CHESTNUT_ENGINE_MOUSE_WHEEL_EVENT_H__
+#define __CHESTNUT_ENGINE_MOUSE_WHEEL_EVENT_H__
 
 #include "../event.hpp"
 #include "../../maths/vector2.hpp"
@@ -13,4 +13,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_MOUSE_WHEEL_EVENY_H__
+#endif // __CHESTNUT_ENGINE_MOUSE_WHEEL_EVENT_H__

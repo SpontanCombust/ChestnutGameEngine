@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_MATRIX4_H__
-#define __CHESTNUT_MATRIX4_H__
+#ifndef __CHESTNUT_ENGINE_MATRIX4_H__
+#define __CHESTNUT_ENGINE_MATRIX4_H__
 
 #include "matrix.hpp"
 #include "vector3.hpp"
@@ -50,4 +50,4 @@ namespace chestnut
 #include "matrix4.tpp"
 
 
-#endif // __CHESTNUT_MATRIX4_H__
+#endif // __CHESTNUT_ENGINE_MATRIX4_H__

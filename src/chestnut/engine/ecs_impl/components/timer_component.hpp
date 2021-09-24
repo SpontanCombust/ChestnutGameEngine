@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_TIMER_COMPONENT_H__
-#define __CHESTNUT_TIMER_COMPONENT_H__
+#ifndef __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
+#define __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
 
 #include "../../misc/locked_manual_timer.hpp"
 
@@ -25,4 +25,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_TIMER_COMPONENT_H__
+#endif // __CHESTNUT_ENGINE_TIMER_COMPONENT_H__

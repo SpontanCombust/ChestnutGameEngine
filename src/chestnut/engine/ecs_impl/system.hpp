@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_SYSTEM_H__
-#define __CHESTNUT_SYSTEM_H__
+#ifndef __CHESTNUT_ENGINE_SYSTEM_H__
+#define __CHESTNUT_ENGINE_SYSTEM_H__
 
 namespace chestnut
 {
@@ -22,4 +22,4 @@ namespace chestnut
     
 } // namespace chestnut
 
-#endif // __CHESTNUT_SYSTEM_H__
+#endif // __CHESTNUT_ENGINE_SYSTEM_H__

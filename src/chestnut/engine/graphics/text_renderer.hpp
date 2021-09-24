@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_TEXT_RENDERER_H__
-#define __CHESTNUT_TEXT_RENDERER_H__
+#ifndef __CHESTNUT_ENGINE_TEXT_RENDERER_H__
+#define __CHESTNUT_ENGINE_TEXT_RENDERER_H__
 
 #include "renderer.hpp"
 #include "text.hpp"
@@ -107,4 +107,4 @@ namespace chestnut
     
 } // namespace chestnut
 
-#endif // __CHESTNUT_TEXT_RENDERER_H__
+#endif // __CHESTNUT_ENGINE_TEXT_RENDERER_H__

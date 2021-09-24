@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_SHADER_PROGRAM_RESOURCE_H__
-#define __CHESTNUT_SHADER_PROGRAM_RESOURCE_H__
+#ifndef __CHESTNUT_ENGINE_SHADER_PROGRAM_RESOURCE_H__
+#define __CHESTNUT_ENGINE_SHADER_PROGRAM_RESOURCE_H__
 
 #include "resource.hpp"
 
@@ -45,4 +45,4 @@ namespace chestnut
 
 } // namespace chestnut
 
-#endif // __CHESTNUT_SHADER_PROGRAM_RESOURCE_H__
+#endif // __CHESTNUT_ENGINE_SHADER_PROGRAM_RESOURCE_H__
