@@ -1,94 +1,76 @@
 #include "window.hpp"
 
 #include "../debug/debug.hpp"
+#include "../init.hpp"
 
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
-
-#include <cassert>
+#include <SDL2/SDL.h>
+#include <GL/glew.h>
+#include <SDL2/SDL_opengl.h>
 
 namespace chestnut
 {
-    SWindowProperties::SWindowProperties( int glVersionMajor, int glVersionMinor ) 
+    namespace internal
     {
-        sdlWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
-#ifdef CHESTNUT_DEBUG
-        sdlGLContextFlags = SDL_GL_CONTEXT_DEBUG_FLAG;
-        sdlGLContextProfileMask = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
-#else
-        sdlGLContextFlags = 0;
-        sdlGLContextProfileMask = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
-#endif
-        sdlGLContextVersionMajor = glVersionMajor;
-        sdlGLContextVersionMinor = glVersionMinor;
-    }
+        struct SLibraryWindowHandle
+        {
+            SDL_Window *sdlWindow;
+            SDL_GLContext sdlGLContext;
+
+            SLibraryWindowHandle( SDL_Window *window, SDL_GLContext context )
+            {
+                sdlWindow = window;
+                sdlGLContext = context;
+            }
+
+            ~SLibraryWindowHandle()
+            {
+                SDL_DestroyWindow( sdlWindow );
+                SDL_GL_DeleteContext( sdlGLContext );
+            }
+        };
+
+    } // namespace internal
 
 
 
-    std::shared_ptr<CWindow> createWindow( const SWindowProperties& windowProperties, const std::string& title, int width, int height, int x, int y, bool useVsync ) 
+
+
+    std::shared_ptr<CWindow> createWindow( const std::string& title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
         // if any error happens we'll just return default smart pointer with null inside 
         std::shared_ptr<CWindow> ptr;
 
-
-        // ========= Init SDL2 ========= //
-
-        int flags;
-
-        flags = SDL_INIT_EVERYTHING;
-        if( SDL_Init( flags ) < 0 )
+        if( !chestnutWasInit() )
         {
-            LOG_CHANNEL( "WINDOW", "SDL failed to initialize!" );
-            LOG_CHANNEL( "WINDOW", SDL_GetError() );
+            LOG_CHANNEL( "WINDOW", "Can't create a window without first initializing the dependency libraries!" );
+            LOG_CHANNEL( "WINDOW", "Use chestnutInit() first!" );
             return ptr;
         }
-
-        flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP;
-        if( !( IMG_Init( flags ) & flags ) )
-        {
-            LOG_CHANNEL( "WINDOW", "SDL_image failed to initialize!" );
-            LOG_CHANNEL( "WINDOW", IMG_GetError() );
-            SDL_Quit();
-            return ptr;
-        }
-
-        if( TTF_Init() < 0 )
-        {
-            LOG_CHANNEL( "WINDOW", "SDL_ttf failed to initialize!" );
-            LOG_CHANNEL( "WINDOW", TTF_GetError() );
-            IMG_Quit();
-            SDL_Quit();
-            return ptr;
-        }
-
-
-        // ========= Prepare SDL_GL ========= //
-
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, windowProperties.sdlGLContextVersionMajor );
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, windowProperties.sdlGLContextVersionMinor );
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_FLAGS, windowProperties.sdlGLContextFlags );
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, windowProperties.sdlGLContextProfileMask );
 
 
 
         // ========= Create window and context ========= //
 
-        // changing x and/or y if they were left default, that is to be positioned at the center of the screen
-        SDL_DisplayMode displayMode;
-        if( SDL_GetCurrentDisplayMode( 0, &displayMode ) == 0 )
+        // if x and/or y are lesser than 0 se the position at the center of the screen
+        Uint32 windowFlags = SDL_WINDOW_OPENGL;
+        if( !showAfterCreating )
         {
-            if( x < 0 )
-            {
-                x = displayMode.w / 2 - width / 2;
-            }
-            if( y < 0 )
-            {
-                y = displayMode.h / 2 - height / 2;
-            }
+            windowFlags |= SDL_WINDOW_HIDDEN;
+        }
+        if( displayMode == EWindowDisplayMode::WINDOWED_BORDLERLESS )
+        {
+            windowFlags |= SDL_WINDOW_BORDERLESS;
+        }
+        else if( displayMode == EWindowDisplayMode::FULLSCREEN )
+        {
+            windowFlags |= SDL_WINDOW_FULLSCREEN;
         }
 
 
-        SDL_Window *window = SDL_CreateWindow( title.c_str(), x, y, width, height, windowProperties.sdlWindowFlags );
+        x = ( x < 0 ) ? SDL_WINDOWPOS_CENTERED : x;
+        y = ( y < 0 ) ? SDL_WINDOWPOS_CENTERED : y;
+
+        SDL_Window *window = SDL_CreateWindow( title.c_str(), x, y, width, height, windowFlags );
         if( !window )
         {
             LOG_CHANNEL( "WINDOW", "Failed to create window. Error: " );
@@ -104,6 +86,7 @@ namespace chestnut
             SDL_DestroyWindow( window );
             return ptr;
         }
+
 
 
         // ========= Init OpenGL ========= //
@@ -131,36 +114,34 @@ namespace chestnut
         SDL_GL_SetSwapInterval( interval );        
 
 
-        ptr = std::shared_ptr<CWindow>( new CWindow( window, context ) );
+        ptr = std::shared_ptr<CWindow>( new CWindow( new internal::SLibraryWindowHandle( window, context ) ) );
 
         return ptr;
     }
 
-    CWindow::CWindow( SDL_Window *window, SDL_GLContext context ) 
+
+
+
+
+
+    CWindow::CWindow( internal::SLibraryWindowHandle *handle ) 
     {
-        m_sdlWindow = window;
-        m_sdlGLContext = context;
+        m_libraryWindowHandle = handle;
     }
 
     CWindow::~CWindow() 
     {
-        SDL_GL_DeleteContext( m_sdlGLContext );
-        SDL_DestroyWindow( m_sdlWindow );
-
-        //! THIS WAY IT DOESN'T SUPPORT MULTIPLE WINDOWS IN SITUATIONS WHEN THEY'RE ALL NOT DESTROYED SIMULTANOUSLY!
-        TTF_Quit();
-        IMG_Quit();
-        SDL_Quit();
+        delete m_libraryWindowHandle;
     }
 
     void CWindow::setTitle( const std::string& title ) 
     {
-        SDL_SetWindowTitle( m_sdlWindow, title.c_str() );
+        SDL_SetWindowTitle( m_libraryWindowHandle->sdlWindow, title.c_str() );
     }
 
-    std::string CWindow::getTitle() 
+    std::string CWindow::getTitle() const 
     {
-        return std::string( SDL_GetWindowTitle( m_sdlWindow ) );
+        return std::string( SDL_GetWindowTitle( m_libraryWindowHandle->sdlWindow ) );
     }
 
     void CWindow::setDisplayMode( EWindowDisplayMode displayMode ) 
@@ -168,24 +149,24 @@ namespace chestnut
         switch( displayMode )
         {
             case EWindowDisplayMode::WINDOWED:
-                SDL_SetWindowFullscreen( m_sdlWindow, 0 );
-                SDL_SetWindowBordered( m_sdlWindow, SDL_TRUE );
+                SDL_SetWindowFullscreen( m_libraryWindowHandle->sdlWindow, 0 );
+                SDL_SetWindowBordered( m_libraryWindowHandle->sdlWindow, SDL_TRUE );
                 break;
             case EWindowDisplayMode::WINDOWED_BORDLERLESS:
-                SDL_SetWindowFullscreen( m_sdlWindow, 0 );
-                SDL_SetWindowBordered( m_sdlWindow, SDL_FALSE );
+                SDL_SetWindowFullscreen( m_libraryWindowHandle->sdlWindow, 0 );
+                SDL_SetWindowBordered( m_libraryWindowHandle->sdlWindow, SDL_FALSE );
                 break;
             case EWindowDisplayMode::FULLSCREEN:
-                SDL_SetWindowFullscreen( m_sdlWindow, SDL_WINDOW_FULLSCREEN );
+                SDL_SetWindowFullscreen( m_libraryWindowHandle->sdlWindow, SDL_WINDOW_FULLSCREEN );
                 break;
             default:
-                SDL_SetWindowFullscreen( m_sdlWindow, 0 );
+                SDL_SetWindowFullscreen( m_libraryWindowHandle->sdlWindow, 0 );
         }
     }
 
     EWindowDisplayMode CWindow::getDisplayMode() const
     {
-        Uint32 flags = SDL_GetWindowFlags( m_sdlWindow );
+        Uint32 flags = SDL_GetWindowFlags( m_libraryWindowHandle->sdlWindow );
 
         if( ( flags & SDL_WINDOW_FULLSCREEN ) > 0 )
         {
@@ -203,53 +184,82 @@ namespace chestnut
 
     void CWindow::setResizable( bool resizable ) 
     {
-        SDL_SetWindowResizable( m_sdlWindow, resizable ? SDL_TRUE : SDL_FALSE );
+        SDL_SetWindowResizable( m_libraryWindowHandle->sdlWindow, resizable ? SDL_TRUE : SDL_FALSE );
     }
 
     bool CWindow::isResizable() const
     {
-        Uint32 flags = SDL_GetWindowFlags( m_sdlWindow );
+        Uint32 flags = SDL_GetWindowFlags( m_libraryWindowHandle->sdlWindow );
 
         return ( flags & SDL_WINDOW_RESIZABLE ) > 0;
     }
 
     void CWindow::setSize( int w, int h ) 
     {
-        SDL_SetWindowSize( m_sdlWindow, w, h );
+        SDL_SetWindowSize( m_libraryWindowHandle->sdlWindow, w, h );
         glViewport( 0, 0, w, h );
     }
 
-    int CWindow::getSizeWidth() 
+    int CWindow::getSizeWidth() const
     {
         int w;
-        SDL_GetWindowSize( m_sdlWindow, &w, NULL );
+        SDL_GetWindowSize( m_libraryWindowHandle->sdlWindow, &w, NULL );
         return w;
     }
 
-    int CWindow::getSizeHeight() 
+    int CWindow::getSizeHeight() const
     {
         int h;
-        SDL_GetWindowSize( m_sdlWindow, NULL, &h );
+        SDL_GetWindowSize( m_libraryWindowHandle->sdlWindow, NULL, &h );
         return h;
     }
 
     void CWindow::setPosition( int x, int y ) 
     {
-        SDL_SetWindowPosition( m_sdlWindow, x, y );
+        SDL_SetWindowPosition( m_libraryWindowHandle->sdlWindow, x, y );
     }
 
-    int CWindow::getPositionX() 
+    int CWindow::getPositionX() const
     {
         int x;
-        SDL_GetWindowPosition( m_sdlWindow, &x, NULL );
+        SDL_GetWindowPosition( m_libraryWindowHandle->sdlWindow, &x, NULL );
         return x;
     }
 
-    int CWindow::getPositionY() 
+    int CWindow::getPositionY() const
     {
         int y;
-        SDL_GetWindowPosition( m_sdlWindow, NULL, &y );
+        SDL_GetWindowPosition( m_libraryWindowHandle->sdlWindow, NULL, &y );
         return y;
+    }
+
+    void CWindow::minimize() 
+    {
+        SDL_MinimizeWindow( m_libraryWindowHandle->sdlWindow );
+    }
+
+    bool CWindow::isMinimized() const
+    {
+        Uint32 flags = SDL_GetWindowFlags( m_libraryWindowHandle->sdlWindow );
+
+        return ( flags & SDL_WINDOW_MINIMIZED ) > 0;
+    }
+
+    void CWindow::maximize() 
+    {
+        SDL_MaximizeWindow( m_libraryWindowHandle->sdlWindow );
+    }
+
+    bool CWindow::isMaximized() const
+    {
+        Uint32 flags = SDL_GetWindowFlags( m_libraryWindowHandle->sdlWindow );
+
+        return ( flags & SDL_WINDOW_MAXIMIZED ) > 0;
+    }
+
+    void CWindow::restore() 
+    {
+        SDL_RestoreWindow( m_libraryWindowHandle->sdlWindow );
     }
 
     void CWindow::toggleVsync( bool toggle ) 
@@ -264,6 +274,30 @@ namespace chestnut
         }
     }
 
+    void CWindow::show() 
+    {
+        SDL_ShowWindow( m_libraryWindowHandle->sdlWindow );
+    }
+
+    bool CWindow::isShown() const
+    {
+        Uint32 flags = SDL_GetWindowFlags( m_libraryWindowHandle->sdlWindow );
+
+        return ( flags & SDL_WINDOW_SHOWN ) > 0;
+    }
+
+    void CWindow::hide() 
+    {
+        SDL_HideWindow( m_libraryWindowHandle->sdlWindow );
+    }
+
+    bool CWindow::isHidden() const
+    {
+        Uint32 flags = SDL_GetWindowFlags( m_libraryWindowHandle->sdlWindow );
+
+        return ( flags & SDL_WINDOW_HIDDEN ) > 0;
+    }
+
     void CWindow::clear() 
     {
         glClear( GL_COLOR_BUFFER_BIT );
@@ -271,7 +305,7 @@ namespace chestnut
 
     void CWindow::flipBuffer() 
     {
-        SDL_GL_SwapWindow( m_sdlWindow );
+        SDL_GL_SwapWindow( m_libraryWindowHandle->sdlWindow );
     }
 
 } // namespace chestnut

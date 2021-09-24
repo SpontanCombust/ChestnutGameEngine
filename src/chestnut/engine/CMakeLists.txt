@@ -1,3 +1,7 @@
+target_sources(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/init.cpp
+)
+
 add_subdirectory(ecs_impl)
 add_subdirectory(graphics)
 add_subdirectory(main)
