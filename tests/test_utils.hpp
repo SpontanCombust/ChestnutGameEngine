@@ -20,7 +20,7 @@ static const SDL_MessageBoxButtonData confirmTestButtons[] =
 };
 
 // Shows a message box informing a tester of what should happen when they hit "Run!"
-void showRunTestMessageBox( const char *testTitle, const char *testMessage )
+inline void showRunTestMessageBox( const char *testTitle, const char *testMessage )
 {
     SDL_MessageBoxData data;
     data.flags          = SDL_MESSAGEBOX_INFORMATION;
@@ -36,7 +36,7 @@ void showRunTestMessageBox( const char *testTitle, const char *testMessage )
 }
 
 // Shows a message box about test passing confirmation. Returns tester's verdict on whether test passed.
-bool showConfirmTestMessageBox( const char *testTitle )
+inline bool showConfirmTestMessageBox( const char *testTitle )
 {
     SDL_MessageBoxData data;
     data.flags          = SDL_MESSAGEBOX_INFORMATION;

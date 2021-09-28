@@ -25,16 +25,12 @@ namespace chestnut
 
     GLuint CTexture2D::getID() const
     {
-        return m_texResource->m_texID;
+        return m_texResource ? m_texResource->m_texID : 0;
     }
     
     bool CTexture2D::isValid() const
     {
-        if( m_texResource && m_texResource->m_texID != 0 )
-        {
-            return true;
-        }
-        return false;
+        return m_texResource && m_texResource->m_texID != 0;
     }
     
     void CTexture2D::bind() const
@@ -49,22 +45,22 @@ namespace chestnut
 
     GLenum CTexture2D::getPixelFormat() const
     {
-        return m_texResource->m_pixelFormat;
+        return m_texResource ? m_texResource->m_pixelFormat : 0;
     }
 
     int CTexture2D::getWidth() const
     {
-        return m_texResource->m_width;
+        return m_texResource ? m_texResource->m_width : 0;
     }
 
     int CTexture2D::getHeight() const
     {
-        return m_texResource->m_height;
+        return m_texResource ? m_texResource->m_height : 0;
     }
 
     vec2i CTexture2D::getSize() const
     {
-        return { m_texResource->m_width, m_texResource->m_height };
+        return m_texResource ? vec2i{ m_texResource->m_width, m_texResource->m_height } : vec2i{ 0, 0 };
     }
 
     SRectangle CTexture2D::getClippingRect() const
@@ -99,12 +95,14 @@ namespace chestnut
 
     void CTexture2D::setFiltering( GLint minifyingFilter, GLint magnifyingFilter ) 
     {
+        bind();
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minifyingFilter );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter );
     }
 
     void CTexture2D::setWrapping( GLint wrapS, GLint wrapT )
     {
+        bind();
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT );
     }
