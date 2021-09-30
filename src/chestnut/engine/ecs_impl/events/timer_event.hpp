@@ -1,15 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_TIMER_EVENT_H__
 #define __CHESTNUT_ENGINE_TIMER_EVENT_H__
 
-#include "../event.hpp"
 #include "../../types.hpp"
 
 namespace chestnut
 {
-    struct STimerEvent : SEvent
+    struct STimerEvent
     {
         timerid_t timerID;
-        float timerTimeInSeconds;
+        double timerTimeInSeconds;
         float timerIntervalInSeconds;
         bool isTimerRepeating;
     };

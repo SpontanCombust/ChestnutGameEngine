@@ -9,6 +9,7 @@
 
 namespace chestnut
 {
+    //!WARNING this system is very much still in development!
     class CSimpled2DRenderingSystem : public IRenderingSystem
     {
     private:
