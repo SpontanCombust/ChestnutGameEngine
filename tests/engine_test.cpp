@@ -139,16 +139,16 @@ TEST_CASE( "Engine test - handling systems" )
 
     SECTION( "Updating systems" )
     {
-        SECTION( "Try start without master system" )
+        SECTION( "Try start without any systems" )
         {
             REQUIRE_THROWS( engine.start() );
 
-            engine.attachMasterSystem<MasterSystem>();
+            engine.attachLogicSystem<MasterSystem>( SYSTEM_PRIORITY_HIGHEST );
             REQUIRE_NOTHROW( engine.start() );
         }
 
 
-        engine.attachMasterSystem<MasterSystem>();
+        engine.attachLogicSystem<MasterSystem>( SYSTEM_PRIORITY_HIGHEST );
         gstr = "";
 
         SECTION( "foo -> bar -> baz" )

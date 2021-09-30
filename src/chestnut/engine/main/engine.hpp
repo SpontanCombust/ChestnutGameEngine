@@ -41,7 +41,6 @@ namespace chestnut
             systempriority_t priority;
         };
 
-        ISystem *m_masterSystem;
         std::list< SLogicSystemNode > m_listLogicSystemNodes;
         std::list< SRenderingSystemNode > m_listRenderingSystemNodes;
 
@@ -61,12 +60,6 @@ namespace chestnut
         CEventManager& getEventManager();
 
 
-
-        // Attach system acting as the main logic unit in the engine
-        // There can only be one master system at a time
-        // Master system always gets updated first
-        template< typename SystemType, typename ...Args >
-        void attachMasterSystem( Args&&... args );
 
         // System execution is ordered by ascending priority (the bigger the number the later in order system is updated)
         // Doesn't allow system duplicates
@@ -99,7 +92,7 @@ namespace chestnut
         double getGameTimeInSeconds();
 
 
-        // Throws an exception if master system hasn't been attached
+        // Throws an exception if no logic system has been attached
         void start();
 
         void stop();

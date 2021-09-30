@@ -3,9 +3,6 @@
 #include "../debug/debug.hpp"
 #include "../misc/locked_auto_timer.hpp"
 #include "../misc/exception.hpp"
-#include "../ecs_impl/events/quit_request_event.hpp"
-
-#include <cassert>
 
 namespace chestnut
 {    
@@ -24,19 +21,12 @@ namespace chestnut
             m_updateTimer = lockedTimer;
         }
 
-        m_masterSystem = nullptr;
-
         m_isRunning = false;
     }
 
     CEngine::~CEngine() 
     {
         delete m_updateTimer;
-
-        if( m_masterSystem )
-        {
-            delete m_masterSystem;
-        }
 
         for( SLogicSystemNode& logicNode : m_listLogicSystemNodes )
         {
@@ -66,9 +56,9 @@ namespace chestnut
 
     void CEngine::start() 
     {
-        if( !m_masterSystem )
+        if( m_listLogicSystemNodes.empty() )
         {
-            throw ChestnutException( "Engine needs to have a master system attached to it before starting!" );
+            throw ChestnutException( "Engine needs at least one logic system to control it!");
         }
 
         m_isRunning = true;
@@ -83,8 +73,6 @@ namespace chestnut
             if( m_updateTimer->tick() )
             {
                 float dt = m_updateTimer->getDeltaTime();
-                
-                m_masterSystem->update( dt );
 
                 for( SLogicSystemNode& logicNode : m_listLogicSystemNodes )
                 {

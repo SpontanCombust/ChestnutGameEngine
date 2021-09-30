@@ -2,21 +2,6 @@
 
 namespace chestnut
 {    
-    template<typename SystemType, typename ...Args>
-    void CEngine::attachMasterSystem( Args&&... args ) 
-    {
-        static_assert( std::is_base_of_v< ISystem, SystemType >, "SystemType must derive from ISystem!" );
-
-        if( m_masterSystem )
-        {
-            delete m_masterSystem;
-        }
-
-        SystemType *system = new SystemType( *this, std::forward<Args>(args)... );
-
-        m_masterSystem = system;
-    }
-
     template< typename SystemType, typename ...Args >
     void CEngine::attachLogicSystem( systempriority_t priority, Args&&... args ) 
     {
@@ -89,11 +74,6 @@ namespace chestnut
                     return true;
                 }
             }
-
-            if( dynamic_cast< const SystemType * >( m_masterSystem ) != nullptr )
-            {
-                return true;
-            }
         }
 
         return false;
@@ -123,11 +103,6 @@ namespace chestnut
                     return foundSystem;
                 }
             }
-            
-            if( ( foundSystem = dynamic_cast< SystemType * >( m_masterSystem ) ) != nullptr )
-            {
-                return foundSystem;
-            }
         }
 
         return nullptr;
@@ -154,11 +129,6 @@ namespace chestnut
                 {
                     return node.priority;
                 }
-            }
-            
-            if( ( dynamic_cast< SystemType * >( m_masterSystem ) ) != nullptr )
-            {
-                return SYSTEM_PRIORITY_HIGHEST;
             }
         }
 
@@ -190,12 +160,6 @@ namespace chestnut
                     m_listLogicSystemNodes.erase( it );
                     return;
                 }
-            }
-            
-            if( dynamic_cast< SystemType * >( m_masterSystem ) != nullptr )
-            {
-                delete m_masterSystem;
-                m_masterSystem = nullptr;
             }
         }
     }
