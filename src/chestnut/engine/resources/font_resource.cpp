@@ -62,15 +62,21 @@ namespace chestnut
 
     SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask, const std::vector< std::pair< wchar_t, wchar_t > >& vecUnicodeRanges )
     {
+        SFontConfig config;
+
         int sdlStyle = convertToSDLFontStyle( styleMask );
         TTF_SetFontStyle( font, sdlStyle );
 
+        config.pointSize = pointSize;
+        config.styleMask = styleMask;
+        config.ascent = TTF_FontAscent( font );
+        config.descent = TTF_FontDescent( font );
+        config.height = TTF_FontHeight( font );
 
 
         // ========== render all glyphs into seperate surfaces and get their metrics ==========
 
         std::map< wchar_t, SDL_Surface * > mapGlyphSurfaces;
-        std::unordered_map< wchar_t, SGlyphMetrics > mapGlyphMetrics;
         int maxGlyphSideLength = 0;
         for( const auto& [ first, last ] : vecUnicodeRanges )
         {
@@ -93,7 +99,7 @@ namespace chestnut
                     metrics.height = surf->h;
                     TTF_GlyphMetrics( font, (Uint16)g, &metrics.xMin, &metrics.xMax, &metrics.yMin, &metrics.yMax, &metrics.advance );
 
-                    mapGlyphMetrics[g] = metrics;
+                    config.mapGlyphMetrics[g] = metrics;
                     mapGlyphSurfaces[g] = surf;
                 }
             }
@@ -115,15 +121,13 @@ namespace chestnut
 
         // ========== blit all glyph surfaces onto a single bigger surface ==========
 
-        std::map< wchar_t, SRectangle > mapClippingRects;
-
         int x = 0, y = 0;
         for( const auto& [ g, surf ] : mapGlyphSurfaces )
         {
             SDL_Rect dstRect = { x, y, surf->w, surf->h };
 
             SDL_BlitSurface( surf, NULL, spriteSheetSurface, &dstRect );
-            mapClippingRects[g] = SRectangle( x, y, surf->w, surf->h );
+            config.mapGlyphClippingRects[g] = SRectangle( x, y, surf->w, surf->h );
             SDL_FreeSurface( surf );
 
             x += maxGlyphSideLength;
@@ -160,23 +164,10 @@ namespace chestnut
         // ========== create the OpenGL texture resource ==========
 
         glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-        std::shared_ptr<CTexture2DResource> textureResource = loadTexture2DResourceFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED );
+        config.textureResource = loadTexture2DResourceFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED );
         glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
 
-        delete alphaPixels8;
-
-
-        // ========== create the font config ==========
-
-        SFontConfig config;
-        config.pointSize = pointSize;
-        config.styleMask = styleMask;
-        config.ascent = TTF_FontAscent( font );
-        config.descent = TTF_FontDescent( font );
-        config.height = TTF_FontHeight( font );
-        config.mapGlyphMetrics = mapGlyphMetrics;
-        config.glyphSpriteSheet = CMapSpriteSheetTexture2D<wchar_t>( textureResource );
-        config.glyphSpriteSheet.setSheetFragments( mapClippingRects );
+        delete alphaPixels8; // we won't need it no more, data is copied to the GPU
 
 
         return config;
@@ -283,10 +274,6 @@ namespace chestnut
             CFontResource *resource = new CFontResource();
             resource->m_fontPath = fontPath;
             resource->m_mapConfigHashToConfig[ hash ] = initConfig;
-            for( const auto& [ g, metrics ] : initConfig.mapGlyphMetrics )
-            {
-                resource->m_setAvailableGlyphs.insert(g);
-            }
 
             TTF_CloseFont( font );
 

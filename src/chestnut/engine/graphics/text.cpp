@@ -4,6 +4,9 @@
 
 namespace chestnut
 {
+    using namespace internal;
+    
+
     CText::CText() 
     {
         m_pointSize = 0;
@@ -127,9 +130,17 @@ namespace chestnut
         return vecWordFragments;
     }
 
+    SRectangle normalizeGlyphRect( const SRectangle& rect, float spriteSheetW, float spriteSheetH )
+    {
+        return SRectangle( rect.x / spriteSheetW, rect.y / spriteSheetH, rect.w / spriteSheetW, rect.h / spriteSheetH );
+    }
+
     std::vector< STextGlyph > createWordTextGlyphs( std::wstring word, const SFontConfig& fontConfig, vec3f color, vec2i baseOffset = { 0, 0 } )
     {
         std::vector< STextGlyph > vecGlyphs;
+
+        float w = (float)fontConfig.textureResource->m_width;
+        float h = (float)fontConfig.textureResource->m_height;
 
         STextGlyph glyph;
         vec2i offset = baseOffset;
@@ -138,15 +149,15 @@ namespace chestnut
         {
             SGlyphMetrics metrics;
             SRectangle rectNorm;
-            if( fontConfig.glyphSpriteSheet.hasSheetFragment(g) )
+            if( fontConfig.mapGlyphClippingRects.find(g) != fontConfig.mapGlyphClippingRects.end() )
             {
                 metrics = fontConfig.mapGlyphMetrics.at(g);
-                rectNorm = fontConfig.glyphSpriteSheet.getSheetFragment( g, true );
+                rectNorm = normalizeGlyphRect( fontConfig.mapGlyphClippingRects.at(g), w, h );
             }
             else
             {
                 metrics = fontConfig.mapGlyphMetrics.at( UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR );
-                rectNorm = fontConfig.glyphSpriteSheet.getSheetFragment( UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR, true );
+                rectNorm = normalizeGlyphRect( fontConfig.mapGlyphClippingRects.at( UNAVAILABLE_GLYPH_REPLACEMENT_WCHAR ), w, h );
             }
             
 
@@ -154,7 +165,7 @@ namespace chestnut
             glyph.styleMask = fontConfig.styleMask;
             glyph.color = color;
 
-            glyph.texID = fontConfig.glyphSpriteSheet.getID();
+            glyph.texID = fontConfig.textureResource->m_texID;
             glyph.lineOffset = { offset.x + metrics.xMin, offset.y };
             glyph.size = { metrics.width, metrics.height };
             glyph.uvOffsetNorm = { rectNorm.x, rectNorm.y };

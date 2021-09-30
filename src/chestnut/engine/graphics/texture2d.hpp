@@ -19,7 +19,7 @@ namespace chestnut
 
     public:
         CTexture2D();
-        CTexture2D( std::shared_ptr<CTexture2DResource> resource );
+        explicit CTexture2D( std::shared_ptr<CTexture2DResource> resource );
 
         const std::shared_ptr<CTexture2DResource>& getResource() const;
 

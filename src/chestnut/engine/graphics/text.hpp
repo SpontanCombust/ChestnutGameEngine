@@ -2,44 +2,49 @@
 #define __CHESTNUT_ENGINE_TEXT_H__
 
 #include "../maths/vector2.hpp"
-#include "../maths/vector4.hpp"
+#include "../maths/vector3.hpp"
 #include "../resources/font_resource.hpp"
 
 #include <vector>
 
 namespace chestnut
 {
-    struct STextGlyph
-    {   
-        // debug
-        wchar_t g;
-        EFontStyle styleMask;
-
-        // data
-        GLuint texID;
-        vec3f color;
-        vec2i lineOffset;
-        vec2i size;
-        vec2f uvOffsetNorm;
-        vec2f uvSizeNorm;
-    };
-
-    struct STextLine
+    namespace internal
     {
-        // debug
-        std::wstring str;
+        struct STextGlyph
+        {   
+            // debug
+            wchar_t g;
+            EFontStyle styleMask;
 
-        //data
-        vec2i offset;
-        std::vector< STextGlyph > vecGlyphs;
-    };
+            // data
+            GLuint texID;
+            vec3f color;
+            vec2i lineOffset;
+            vec2i size;
+            vec2f uvOffsetNorm;
+            vec2f uvSizeNorm;
+        };
 
-    struct STextFragmentRaw
-    {
-        std::wstring str;
-        EFontStyle styleMask;
-        vec3f color;
-    };
+        struct STextLine
+        {
+            // debug
+            std::wstring str;
+
+            //data
+            vec2i offset;
+            std::vector< STextGlyph > vecGlyphs;
+        };
+
+        struct STextFragmentRaw
+        {
+            std::wstring str;
+            EFontStyle styleMask;
+            vec3f color;
+        };
+        
+    } // namespace internal
+    
 
     enum class ETextAlignment
     {
@@ -58,12 +63,12 @@ namespace chestnut
         int m_maxWidth;
         float m_lineSpacing;
 
-        std::vector<STextFragmentRaw> m_vecRawFragments;
-        std::vector<STextLine> m_vecLines;
+        std::vector<internal::STextFragmentRaw> m_vecRawFragments;
+        std::vector<internal::STextLine> m_vecLines;
 
     public:
         CText();
-        CText( std::shared_ptr<CFontResource> fontResource, int pointSize );
+        explicit CText( std::shared_ptr<CFontResource> fontResource, int pointSize );
 
         const std::shared_ptr<CFontResource>& getResource() const;
         bool isValid() const;
@@ -98,18 +103,18 @@ namespace chestnut
 
         void clearData();
         void generateData();
-        const std::vector<STextLine>& getData() const;
+        const std::vector<internal::STextLine>& getData() const;
 
 
     protected:
-        int computeLineHeight( const STextLine& line ) const;
-        int computeLineWidth( const STextLine& line ) const;
-        std::wstring computeLineString( const STextLine& line ) const;
+        int computeLineHeight( const internal::STextLine& line ) const;
+        int computeLineWidth( const internal::STextLine& line ) const;
+        std::wstring computeLineString( const internal::STextLine& line ) const;
         int computeLineOffsetX( int maxWidth, int lineWidth ) const;
         int computeWordWidth( std::wstring word, const SFontConfig& fontConfig ) const;
 
         // If line with that index doesn't yet exist, it gets created
-        void insertBackGlyphsIntoLineSafe( std::vector<STextGlyph> vecGlyphs, unsigned int lineIdx );
+        void insertBackGlyphsIntoLineSafe( std::vector<internal::STextGlyph> vecGlyphs, unsigned int lineIdx );
         void appendWord( std::wstring str, const SFontConfig& fontConfig, vec3f color );
         void formatLines( unsigned int beginLineIdx = 0 );
         void appendFragment( std::wstring str, EFontStyle styleMask, vec3f color );

@@ -121,9 +121,9 @@ namespace chestnut
             std::unordered_map< GLuint, STextRender_VertexGroup > mapTexIDToVertexGroup;
             
             const auto& vecTextLines = text.getData();
-            for( const STextLine& textLine : vecTextLines )
+            for( const internal::STextLine& textLine : vecTextLines )
             {
-                for( const STextGlyph& textGlyph : textLine.vecGlyphs )
+                for( const internal::STextGlyph& textGlyph : textLine.vecGlyphs )
                 {
                     STextRender_Vertex vertex;
 

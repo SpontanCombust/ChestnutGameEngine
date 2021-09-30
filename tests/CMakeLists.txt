@@ -13,6 +13,7 @@ target_sources(${PROJECT_NAME}_Test PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/math_vector_n_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math_vector_transform_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sprite_renderer_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/text_renderer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/timer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/window_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test_main.cpp

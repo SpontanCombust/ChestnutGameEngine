@@ -20,7 +20,7 @@ namespace chestnut
 
     public:
         CShaderProgram() = default;
-        CShaderProgram( std::shared_ptr<CShaderProgramResource> resource );
+        explicit CShaderProgram( std::shared_ptr<CShaderProgramResource> resource );
 
         const std::shared_ptr<CShaderProgramResource>& getResource() const;
 

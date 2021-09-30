@@ -2,10 +2,12 @@
 #define __CHESTNUT_ENGINE_FONT_RESOURCE_H__
 
 #include "resource.hpp"
-#include "../graphics/map_sprite_sheet.hpp"
+#include "texture2d_resource.hpp"
+#include "../maths/rectangle.hpp"
 #include "../misc/flags.hpp"
 
 #include <string>
+#include <map>
 #include <memory> // std::shared_ptr
 #include <set>
 #include <unordered_map>
@@ -42,7 +44,8 @@ namespace chestnut
         int ascent;
         int descent;
         int height;
-        CMapSpriteSheetTexture2D<wchar_t> glyphSpriteSheet;
+        std::shared_ptr<CTexture2DResource> textureResource; // has a texture with all of the glyphs
+        std::map< wchar_t, SRectangle > mapGlyphClippingRects; // has non-normalized data of placement of glyphs on the texture
         std::unordered_map<wchar_t, SGlyphMetrics> mapGlyphMetrics;
     };
 
@@ -51,7 +54,6 @@ namespace chestnut
     public:
         std::string m_fontPath;
         
-        std::set< wchar_t > m_setAvailableGlyphs;
         std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
     public:
