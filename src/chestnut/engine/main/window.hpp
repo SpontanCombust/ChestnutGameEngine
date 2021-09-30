@@ -4,6 +4,9 @@
 #include <memory>
 #include <string>
 
+struct SDL_Window;
+typedef void * SDL_GLContext;
+
 namespace chestnut
 {
     enum class EWindowDisplayMode
@@ -13,19 +16,14 @@ namespace chestnut
         FULLSCREEN
     };
 
-    namespace internal
-    {
-        struct SLibraryWindowHandle;
-
-    } // namespace internal
-
     class CWindow
     {
     private:
-        internal::SLibraryWindowHandle *m_libraryWindowHandle;
+        SDL_Window *m_sdlWindow;
+        SDL_GLContext m_sdlGLContext;
 
     public:
-        CWindow( internal::SLibraryWindowHandle *libraryWindowHandle );
+        CWindow( SDL_Window *window, SDL_GLContext context );
         ~CWindow();
 
         void setTitle( const std::string& title );

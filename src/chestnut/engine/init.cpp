@@ -16,34 +16,48 @@ namespace chestnut
     {
         int flags;
 
-        flags = SDL_INIT_EVERYTHING;
+        flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS;
         if( SDL_Init( flags ) < 0 )
         {
-            LOG_CHANNEL( "WINDOW", "SDL failed to initialize!" );
-            LOG_CHANNEL( "WINDOW", SDL_GetError() );
+            LOG_CHANNEL( "INIT", "SDL failed to initialize!" );
+            LOG_CHANNEL( "INIT", SDL_GetError() );
             return false;
         }
 
         flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP;
         if( !( IMG_Init( flags ) & flags ) )
         {
-            LOG_CHANNEL( "WINDOW", "SDL_image failed to initialize!" );
-            LOG_CHANNEL( "WINDOW", IMG_GetError() );
+            LOG_CHANNEL( "INIT", "SDL_image failed to initialize!" );
+            LOG_CHANNEL( "INIT", IMG_GetError() );
             SDL_Quit();
             return false;
         }
 
         if( TTF_Init() < 0 )
         {
-            LOG_CHANNEL( "WINDOW", "SDL_ttf failed to initialize!" );
-            LOG_CHANNEL( "WINDOW", TTF_GetError() );
+            LOG_CHANNEL( "INIT", "SDL_ttf failed to initialize!" );
+            LOG_CHANNEL( "INIT", TTF_GetError() );
             IMG_Quit();
             SDL_Quit();
             return false;
         }
 
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, glVerMajor );
-        SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, glVerMinor );
+        if( SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, glVerMajor ) < 0 )
+        {
+            LOG_CHANNEL( "INIT", "Failed to set OpenGL major version!" );
+            LOG_CHANNEL( "INIT", TTF_GetError() );
+            IMG_Quit();
+            SDL_Quit();
+            return false;
+        }
+        if( SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, glVerMinor ) < 0 )
+        {
+            LOG_CHANNEL( "INIT", "Failed to set OpenGL minor version!" );
+            LOG_CHANNEL( "INIT", TTF_GetError() );
+            IMG_Quit();
+            SDL_Quit();
+            return false;
+        }
 
         if( glAllowOnlyCoreProfile )
         {
