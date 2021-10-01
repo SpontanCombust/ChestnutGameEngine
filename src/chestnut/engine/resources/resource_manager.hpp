@@ -8,19 +8,13 @@
 
 #include <string>
 #include <unordered_map>
-#include <variant>
 
 namespace chestnut
 {
     class CResourceManager
     {
     private:
-        typedef std::variant< std::shared_ptr<CShaderProgramResource>,
-                              std::shared_ptr<CTexture2DResource>,
-                              std::shared_ptr<CFontResource> 
-                            > ResourceVariant;
-
-        static std::unordered_map< size_t, ResourceVariant > m_mapHashToResourceVariant;
+        static std::unordered_map< size_t, std::shared_ptr<IResource> > m_mapHashToResource;
         static std::hash< std::string > m_hasher;
 
     public:
@@ -28,6 +22,8 @@ namespace chestnut
         static std::shared_ptr<CShaderProgramResource> loadShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
         // Returns invalid resource if that was not loaded beforehand
         static std::shared_ptr<CShaderProgramResource> getShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
+        // Throws an exception if fails to load the resource
+        static std::shared_ptr<CShaderProgramResource> loadOrGetShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
         static bool isShaderProgramResourceLoaded( const std::string& vertShaderPath, const std::string& fragShaderPath ); 
         static void freeShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
 
@@ -35,6 +31,8 @@ namespace chestnut
         static std::shared_ptr<CTexture2DResource> loadTexture2DResource( const std::string& texturePath );
         // Returns invalid resource if that was not loaded beforehand
         static std::shared_ptr<CTexture2DResource> getTexture2DResource( const std::string& texturePath );
+        // Throws an exception if fails to load the resource
+        static std::shared_ptr<CTexture2DResource> loadOrGetTexture2DResource( const std::string& texturePath );
         static bool isTexture2DResourceLoaded( const std::string& texturePath );
         static void freeTexture2DResource( std::string& texturePath );
 
@@ -42,6 +40,8 @@ namespace chestnut
         static std::shared_ptr<CFontResource> loadFontResource( const std::string& fontPath );
         // Returns invalid resource if that was not loaded beforehand
         static std::shared_ptr<CFontResource> getFontResource( const std::string& fontPath );
+        // Throws an exception if fails to load the resource
+        static std::shared_ptr<CFontResource> loadOrGetFontResource( const std::string& fontPath );
         static bool isFontResourceLoaded( const std::string& fontPath );
         static void freeFontResource( std::string& fontPath );
     };

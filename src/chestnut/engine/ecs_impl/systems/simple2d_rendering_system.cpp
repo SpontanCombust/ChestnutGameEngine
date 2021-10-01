@@ -17,7 +17,7 @@ namespace chestnut
 
         try
         {
-            shader = CShaderProgram( CResourceManager::loadShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
+            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
             m_spriteRenderer.init( shader );
         }
         catch(const std::exception& e)
@@ -31,7 +31,7 @@ namespace chestnut
 
         try
         {
-            shader = CShaderProgram( CResourceManager::loadShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
+            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
             m_polygonRenderer.init( shader );
         }
         catch(const std::exception& e)
