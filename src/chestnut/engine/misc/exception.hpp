@@ -4,7 +4,7 @@
 #include <exception>
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct ChestnutException : std::exception
     {
@@ -20,6 +20,6 @@ namespace chestnut
         }
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_EXCEPTION_H__

@@ -1,4 +1,4 @@
-namespace chestnut
+namespace chestnut::engine
 {    
     template< typename T >
     Matrix<T,4> matMakeOrthographic( T left, T right, T bottom, T top, T near, T far )
@@ -173,4 +173,4 @@ namespace chestnut
         return rm;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

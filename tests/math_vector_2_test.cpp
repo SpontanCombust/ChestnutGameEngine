@@ -5,7 +5,7 @@
 #include <cmath>
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "2-size vector test" )
 {

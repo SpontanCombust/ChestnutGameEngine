@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_RESOURCE_H__
 #define __CHESTNUT_ENGINE_RESOURCE_H__
 
-namespace chestnut
+namespace chestnut::engine
 {
     class IResource
     {
@@ -11,6 +11,6 @@ namespace chestnut
         virtual bool isValid() const = 0;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_RESOURCE_H__

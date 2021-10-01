@@ -3,7 +3,7 @@
 
 #include "../system.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CInputEventDispatchSystem : public ISystem
     {
@@ -13,6 +13,6 @@ namespace chestnut
         void update( float deltaTime ) override;   
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_INPUT_EVENT_DISPATCH_SYSTEM_H__

@@ -1,6 +1,6 @@
 #include "texture2d.hpp"
 
-namespace chestnut 
+namespace chestnut::engine 
 {
     CTexture2D::CTexture2D() 
     {
@@ -107,4 +107,4 @@ namespace chestnut
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

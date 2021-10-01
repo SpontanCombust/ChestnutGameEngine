@@ -3,7 +3,7 @@
 
 #include "system.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     class IRenderingSystem : public ISystem
     {
@@ -14,6 +14,6 @@ namespace chestnut
         virtual void render() = 0;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_RENDERING_SYSTEM_H__

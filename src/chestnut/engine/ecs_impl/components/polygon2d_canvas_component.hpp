@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct CPolygon2DCanvasComponent : public ecs::CComponent
     {
@@ -16,6 +16,6 @@ namespace chestnut
         CPolygon2DCanvasComponent() = default;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_POLYGON2D_CANVAS_COMPONENT_H__

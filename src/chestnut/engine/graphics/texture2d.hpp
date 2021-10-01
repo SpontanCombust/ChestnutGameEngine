@@ -6,7 +6,7 @@
 #include "../maths/vector2.hpp"
 #include "../maths/vector3.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CTexture2D
     {
@@ -51,6 +51,6 @@ namespace chestnut
         void setWrapping( GLint wrapS, GLint wrapT );
     };   
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TEXTURE2D_H__

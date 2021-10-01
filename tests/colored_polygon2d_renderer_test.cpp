@@ -10,7 +10,7 @@
 #include "../src/chestnut/engine/constants.hpp"
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "Colored polygon renderer test", "[interactive]" )
 {

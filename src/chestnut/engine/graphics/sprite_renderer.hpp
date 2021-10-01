@@ -9,7 +9,7 @@
 #include <vector>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A renderer class used to render textures onto the screen
@@ -120,6 +120,6 @@ namespace chestnut
         void deleteBuffers() override;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_SPRITE_RENDERER_H__

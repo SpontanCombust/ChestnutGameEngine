@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_SYSTEM_H__
 #define __CHESTNUT_ENGINE_SYSTEM_H__
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CEngine; // forward declaration
     
@@ -20,6 +20,6 @@ namespace chestnut
         virtual void update( float deltaTime ) = 0;
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_SYSTEM_H__

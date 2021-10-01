@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_RECTANGLE_H__
 #define __CHESTNUT_ENGINE_RECTANGLE_H__
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct SRectangle
     {
@@ -11,6 +11,6 @@ namespace chestnut
         SRectangle( float _x, float _y, float _w, float _h ) : x(_x), y(_y), w(_w), h(_h) {}
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_RECTANGLE_H__

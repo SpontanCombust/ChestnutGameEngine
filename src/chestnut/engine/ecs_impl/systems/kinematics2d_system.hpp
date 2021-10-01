@@ -5,7 +5,7 @@
 
 #include <chestnut/ecs/entity_query.hpp>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CKinematics2DSystem : public ISystem
     {
@@ -18,6 +18,6 @@ namespace chestnut
         void update( float deltaTime ) override;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_KINEMATICS2D_SYSTEM_H__

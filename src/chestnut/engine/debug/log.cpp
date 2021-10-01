@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace chestnut
+namespace chestnut::engine
 {   
     std::ostream *CLogger::streamPtr = &std::cout;
     bool CLogger::hasFileOpened = false;
@@ -71,4 +71,4 @@ namespace chestnut
         return oss.str();
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

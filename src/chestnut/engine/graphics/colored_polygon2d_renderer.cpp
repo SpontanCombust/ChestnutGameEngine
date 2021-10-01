@@ -5,7 +5,7 @@
 #define INIT_POLYGON_VERTEX_CAPACITY 100
 #define INIT_VERTEX_INDEX_CAPACITY 150
 
-namespace chestnut
+namespace chestnut::engine
 {
     void CColoredPolygon2DRenderer::onInit() 
     {
@@ -150,4 +150,4 @@ namespace chestnut
         glBindVertexArray(0);
     }
     
-} // namespace chestnut
+} // namespace chestnut::engine

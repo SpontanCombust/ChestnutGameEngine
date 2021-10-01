@@ -4,7 +4,7 @@
 #include <cmath> // sqrt
 #include <sstream>
 
-namespace chestnut
+namespace chestnut::engine
 {    
     template<typename T, size_t n>
     Vector<T, n>::Vector()
@@ -288,4 +288,4 @@ namespace chestnut
         return ss.str();
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

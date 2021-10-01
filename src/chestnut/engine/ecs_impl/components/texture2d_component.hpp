@@ -6,7 +6,7 @@
 
 #include <chestnut/ecs/component.hpp>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct CTextureComponent : public ecs::CComponent
     {
@@ -17,6 +17,6 @@ namespace chestnut
         CTextureComponent() = default;
     };
 
-} // namespace chestnut 
+} // namespace chestnut::engine 
 
 #endif // __CHESTNUT_ENGINE_TEXTURE2D_COMPONENT_H__

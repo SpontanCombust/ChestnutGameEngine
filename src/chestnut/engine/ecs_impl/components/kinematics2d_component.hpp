@@ -5,7 +5,7 @@
 
 #include <chestnut/ecs/component.hpp>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct CKinematics2DComponent : public ecs::CComponent
     {
@@ -17,6 +17,6 @@ namespace chestnut
         CKinematics2DComponent();
     };
 
-} // namespace chestnut 
+} // namespace chestnut::engine 
 
 #endif // __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__

@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< typename T >
     struct Vector<T,4>
@@ -29,7 +29,7 @@ namespace chestnut
 
     using vec4f = Vector<float,4>;
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "vector4.tpp"

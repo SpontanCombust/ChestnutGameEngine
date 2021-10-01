@@ -1,6 +1,6 @@
 #include "kinematics2d_component.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CKinematics2DComponent::CKinematics2DComponent()
     {
@@ -10,4 +10,4 @@ namespace chestnut
         angularAcceleration = 0.f;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -3,7 +3,7 @@
 #include "../src/chestnut/engine/maths/matrix.hpp"
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 typedef Matrix<float,4> mat4f;
 

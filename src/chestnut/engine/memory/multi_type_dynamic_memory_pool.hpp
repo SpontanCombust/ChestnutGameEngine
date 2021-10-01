@@ -5,7 +5,7 @@
 #include <typeindex>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CMultiTypeDynamicMemoryPool
     {
@@ -31,7 +31,7 @@ namespace chestnut
         void remove( T *ptr );
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "multi_type_dynamic_memory_pool.tpp"

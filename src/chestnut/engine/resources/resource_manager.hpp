@@ -9,7 +9,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CResourceManager
     {
@@ -46,6 +46,6 @@ namespace chestnut
         static void freeFontResource( std::string& fontPath );
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__

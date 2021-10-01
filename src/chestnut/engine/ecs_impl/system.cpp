@@ -1,6 +1,6 @@
 #include "system.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CEngine& ISystem::getEngine() const
     {
@@ -12,4 +12,4 @@ namespace chestnut
 
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

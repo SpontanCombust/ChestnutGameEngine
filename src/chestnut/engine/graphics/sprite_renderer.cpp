@@ -4,7 +4,7 @@
 
 #define INIT_SPRITE_CAPACITY 100
 
-namespace chestnut
+namespace chestnut::engine
 {   
     static const uint8_t missingTextureBytes[] = 
     {
@@ -264,4 +264,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

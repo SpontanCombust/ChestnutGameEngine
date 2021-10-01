@@ -3,7 +3,7 @@
 
 #include <ostream>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CLogger
     {
@@ -25,7 +25,7 @@ namespace chestnut
         static void closeFileIfIsOpened();
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #ifdef CHESTNUT_DEBUG
     #define LOG_INFO(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [INFO] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }

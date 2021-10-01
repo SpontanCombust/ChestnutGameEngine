@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     // A mathematical vector with data of type T and size n
     template< typename T, size_t n >
@@ -85,7 +85,7 @@ namespace chestnut
     template< typename T, size_t n >
     std::string vecToString( const Vector<T,n>& v );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "vector.tpp"

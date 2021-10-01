@@ -4,7 +4,7 @@
 #include "../components/transform2d_component.hpp"
 #include "../components/kinematics2d_component.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CKinematics2DSystem::CKinematics2DSystem( CEngine& engine ) 
     : ISystem( engine ) 
@@ -30,4 +30,4 @@ namespace chestnut
         });
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

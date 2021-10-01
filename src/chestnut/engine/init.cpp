@@ -8,7 +8,7 @@
 
 #include "debug/log.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     bool wasInit = false;
 
@@ -91,4 +91,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

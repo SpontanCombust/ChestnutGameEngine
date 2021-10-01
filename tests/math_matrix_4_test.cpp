@@ -4,7 +4,7 @@
 #include "../src/chestnut/engine/constants.hpp"
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "4-size matrix test" )
 {

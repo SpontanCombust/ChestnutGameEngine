@@ -1,4 +1,4 @@
-namespace chestnut
+namespace chestnut::engine
 {  
     template< typename T >
     T* CMultiTypeDynamicMemoryPool::create() 
@@ -29,4 +29,4 @@ namespace chestnut
         ptrStack.push( static_cast< void * >( ptr ) );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

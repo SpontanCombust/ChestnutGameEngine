@@ -7,7 +7,7 @@
 
 #define INIT_GLYPH_CAPACITY 128
 
-namespace chestnut
+namespace chestnut::engine
 {
     void CTextRenderer::onInit() 
     {
@@ -221,4 +221,4 @@ namespace chestnut
         glBindVertexArray(0);
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -1,6 +1,6 @@
 #include "vector2.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template<>
     struct Vector<float,2>;
@@ -113,4 +113,4 @@ namespace chestnut
     template<>
     std::string vecToString( const Vector<int,2>& v );
 
-} // namespace chestnut
+} // namespace chestnut::engine

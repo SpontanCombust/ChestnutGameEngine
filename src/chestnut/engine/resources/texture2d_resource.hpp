@@ -8,7 +8,7 @@
 #include <memory>
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     // A texture resource class that provides automatic texture deallocation on object deletion
     class CTexture2DResource : public IResource
@@ -37,6 +37,6 @@ namespace chestnut
     // Throws exception if fails to load the texture
     std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TEXTURE2D_RESOURCE_H__

@@ -6,7 +6,7 @@
 
 #include <GL/glew.h>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class IRenderer
     {
@@ -48,6 +48,6 @@ namespace chestnut
         virtual void deleteBuffers() {};
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_RENDERER_H__

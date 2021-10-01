@@ -1,6 +1,6 @@
 #include <cstring> // memcpy
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< size_t targetN, typename T, size_t sourceN, typename = typename std::enable_if< ( targetN > sourceN ) >::type >
     Vector<T,targetN> vecCastSizeGreater( const Vector<T,sourceN>& v, T initRemainVals )
@@ -84,4 +84,4 @@ namespace chestnut
         return res;
     }
     
-} // namespace chestnut
+} // namespace chestnut::engine

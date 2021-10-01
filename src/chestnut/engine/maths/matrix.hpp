@@ -3,7 +3,7 @@
 
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     /*
         A mathematical square matrix with data of type and number of both rows and columns equal n 
@@ -85,7 +85,7 @@ namespace chestnut
     template< typename T, size_t n >
     std::string matToString( const Matrix<T,n>& m );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "matrix.tpp"

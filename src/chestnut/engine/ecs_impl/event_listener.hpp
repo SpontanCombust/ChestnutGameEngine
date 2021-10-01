@@ -6,7 +6,7 @@
 #include <typeindex>
 #include <functional>
 
-namespace chestnut
+namespace chestnut::engine
 {
 	class IEventListener
 	{
@@ -51,7 +51,7 @@ namespace chestnut
 		void invokeHandlerIfFilterAccepts( const EventType& event );
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "event_listener.tpp"

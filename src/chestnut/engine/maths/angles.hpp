@@ -6,7 +6,7 @@
 
 #include <cmath>
 
-namespace chestnut
+namespace chestnut::engine
 {
     inline float radiansToDegrees( float rad )
     {
@@ -38,6 +38,6 @@ namespace chestnut
 
     void rotateUnitVec2f( vec2f& v, float angleRad );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_ANGLES_H__

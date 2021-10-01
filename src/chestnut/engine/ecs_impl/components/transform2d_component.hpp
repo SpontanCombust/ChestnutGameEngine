@@ -5,7 +5,7 @@
 
 #include <chestnut/ecs/component.hpp>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct CTransform2DComponent : public ecs::CComponent
     {
@@ -16,6 +16,6 @@ namespace chestnut
         CTransform2DComponent();
     };
 
-} // namespace chestnut 
+} // namespace chestnut::engine 
 
 #endif // __CHESTNUT_ENGINE_TRANSFORM2D_COMPONENT_H__

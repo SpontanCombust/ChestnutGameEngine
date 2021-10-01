@@ -1,6 +1,6 @@
 #include "multi_type_dynamic_memory_pool.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CMultiTypeDynamicMemoryPool::CMultiTypeDynamicMemoryPool( CMultiTypeDynamicMemoryPool&& other ) 
     {
@@ -21,4 +21,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

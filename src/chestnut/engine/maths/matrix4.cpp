@@ -1,6 +1,6 @@
 #include "matrix4.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template<>
     struct Matrix<float,4>;
@@ -88,4 +88,4 @@ namespace chestnut
     template<>
     Matrix<float,4> matMakeRotation( Vector<float,3> axis, float angleRad );
 
-} // namespace chestnut
+} // namespace chestnut::engine

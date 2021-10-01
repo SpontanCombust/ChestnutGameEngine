@@ -1,6 +1,6 @@
 #include "timer_component.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {   
     timerid_t CTimerComponent::m_timerIDAccumulator = 0;
     
@@ -37,4 +37,4 @@ namespace chestnut
         vTimers.clear();
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -1,6 +1,6 @@
 #include "vector3.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template<>
     struct Vector<float,3>;
@@ -75,4 +75,4 @@ namespace chestnut
     template<>
     Vector<float,3> vecCrossProduct( const Vector<float,3>& v1, const Vector<float,3>& v2 );
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace chestnut
+namespace chestnut::engine
 {
     namespace internal
     {
@@ -120,6 +120,6 @@ namespace chestnut
         void appendFragment( std::wstring str, EFontStyle styleMask, vec3f color );
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TEXT_H__

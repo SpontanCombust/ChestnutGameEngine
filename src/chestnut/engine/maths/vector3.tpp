@@ -1,4 +1,4 @@
-namespace chestnut
+namespace chestnut::engine
 {
     template<typename T>
     Vector<T,3>::Vector()
@@ -90,4 +90,4 @@ namespace chestnut
         return pv;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

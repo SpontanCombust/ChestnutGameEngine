@@ -1,6 +1,6 @@
 #include <type_traits>
 
-namespace chestnut
+namespace chestnut::engine
 {    
     template< typename SystemType, typename ...Args >
     void CEngine::attachLogicSystem( systempriority_t priority, Args&&... args ) 
@@ -164,4 +164,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

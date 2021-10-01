@@ -5,7 +5,7 @@
 
 #include <map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< typename KeyType, typename Compare = std::less< KeyType > >
     class CMapSpriteSheetTexture2D : public CTexture2D
@@ -44,7 +44,7 @@ namespace chestnut
         SRectangle normalizeRectangle( const SRectangle& rect ) const;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "map_sprite_sheet.tpp"

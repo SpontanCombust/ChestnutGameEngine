@@ -1,6 +1,6 @@
 #include <cmath>
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< typename T >
     Matrix<T,3> matMakeTranslation( T tx, T ty )
@@ -40,4 +40,4 @@ namespace chestnut
         return m;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

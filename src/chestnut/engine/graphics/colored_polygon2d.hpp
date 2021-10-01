@@ -6,7 +6,7 @@
 
 #include <GL/glew.h>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct SColoredVertex
     {
@@ -36,6 +36,6 @@ namespace chestnut
         const std::vector< GLuint >& getIndices() const;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__

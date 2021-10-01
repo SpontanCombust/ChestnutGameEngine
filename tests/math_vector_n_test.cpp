@@ -5,7 +5,7 @@
 #include <cmath>
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 typedef Vector<float,3> vec3f;
 

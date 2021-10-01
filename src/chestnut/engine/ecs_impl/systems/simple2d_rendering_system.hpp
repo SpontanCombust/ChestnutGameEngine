@@ -7,7 +7,7 @@
 
 #include <chestnut/ecs/entity_query.hpp>
 
-namespace chestnut
+namespace chestnut::engine
 {
     //!WARNING this system is very much still in development!
     class CSimpled2DRenderingSystem : public IRenderingSystem
@@ -31,6 +31,6 @@ namespace chestnut
         void renderColoredPolygons();
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__

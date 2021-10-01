@@ -1,6 +1,6 @@
 #include "event_manager.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {        
     void CEventManager::registerListener( std::weak_ptr<IEventListener> listener, listenerpriority_t priority ) 
     {
@@ -49,4 +49,4 @@ namespace chestnut
     }
 
 
-} // namespace chestnut
+} // namespace chestnut::engine

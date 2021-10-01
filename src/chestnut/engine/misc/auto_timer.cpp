@@ -4,7 +4,7 @@
 
 #include <chrono>
 
-namespace chestnut
+namespace chestnut::engine
 {
     CAutoTimer::CAutoTimer( timerid_t id ) 
     : ITimer( id )
@@ -38,4 +38,4 @@ namespace chestnut
         return true;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

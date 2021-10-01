@@ -1,6 +1,6 @@
 #include "shader_program.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CShaderProgram::CShaderProgram( std::shared_ptr<CShaderProgramResource> resource ) 
     {
@@ -160,4 +160,4 @@ namespace chestnut
         glUniformMatrix4fv( loc, 1, GL_FALSE, val.data() );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

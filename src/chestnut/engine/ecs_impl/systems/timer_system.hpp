@@ -5,7 +5,7 @@
 
 #include <chestnut/ecs/entity_query.hpp>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CTimerSystem : public ISystem
     {
@@ -18,6 +18,6 @@ namespace chestnut
         void update( float deltaTime ) override;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TIMER_SYSTEM_H__

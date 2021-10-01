@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <typeindex>
 
-namespace chestnut
+namespace chestnut::engine
 {    
     typedef void event_function;
 
@@ -14,6 +14,6 @@ namespace chestnut
 
     typedef signed short systempriority_t;
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TYPES_H__

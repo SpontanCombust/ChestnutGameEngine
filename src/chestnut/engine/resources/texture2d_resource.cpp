@@ -5,7 +5,7 @@
 
 #include <SDL2/SDL_image.h>
 
-namespace chestnut
+namespace chestnut::engine
 {
     GLuint loadOpenGLTexture2DFromPixels( void *pixels, int width, int height, GLenum pixelFormat )
     {
@@ -187,5 +187,5 @@ namespace chestnut
         return std::shared_ptr<CTexture2DResource>( resource );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine
 

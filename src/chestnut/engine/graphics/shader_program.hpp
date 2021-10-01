@@ -11,7 +11,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CShaderProgram
     {
@@ -52,7 +52,7 @@ namespace chestnut
         void setMatrix4f( GLint loc, const mat4f& val );
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #endif // __CHESTNUT_ENGINE_SHADER_PROGRAM_H__

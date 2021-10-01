@@ -10,7 +10,7 @@
 #include <typeindex>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CEventManager
     {
@@ -35,7 +35,7 @@ namespace chestnut
         void raiseEvent( const EventType& event );
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "event_manager.tpp"

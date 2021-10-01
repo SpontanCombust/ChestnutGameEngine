@@ -7,7 +7,7 @@
 struct SDL_Window;
 typedef void * SDL_GLContext;
 
-namespace chestnut
+namespace chestnut::engine
 {
     enum class EWindowDisplayMode
     {
@@ -74,6 +74,6 @@ namespace chestnut
                                            bool useVsync = false );
 
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_WINDOW_H__

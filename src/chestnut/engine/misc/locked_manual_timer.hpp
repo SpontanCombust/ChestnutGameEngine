@@ -3,7 +3,7 @@
 
 #include "manual_timer.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A timer class, which objects get updated (ticked) using extrnal delta time value and tick only in given time interval.
@@ -52,6 +52,6 @@ namespace chestnut
         bool tick( float dt ) override;
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_LOCKED_MANUAL_TIMER_H__

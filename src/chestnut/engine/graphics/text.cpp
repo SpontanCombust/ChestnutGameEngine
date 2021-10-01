@@ -1,6 +1,6 @@
 #include "text.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     using namespace internal;
     
@@ -594,4 +594,4 @@ namespace chestnut
         return m_vecLines;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

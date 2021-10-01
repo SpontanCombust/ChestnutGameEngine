@@ -5,7 +5,7 @@
 
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     using mat3f = Matrix<float,3>;
 
@@ -19,7 +19,7 @@ namespace chestnut
     template< typename T >
     Matrix<T,3> matMakeRotation( float angleRad );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "matrix3.tpp"

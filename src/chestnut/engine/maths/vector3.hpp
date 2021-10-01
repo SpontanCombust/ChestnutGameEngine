@@ -4,7 +4,7 @@
 #include "vector.hpp"
 #include "vector2.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< typename T >
     struct Vector<T,3>
@@ -36,7 +36,7 @@ namespace chestnut
     template< typename T >
     Vector<T,3> vecCrossProduct( const Vector<T,3>& v1, const Vector<T,3>& v2 );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "vector3.tpp"

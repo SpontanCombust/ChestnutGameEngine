@@ -10,7 +10,7 @@
 #include <utility> // pair
 #include <vector>
 
-namespace chestnut
+namespace chestnut::engine
 {
     DEFINE_ENUM_FLAG_OPERATORS(EFontStyle)
 
@@ -284,4 +284,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut`
+} // namespace chestnut::engine`

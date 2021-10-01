@@ -7,7 +7,7 @@
 #include "vector3.hpp"
 #include "vector4.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief Perform multiplication matrix * vector, where if vector is smaller size than matrix side, 
@@ -54,7 +54,7 @@ namespace chestnut
     template< typename T >
     void vecRotate( Vector<T,4>& v, const Vector<T,3>& axis, float angleRad );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "vector_transform.tpp"

@@ -8,7 +8,7 @@
 #include <memory>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     // A resource class that provides automatic shader program deallocation on object deletion
     class CShaderProgramResource : public IResource
@@ -43,6 +43,6 @@ namespace chestnut
     // Throws exception if fails to load the shader program
     std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_SHADER_PROGRAM_RESOURCE_H__

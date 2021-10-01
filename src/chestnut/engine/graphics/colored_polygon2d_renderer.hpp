@@ -8,7 +8,7 @@
 
 #include <vector>
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A renderer class used to render plain colored polygons in 2D space
@@ -84,7 +84,7 @@ namespace chestnut
         void deleteBuffers() override;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__

@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace chestnut
+namespace chestnut::engine
 {    
     bool checkShaderCompiled( GLuint shader, std::string& msgBuff )
     {
@@ -245,4 +245,4 @@ namespace chestnut
         return std::shared_ptr<CShaderProgramResource>( resource );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

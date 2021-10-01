@@ -3,7 +3,7 @@
 #include "matrix4.hpp"
 #include "vector_cast.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
     Vector<T,vn> vecLeftMultiplyByMatrix( const Matrix<T,mn>& m, const Vector<T,vn>& v )
@@ -117,4 +117,4 @@ namespace chestnut
         v = m * v;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

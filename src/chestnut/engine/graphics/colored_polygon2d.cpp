@@ -2,7 +2,7 @@
 
 #include "../misc/exception.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {    
     SColoredVertex::SColoredVertex( vec2f position, vec4f color ) 
     {
@@ -64,4 +64,4 @@ namespace chestnut
         return m_vecIndices;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

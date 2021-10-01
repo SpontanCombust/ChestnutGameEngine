@@ -1,6 +1,6 @@
 #include "matrix3.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template<> 
     struct Matrix<float,3>;
@@ -67,4 +67,4 @@ namespace chestnut
     template<>
     Matrix<float,3> matMakeRotation( float angleRad );
     
-} // namespace chestnut
+} // namespace chestnut::engine

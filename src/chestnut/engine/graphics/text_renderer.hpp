@@ -6,7 +6,7 @@
 
 #include <vector>
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A renderer class responsible for rendering formatted text
@@ -105,6 +105,6 @@ namespace chestnut
         void deleteBuffers() override;
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TEXT_RENDERER_H__

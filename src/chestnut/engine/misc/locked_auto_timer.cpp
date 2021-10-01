@@ -4,7 +4,7 @@
 
 #include <thread>
 
-namespace chestnut
+namespace chestnut::engine
 {
     CLockedAutoTimer::CLockedAutoTimer( timerid_t id, float updateIntervalInSeconds, bool isRepeating )
     : CAutoTimer( id )
@@ -86,4 +86,4 @@ namespace chestnut
         return false;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

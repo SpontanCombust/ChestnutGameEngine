@@ -1,7 +1,7 @@
 #include <algorithm>
 #include <cstring>
 
-namespace chestnut
+namespace chestnut::engine
 {
     template<typename T>
     Vector<T,2>::Vector()
@@ -69,4 +69,4 @@ namespace chestnut
         return *this;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

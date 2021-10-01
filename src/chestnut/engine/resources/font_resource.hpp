@@ -12,7 +12,7 @@
 #include <set>
 #include <unordered_map>
 
-namespace chestnut
+namespace chestnut::engine
 {
     enum class EFontStyle
     {
@@ -79,6 +79,6 @@ namespace chestnut
     // Throws an exception if fails to load the font
     std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_FONT_RESOURCE_H__

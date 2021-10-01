@@ -5,7 +5,7 @@
 
 #include <limits>
 
-namespace chestnut
+namespace chestnut::engine
 {
     const double CHESTNUT_PI = 3.14159265359;
 
@@ -23,6 +23,6 @@ namespace chestnut
 
     const systempriority_t SYSTEM_PRIORITY_INVALID = -1;
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_CONSTANTS_H__

@@ -10,7 +10,7 @@
 #include "../src/chestnut/engine/graphics/text_renderer.hpp"
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
 {

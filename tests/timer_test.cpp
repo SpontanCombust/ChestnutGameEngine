@@ -9,7 +9,7 @@
 #include <thread>
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "Auto timer test" )
 {

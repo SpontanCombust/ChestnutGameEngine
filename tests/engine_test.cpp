@@ -6,7 +6,7 @@
 #include <string>
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 std::string gstr = "abc";
 

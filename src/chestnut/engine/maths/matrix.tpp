@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-namespace chestnut
+namespace chestnut::engine
 {    
     template<typename T, size_t n>
     Matrix<T, n>::Matrix()
@@ -247,4 +247,4 @@ namespace chestnut
         return ss.str();
     }
     
-} // namespace chestnut
+} // namespace chestnut::engine

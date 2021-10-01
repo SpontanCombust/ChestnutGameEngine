@@ -3,7 +3,7 @@
 
 #include "vector.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template< typename T >
     struct Vector<T,2>
@@ -29,7 +29,7 @@ namespace chestnut
     using vec2f = Vector<float,2>;
     using vec2i = Vector<int,2>;
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "vector2.tpp"

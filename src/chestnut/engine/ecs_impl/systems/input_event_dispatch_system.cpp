@@ -4,7 +4,7 @@
 
 #include <SDL2/SDL_events.h>
 
-namespace chestnut
+namespace chestnut::engine
 {      
     CInputEventDispatchSystem::CInputEventDispatchSystem( CEngine& engine ) : ISystem( engine )
     {
@@ -55,4 +55,4 @@ namespace chestnut
     }
 
 
-} // namespace chestnut
+} // namespace chestnut::engine

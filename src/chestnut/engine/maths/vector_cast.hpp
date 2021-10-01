@@ -5,7 +5,7 @@
 
 #include <type_traits>
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief Returns vector of given targetN size created from vector v, where targetN is greater than sourceN
@@ -79,7 +79,7 @@ namespace chestnut
     template< typename targetT, size_t targetN, typename sourceT, size_t sourceN >
     Vector<targetT,targetN> vecCast( const Vector<sourceT,sourceN>& v, targetT initRemainVals = 1 );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "vector_cast.tpp"

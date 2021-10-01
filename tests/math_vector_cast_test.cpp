@@ -5,7 +5,7 @@
 #include "../src/chestnut/engine/maths/vector3.hpp"
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "Vector casting test" )
 {

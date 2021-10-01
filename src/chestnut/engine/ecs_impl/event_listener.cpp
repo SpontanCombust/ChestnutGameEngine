@@ -1,6 +1,6 @@
 #include "event_listener.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {    
     void IEventListener::setEnabled( bool enabled ) 
     {
@@ -12,4 +12,4 @@ namespace chestnut
         return m_isEnabled;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

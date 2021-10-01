@@ -14,7 +14,7 @@
 #include <list>
 #include <memory> // shared_ptr
 
-namespace chestnut
+namespace chestnut::engine
 {
     class CEngine
     {
@@ -101,7 +101,7 @@ namespace chestnut
         void gameLoop();
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "engine.tpp"

@@ -4,7 +4,7 @@
 #include "../components/timer_component.hpp"
 #include "../events/timer_event.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CTimerSystem::CTimerSystem( CEngine& engine ) : ISystem( engine )
     {
@@ -42,4 +42,4 @@ namespace chestnut
         });
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

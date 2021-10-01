@@ -1,6 +1,6 @@
 #include "../misc/exception.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     template<typename KeyType, typename Compare>
     CMapSpriteSheetTexture2D<KeyType,Compare>::CMapSpriteSheetTexture2D()
@@ -103,4 +103,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

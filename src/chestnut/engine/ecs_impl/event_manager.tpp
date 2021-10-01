@@ -1,4 +1,4 @@
-namespace chestnut
+namespace chestnut::engine
 {    
     template<typename EventType>
     void CEventManager::raiseEvent( const EventType& event ) 
@@ -31,4 +31,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -1,6 +1,6 @@
 #include "transform2d_component.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CTransform2DComponent::CTransform2DComponent()
     {
@@ -9,4 +9,4 @@ namespace chestnut
         rotation = 0.f;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

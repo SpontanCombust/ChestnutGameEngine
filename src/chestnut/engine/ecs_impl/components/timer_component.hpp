@@ -7,7 +7,7 @@
 
 #include <vector>
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct CTimerComponent : public ecs::CComponent
     {
@@ -23,6 +23,6 @@ namespace chestnut
         static timerid_t m_timerIDAccumulator;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TIMER_COMPONENT_H__

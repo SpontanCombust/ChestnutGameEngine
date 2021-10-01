@@ -5,7 +5,7 @@
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/window.hpp"
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 TEST_CASE( "Window test - creating without initializing libraries" )
 {

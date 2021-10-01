@@ -4,7 +4,7 @@
 #include "timer.hpp"
 #include "../types.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A timer class which objects get updated (ticked) using std::chrono functionality
@@ -33,6 +33,6 @@ namespace chestnut
         uint64_t getAbsoluteTimeInMicroseconds() const;
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_AUTO_TIMER_H__

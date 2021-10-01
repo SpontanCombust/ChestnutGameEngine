@@ -1,4 +1,4 @@
-namespace chestnut
+namespace chestnut::engine
 {
     template<typename EventType>
     CEventListener<EventType>::CEventListener() 
@@ -87,4 +87,4 @@ namespace chestnut
         }
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -3,7 +3,7 @@
 
 #include "timer.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A timer class, which objects get updated (ticked) using external delta time value
@@ -25,6 +25,6 @@ namespace chestnut
         virtual bool tick( float dt );
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_MANUAL_TIMER_H__

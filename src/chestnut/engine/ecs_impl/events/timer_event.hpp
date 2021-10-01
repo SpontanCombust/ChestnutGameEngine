@@ -3,7 +3,7 @@
 
 #include "../../types.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     struct STimerEvent
     {
@@ -13,6 +13,6 @@ namespace chestnut
         bool isTimerRepeating;
     };
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TIMER_EVENT_H__

@@ -7,7 +7,7 @@
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
 
-namespace chestnut
+namespace chestnut::engine
 {
     std::shared_ptr<CWindow> createWindow( const std::string& title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
@@ -284,4 +284,4 @@ namespace chestnut
         SDL_GL_SwapWindow( m_sdlWindow );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

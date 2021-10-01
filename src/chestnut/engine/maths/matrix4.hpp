@@ -6,7 +6,7 @@
 
 #include <string>
 
-namespace chestnut
+namespace chestnut::engine
 {
     using mat4f = Matrix<float,4>;
 
@@ -44,7 +44,7 @@ namespace chestnut
     template< typename T >
     Matrix<T,4> matMakeRotation( Vector<T,3> axis, float angleRad );
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 
 #include "matrix4.tpp"

@@ -8,7 +8,7 @@
 #include "../components/polygon2d_canvas_component.hpp"
 #include "../../debug/log.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     CSimpled2DRenderingSystem::CSimpled2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
     {
@@ -109,5 +109,5 @@ namespace chestnut
         m_polygonRenderer.unbindShader();
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine
 

@@ -5,7 +5,7 @@
 
 #include <cstdint>
 
-namespace chestnut
+namespace chestnut::engine
 {
     // A timer interface
     class ITimer
@@ -49,6 +49,6 @@ namespace chestnut
         float getUpdatesPerSec();
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TIMER_H__

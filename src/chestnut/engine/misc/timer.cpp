@@ -1,6 +1,6 @@
 #include "timer.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     ITimer::ITimer( timerid_t id )
     {
@@ -53,4 +53,4 @@ namespace chestnut
         return 0.f;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -3,7 +3,7 @@
 #include "../misc/locked_auto_timer.hpp"
 #include "../misc/exception.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {    
     CEngine::CEngine( std::shared_ptr<CWindow> window, float updateInterval )
     {
@@ -102,4 +102,4 @@ namespace chestnut
         return m_updateTimer->getElapsedTimeInSeconds();
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

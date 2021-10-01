@@ -3,7 +3,7 @@
 
 #include "auto_timer.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     /**
      * @brief A timer class which objects get updated (ticked) using std::chrono functionality and tick only in given tick interval.
@@ -62,6 +62,6 @@ namespace chestnut
         bool tick() override;
     };
     
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_LOCKED_AUTO_TIMER_H__

@@ -1,6 +1,6 @@
 #include "angles.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     void rotateUnitVec2f( vec2f& v, float angleRad )
     {
@@ -9,4 +9,4 @@ namespace chestnut
         v.y = v.x * sine + v.y * cosine;
     }
     
-} // namespace chestnut
+} // namespace chestnut::engine

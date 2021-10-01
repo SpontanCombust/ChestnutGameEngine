@@ -2,7 +2,7 @@
 
 #include "../misc/exception.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {    
     void IRenderer::init( const CShaderProgram& shader ) 
     {

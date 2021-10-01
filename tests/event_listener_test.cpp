@@ -3,7 +3,7 @@
 #include "../src/chestnut/engine/ecs_impl/event_listener.hpp"
 
 
-using namespace chestnut;
+using namespace chestnut::engine;
 
 struct SNumSwitchEvent
 {

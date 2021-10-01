@@ -2,7 +2,7 @@
 
 #include "../debug/log.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {    
     CManualTimer::CManualTimer( timerid_t id ) 
     : ITimer( id ) 
@@ -29,4 +29,4 @@ namespace chestnut
         return true;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

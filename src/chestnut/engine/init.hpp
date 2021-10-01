@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_INIT_H__
 #define __CHESTNUT_ENGINE_INIT_H__
 
-namespace chestnut
+namespace chestnut::engine
 {
     // Initializes SDL2 library and its sublibraries
     // Returns false of failure
@@ -13,6 +13,6 @@ namespace chestnut
 
     void chestnutQuit();
 
-} // namespace chestnut
+} // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_INIT_H__

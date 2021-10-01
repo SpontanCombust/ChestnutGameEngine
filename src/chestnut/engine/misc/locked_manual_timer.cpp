@@ -2,7 +2,7 @@
 
 #include "../debug/log.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {    
     CLockedManualTimer::CLockedManualTimer( timerid_t id, float updateIntervalInSeconds, bool isRepeating )
     : CManualTimer( id ) 
@@ -56,4 +56,4 @@ namespace chestnut
         return false;
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine

@@ -1,6 +1,6 @@
 #include "resource_manager.hpp"
 
-namespace chestnut
+namespace chestnut::engine
 {
     // instantiate static variables
     std::unordered_map< size_t, std::shared_ptr<IResource> > CResourceManager::m_mapHashToResource;
@@ -220,4 +220,4 @@ namespace chestnut
         m_mapHashToResource.erase( hash );
     }
 
-} // namespace chestnut
+} // namespace chestnut::engine
