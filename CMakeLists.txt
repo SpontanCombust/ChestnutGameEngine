@@ -6,52 +6,62 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/cmake/sdl2)
 
+
+# =================================== Finding libraries ===================================
+
+find_package(SDL2 REQUIRED)
+
+find_package(SDL2_image REQUIRED)
+
+find_package(SDL2_ttf REQUIRED)
+
+# find_package(SDL2_mixer REQUIRED)
+
+set(OpenGL_GL_PREFERENCE GLVND)
+find_package(OpenGL REQUIRED)
+
+find_package(GLEW REQUIRED)
+
+
 # ====================================== CGE library ======================================
 
-add_library(${PROJECT_NAME})
+add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
-add_subdirectory(src)
+add_subdirectory(src/chestnut/engine)
 
 target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
 
-install(TARGETS ${PROJECT_NAME} CONFIGURATIONS Debug RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/lib)
-install(TARGETS ${PROJECT_NAME} CONFIGURATIONS Release RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/lib)
 
+add_subdirectory(dependencies/ChestnutECSCore)
+target_link_libraries(${PROJECT_NAME} ChestnutECSCore)
 
-set(OpenGL_GL_PREFERENCE GLVND)
-find_package(OpenGL REQUIRED)
+target_link_libraries(${PROJECT_NAME} SDL2::Main)
+target_link_libraries(${PROJECT_NAME} SDL2::Image)
+target_link_libraries(${PROJECT_NAME} SDL2::TTF)
+# target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 
-find_package(GLEW REQUIRED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRECTORIES})
+target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
+
+#TODO readd install targets later
 
 # ====================================== Tests executable ======================================
 
-add_executable(Tests ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
-target_include_directories(Tests PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
-target_link_libraries(Tests ${PROJECT_NAME})
+add_executable(${PROJECT_NAME}_Test)
+
+target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
+
 add_subdirectory(tests)
 
-install(TARGETS Tests CONFIGURATIONS Debug RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin)
-install(TARGETS Tests CONFIGURATIONS Release RUNTIME DESTINATION ${PROJECT_SOURCE_DIR}/bin)
+find_package(Catch2)
 
-find_package(SDL2 REQUIRED)
-target_link_libraries(Tests SDL2::Main)
+target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_Test Catch2::Catch2)
 
-find_package(SDL2_image REQUIRED)
-target_link_libraries(Tests SDL2::Image)
+include(CTest)
+include(Catch)
+catch_discover_tests(${PROJECT_NAME}_Test)
 
-find_package(SDL2_ttf REQUIRED)
-target_link_libraries(Tests SDL2::TTF)
-
-# find_package(SDL2_mixer REQUIRED)
-# target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
-
-set(OpenGL_GL_PREFERENCE GLVND)
-find_package(OpenGL REQUIRED)
-target_include_directories(Tests PUBLIC ${OPENGL_INCLUDE_DIRS})
-target_link_libraries(Tests ${OPENGL_LIBRARIES})
-
-find_package(GLEW REQUIRED)
-target_include_directories(Tests PUBLIC ${GLEW_INCLUDE_DIRECTORIES})
-target_link_libraries(Tests ${GLEW_LIBRARIES})
