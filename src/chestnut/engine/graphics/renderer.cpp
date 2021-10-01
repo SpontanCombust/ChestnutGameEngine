@@ -1,22 +1,30 @@
 #include "renderer.hpp"
 
-#include "../debug/debug.hpp"
-
-#include <cassert>
+#include "../misc/exception.hpp"
 
 namespace chestnut
 {    
     void IRenderer::init( const CShaderProgram& shader ) 
     {
         m_shader = shader;
-        assert( m_shader.isValid() );
+        if( !m_shader.isValid() )
+        {
+            throw ChestnutException( "Invalid shader program passed to the renderer!" );
+        }
 
         m_shader.bind();
-        assert( setProjectionAndViewMatrixLocations() );
-        assert( setShaderVariableLocations() );
+        if( !setProjectionAndViewMatrixLocations() )
+        {
+            throw ChestnutException( "Failed to set shader locations for projection and view matrice uniforms!" );
+        }
+        if( !setShaderVariableLocations() )
+        {
+            throw ChestnutException( "Failed to set shader locations for attributes and/or uniforms!" );
+        }
+
         initBuffers();
 
-        assert( onInitCustom() );
+        onInit();
     }
 
     IRenderer::~IRenderer() 

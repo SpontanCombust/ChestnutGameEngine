@@ -19,6 +19,7 @@ namespace chestnut
     public:
         virtual ~IRenderer();
 
+        // Throws exception on error
         void init( const CShaderProgram& shader );
 
         void bindShader();
@@ -29,11 +30,6 @@ namespace chestnut
         // requires bound renderer shader
         void setViewMatrix( const mat4f& mat );
 
-    protected:
-        // Set variable locations for view and projection matrices
-        virtual bool setProjectionAndViewMatrixLocations();
-
-    public:
         // Method called to clear all the data used to render stuff
         virtual void clear() = 0;
         // Method called to render stuff with gathered data
@@ -41,8 +37,9 @@ namespace chestnut
 
 
     protected:
-        // Called in init method
-        virtual bool onInitCustom() = 0;
+        virtual void onInit() = 0;
+        // Set variable locations for view and projection matrices
+        virtual bool setProjectionAndViewMatrixLocations();
         // Called on initialization to fetch custom shader variables' locations
         virtual bool setShaderVariableLocations() = 0;
         // Called on initialization to setup buffers for further use

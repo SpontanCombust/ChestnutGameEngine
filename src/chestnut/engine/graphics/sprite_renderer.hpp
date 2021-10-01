@@ -109,7 +109,7 @@ namespace chestnut
         void render() override;
 
     protected:
-        bool onInitCustom() override;
+        void onInit() override;
 
         bool setShaderVariableLocations() override;
 

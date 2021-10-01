@@ -6,6 +6,7 @@
 #include "../components/transform2d_component.hpp"
 #include "../components/texture2d_component.hpp"
 #include "../components/polygon2d_canvas_component.hpp"
+#include "../../debug/log.hpp"
 
 namespace chestnut
 {
@@ -14,17 +15,30 @@ namespace chestnut
         CShaderProgram shader;
         mat4f projection = matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f );
 
-        shader = CShaderProgram( CResourceManager::loadShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
-        m_spriteRenderer.init( shader );
+        try
+        {
+            shader = CShaderProgram( CResourceManager::loadShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
+            m_spriteRenderer.init( shader );
+        }
+        catch(const std::exception& e)
+        {
+            LOG_ERROR( e.what() );
+        }
 
         m_spriteRenderer.bindShader();
         m_spriteRenderer.setViewMatrix( mat4f() );
         m_spriteRenderer.setProjectionMatrix( projection );
 
-
-        shader = CShaderProgram( CResourceManager::loadShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
-        m_polygonRenderer.init( shader );
-
+        try
+        {
+            shader = CShaderProgram( CResourceManager::loadShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
+            m_polygonRenderer.init( shader );
+        }
+        catch(const std::exception& e)
+        {
+            LOG_ERROR( e.what() );   
+        }
+        
         m_polygonRenderer.bindShader();
         m_polygonRenderer.setViewMatrix( mat4f() );
         m_polygonRenderer.setProjectionMatrix( projection );

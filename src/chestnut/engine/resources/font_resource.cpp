@@ -1,7 +1,6 @@
 #include "font_resource.hpp"
 
 #include "../misc/exception.hpp"
-#include "../debug/debug.hpp"
 #include "../resources/texture2d_resource.hpp"
 
 #include <SDL2/SDL_ttf.h>

@@ -22,7 +22,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
     CShaderProgram shader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
 
     CSpriteRenderer renderer;
-    renderer.init( shader );
+    REQUIRE_NOTHROW( renderer.init( shader ) );
 
     auto texResource = loadTexture2DResourceFromFile( "../assets/images/awesomeface.png" );
     REQUIRE( texResource->isValid() );

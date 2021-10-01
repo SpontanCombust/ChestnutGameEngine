@@ -1,6 +1,6 @@
 #include "shader_program_resource.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 #include "../misc/exception.hpp"
 
 #include <fstream>
@@ -91,15 +91,15 @@ namespace chestnut
             std::string errMsg;
             if( !checkShaderCompiled( shader, errMsg ) )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Failed to compile the shader from file: " << path );
-                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Error: " << errMsg );
+                LOG_ERROR( "Failed to compile the shader from file: " << path );
+                LOG_ERROR( "Error: " << errMsg );
                 glDeleteShader( shader );
                 shader = 0;
             }
         }
         else
         {
-            LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Failed to open shader source file: " << path );
+            LOG_ERROR( "Failed to open shader source file: " << path );
             shader = 0;
         }
 
@@ -136,8 +136,8 @@ namespace chestnut
         std::string errMsg;
         if( !checkProgramLinked( program, errMsg ) )
         {
-            LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Failed to link the program for vertex shader " << vertPath << " and fragment shader " << fragPath );
-            LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Error: " << errMsg );
+            LOG_ERROR( "Failed to link the program for vertex shader " << vertPath << " and fragment shader " << fragPath );
+            LOG_ERROR( "Error: " << errMsg );
             glDeleteShader( fragShader );
             glDeleteShader( vertShader );
             glDeleteProgram( program );
@@ -193,7 +193,7 @@ namespace chestnut
 
             if( loc == -1 )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find attribute with name " << attrName << " in program " << m_programID );
+                LOG_WARNING( "Couldn't find attribute with name " << attrName << " in program " << m_programID );
             }
             else
             {
@@ -218,7 +218,7 @@ namespace chestnut
 
             if( loc == -1 )
             {
-                LOG_CHANNEL( "SHADER_PROGRAM_RESOURCE", "Couldn't find uniform with name " << uniformName << " in program " << m_programID );
+                LOG_WARNING( "Couldn't find uniform with name " << uniformName << " in program " << m_programID );
             }
             else
             {

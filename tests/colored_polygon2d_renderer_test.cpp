@@ -23,7 +23,7 @@ TEST_CASE( "Colored polygon renderer test", "[interactive]" )
     CShaderProgram shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
 
     CColoredPolygon2DRenderer renderer;
-    renderer.init( shader );
+    REQUIRE_NOTHROW( renderer.init( shader ) );
 
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );

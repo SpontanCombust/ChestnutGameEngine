@@ -1,7 +1,5 @@
 #include "shader_program.hpp"
 
-#include "../debug/debug.hpp"
-
 namespace chestnut
 {
     CShaderProgram::CShaderProgram( std::shared_ptr<CShaderProgramResource> resource ) 

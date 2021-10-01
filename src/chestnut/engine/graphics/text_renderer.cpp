@@ -1,6 +1,6 @@
 #include "text_renderer.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 #include "../maths/vector_cast.hpp"
 
 #include <unordered_map>
@@ -9,11 +9,10 @@
 
 namespace chestnut
 {
-    bool CTextRenderer::onInitCustom() 
+    void CTextRenderer::onInit() 
     {
         m_glyphCapacity = 0;
         reserveBufferSpace( INIT_GLYPH_CAPACITY );
-        return true;
     }
 
     void CTextRenderer::deleteBuffers() 
@@ -81,7 +80,7 @@ namespace chestnut
             GLenum err = glGetError();
             if( err != GL_NO_ERROR )
             {
-                LOG_CHANNEL( "TEXT_RENDERER", "Error occured while initializing buffers: " << gluErrorString( err ) );
+                LOG_ERROR( "Error occured while initializing buffers: " << gluErrorString( err ) );
             }
 
             m_glyphCapacity = targetGlyphCapacity;

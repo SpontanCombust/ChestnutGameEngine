@@ -27,7 +27,7 @@ TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
 
     CShaderProgram textureShader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
     CSpriteRenderer spriteRenderer;
-    spriteRenderer.init( textureShader );
+    REQUIRE_NOTHROW( spriteRenderer.init( textureShader ) );
 
     spriteRenderer.bindShader();
     spriteRenderer.setViewMatrix( mat4f() );
@@ -112,7 +112,7 @@ TEST_CASE( "Text renderer test - rendering text glyphs", "[interactive]" )
 
     CShaderProgram textShader( loadShaderProgramResourceFromFiles( "../assets/shaders/text.vert", "../assets/shaders/text.frag" ) );
     CTextRenderer textRenderer;
-    textRenderer.init( textShader );
+    REQUIRE_NOTHROW( textRenderer.init( textShader ) );
 
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );

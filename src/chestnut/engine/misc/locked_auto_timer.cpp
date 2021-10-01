@@ -1,6 +1,6 @@
 #include "locked_auto_timer.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 
 #include <thread>
 
@@ -46,7 +46,7 @@ namespace chestnut
 
         if( !m_wasStarted )
         {
-            LOG_CHANNEL( "LOCKED_AUTO_TIMER", "Warning! Trying to update a timer that wasn't started yet! ID: " << m_timerID );
+            LOG_WARNING( "Trying to update a timer that wasn't started yet! ID: " << m_timerID );
             return false;
         }
         

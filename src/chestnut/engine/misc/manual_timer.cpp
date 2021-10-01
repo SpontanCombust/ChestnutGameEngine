@@ -1,6 +1,6 @@
 #include "manual_timer.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 
 namespace chestnut
 {    
@@ -19,7 +19,7 @@ namespace chestnut
     {
         if( !m_wasStarted )
         {
-            LOG_CHANNEL( "MANUAL_TIMER", "Warning! Trying to update a timer that wasn't started yet! ID: " << m_timerID );
+            LOG_WARNING( "Trying to update a timer that wasn't started yet! ID: " << m_timerID );
             return false;
         }
 

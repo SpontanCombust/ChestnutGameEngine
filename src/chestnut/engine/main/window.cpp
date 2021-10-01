@@ -1,6 +1,6 @@
 #include "window.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 #include "../init.hpp"
 
 #include <SDL2/SDL.h>
@@ -16,8 +16,8 @@ namespace chestnut
 
         if( !chestnutWasInit() )
         {
-            LOG_CHANNEL( "WINDOW", "Can't create a window without first initializing the dependency libraries!" );
-            LOG_CHANNEL( "WINDOW", "Use chestnutInit() first!" );
+            LOG_ERROR( "Can't create a window without first initializing the dependency libraries!" );
+            LOG_ERROR( "Use chestnutInit() first!" );
             return ptr;
         }
 
@@ -47,16 +47,16 @@ namespace chestnut
         SDL_Window *window = SDL_CreateWindow( title.c_str(), x, y, width, height, windowFlags );
         if( !window )
         {
-            LOG_CHANNEL( "WINDOW", "Failed to create window. Error: " );
-            LOG_CHANNEL( "WINDOW", SDL_GetError() );
+            LOG_ERROR( "Failed to create window. Error: " );
+            LOG_ERROR( SDL_GetError() );
             return ptr;
         }
 
         SDL_GLContext context = SDL_GL_CreateContext( window );
         if( !context )
         {
-            LOG_CHANNEL( "WINDOW", "Failed to create OpenGL context for the window. Error: " );
-            LOG_CHANNEL( "WINDOW", SDL_GetError() );
+            LOG_ERROR( "Failed to create OpenGL context for the window. Error: " );
+            LOG_ERROR( SDL_GetError() );
             SDL_DestroyWindow( window );
             return ptr;
         }
@@ -68,8 +68,8 @@ namespace chestnut
         GLenum err = glewInit();
         if( err != GLEW_OK )
         {
-            LOG_CHANNEL( "WINDOW", "Failed to initialize GLEW! Error: " );
-            LOG_CHANNEL( "WINDOW", glewGetErrorString( err ) );
+            LOG_ERROR( "Failed to initialize GLEW! Error: " );
+            LOG_ERROR( glewGetErrorString( err ) );
             SDL_GL_DeleteContext( context );
             SDL_DestroyWindow( window );
             return ptr;

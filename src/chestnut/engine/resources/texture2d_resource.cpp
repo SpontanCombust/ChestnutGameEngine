@@ -1,6 +1,6 @@
 #include "texture2d_resource.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 #include "../misc/exception.hpp"
 
 #include <SDL2/SDL_image.h>
@@ -20,8 +20,8 @@ namespace chestnut
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
         {
-            LOG_CHANNEL( "TEXTURE2D_RESOURCE", "Error occured while loading texture from pixels! Error:" );
-            LOG_CHANNEL( "TEXTURE2D_RESOURCE", (char *)gluErrorString( err ) );
+            LOG_ERROR( "Error occured while loading texture from pixels! Error:" );
+            LOG_ERROR( gluErrorString( err ) );
             glDeleteTextures( 1, &texID );
             glBindTexture( GL_TEXTURE_2D, 0 );
             
@@ -51,7 +51,7 @@ namespace chestnut
 
         if( surf->w != surf->h || ( surf->w & ( surf->w - 1 ) ) != 0 )
         {
-            LOG_CHANNEL( "TEXTURE2D_RESOURCE", "Warning! Loading non-power-of-two texture from " << path );
+            LOG_WARNING( "Loading non-power-of-two texture from " << path );
         }
 
         width = surf->w;

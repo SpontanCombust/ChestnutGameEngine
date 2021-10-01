@@ -1,6 +1,6 @@
 #include "sprite_renderer.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 
 #define INIT_SPRITE_CAPACITY 100
 
@@ -18,15 +18,13 @@ namespace chestnut
         0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff
     };
 
-    bool CSpriteRenderer::onInitCustom() 
+    void CSpriteRenderer::onInit() 
     {
         m_spriteCapacity = 0;
         reserveBufferSpace( INIT_SPRITE_CAPACITY );
 
         m_missingTexturePlaceholder = CTexture2D( loadTexture2DResourceFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB ) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );
-
-        return true;
     }
 
     void CSpriteRenderer::deleteBuffers() 
@@ -139,7 +137,7 @@ namespace chestnut
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
         {
-            LOG_CHANNEL( "SPRITE_RENDERER", "Error occured while initializing buffers: " << gluErrorString( err ) );
+            LOG_ERROR( "Error occured while initializing buffers: " << gluErrorString( err ) );
         }
     }
 
@@ -157,7 +155,7 @@ namespace chestnut
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
         {
-            LOG_CHANNEL( "SPRITE_RENDERER", "Error occured while reserving buffer space: " << gluErrorString( err ) );
+            LOG_ERROR( "Error occured while reserving buffer space: " << gluErrorString( err ) );
         }
 
         m_spriteCapacity = targetSpriteCapacity;
@@ -262,7 +260,7 @@ namespace chestnut
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
         {
-            LOG_CHANNEL( "SPRITE_RENDERER", "Error occured while rendering: " << gluErrorString( err ) );
+            LOG_ERROR( "Error occured while rendering: " << gluErrorString( err ) );
         }
     }
 

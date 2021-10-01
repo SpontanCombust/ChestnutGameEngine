@@ -6,7 +6,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 
-#include "debug/debug.hpp"
+#include "debug/log.hpp"
 
 namespace chestnut
 {
@@ -19,24 +19,24 @@ namespace chestnut
         flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS;
         if( SDL_Init( flags ) < 0 )
         {
-            LOG_CHANNEL( "INIT", "SDL failed to initialize!" );
-            LOG_CHANNEL( "INIT", SDL_GetError() );
+            LOG_ERROR( "SDL failed to initialize!" );
+            LOG_ERROR( SDL_GetError() );
             return false;
         }
 
         flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP;
         if( !( IMG_Init( flags ) & flags ) )
         {
-            LOG_CHANNEL( "INIT", "SDL_image failed to initialize!" );
-            LOG_CHANNEL( "INIT", IMG_GetError() );
+            LOG_ERROR( "SDL_image failed to initialize!" );
+            LOG_ERROR( IMG_GetError() );
             SDL_Quit();
             return false;
         }
 
         if( TTF_Init() < 0 )
         {
-            LOG_CHANNEL( "INIT", "SDL_ttf failed to initialize!" );
-            LOG_CHANNEL( "INIT", TTF_GetError() );
+            LOG_ERROR( "SDL_ttf failed to initialize!" );
+            LOG_ERROR( TTF_GetError() );
             IMG_Quit();
             SDL_Quit();
             return false;
@@ -44,16 +44,16 @@ namespace chestnut
 
         if( SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, glVerMajor ) < 0 )
         {
-            LOG_CHANNEL( "INIT", "Failed to set OpenGL major version!" );
-            LOG_CHANNEL( "INIT", TTF_GetError() );
+            LOG_WARNING( "Failed to set OpenGL major version!" );
+            LOG_WARNING( TTF_GetError() );
             IMG_Quit();
             SDL_Quit();
             return false;
         }
         if( SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, glVerMinor ) < 0 )
         {
-            LOG_CHANNEL( "INIT", "Failed to set OpenGL minor version!" );
-            LOG_CHANNEL( "INIT", TTF_GetError() );
+            LOG_WARNING( "Failed to set OpenGL minor version!" );
+            LOG_WARNING( TTF_GetError() );
             IMG_Quit();
             SDL_Quit();
             return false;

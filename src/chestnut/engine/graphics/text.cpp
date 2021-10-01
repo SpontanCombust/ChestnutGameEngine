@@ -1,7 +1,5 @@
 #include "text.hpp"
 
-#include "../debug/debug.hpp"
-
 namespace chestnut
 {
     using namespace internal;

@@ -1,18 +1,17 @@
 #include "colored_polygon2d_renderer.hpp"
 
-#include "../debug/debug.hpp"
+#include "../debug/log.hpp"
 
 #define INIT_POLYGON_VERTEX_CAPACITY 100
 #define INIT_VERTEX_INDEX_CAPACITY 150
 
 namespace chestnut
 {
-    bool CColoredPolygon2DRenderer::onInitCustom() 
+    void CColoredPolygon2DRenderer::onInit() 
     {
         m_polygonVertexCapacity = 0;
         m_vertexIndexCapacity = 0;
         reserveBufferSpace( INIT_POLYGON_VERTEX_CAPACITY, INIT_VERTEX_INDEX_CAPACITY );
-        return true;
     }
 
     void CColoredPolygon2DRenderer::deleteBuffers() 
@@ -89,7 +88,7 @@ namespace chestnut
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
         {
-            LOG_CHANNEL( "COLORED_POLYGON2D_RENDERER", "Error occured while reserving buffer space: " << gluErrorString( err ) );
+            LOG_ERROR( "Error occured while reserving buffer space: " << gluErrorString( err ) );
         }
     }
 
@@ -103,7 +102,7 @@ namespace chestnut
     {
         if( !polygon.isRenderable() )
         {
-            LOG_CHANNEL( "COLORED_POLYGON2D_RENDERER", "Polygon with improper indices cannot be used!" );
+            LOG_WARNING( "Polygon with improper indices cannot be used!" );
             return;
         }
 
