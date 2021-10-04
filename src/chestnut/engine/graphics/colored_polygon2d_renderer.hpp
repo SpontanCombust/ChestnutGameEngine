@@ -2,16 +2,15 @@
 #define __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
 
 #include "renderer.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/vector4.hpp"
 #include "colored_polygon2d.hpp"
 
+#include <unordered_map>
 #include <vector>
 
 namespace chestnut::engine
 {
     /**
-     * @brief A renderer class used to render plain colored polygons in 2D space
+     * @brief A renderer class used to render plain polygons in 2D space
      * 
      * @details
      * Renderer receives data with submitPolygon() method, which takes in:
@@ -44,10 +43,23 @@ namespace chestnut::engine
             vec2f scale;
             float rotation;
         };
+
+        struct SColoredPolygon2DRender_VertexGroup
+        {
+            std::vector< SColoredPolygon2DRender_Vertex > vecRenderVertices;
+            std::vector< GLuint > vecRenderIndices;
+        };
+
+        struct SColoredPolygon2DRender_Batch
+        {
+            GLenum drawMode;
+            GLsizei indexCount;
+            GLsizei indexOffset;
+        };
         
     private:
-        std::vector< SColoredPolygon2DRender_Vertex > m_vecColoredVertices;
-        std::vector< GLuint > m_vecIndices;
+        std::unordered_map< GLenum, SColoredPolygon2DRender_VertexGroup > m_mapDrawModeToVertexGroup;
+        std::vector< SColoredPolygon2DRender_Batch > m_vecBatches;
 
         GLuint m_vbo;
         GLuint m_ebo;
@@ -68,7 +80,10 @@ namespace chestnut::engine
 
         void clear() override;
 
-        void submitPolygon( const CColoredPolygon2D& polygon, const vec2f& translation, const vec2f& scale = { 1.f, 1.f }, float rotation = 0.f );
+        void submitPolygon( const SColoredPolygon2D& polygonModel, const vec2f& translation, const vec2f& scale = { 1.f, 1.f }, float rotation = 0.f );
+        
+        void submitPolygon( const SMulticoloredPolygon2D& polygonModel, const vec2f& translation, const vec2f& scale = { 1.f, 1.f }, float rotation = 0.f );
+
         // requires bound renderer shader
         void render() override;
 

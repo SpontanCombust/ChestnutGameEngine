@@ -6,34 +6,43 @@
 
 #include <GL/glew.h>
 
+#include <vector>
+
 namespace chestnut::engine
 {
-    struct SColoredVertex
+    struct SVertex2D
     {
-        vec2f position;
-        vec4f color;
+        vec2f pos;
 
-        SColoredVertex() = default;
-        SColoredVertex( vec2f position, vec4f color );
+        SVertex2D( vec2f _pos );
     };
 
-    class CColoredPolygon2D
+    struct SColoredVertex2D
     {
-    private:
-        std::vector< SColoredVertex > m_vecVertices;
-        std::vector< GLuint > m_vecIndices;
+        vec2f pos;
+        vec4f color;
 
-    public:
-        void addVertex( vec2f position, vec4f color );
-        void addVertex( vec2f position, float r, float g, float b, float a );
-        void addVertex( vec2f position, char r, char g, char b, char a );
-        // Throws an exception if any of indices doesn't correspond to a vertex
-        void addIndices( GLuint i1, GLuint i2, GLuint i3 );
+        SColoredVertex2D( vec2f _pos, vec4f _color );
+    };
 
-        bool isRenderable() const;
 
-        const std::vector< SColoredVertex >& getVertices() const;
-        const std::vector< GLuint >& getIndices() const;
+    struct SColoredPolygon2D
+    {
+        std::vector< SVertex2D > vecVertices;
+        std::vector< GLuint > vecIndices;
+        vec4f color;
+        GLenum drawMode;
+
+        SColoredPolygon2D();
+    };
+
+    struct SMulticoloredPolygon2D
+    {
+        std::vector< SColoredVertex2D > vecVertices;
+        std::vector< GLuint > vecIndices;
+        GLenum drawMode;
+
+        SMulticoloredPolygon2D();
     };
 
 } // namespace chestnut::engine

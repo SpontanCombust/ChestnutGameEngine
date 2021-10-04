@@ -94,51 +94,177 @@ namespace chestnut::engine
 
     void CColoredPolygon2DRenderer::clear() 
     {
-        m_vecColoredVertices.clear();
-        m_vecIndices.clear();
+        for( auto& [ drawMode, vertexGroup ] : m_mapDrawModeToVertexGroup )
+        {
+            vertexGroup.vecRenderVertices.clear();
+            vertexGroup.vecRenderIndices.clear();
+        }
+
+        m_vecBatches.clear();
     }
 
-    void CColoredPolygon2DRenderer::submitPolygon( const CColoredPolygon2D& polygon, const vec2f& translation, const vec2f& scale, float rotation ) 
+    bool isPolygon2DRenderable( const SColoredPolygon2D& polygon )
     {
-        if( !polygon.isRenderable() )
+        if( polygon.drawMode == GL_TRIANGLES )
+        {
+            if( polygon.vecIndices.size() % 3 == 0 )
+            {
+                return true;
+            }
+
+            return false;
+        }
+        else if ( polygon.drawMode == GL_LINES )
+        {
+            if( polygon.vecIndices.size() % 2 == 0 )
+            {
+                return true;
+            }
+
+            return false;   
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    bool isPolygon2DRenderable( const SMulticoloredPolygon2D& polygon )
+    {
+        if( polygon.drawMode == GL_TRIANGLES )
+        {
+            if( polygon.vecIndices.size() % 3 == 0 )
+            {
+                return true;
+            }
+
+            return false;
+        }
+        else if ( polygon.drawMode == GL_LINES )
+        {
+            if( polygon.vecIndices.size() % 2 == 0 )
+            {
+                return true;
+            }
+
+            return false;   
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    void CColoredPolygon2DRenderer::submitPolygon( const SColoredPolygon2D& polygonModel, const vec2f& translation, const vec2f& scale, float rotation ) 
+    {
+        if( !isPolygon2DRenderable( polygonModel ) )
         {
             LOG_WARNING( "Polygon with improper indices cannot be used!" );
             return;
         }
 
-        GLuint indexOffset = m_vecColoredVertices.size();
+        auto& renderVertexGroup = m_mapDrawModeToVertexGroup[ polygonModel.drawMode ];
+
+        GLuint indexOffset = renderVertexGroup.vecRenderVertices.size(); // this offset is a local offset of vertex group, not the entirety of vertices accross all draw modes
 
         SColoredPolygon2DRender_Vertex renderVertex;
-        for( const SColoredVertex& vertex : polygon.getVertices() )
+        for( const SVertex2D& vertex : polygonModel.vecVertices )
         {
-            renderVertex.position = vertex.position;
+            renderVertex.position = vertex.pos;
+            renderVertex.color = polygonModel.color;
+
+            renderVertex.translation = translation;
+            renderVertex.scale = scale;
+            renderVertex.rotation = rotation;
+
+            renderVertexGroup.vecRenderVertices.push_back( renderVertex );
+        }
+
+        for( GLuint index : polygonModel.vecIndices )
+        {
+            renderVertexGroup.vecRenderIndices.push_back( index + indexOffset );
+        }
+    }
+
+    void CColoredPolygon2DRenderer::submitPolygon( const SMulticoloredPolygon2D& polygonModel, const vec2f& translation, const vec2f& scale, float rotation ) 
+    {
+        if( !isPolygon2DRenderable( polygonModel ) )
+        {
+            LOG_WARNING( "Polygon with improper indices cannot be used!" );
+            return;
+        }
+
+        auto& renderVertexGroup = m_mapDrawModeToVertexGroup[ polygonModel.drawMode ];
+
+        GLuint indexOffset = renderVertexGroup.vecRenderVertices.size(); // this offset is a local offset of vertex group, not the entirety of vertices accross all draw modes
+
+        SColoredPolygon2DRender_Vertex renderVertex;
+        for( const SColoredVertex2D& vertex : polygonModel.vecVertices )
+        {
+            renderVertex.position = vertex.pos;
             renderVertex.color = vertex.color;
 
             renderVertex.translation = translation;
             renderVertex.scale = scale;
             renderVertex.rotation = rotation;
 
-            m_vecColoredVertices.push_back( renderVertex );
+            renderVertexGroup.vecRenderVertices.push_back( renderVertex );
         }
 
-        for( const GLuint& index : polygon.getIndices() )
+        for( GLuint index : polygonModel.vecIndices )
         {
-            m_vecIndices.push_back( index + indexOffset );
+            renderVertexGroup.vecRenderIndices.push_back( index + indexOffset );
         }
     }
 
     void CColoredPolygon2DRenderer::prepareBuffers() 
     {
-        GLsizei vertexCount, indexCount;
-        vertexCount = m_vecColoredVertices.size();
-        indexCount = m_vecIndices.size();
+        GLsizei vertexCount = 0, indexCount = 0;
+
+        for( const auto& [ drawMode, vertexGroup ] : m_mapDrawModeToVertexGroup )
+        {
+            vertexCount += vertexGroup.vecRenderVertices.size();
+            indexCount += vertexGroup.vecRenderIndices.size();
+        }
+
         reserveBufferSpace( vertexCount, indexCount );
 
-        glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-        glBufferSubData( GL_ARRAY_BUFFER, 0, sizeof( SColoredPolygon2DRender_Vertex ) * vertexCount, m_vecColoredVertices.data() );
+        GLsizei vertexOffset = 0, indexOffset = 0;
+        for( auto& [ drawMode, vertexGroup ] : m_mapDrawModeToVertexGroup )
+        {
+            vertexCount = vertexGroup.vecRenderVertices.size();
+            indexCount = vertexGroup.vecRenderIndices.size();
 
-        glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
-        glBufferSubData( GL_ELEMENT_ARRAY_BUFFER, 0, sizeof( GLuint ) * indexCount, m_vecIndices.data() );
+            // we have to add one more offset to indices of a vertex group
+            // the way it is done now with single buffer with contiguous sections for specific drawing modes
+            // and a map to store the data for these modes, there's not an easy way of storing valid indices
+            // if we can submit polygons with different drawing modes in random order
+            // that's why here when we're going over every draw mode in the map we keep track of previously
+            // checked vertex group index count and apply an offset to the next one to make these groups be contiguous in the EBO
+            // and to not overwrite each other
+            for( GLuint& index : vertexGroup.vecRenderIndices )
+            {
+                index += vertexOffset;
+            }
+
+            glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
+            glBufferSubData( GL_ARRAY_BUFFER, sizeof( SColoredPolygon2DRender_Vertex ) * vertexOffset, sizeof( SColoredPolygon2DRender_Vertex ) * vertexCount, vertexGroup.vecRenderVertices.data() );
+
+            glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
+            glBufferSubData( GL_ELEMENT_ARRAY_BUFFER, sizeof( GLuint ) * indexOffset, sizeof( GLuint ) * indexCount, vertexGroup.vecRenderIndices.data() );
+
+
+            SColoredPolygon2DRender_Batch batch;
+            batch.drawMode = drawMode;
+            batch.indexCount = indexCount;
+            batch.indexOffset = indexOffset;
+            m_vecBatches.push_back( batch );
+
+
+            vertexOffset += vertexCount;
+            indexOffset += indexCount;
+        }
+
     }
 
     void CColoredPolygon2DRenderer::render() 
@@ -146,7 +272,10 @@ namespace chestnut::engine
         prepareBuffers();
         
         glBindVertexArray( m_vao );
-            glDrawElements( GL_TRIANGLES, m_vecIndices.size(), GL_UNSIGNED_INT, 0 );
+            for( const SColoredPolygon2DRender_Batch& batch : m_vecBatches )
+            {
+                glDrawElements( batch.drawMode, batch.indexCount, GL_UNSIGNED_INT, ( void * )( sizeof( GLuint ) * batch.indexOffset ) );
+            }
         glBindVertexArray(0);
     }
     

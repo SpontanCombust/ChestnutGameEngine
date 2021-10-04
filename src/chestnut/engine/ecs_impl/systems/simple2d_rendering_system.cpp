@@ -78,7 +78,7 @@ namespace chestnut::engine
         ecs::forEachEntityInQuery< CTransform2DComponent, CPolygon2DCanvasComponent >( m_polygonQuery, 
         [this]( CTransform2DComponent& transform, CPolygon2DCanvasComponent& canvas )
         {
-            for( const CColoredPolygon2D& polygon : canvas.vecPolygons )
+            for( const SColoredPolygon2D& polygon : canvas.vecPolygons )
             {
                 m_polygonRenderer.submitPolygon( polygon, transform.position, transform.scale, transform.rotation );
             }

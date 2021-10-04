@@ -11,7 +11,7 @@ namespace chestnut::engine
 {
     struct CPolygon2DCanvasComponent : public ecs::CComponent
     {
-        std::vector< CColoredPolygon2D > vecPolygons;
+        std::vector< SColoredPolygon2D > vecPolygons;
 
         CPolygon2DCanvasComponent() = default;
     };
