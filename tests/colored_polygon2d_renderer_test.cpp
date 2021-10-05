@@ -12,7 +12,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Colored polygon renderer test", "[interactive]" )
+TEST_CASE( "Colored polygon renderer test - general presentation", "[interactive]" )
 {
     const char *testName = "Colored polygon renderer test";
 
@@ -75,3 +75,53 @@ TEST_CASE( "Colored polygon renderer test", "[interactive]" )
 
     REQUIRE( showConfirmTestMessageBox( testName ) );
 }   
+
+
+using namespace chestnut::engine::colored_polygon_templates;
+
+TEST_CASE( "Colored polygon renderer test - template polygons", "[interactive]" )
+{
+    const char *testName = "Colored polygon renderer test - template polygons";
+
+    REQUIRE( chestnutInit() );
+
+    auto window = createWindow( testName );
+    REQUIRE( window );
+
+    CShaderProgram shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
+
+    CColoredPolygon2DRenderer renderer;
+    REQUIRE_NOTHROW( renderer.init( shader ) );
+
+    renderer.bindShader();
+    renderer.setViewMatrix( mat4f() );
+    renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
+
+
+    SColoredPolygon2D triangle1 = coloredPolygonTriangle( 100.f );          triangle1.color = { 1.f, 0.f, 0.f, 1.f };
+    SColoredPolygon2D triangle2 = coloredPolygonTriangle( 150.f, 50.f );    triangle2.color = { 1.f, 1.f, 0.f, 1.f };
+    SColoredPolygon2D square    = coloredPolygonSquare( 60.f );             square.color    = { 0.f, 1.f, 0.f, 1.f };
+    SColoredPolygon2D rectangle = coloredPolygonRectangle( 40.f, 100.f );   rectangle.color = { 0.f, 1.f, 1.f, 1.f };
+    SColoredPolygon2D circle    = coloredPolygonCircle( 30.f, 36 );         circle.color    = { 0.f, 0.f, 1.f, 1.f };
+
+
+    showRunTestMessageBox( testName, "Click to render:\n"
+                                     "-red equal side triangle\n"
+                                     "-yellow wide triangle\n"
+                                     "-green square\n"
+                                     "-cyan rectangle\n"
+                                     "-blue circle");
+
+    window->clear();
+        renderer.clear();
+        renderer.submitPolygon( triangle1, { 100.f, 100.f } );
+        renderer.submitPolygon( triangle2, { 250.f, 100.f } );
+        renderer.submitPolygon( square, { 400.f, 100.f } );
+        renderer.submitPolygon( rectangle, { 100.f, 300.f } );
+        renderer.submitPolygon( circle, { 200.f, 300.f } );
+        renderer.render();
+    window->flipBuffer();
+
+
+    REQUIRE( showConfirmTestMessageBox( testName ) );
+}

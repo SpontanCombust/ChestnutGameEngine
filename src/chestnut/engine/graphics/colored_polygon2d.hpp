@@ -45,6 +45,22 @@ namespace chestnut::engine
         SMulticoloredPolygon2D();
     };
 
+
+    namespace colored_polygon_templates
+    {
+        SColoredPolygon2D coloredPolygonTriangle( float a );
+
+        SColoredPolygon2D coloredPolygonTriangle( float a, float h );
+
+        SColoredPolygon2D coloredPolygonSquare( float a );
+
+        SColoredPolygon2D coloredPolygonRectangle( float a, float b );
+
+        SColoredPolygon2D coloredPolygonCircle( float r, unsigned int segments );
+
+    } // namespace coloredPolygonTemplates
+    
+
 } // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
