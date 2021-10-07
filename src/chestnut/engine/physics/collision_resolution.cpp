@@ -1,6 +1,6 @@
 #include "collision_resolution.hpp"
 
-#include <algorithm> // min_element
+#include <algorithm> // min_element, min, clamp
 
 namespace chestnut::engine
 {    
@@ -64,12 +64,83 @@ namespace chestnut::engine
 
     bool resolveAABB2DVsAABB2D( SColliderBodyAABB2D& aabb1, ECollisionPolicyFlags aabb1Policy, SColliderBodyAABB2D& aabb2, ECollisionPolicyFlags aabb2Policy ) 
     {
+        vec2f right1left2 = vec2f{ aabb2.pos.x - ( aabb1.pos.x + aabb1.size.x ), 0.f };
+        vec2f left1Right2 = vec2f{ aabb2.pos.x + aabb2.size.x - aabb1.pos.x, 0.f };
+        vec2f down1Up2 = vec2f{ 0.f, aabb2.pos.y - ( aabb1.pos.y + aabb1.size.y ) };
+        vec2f up1Down2 = vec2f{ 0.f, aabb2.pos.y + aabb2.size.y - aabb1.pos.y };
 
+        if( right1left2.x <= 0.f && left1Right2.x >= 0.f && down1Up2.y <= 0.f && up1Down2.y >= 0.f )
+        {
+            vec2f displace = std::min( { right1left2, left1Right2, down1Up2, up1Down2 }, []( const vec2f& lhs, const vec2f& rhs )
+            {
+                return vecMagnitude( lhs ) < vecMagnitude( rhs );
+            });
+            
+            // if both can be moved and move other objects - move them from the center of collision by half the intersection magnitude
+            if( ( aabb1Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING )
+             && ( aabb2Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) )
+            {
+                aabb1.pos += displace * 0.5f;
+                aabb2.pos -= displace * 0.5f;
+            }
+            // if only the first one is to be moved by the second one - move the 1st one away from 2nd one's way
+            else if( ( aabb1Policy & ECollisionPolicyFlags::AFFECTED ) > 0 && ( aabb2Policy & ECollisionPolicyFlags::AFFECTING ) > 0 )
+            {
+                aabb1.pos += displace;
+            }
+            // if only the first one is supposed to move second object - move the 2nd one away from 1st one's way
+            else if( ( aabb1Policy & ECollisionPolicyFlags::AFFECTING ) > 0 && ( aabb2Policy & ECollisionPolicyFlags::AFFECTED ) > 0 )
+            {
+                aabb2.pos -= displace;
+            }
+            // in any other case objects just clip through
+
+            return true;
+        }
+
+        return false;
     }
 
     bool resolveAABB2DVsCircle2D( SColliderBodyAABB2D& aabb, ECollisionPolicyFlags aabbPolicy, SColliderBodyCircle2D& circle, ECollisionPolicyFlags circlePolicy ) 
     {
+        // Made with the help of https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-detection
+        // FIXME This is an incomplete algorithm that can't properly handle situations when circle's centre is inside AABB
 
+        vec2f aabbHalfExtents = aabb.size * 0.5f;
+        vec2f aabbCenter = aabb.pos + aabbHalfExtents;
+        vec2f diff = circle.pos - aabbCenter;
+
+        vec2f clamped { std::clamp( diff.x, -aabbHalfExtents.x, aabbHalfExtents.x ),
+                        std::clamp( diff.y, -aabbHalfExtents.y, aabbHalfExtents.y ) };
+
+        vec2f closest = aabbCenter + clamped;
+        diff = closest - circle.pos;
+
+        float mag = vecMagnitude( diff );
+
+        if( mag <= circle.radius )
+        {
+            vec2f displaceFull = vecNormalized( diff ) * ( circle.radius - mag );
+
+            if( ( aabbPolicy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING )
+             && ( circlePolicy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) )
+            {
+                aabb.pos += displaceFull * 0.5f;
+                circle.pos -= displaceFull * 0.5f;    
+            }
+            else if( ( aabbPolicy & ECollisionPolicyFlags::AFFECTED ) > 0 && ( circlePolicy & ECollisionPolicyFlags::AFFECTING ) > 0 )
+            {
+                aabb.pos += displaceFull;
+            }
+            else if( ( aabbPolicy & ECollisionPolicyFlags::AFFECTING ) > 0 && ( circlePolicy & ECollisionPolicyFlags::AFFECTED ) > 0 )
+            {
+                circle.pos -= displaceFull;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     bool resolveCircle2DVsCircle2D( SColliderBodyCircle2D& circle1, ECollisionPolicyFlags circle1Policy, SColliderBodyCircle2D& circle2, ECollisionPolicyFlags circle2Policy ) 
@@ -82,8 +153,8 @@ namespace chestnut::engine
         if( diffMagn <= circle1.radius + circle2.radius )
         {
             // if both can be moved and move other objects - move them from the center of collision by half the intersection magnitude
-            if( ( circle1Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) > 0 
-             && ( circle2Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) > 0 )
+            if( ( circle1Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) 
+             && ( circle2Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) )
             {
                 vec2f displace = ( intersectMagn / 2.f ) * diffNorm;
                 circle1.pos -= displace;
@@ -97,7 +168,7 @@ namespace chestnut::engine
             // if only the first one is supposed to move second object - move the 2nd one away from 1st one's way
             else if( ( circle1Policy & ECollisionPolicyFlags::AFFECTING ) > 0 && ( circle2Policy & ECollisionPolicyFlags::AFFECTED ) > 0 )
             {
-                circle2.pos += intersectMagn * diffMagn;
+                circle2.pos += intersectMagn * diffNorm;
             }
             // in any other case objects just clip through
 

@@ -45,13 +45,13 @@ namespace chestnut::engine
 
     struct SColliderBodyAABB2D
     {
-        vec2f pos;
+        vec2f pos; // defines the upper left corner of the rectangle
         vec2f size;
     };
 
     struct SColliderBodyCircle2D
     {
-        vec2f pos;
+        vec2f pos; // defines centre of the circle
         float radius;
     };
 
