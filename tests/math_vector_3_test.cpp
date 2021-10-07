@@ -7,7 +7,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "3-size vector test" )
+TEST_CASE( "Math - 3-size vector test" )
 {
     SECTION( "Default state" )
     {
@@ -183,6 +183,26 @@ TEST_CASE( "3-size vector test" )
         REQUIRE( v.x == Approx(-2.5).margin(0.001) );
         REQUIRE( v.y == Approx(-5.0).margin(0.001) );
         REQUIRE( v.z == Approx(-7.5).margin(0.001) );
+    }
+
+    SECTION( "Scalar quotient" )
+    {
+        vec3f v;
+        v.x = 1.f;
+        v.y = 2.f;
+        v.z = 3.f;
+
+        vec3f u = v / -2.f;
+
+        REQUIRE( u.x == Approx(-0.5).margin(0.001) );
+        REQUIRE( u.y == Approx(-1.0).margin(0.001) );
+        REQUIRE( u.z == Approx(-1.5).margin(0.001) );
+
+
+        v /= -2.f;
+        REQUIRE( u.x == Approx(-0.5).margin(0.001) );
+        REQUIRE( u.y == Approx(-1.0).margin(0.001) );
+        REQUIRE( u.z == Approx(-1.5).margin(0.001) );
     }
 
     SECTION( "Dot product" )

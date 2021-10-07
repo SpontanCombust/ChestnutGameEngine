@@ -86,9 +86,9 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive]" )
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( poly1, body1.pos + body1.size * 0.5f );
-            renderer.submitPolygon( poly2, body2.pos + body2.size * 0.5f );
-            renderer.submitPolygon( poly3, body3.pos + body3.size * 0.5f );
+            renderer.submitPolygon( poly1, body1.pos + body1.size / 2.f );
+            renderer.submitPolygon( poly2, body2.pos + body2.size / 2.f );
+            renderer.submitPolygon( poly3, body3.pos + body3.size / 2.f );
             renderer.submitPolygon( polyPoint, bodyPoint );
             renderer.render();
         window->flipBuffer();
@@ -346,11 +346,11 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( aabb1, aabb1Body.pos + aabb1Body.size * 0.5f );
-            renderer.submitPolygon( aabb2, aabb2Body.pos + aabb2Body.size * 0.5f );
-            renderer.submitPolygon( aabb3, aabb3Body.pos + aabb3Body.size * 0.5f );
-            renderer.submitPolygon( aabb4, aabb4Body.pos + aabb4Body.size * 0.5f );
-            renderer.submitPolygon( aabbUser, aabbUserBody.pos  + aabbUserBody.size * 0.5f );
+            renderer.submitPolygon( aabb1, aabb1Body.pos + aabb1Body.size / 2.f );
+            renderer.submitPolygon( aabb2, aabb2Body.pos + aabb2Body.size / 2.f );
+            renderer.submitPolygon( aabb3, aabb3Body.pos + aabb3Body.size / 2.f );
+            renderer.submitPolygon( aabb4, aabb4Body.pos + aabb4Body.size / 2.f );
+            renderer.submitPolygon( aabbUser, aabbUserBody.pos  + aabbUserBody.size / 2.f );
             renderer.render();
         window->flipBuffer();
 
@@ -446,10 +446,10 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( aabb1, aabb1Body.pos + aabb1Body.size * 0.5f );
-            renderer.submitPolygon( aabb2, aabb2Body.pos + aabb2Body.size * 0.5f );
-            renderer.submitPolygon( aabb3, aabb3Body.pos + aabb3Body.size * 0.5f );
-            renderer.submitPolygon( aabb4, aabb4Body.pos + aabb4Body.size * 0.5f );
+            renderer.submitPolygon( aabb1, aabb1Body.pos + aabb1Body.size / 2.f );
+            renderer.submitPolygon( aabb2, aabb2Body.pos + aabb2Body.size / 2.f );
+            renderer.submitPolygon( aabb3, aabb3Body.pos + aabb3Body.size / 2.f );
+            renderer.submitPolygon( aabb4, aabb4Body.pos + aabb4Body.size / 2.f );
             renderer.submitPolygon( circleUser, circleUserBody.pos );
             renderer.render();
         window->flipBuffer();

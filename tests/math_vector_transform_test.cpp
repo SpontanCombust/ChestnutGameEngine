@@ -6,7 +6,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Vector transformation test" )
+TEST_CASE( "Math - Vector transformation test" )
 {
     SECTION( "vec2 transform" )
     {

@@ -12,7 +12,7 @@ namespace chestnut::engine
         T elements[n];
 
         Vector();
-        Vector( T init );
+        explicit Vector( T init );
 
         const T* data() const;
         T* data();
@@ -22,6 +22,7 @@ namespace chestnut::engine
         Vector& operator*=( const Vector& v );
         Vector& operator/=( const Vector& v );
         Vector& operator*=( T s );
+        Vector& operator/=( T s );
     };
 
 
@@ -37,31 +38,38 @@ namespace chestnut::engine
     Vector<T,n> vecNegated( const Vector<T,n>& v );
 
     template< typename T, size_t n >
-    Vector<T,n> operator-( const Vector<T,n>& v );
+    inline Vector<T,n> operator-( const Vector<T,n>& v ) { return vecNegated( v ); }
 
 
     template< typename T, size_t n >
     Vector<T,n> vecSum( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
     template< typename T, size_t n >
-    Vector<T,n> operator+( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+    inline Vector<T,n> operator+( const Vector<T,n>& v1, const Vector<T,n>& v2 ) { return vecSum( v1, v2 ); }
 
 
     template< typename T, size_t n >
     Vector<T,n> vecDifference( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
     template<typename T, size_t n>
-    Vector<T,n> operator-( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+    inline Vector<T,n> operator-( const Vector<T,n>& v1, const Vector<T,n>& v2 ) { return vecDifference( v1, v2 ); }
 
 
     template< typename T, size_t n >
     Vector<T,n> vecScalarProduct( const Vector<T,n>& v, T s );
 
     template< typename T, size_t n >
-    Vector<T,n> operator*( T s, const Vector<T,n>& v );
+    inline Vector<T,n> operator*( T s, const Vector<T,n>& v ) { return vecScalarProduct( v, s ); }
 
     template< typename T, size_t n >
-    Vector<T,n> operator*( const Vector<T,n>& v, T s );
+    inline Vector<T,n> operator*( const Vector<T,n>& v, T s ) { return vecScalarProduct( v, s ); }
+
+
+    template< typename T, size_t n >
+    Vector<T,n> vecScalarQuotient( const Vector<T,n>& v, T s );
+
+    template< typename T, size_t n >
+    inline Vector<T,n> operator/( const Vector<T,n>& v, T s ) { return vecScalarQuotient( v, s ); }
 
 
     template< typename T, size_t n >
@@ -72,14 +80,14 @@ namespace chestnut::engine
     Vector<T,n> vecComponentProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
     template< typename T, size_t n >
-    Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+    inline Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 ) { return vecComponentProduct( v1, v2 ); }
 
 
     template< typename T, size_t n >
     Vector<T,n> vecComponentQuotient( const Vector<T,n>& v1, const Vector<T,n>& v2 );
 
     template< typename T, size_t n >
-    Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+    inline Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 ) { return vecComponentQuotient( v1, v2 ); }
 
 
     template< typename T, size_t n >

@@ -6,7 +6,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "3-size matrix test" )
+TEST_CASE( "Math - 3-size matrix test" )
 {
     SECTION( "Translation matrix" )
     {

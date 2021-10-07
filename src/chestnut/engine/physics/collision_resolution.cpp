@@ -80,8 +80,8 @@ namespace chestnut::engine
             if( ( aabb1Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING )
              && ( aabb2Policy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) )
             {
-                aabb1.pos += displace * 0.5f;
-                aabb2.pos -= displace * 0.5f;
+                aabb1.pos += displace / 2.f;
+                aabb2.pos -= displace / 2.f;
             }
             // if only the first one is to be moved by the second one - move the 1st one away from 2nd one's way
             else if( ( aabb1Policy & ECollisionPolicyFlags::AFFECTED ) > 0 && ( aabb2Policy & ECollisionPolicyFlags::AFFECTING ) > 0 )
@@ -106,7 +106,7 @@ namespace chestnut::engine
         // Made with the help of https://learnopengl.com/In-Practice/2D-Game/Collisions/Collision-detection
         // FIXME This is an incomplete algorithm that can't properly handle situations when circle's centre is inside AABB
 
-        vec2f aabbHalfExtents = aabb.size * 0.5f;
+        vec2f aabbHalfExtents = aabb.size / 2.f;
         vec2f aabbCenter = aabb.pos + aabbHalfExtents;
         vec2f diff = circle.pos - aabbCenter;
 
@@ -125,8 +125,8 @@ namespace chestnut::engine
             if( ( aabbPolicy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING )
              && ( circlePolicy & ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) ) == ( ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING ) )
             {
-                aabb.pos += displaceFull * 0.5f;
-                circle.pos -= displaceFull * 0.5f;    
+                aabb.pos += displaceFull / 2.f;
+                circle.pos -= displaceFull / 2.f;    
             }
             else if( ( aabbPolicy & ECollisionPolicyFlags::AFFECTED ) > 0 && ( circlePolicy & ECollisionPolicyFlags::AFFECTING ) > 0 )
             {

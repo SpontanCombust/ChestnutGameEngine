@@ -9,7 +9,7 @@ using namespace chestnut::engine;
 
 typedef Vector<float,3> vec3f;
 
-TEST_CASE( "N-size vector test" )
+TEST_CASE( "Math - N-size vector test" )
 {
     SECTION( "Default state" )
     {
@@ -173,6 +173,26 @@ TEST_CASE( "N-size vector test" )
         REQUIRE( v.elements[0] == Approx(-2.5).margin(0.001) );
         REQUIRE( v.elements[1] == Approx(-5.0).margin(0.001) );
         REQUIRE( v.elements[2] == Approx(-7.5).margin(0.001) );
+    }
+
+    SECTION( "Scalar quotient" )
+    {
+        vec3f v;
+        v.elements[0] = 1.f;
+        v.elements[1] = 2.f;
+        v.elements[2] = 3.f;
+
+        vec3f u = v / -2.f;
+
+        REQUIRE( u.elements[0] == Approx(-0.5).margin(0.001) );
+        REQUIRE( u.elements[1] == Approx(-1.0).margin(0.001) );
+        REQUIRE( u.elements[2] == Approx(-1.5).margin(0.001) );
+
+
+        v /= -2.f;
+        REQUIRE( u.elements[0] == Approx(-0.5).margin(0.001) );
+        REQUIRE( u.elements[1] == Approx(-1.0).margin(0.001) );
+        REQUIRE( u.elements[2] == Approx(-1.5).margin(0.001) );
     }
 
     SECTION( "Dot product" )
