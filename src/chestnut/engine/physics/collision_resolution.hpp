@@ -9,32 +9,44 @@ namespace chestnut::engine
 
 
     // Returns true if collision happened
+    // aabbPos describes world position of the center of AABB 
     // AFFECTING flag is ignored for the point
-    bool resolvePoint2DVsAABB2D( SColliderBodyPoint2D& point, ECollisionPolicyFlags pointPolicy, SColliderBodyAABB2D& aabb, ECollisionPolicyFlags aabbPolicy );
+    bool resolvePoint2DVsAABB2D( vec2f& pointPos, ECollisionPolicyFlags pointPolicy, vec2f& aabbPos, const vec2f& aabbScale, const SColliderBodyAABB2D& aabbBody, ECollisionPolicyFlags aabbPolicy );
 
     // Returns true if collision happened
+    // circlePos describes world position of the center of the circle
     // AFFECTING flag is ignored for the point
-    bool resolvePoint2DVsCircle2D( SColliderBodyPoint2D& point, ECollisionPolicyFlags pointPolicy, SColliderBodyCircle2D& circle, ECollisionPolicyFlags circlePolicy );
+    bool resolvePoint2DVsCircle2D( vec2f& pointPos, ECollisionPolicyFlags pointPolicy, vec2f& circlePos, float circleScale, const SColliderBodyCircle2D& circleBody, ECollisionPolicyFlags circlePolicy );
 
 
     // Returns true if collision happened
+    // aabbPos describes world position of the center of AABB 
     // AFFECTING flag is ignored for the point
-    inline bool resolveAABB2DVsPoint2D( SColliderBodyAABB2D& aabb, ECollisionPolicyFlags aabbPolicy, SColliderBodyPoint2D& point, ECollisionPolicyFlags pointPolicy ) { return resolvePoint2DVsAABB2D( point, pointPolicy, aabb, aabbPolicy ); }
+    inline bool resolveAABB2DVsPoint2D( vec2f& aabbPos, const vec2f& aabbScale, const SColliderBodyAABB2D& aabbBody, ECollisionPolicyFlags aabbPolicy, vec2f& pointPos, ECollisionPolicyFlags pointPolicy ) { return resolvePoint2DVsAABB2D( pointPos, pointPolicy, aabbPos, aabbScale, aabbBody, aabbPolicy ); }
 
     // Returns true if collision happened
-    bool resolveAABB2DVsAABB2D( SColliderBodyAABB2D& aabb1, ECollisionPolicyFlags aabb1Policy, SColliderBodyAABB2D& aabb2, ECollisionPolicyFlags aabb2Policy );
+    // aabbPos describes world position of the center of AABB 
+    bool resolveAABB2DVsAABB2D( vec2f& aabb1Pos, const vec2f& aabb1Scale, const SColliderBodyAABB2D& aabb1Body, ECollisionPolicyFlags aabb1Policy, vec2f& aabb2Pos, const vec2f& aabb2Scale, const SColliderBodyAABB2D& aabb2Body, ECollisionPolicyFlags aabb2Policy );
 
     // Returns true if collision happened
-    bool resolveAABB2DVsCircle2D( SColliderBodyAABB2D& aabb, ECollisionPolicyFlags aabbPolicy, SColliderBodyCircle2D& circle, ECollisionPolicyFlags circlePolicy );
+    // aabbPos describes world position of the center of AABB 
+    // circlePos describes world position of the center of the circle
+    bool resolveAABB2DVsCircle2D( vec2f& aabbPos, const vec2f& aabbScale, const SColliderBodyAABB2D& aabbBody, ECollisionPolicyFlags aabbPolicy, vec2f& circlePos, float circleScale, const SColliderBodyCircle2D& circleBody, ECollisionPolicyFlags circlePolicy );
     
 
     // Returns true if collision happened
+    // circlePos describes world position of the center of the circle
     // AFFECTING flag is ignored for the point
-    inline bool resolveCircle2DVsPoint2D( SColliderBodyCircle2D& circle, ECollisionPolicyFlags circlePolicy, SColliderBodyPoint2D& point, ECollisionPolicyFlags pointPolicy ) { return resolvePoint2DVsCircle2D( point, pointPolicy, circle, circlePolicy ); }
+    inline bool resolveCircle2DVsPoint2D( vec2f& circlePos, float circleScale, const SColliderBodyCircle2D& circleBody, ECollisionPolicyFlags circlePolicy, vec2f& pointPos, ECollisionPolicyFlags pointPolicy ) { return resolvePoint2DVsCircle2D( pointPos, pointPolicy, circlePos, circleScale, circleBody, circlePolicy ); }
 
-    inline bool resolveCircle2DVsAABB2D( SColliderBodyCircle2D& circle, ECollisionPolicyFlags circlePolicy, SColliderBodyAABB2D& aabb, ECollisionPolicyFlags aabbPolicy ) { return resolveAABB2DVsCircle2D( aabb, aabbPolicy, circle, circlePolicy ); }
+    // Returns true if collision happened
+    // circlePos describes world position of the center of the circle
+    // aabbPos describes world position of the center of AABB 
+    inline bool resolveCircle2DVsAABB2D( vec2f& circlePos, float circleScale, const SColliderBodyCircle2D& circleBody, ECollisionPolicyFlags circlePolicy, vec2f& aabbPos, const vec2f& aabbScale, const SColliderBodyAABB2D& aabbBody, ECollisionPolicyFlags aabbPolicy ) { return resolveAABB2DVsCircle2D( aabbPos, aabbScale, aabbBody, aabbPolicy, circlePos, circleScale, circleBody, circlePolicy ); }
 
-    bool resolveCircle2DVsCircle2D( SColliderBodyCircle2D& circle1, ECollisionPolicyFlags circle1Policy, SColliderBodyCircle2D& circle2, ECollisionPolicyFlags circle2Policy );
+    // Returns true if collision happened
+    // circlePos describes world position of the center of the circle
+    bool resolveCircle2DVsCircle2D( vec2f& circle1Pos, float circle1Scale, const SColliderBodyCircle2D& circle1Body, ECollisionPolicyFlags circle1Policy, vec2f& circle2Pos, float circle2Scale, const SColliderBodyCircle2D& circle2Body, ECollisionPolicyFlags circle2Policy );
 
 } // namespace chestnut::engine
 

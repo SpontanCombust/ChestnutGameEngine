@@ -41,17 +41,19 @@ namespace chestnut::engine
     DECLARE_ENUM_FLAG_OPERATORS( ECollisionPolicyFlags )
 
 
-    typedef vec2f SColliderBodyPoint2D;
+    // point's body on its own has no properties
+    struct SColliderBodyPoint2D
+    {
+
+    };
 
     struct SColliderBodyAABB2D
     {
-        vec2f pos; // defines the upper left corner of the rectangle
         vec2f size;
     };
 
     struct SColliderBodyCircle2D
     {
-        vec2f pos; // defines centre of the circle
         float radius;
     };
 

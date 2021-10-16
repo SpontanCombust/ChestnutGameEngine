@@ -13,7 +13,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Physics - point vs AABB collision", "[interactive]" )
+TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
 {
     chestnutInit();
 
@@ -28,22 +28,31 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive]" )
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
-    SColoredPolygon2D poly1 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 300.f );
-    SColliderBodyAABB2D body1 = { { 50.f, 50.f }, { 100.f, 300.f } };
-    ECollisionPolicyFlags policy1 = ECollisionPolicyFlags::NONE;
+    SColoredPolygon2D aabb1 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 300.f );
+    vec2f aabb1Pos { 100.f, 250.f };
+    SColliderBodyAABB2D aabb1Body { { 100.f, 300.f } };
+    ECollisionPolicyFlags aabb1Policy = ECollisionPolicyFlags::NONE;
 
-    SColoredPolygon2D poly2 = colored_polygon_templates::coloredPolygonSquare( 50.f );
-    SColliderBodyAABB2D body2 = { { 400.f, 500.f }, { 50.f, 50.f } };
-    ECollisionPolicyFlags policy2 = ECollisionPolicyFlags::AFFECTING;
+    SColoredPolygon2D aabb2 = colored_polygon_templates::coloredPolygonRectangle( 200.f, 100.f );
+    vec2f aabb2Pos { 400.f, 250.f };
+    SColliderBodyAABB2D aabb2Body = { { 200.f, 100.f } };
+    ECollisionPolicyFlags aabb2Policy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
-    SColoredPolygon2D poly3 = colored_polygon_templates::coloredPolygonRectangle( 200.f, 100.f );
-    SColliderBodyAABB2D body3 = { { 300.f, 200.f }, { 200.f, 100.f } };
-    ECollisionPolicyFlags policy3 = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
+    SColoredPolygon2D aabb3 = colored_polygon_templates::coloredPolygonSquare( 50.f );
+    vec2f aabb3Pos { 400.f, 500.f };
+    SColliderBodyAABB2D aabb3Body = { { 50.f, 50.f } };
+    ECollisionPolicyFlags aabb3Policy = ECollisionPolicyFlags::AFFECTED;
 
-    SColoredPolygon2D polyPoint = colored_polygon_templates::coloredPolygonSquare( 4.f );
-    polyPoint.color = { 0.f, 0.f, 1.f, 1.f };
-    SColliderBodyPoint2D bodyPoint = { 0.f, 0.f };
-    ECollisionPolicyFlags policyPoint = ECollisionPolicyFlags::AFFECTED;
+    SColoredPolygon2D aabb4 = colored_polygon_templates::coloredPolygonSquare( 25.f );
+    vec2f aabb4Pos { 700.f, 300.f };
+    vec2f aabb4Scale { 4.f, 4.f };
+    SColliderBodyAABB2D aabb4Body = { { 25.f, 25.f } };
+    ECollisionPolicyFlags aabb4Policy = ECollisionPolicyFlags::AFFECTING;
+
+    SColoredPolygon2D point = colored_polygon_templates::coloredPolygonSquare( 4.f );
+    point.color = { 0.f, 0.f, 1.f, 1.f };
+    vec2f pointPos { 0.f, 0.f };
+    ECollisionPolicyFlags pointPolicy = ECollisionPolicyFlags::AFFECTED;
 
 
     SDL_Event e;
@@ -55,41 +64,50 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive]" )
 
         vec2i mousePos;
         SDL_GetMouseState( &mousePos.x, &mousePos.y );
-        bodyPoint = vecCastType<float>( mousePos );
+        pointPos = vecCastType<float>( mousePos );
 
 
-        if( resolvePoint2DVsAABB2D( bodyPoint, policyPoint, body1, policy1 ) )
+        if( resolvePoint2DVsAABB2D( pointPos, pointPolicy, aabb1Pos, vec2f(1.f), aabb1Body, aabb1Policy ) )
         {
-            poly1.color = { 1.f, 0.f, 0.f, 1.f };
+            aabb1.color = { 1.f, 0.f, 0.f, 1.f };
         }
         else
         {
-            poly1.color = { 1.f, 1.f, 1.f, 1.f };
+            aabb1.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolvePoint2DVsAABB2D( bodyPoint, policyPoint, body2, policy2 ) )
+        if( resolvePoint2DVsAABB2D( pointPos, pointPolicy, aabb2Pos, vec2f(1.f), aabb2Body, aabb2Policy ) )
         {
-            poly2.color = { 1.f, 0.f, 0.f, 1.f };
-        }
-        else
-        {
-            poly2.color = { 1.f, 1.f, 1.f, 1.f };
-        }
-        if( resolvePoint2DVsAABB2D( bodyPoint, policyPoint, body3, policy3 ) )
-        {
-            poly3.color = { 1.f, 0.f, 0.f, 1.f };
+            aabb2.color = { 1.f, 0.f, 0.f, 1.f };
         }
         else
         {
-            poly3.color = { 1.f, 1.f, 1.f, 1.f };
+            aabb2.color = { 1.f, 1.f, 1.f, 1.f };
+        }
+        if( resolvePoint2DVsAABB2D( pointPos, pointPolicy, aabb3Pos, vec2f(1.f), aabb3Body, aabb3Policy ) )
+        {
+            aabb3.color = { 1.f, 0.f, 0.f, 1.f };
+        }
+        else
+        {
+            aabb3.color = { 1.f, 1.f, 1.f, 1.f };
+        }
+        if( resolvePoint2DVsAABB2D( pointPos, pointPolicy, aabb4Pos, aabb4Scale, aabb4Body, aabb4Policy ) )
+        {
+            aabb4.color = { 1.f, 0.f, 0.f, 1.f };
+        }
+        else
+        {
+            aabb4.color = { 1.f, 1.f, 1.f, 1.f };
         }
         
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( poly1, body1.pos + body1.size / 2.f );
-            renderer.submitPolygon( poly2, body2.pos + body2.size / 2.f );
-            renderer.submitPolygon( poly3, body3.pos + body3.size / 2.f );
-            renderer.submitPolygon( polyPoint, bodyPoint );
+            renderer.submitPolygon( aabb1, aabb1Pos );
+            renderer.submitPolygon( aabb2, aabb2Pos );
+            renderer.submitPolygon( aabb3, aabb3Pos );
+            renderer.submitPolygon( aabb4, aabb4Pos, aabb4Scale );
+            renderer.submitPolygon( point, pointPos );
             renderer.render();
         window->flipBuffer();
 
@@ -99,7 +117,7 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive]" )
 }
 
 
-TEST_CASE( "Physics - point vs circle collision", "[interactive]" )
+TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
 {
     chestnutInit();
 
@@ -114,17 +132,25 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive]" )
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
-    SColoredPolygon2D circle1 = colored_polygon_templates::coloredPolygonCircle( 150.f, 24 );
-    SColliderBodyCircle2D circle1Body = { { 200.f, 200.f }, 150.f };
+    SColoredPolygon2D circle1 = colored_polygon_templates::coloredPolygonCircle( 150.f, 36 );
+    vec2f circle1Pos { 200.f, 200.f };
+    SColliderBodyCircle2D circle1Body = { 150.f };
     ECollisionPolicyFlags circle1Policy = ECollisionPolicyFlags::AFFECTING;
 
-    SColoredPolygon2D circle2 = colored_polygon_templates::coloredPolygonCircle( 50.f, 12 );
-    SColliderBodyCircle2D circle2Body = { { 500.f, 200.f }, 50.f };
+    SColoredPolygon2D circle2 = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
+    vec2f circle2Pos { 500.f, 200.f };
+    SColliderBodyCircle2D circle2Body = { 50.f };
     ECollisionPolicyFlags circle2Policy = ECollisionPolicyFlags::NONE;
+
+    SColoredPolygon2D circle3 = colored_polygon_templates::coloredPolygonCircle( 200.f, 36 );
+    vec2f circle3Pos { 500.f, 400.f };
+    float circle3Scale = 0.5f;
+    SColliderBodyCircle2D circle3Body = { 200.f };
+    ECollisionPolicyFlags circle3Policy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
     SColoredPolygon2D point = colored_polygon_templates::coloredPolygonSquare( 4.f );
     point.color = { 0.f, 0.f, 1.f, 1.f };
-    SColliderBodyPoint2D pointBody = { 0.f, 0.f };
+    vec2f pointPos { 0.f, 0.f };
     ECollisionPolicyFlags pointPolicy = ECollisionPolicyFlags::AFFECTED;
 
 
@@ -137,10 +163,10 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive]" )
 
         vec2i mousePos;
         SDL_GetMouseState( &mousePos.x, &mousePos.y );
-        pointBody = vecCastType<float>( mousePos );
+        pointPos = vecCastType<float>( mousePos );
 
 
-        if( resolvePoint2DVsCircle2D( pointBody, pointPolicy, circle1Body, circle1Policy ) )
+        if( resolvePoint2DVsCircle2D( pointPos, pointPolicy, circle1Pos, 1.f, circle1Body, circle1Policy ) )
         {
             circle1.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -148,7 +174,7 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive]" )
         {
             circle1.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolvePoint2DVsCircle2D( pointBody, pointPolicy, circle2Body, circle2Policy ) )
+        if( resolvePoint2DVsCircle2D( pointPos, pointPolicy, circle2Pos, 1.f, circle2Body, circle2Policy ) )
         {
             circle2.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -156,13 +182,22 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive]" )
         {
             circle2.color = { 1.f, 1.f, 1.f, 1.f };
         }
+        if( resolvePoint2DVsCircle2D( pointPos, pointPolicy, circle3Pos, circle3Scale, circle3Body, circle3Policy ) )
+        {
+            circle3.color = { 1.f, 0.f, 0.f, 1.f };
+        }
+        else
+        {
+            circle3.color = { 1.f, 1.f, 1.f, 1.f };
+        }
         
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( circle1, circle1Body.pos );
-            renderer.submitPolygon( circle2, circle2Body.pos );
-            renderer.submitPolygon( point, pointBody );
+            renderer.submitPolygon( circle1, circle1Pos );
+            renderer.submitPolygon( circle2, circle2Pos );
+            renderer.submitPolygon( circle3, circle3Pos, vec2f( circle3Scale ) );
+            renderer.submitPolygon( point, pointPos );
             renderer.render();
         window->flipBuffer();
 
@@ -172,7 +207,7 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive]" )
 }
 
 
-TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
+TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
 {
     chestnutInit();
 
@@ -188,20 +223,26 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 1280, 720, 0, -1, 1 ) );
 
     SColoredPolygon2D circle1 = colored_polygon_templates::coloredPolygonCircle( 150.f, 36 );
-    SColliderBodyCircle2D circle1Body = { { 300.f, 300.f }, 150.f };
+    vec2f circle1Pos { 300.f, 300.f };
+    SColliderBodyCircle2D circle1Body = { 150.f };
     ECollisionPolicyFlags circle1Policy = ECollisionPolicyFlags::AFFECTING;
 
     SColoredPolygon2D circle2 = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
-    SColliderBodyCircle2D circle2Body = { { 800.f, 300.f }, 50.f };
+    vec2f circle2Pos { 800.f, 300.f };
+    SColliderBodyCircle2D circle2Body = { 50.f };
     ECollisionPolicyFlags circle2Policy = ECollisionPolicyFlags::AFFECTED;
 
-    SColoredPolygon2D circle3 = colored_polygon_templates::coloredPolygonCircle( 100.f, 36 );
-    SColliderBodyCircle2D circle3Body = { { 500.f, 600.f }, 100.f };
+    SColoredPolygon2D circle3 = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
+    vec2f circle3Pos { 500.f, 600.f };
+    float circle3Scale = 2.f;
+    SColliderBodyCircle2D circle3Body = { 50.f };
     ECollisionPolicyFlags circle3Policy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
-    SColoredPolygon2D circleUser = colored_polygon_templates::coloredPolygonCircle( 100.f, 36 );
+    SColoredPolygon2D circleUser = colored_polygon_templates::coloredPolygonCircle( 200.f, 36 );
     circleUser.color = { 0.f, 0.f, 1.f, 1.f };
-    SColliderBodyCircle2D circleUserBody = { { 0.f, 0.f }, 100.f };
+    vec2f circleUserPos;
+    float circleUserScale = 0.5f;
+    SColliderBodyCircle2D circleUserBody = { 200.f };
     ECollisionPolicyFlags circleUserPolicy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
 
@@ -214,10 +255,10 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
 
         vec2i mousePos;
         SDL_GetMouseState( &mousePos.x, &mousePos.y );
-        circleUserBody.pos = vecCastType<float>( mousePos );
+        circleUserPos = vecCastType<float>( mousePos );
 
 
-        if( resolveCircle2DVsCircle2D( circleUserBody, circleUserPolicy, circle1Body, circle1Policy ) )
+        if( resolveCircle2DVsCircle2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, circle1Pos, 1.f, circle1Body, circle1Policy ) )
         {
             circle1.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -225,7 +266,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
         {
             circle1.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveCircle2DVsCircle2D( circleUserBody, circleUserPolicy, circle2Body, circle2Policy ) )
+        if( resolveCircle2DVsCircle2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, circle2Pos, 1.f, circle2Body, circle2Policy ) )
         {
             circle2.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -233,7 +274,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
         {
             circle2.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveCircle2DVsCircle2D( circleUserBody, circleUserPolicy, circle3Body, circle3Policy ) )
+        if( resolveCircle2DVsCircle2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, circle3Pos, circle3Scale, circle3Body, circle3Policy ) )
         {
             circle3.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -245,10 +286,10 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( circle1, circle1Body.pos );
-            renderer.submitPolygon( circle2, circle2Body.pos );
-            renderer.submitPolygon( circle3, circle3Body.pos );
-            renderer.submitPolygon( circleUser, circleUserBody.pos );
+            renderer.submitPolygon( circle1, circle1Pos );
+            renderer.submitPolygon( circle2, circle2Pos );
+            renderer.submitPolygon( circle3, circle3Pos, vec2f( circle3Scale ) );
+            renderer.submitPolygon( circleUser, circleUserPos, vec2f( circleUserScale ) );
             renderer.render();
         window->flipBuffer();
 
@@ -258,7 +299,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive]" )
 }
 
 
-TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
+TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
 {
     chestnutInit();
 
@@ -276,24 +317,30 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
 
 
     SColoredPolygon2D aabb1 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 200.f );
-    SColliderBodyAABB2D aabb1Body = { { 100.f, 150.f }, { 100.f, 200.f } };
+    vec2f aabb1Pos { 200.f, 250.f };
+    SColliderBodyAABB2D aabb1Body = { { 100.f, 200.f } };
     ECollisionPolicyFlags aabb1Policy = ECollisionPolicyFlags::NONE;
 
     SColoredPolygon2D aabb2 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 50.f );
-    SColliderBodyAABB2D aabb2Body = { { 500.f, 150.f }, { 100.f, 50.f } };
+    vec2f aabb2Pos { 600.f, 250.f };
+    SColliderBodyAABB2D aabb2Body = { { 100.f, 50.f } };
     ECollisionPolicyFlags aabb2Policy = ECollisionPolicyFlags::AFFECTED;
 
     SColoredPolygon2D aabb3 = colored_polygon_templates::coloredPolygonRectangle( 150.f, 150.f );
-    SColliderBodyAABB2D aabb3Body = { { 900.f, 150.f }, { 150.f, 150.f } };
+    vec2f aabb3Pos { 1000.f, 250.f };
+    SColliderBodyAABB2D aabb3Body = { { 150.f, 150.f } };
     ECollisionPolicyFlags aabb3Policy = ECollisionPolicyFlags::AFFECTING;
 
-    SColoredPolygon2D aabb4 = colored_polygon_templates::coloredPolygonRectangle( 300.f, 100.f );
-    SColliderBodyAABB2D aabb4Body = { { 400.f, 500.f }, { 300.f, 100.f } };
+    SColoredPolygon2D aabb4 = colored_polygon_templates::coloredPolygonRectangle( 400.f, 50.f );
+    vec2f aabb4Pos { 600.f, 500.f };
+    vec2f aabb4Scale { 0.75f, 2.f };
+    SColliderBodyAABB2D aabb4Body = { { 400.f, 50.f } };
     ECollisionPolicyFlags aabb4Policy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
     SColoredPolygon2D aabbUser = colored_polygon_templates::coloredPolygonRectangle( 80.f, 120.f );
     aabbUser.color = { 0.f, 0.f, 1.f, 1.f };
-    SColliderBodyAABB2D aabbUserBody = { { 0.f, 0.f }, { 80.f, 120.f } };
+    vec2f aabbUserPos;
+    SColliderBodyAABB2D aabbUserBody = { { 80.f, 120.f } };
     ECollisionPolicyFlags aabbUserPolicy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
 
@@ -307,10 +354,10 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
 
         vec2i mousePos;
         SDL_GetMouseState( &mousePos.x, &mousePos.y );
-        aabbUserBody.pos = vecCastType<float>( mousePos );
+        aabbUserPos = vecCastType<float>( mousePos );
 
 
-        if( resolveAABB2DVsAABB2D( aabbUserBody, aabbUserPolicy, aabb1Body, aabb1Policy ) )
+        if( resolveAABB2DVsAABB2D( aabbUserPos, vec2f(1.f), aabbUserBody, aabbUserPolicy, aabb1Pos, vec2f(1.f), aabb1Body, aabb1Policy ) )
         {
             aabb1.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -318,7 +365,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
         {
             aabb1.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveAABB2DVsAABB2D( aabbUserBody, aabbUserPolicy, aabb2Body, aabb2Policy ) )
+        if( resolveAABB2DVsAABB2D( aabbUserPos, vec2f(1.f), aabbUserBody, aabbUserPolicy, aabb2Pos, vec2f(1.f), aabb2Body, aabb2Policy ) )
         {
             aabb2.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -326,7 +373,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
         {
             aabb2.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveAABB2DVsAABB2D( aabbUserBody, aabbUserPolicy, aabb3Body, aabb3Policy ) )
+        if( resolveAABB2DVsAABB2D( aabbUserPos, vec2f(1.f), aabbUserBody, aabbUserPolicy, aabb3Pos, vec2f(1.f), aabb3Body, aabb3Policy ) )
         {
             aabb3.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -334,7 +381,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
         {
             aabb3.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveAABB2DVsAABB2D( aabbUserBody, aabbUserPolicy, aabb4Body, aabb4Policy ) )
+        if( resolveAABB2DVsAABB2D( aabbUserPos, vec2f(1.f), aabbUserBody, aabbUserPolicy, aabb4Pos, aabb4Scale, aabb4Body, aabb4Policy ) )
         {
             aabb4.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -346,11 +393,11 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( aabb1, aabb1Body.pos + aabb1Body.size / 2.f );
-            renderer.submitPolygon( aabb2, aabb2Body.pos + aabb2Body.size / 2.f );
-            renderer.submitPolygon( aabb3, aabb3Body.pos + aabb3Body.size / 2.f );
-            renderer.submitPolygon( aabb4, aabb4Body.pos + aabb4Body.size / 2.f );
-            renderer.submitPolygon( aabbUser, aabbUserBody.pos  + aabbUserBody.size / 2.f );
+            renderer.submitPolygon( aabb1, aabb1Pos );
+            renderer.submitPolygon( aabb2, aabb2Pos );
+            renderer.submitPolygon( aabb3, aabb3Pos );
+            renderer.submitPolygon( aabb4, aabb4Pos, aabb4Scale );
+            renderer.submitPolygon( aabbUser, aabbUserPos );
             renderer.render();
         window->flipBuffer();
 
@@ -360,7 +407,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive]" )
 }
 
 
-TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
+TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
 {
     chestnutInit();
 
@@ -377,24 +424,31 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
 
 
     SColoredPolygon2D aabb1 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 200.f );
-    SColliderBodyAABB2D aabb1Body = { { 100.f, 150.f }, { 100.f, 200.f } };
+    vec2f aabb1Pos { 100.f, 150.f };
+    SColliderBodyAABB2D aabb1Body = { { 100.f, 200.f } };
     ECollisionPolicyFlags aabb1Policy = ECollisionPolicyFlags::NONE;
 
     SColoredPolygon2D aabb2 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 50.f );
-    SColliderBodyAABB2D aabb2Body = { { 500.f, 150.f }, { 100.f, 50.f } };
+    vec2f aabb2Pos { 500.f, 150.f };
+    SColliderBodyAABB2D aabb2Body = { { 100.f, 50.f } };
     ECollisionPolicyFlags aabb2Policy = ECollisionPolicyFlags::AFFECTED;
 
-    SColoredPolygon2D aabb3 = colored_polygon_templates::coloredPolygonRectangle( 150.f, 150.f );
-    SColliderBodyAABB2D aabb3Body = { { 900.f, 150.f }, { 150.f, 150.f } };
+    SColoredPolygon2D aabb3 = colored_polygon_templates::coloredPolygonSquare( 200.f );
+    vec2f aabb3Pos { 900.f, 150.f };
+    vec2f aabb3Scale { 0.75f, 0.75f };
+    SColliderBodyAABB2D aabb3Body = { { 200.f, 200.f } };
     ECollisionPolicyFlags aabb3Policy = ECollisionPolicyFlags::AFFECTING;
 
     SColoredPolygon2D aabb4 = colored_polygon_templates::coloredPolygonRectangle( 300.f, 100.f );
-    SColliderBodyAABB2D aabb4Body = { { 400.f, 500.f }, { 300.f, 100.f } };
+    vec2f aabb4Pos { 400.f, 500.f };
+    SColliderBodyAABB2D aabb4Body = { { 300.f, 100.f } };
     ECollisionPolicyFlags aabb4Policy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
-    SColoredPolygon2D circleUser = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
+    SColoredPolygon2D circleUser = colored_polygon_templates::coloredPolygonCircle( 25.f, 36 );
     circleUser.color = { 0.f, 0.f, 1.f, 1.f };
-    SColliderBodyCircle2D circleUserBody = { { 0.f, 0.f }, 50.f };
+    vec2f circleUserPos;
+    float circleUserScale = 2.f;
+    SColliderBodyCircle2D circleUserBody = { 25.f };
     ECollisionPolicyFlags circleUserPolicy = ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING;
 
 
@@ -407,10 +461,10 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
 
         vec2i mousePos;
         SDL_GetMouseState( &mousePos.x, &mousePos.y );
-        circleUserBody.pos = vecCastType<float>( mousePos );
+        circleUserPos = vecCastType<float>( mousePos );
 
 
-        if( resolveCircle2DVsAABB2D( circleUserBody, circleUserPolicy, aabb1Body, aabb1Policy ) )
+        if( resolveCircle2DVsAABB2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, aabb1Pos, vec2f(1.f), aabb1Body, aabb1Policy ) )
         {
             aabb1.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -418,7 +472,7 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
         {
             aabb1.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveCircle2DVsAABB2D( circleUserBody, circleUserPolicy, aabb2Body, aabb2Policy ) )
+        if( resolveCircle2DVsAABB2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, aabb2Pos, vec2f(1.f), aabb2Body, aabb2Policy ) )
         {
             aabb2.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -426,7 +480,7 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
         {
             aabb2.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveCircle2DVsAABB2D( circleUserBody, circleUserPolicy, aabb3Body, aabb3Policy ) )
+        if( resolveCircle2DVsAABB2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, aabb3Pos, aabb3Scale, aabb3Body, aabb3Policy ) )
         {
             aabb3.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -434,7 +488,7 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
         {
             aabb3.color = { 1.f, 1.f, 1.f, 1.f };
         }
-        if( resolveCircle2DVsAABB2D( circleUserBody, circleUserPolicy, aabb4Body, aabb4Policy ) )
+        if( resolveCircle2DVsAABB2D( circleUserPos, circleUserScale, circleUserBody, circleUserPolicy, aabb4Pos, vec2f(1.f), aabb4Body, aabb4Policy ) )
         {
             aabb4.color = { 1.f, 0.f, 0.f, 1.f };
         }
@@ -446,11 +500,11 @@ TEST_CASE( "Physics - Circle vs AABB collision", "[interactive]" )
         
         window->clear();
             renderer.clear();
-            renderer.submitPolygon( aabb1, aabb1Body.pos + aabb1Body.size / 2.f );
-            renderer.submitPolygon( aabb2, aabb2Body.pos + aabb2Body.size / 2.f );
-            renderer.submitPolygon( aabb3, aabb3Body.pos + aabb3Body.size / 2.f );
-            renderer.submitPolygon( aabb4, aabb4Body.pos + aabb4Body.size / 2.f );
-            renderer.submitPolygon( circleUser, circleUserBody.pos );
+            renderer.submitPolygon( aabb1, aabb1Pos );
+            renderer.submitPolygon( aabb2, aabb2Pos );
+            renderer.submitPolygon( aabb3, aabb3Pos, aabb3Scale );
+            renderer.submitPolygon( aabb4, aabb4Pos );
+            renderer.submitPolygon( circleUser, circleUserPos, vec2f( circleUserScale ) );
             renderer.render();
         window->flipBuffer();
 
