@@ -10,10 +10,11 @@ namespace chestnut::engine
     class CTimerSystem : public ISystem
     {
     private:
-        ecs::SEntityQuery m_timerQuery;
+        ecs::queryid m_timerQueryID;
 
     public:
         CTimerSystem( CEngine& engine );
+        ~CTimerSystem();
 
         void update( float deltaTime ) override;
     };

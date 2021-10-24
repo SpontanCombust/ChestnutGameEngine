@@ -3,13 +3,11 @@
 
 #include "../../graphics/colored_polygon2d.hpp"
 
-#include <chestnut/ecs/component.hpp>
-
 #include <vector>
 
 namespace chestnut::engine
 {
-    struct CPolygon2DCanvasComponent : public ecs::CComponent
+    struct CPolygon2DCanvasComponent
     {
         std::vector< SColoredPolygon2D > vecPolygons;
 

@@ -13,14 +13,15 @@ namespace chestnut::engine
     class CSimpled2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::SEntityQuery m_textureQuery;
-        ecs::SEntityQuery m_polygonQuery;
+        ecs::queryid m_textureQueryID;
+        ecs::queryid m_polygonQueryID;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
 
     public:
         CSimpled2DRenderingSystem( CEngine& engine );
+        ~CSimpled2DRenderingSystem();
 
         void update( float deltaTime ) override;
 

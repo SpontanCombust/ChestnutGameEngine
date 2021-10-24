@@ -3,11 +3,9 @@
 
 #include "../../maths/vector2.hpp"
 
-#include <chestnut/ecs/component.hpp>
-
 namespace chestnut::engine
 {
-    struct CTransform2DComponent : public ecs::CComponent
+    struct CTransform2DComponent
     {
         vec2f position;
         vec2f scale;

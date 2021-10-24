@@ -13,10 +13,15 @@ namespace chestnut::engine
 {    
     CSimple2DCollisionSystem::CSimple2DCollisionSystem( CEngine& engine ) : ISystem( engine )
     {
-        m_query.entitySignCond = []( const ecs::CEntitySignature& sign )
-        {
-            return sign.has<CTransform2DComponent>() && sign.has<CCollision2DComponent>();
-        };
+        m_collisionQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CCollision2DComponent >(),
+            ecs::makeEntitySignature()
+        );
+    }
+
+    CSimple2DCollisionSystem::~CSimple2DCollisionSystem() 
+    {
+        getEngine().getEntityWorld().destroyQuery( m_collisionQueryID );
     }
 
     inline bool canCollidersTrigger( ECollisionPolicyFlags policy1, ECollisionPolicyFlags policy2 )
@@ -26,21 +31,16 @@ namespace chestnut::engine
 
     void CSimple2DCollisionSystem::update( float dt )
     {
-        getEngine().getEntityWorld().queryEntities( m_query );
+        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_collisionQueryID );
 
-        ecs::forEachEntityInQuery< CTransform2DComponent, CCollision2DComponent >( m_query, 
-        [this]( CTransform2DComponent& transform1, CCollision2DComponent& collision1 )
-        {
-            ecs::forEachEntityInQuery< CTransform2DComponent, CCollision2DComponent >( m_query, 
-            [this, &transform1, &collision1]( CTransform2DComponent& transform2, CCollision2DComponent& collision2 )
+        query->forEachEntityPairWith< CTransform2DComponent, CCollision2DComponent >(
+            [this]( ecs::entityid ent1, CTransform2DComponent& transform1, CCollision2DComponent& collision1, ecs::entityid ent2, CTransform2DComponent& transform2, CCollision2DComponent& collision2 )
             {
                 bool collisionHappened = false;
 
-                // check if we're not testing entity against itself
-                if( transform1.owner != transform2.owner 
                 // check if both entities aren't static colliders
                 // if they're both static we can ignore their interactions
-                && !( collision1.activity == EColliderActivity::STATIC && collision2.activity == EColliderActivity::STATIC ) )
+                if( !( collision1.activity == EColliderActivity::STATIC && collision2.activity == EColliderActivity::STATIC ) )
                 {   
                     try
                     {
@@ -137,20 +137,20 @@ namespace chestnut::engine
                     }
                     catch(const std::bad_variant_access& e)
                     {
-                        LOG_WARNING( "Collider type and stored collider body inside variant in collision component from entity " << transform1.owner << " or " << transform2.owner << " are not matching!" );
+                        LOG_WARNING( "Collider type and stored collider body inside variant in collision component from entity " << ent1 << " or " << ent2 << " are not matching!" );
                     }
                     
 
                     if( collisionHappened && canCollidersTrigger( collision1.policyFlags, collision2.policyFlags ) )
                     {
                         SCollisionEvent e;
-                        e.entity1 = transform1.owner;
-                        e.entity2 = transform2.owner;
+                        e.entity1 = ent1;
+                        e.entity2 = ent2;
                         getEngine().getEventManager().raiseEvent(e);
                     }
                 }
-            }); 
-        });
+            }
+        );
     }
 
     

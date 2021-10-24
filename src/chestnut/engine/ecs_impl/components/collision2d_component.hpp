@@ -3,8 +3,6 @@
 
 #include "../../physics/collider.hpp"
 
-#include <chestnut/ecs/component.hpp>
-
 #include <variant>
 
 namespace chestnut::engine
@@ -13,9 +11,8 @@ namespace chestnut::engine
                           SColliderBodyAABB2D,
                           SColliderBodyCircle2D > CColliderBodyVariant;
 
-    class CCollision2DComponent : public ecs::CComponent
+    struct CCollision2DComponent
     {
-    public:
         EColliderActivity activity;
         EColliderBodyType bodyType;
         CColliderBodyVariant bodyVariant;

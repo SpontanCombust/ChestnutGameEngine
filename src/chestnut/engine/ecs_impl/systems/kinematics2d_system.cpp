@@ -9,25 +9,30 @@ namespace chestnut::engine
     CKinematics2DSystem::CKinematics2DSystem( CEngine& engine ) 
     : ISystem( engine ) 
     {
-        m_transformKinematicQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
-        {
-            return sign.has<CTransform2DComponent>() && sign.has<CKinematics2DComponent>();
-        };
+        m_kinematicQueryID = getEngine().getEntityWorld().createQuery( 
+            ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >(), 
+            ecs::CEntitySignature() );
+    }
+
+    CKinematics2DSystem::~CKinematics2DSystem() 
+    {
+        getEngine().getEntityWorld().destroyQuery( m_kinematicQueryID );
     }
 
     void CKinematics2DSystem::update( float deltaTime ) 
     {
-        getEngine().getEntityWorld().queryEntities( m_transformKinematicQuery );
+        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_kinematicQueryID );
 
-        ecs::forEachEntityInQuery< CTransform2DComponent, CKinematics2DComponent >( m_transformKinematicQuery,
-        [deltaTime]( CTransform2DComponent& transform, CKinematics2DComponent& kinematic )
-        {
-            kinematic.linearVelocity  += deltaTime * kinematic.linearAcceleration;
-            kinematic.angularVelocity += deltaTime * kinematic.angularAcceleration;
+        query->forEachEntityWith< CTransform2DComponent, CKinematics2DComponent >(
+            [deltaTime]( CTransform2DComponent& transform, CKinematics2DComponent& kinematic )
+            {
+                kinematic.linearVelocity  += deltaTime * kinematic.linearAcceleration;
+                kinematic.angularVelocity += deltaTime * kinematic.angularAcceleration;
 
-            transform.position += deltaTime * kinematic.linearVelocity;
-            transform.rotation += deltaTime * kinematic.angularVelocity; 
-        });
+                transform.position += deltaTime * kinematic.linearVelocity;
+                transform.rotation += deltaTime * kinematic.angularVelocity; 
+            }
+        );
     }
 
 } // namespace chestnut::engine

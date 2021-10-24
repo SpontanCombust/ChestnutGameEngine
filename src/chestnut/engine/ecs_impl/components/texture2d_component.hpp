@@ -4,16 +4,13 @@
 #include "../../maths/vector2.hpp"
 #include "../../graphics/texture2d.hpp"
 
-#include <chestnut/ecs/component.hpp>
-
 namespace chestnut::engine
 {
-    struct CTextureComponent : public ecs::CComponent
+    struct CTextureComponent
     {
         CTexture2D texture;
         vec2f origin; // values typically in range (0;1) where 0 = left/top and 1 = right/bottom
         
-        //TODO create "missing texture" for default constructor
         CTextureComponent() = default;
     };
 

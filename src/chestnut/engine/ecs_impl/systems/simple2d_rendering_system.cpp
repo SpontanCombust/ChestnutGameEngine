@@ -45,44 +45,53 @@ namespace chestnut::engine
         m_polygonRenderer.unbindShader();
 
 
+        m_textureQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CTextureComponent >(),
+            ecs::makeEntitySignature()
+        );
 
-        m_textureQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
-        {
-            return sign.has<CTransform2DComponent>() && sign.has<CTextureComponent>();
-        };
+        m_polygonQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CPolygon2DCanvasComponent >(),
+            ecs::makeEntitySignature()
+        );
+    }
 
-        m_polygonQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
-        {
-            return sign.has<CTransform2DComponent>() && sign.has<CPolygon2DCanvasComponent>();
-        };
+    CSimpled2DRenderingSystem::~CSimpled2DRenderingSystem() 
+    {
+        getEngine().getEntityWorld().destroyQuery( m_textureQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_polygonQueryID );
     }
 
     void CSimpled2DRenderingSystem::update( float deltaTime ) 
     {
-        getEngine().getEntityWorld().queryEntities( m_textureQuery );
+        const ecs::CEntityQuery* query;
+
+
+        query = getEngine().getEntityWorld().queryEntities( m_textureQueryID );
 
         m_spriteRenderer.clear();
 
-        ecs::forEachEntityInQuery< CTransform2DComponent, CTextureComponent >( m_textureQuery,
-        [this]( CTransform2DComponent& transform, CTextureComponent& texture )
-        {
-            m_spriteRenderer.submitSprite( texture.texture, transform.position, texture.origin, transform.scale, transform.rotation );
-        });
+        query->forEachEntityWith< CTransform2DComponent, CTextureComponent >(
+            [this]( CTransform2DComponent& transform, CTextureComponent& texture )
+            {
+                m_spriteRenderer.submitSprite( texture.texture, transform.position, texture.origin, transform.scale, transform.rotation );
+            }
+        );
 
 
-
-        getEngine().getEntityWorld().queryEntities( m_polygonQuery );
+        query = getEngine().getEntityWorld().queryEntities( m_polygonQueryID );
 
         m_polygonRenderer.clear();
 
-        ecs::forEachEntityInQuery< CTransform2DComponent, CPolygon2DCanvasComponent >( m_polygonQuery, 
-        [this]( CTransform2DComponent& transform, CPolygon2DCanvasComponent& canvas )
-        {
-            for( const SColoredPolygon2D& polygon : canvas.vecPolygons )
+        query->forEachEntityWith< CTransform2DComponent, CPolygon2DCanvasComponent >(
+            [this]( CTransform2DComponent& transform, CPolygon2DCanvasComponent& canvas )
             {
-                m_polygonRenderer.submitPolygon( polygon, transform.position, transform.scale, transform.rotation );
+                for( const SColoredPolygon2D& polygon : canvas.vecPolygons )
+                {
+                    m_polygonRenderer.submitPolygon( polygon, transform.position, transform.scale, transform.rotation );
+                }
             }
-        });
+        );
     }
 
     void CSimpled2DRenderingSystem::render()
