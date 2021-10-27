@@ -3,9 +3,10 @@
 #include "../../main/engine.hpp"
 #include "../../resources/resource_manager.hpp"
 #include "../../maths/matrix4.hpp"
+#include "../../maths/vector_cast.hpp"
+#include "../components/model2d_component.hpp"
 #include "../components/transform2d_component.hpp"
 #include "../components/texture2d_component.hpp"
-#include "../components/polygon2d_canvas_component.hpp"
 #include "../../debug/log.hpp"
 
 namespace chestnut::engine
@@ -29,6 +30,7 @@ namespace chestnut::engine
         m_spriteRenderer.setViewMatrix( mat4f() );
         m_spriteRenderer.setProjectionMatrix( projection );
 
+
         try
         {
             shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
@@ -45,21 +47,15 @@ namespace chestnut::engine
         m_polygonRenderer.unbindShader();
 
 
-        m_textureQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CTransform2DComponent, CTextureComponent >(),
-            ecs::makeEntitySignature()
-        );
-
-        m_polygonQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CTransform2DComponent, CPolygon2DCanvasComponent >(),
+        m_modelWithTextureQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent  >(),
             ecs::makeEntitySignature()
         );
     }
 
     CSimpled2DRenderingSystem::~CSimpled2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_textureQueryID );
-        getEngine().getEntityWorld().destroyQuery( m_polygonQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_modelWithTextureQueryID );
     }
 
     void CSimpled2DRenderingSystem::update( float deltaTime ) 
@@ -67,29 +63,39 @@ namespace chestnut::engine
         const ecs::CEntityQuery* query;
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_textureQueryID );
+        query = getEngine().getEntityWorld().queryEntities( m_modelWithTextureQueryID );
 
         m_spriteRenderer.clear();
 
-        query->forEachEntityWith< CTransform2DComponent, CTextureComponent >(
-            [this]( CTransform2DComponent& transform, CTextureComponent& texture )
+        query->forEachEntityWith< CModel2DComponent, CTransform2DComponent, CTexture2DComponent >(
+            [this]( CModel2DComponent& model, CTransform2DComponent& transform, CTexture2DComponent& texture )
             {
-                m_spriteRenderer.submitSprite( texture.texture, transform.position, texture.origin, transform.scale, transform.rotation );
-            }
-        );
+                vec2f adjustScale;
 
-
-        query = getEngine().getEntityWorld().queryEntities( m_polygonQueryID );
-
-        m_polygonRenderer.clear();
-
-        query->forEachEntityWith< CTransform2DComponent, CPolygon2DCanvasComponent >(
-            [this]( CTransform2DComponent& transform, CPolygon2DCanvasComponent& canvas )
-            {
-                for( const SColoredPolygon2D& polygon : canvas.vecPolygons )
+                float tmp;
+                switch( texture.adjust )
                 {
-                    m_polygonRenderer.submitPolygon( polygon, transform.position, transform.scale, transform.rotation );
+                case EModel2DTextureAdjust::SCALED:
+                    adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+                    tmp = std::min( adjustScale.x, adjustScale.y );
+                    adjustScale = { tmp, tmp };
+                    break;
+
+                case EModel2DTextureAdjust::SPANNED:
+                    adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+                    break;
+                
+                case EModel2DTextureAdjust::ZOOMED:
+                    adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+                    tmp = std::max( adjustScale.x, adjustScale.y );
+                    adjustScale = { tmp, tmp };
+                    break;
+
+                default:
+                    adjustScale = { 1.f, 1.f };
                 }
+
+                m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
         );
     }
@@ -98,24 +104,11 @@ namespace chestnut::engine
     {
         getEngine().getWindow().clear();
         
-        renderTextures();
-        renderColoredPolygons();
-
-        getEngine().getWindow().flipBuffer();
-    }
-
-    void CSimpled2DRenderingSystem::renderTextures()
-    {
         m_spriteRenderer.bindShader();
         m_spriteRenderer.render();
         m_spriteRenderer.unbindShader();
-    }
 
-    void CSimpled2DRenderingSystem::renderColoredPolygons() 
-    {
-        m_polygonRenderer.bindShader();
-        m_polygonRenderer.render();
-        m_polygonRenderer.unbindShader();
+        getEngine().getWindow().flipBuffer();
     }
 
 } // namespace chestnut::engine

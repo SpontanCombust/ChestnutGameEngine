@@ -6,12 +6,20 @@
 
 namespace chestnut::engine
 {
-    struct CTextureComponent
+    enum class EModel2DTextureAdjust
+    {
+        NONE, // texture doesn't adjust to the model
+        SCALED, // scale up/down keeping the aspect ratio to fit inside the model
+        SPANNED, // scale up/down without keeping the aspect ratio to fit the entire surface area of the model 
+        ZOOMED // scale up/down keeping the aspect ratio to fit the entire surface area of the model and possibly going beyond the shape
+    };
+
+    struct CTexture2DComponent
     {
         CTexture2D texture;
-        vec2f origin; // values typically in range (0;1) where 0 = left/top and 1 = right/bottom
-        
-        CTextureComponent() = default;
+        EModel2DTextureAdjust adjust;
+
+        CTexture2DComponent();
     };
 
 } // namespace chestnut::engine 

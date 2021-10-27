@@ -9,12 +9,10 @@
 
 namespace chestnut::engine
 {
-    //!WARNING this system is very much still in development!
     class CSimpled2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::queryid m_textureQueryID;
-        ecs::queryid m_polygonQueryID;
+        ecs::queryid m_modelWithTextureQueryID;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
@@ -26,10 +24,6 @@ namespace chestnut::engine
         void update( float deltaTime ) override;
 
         void render() override;
-
-    private:
-        void renderTextures();
-        void renderColoredPolygons();
     };
 
 } // namespace chestnut::engine
