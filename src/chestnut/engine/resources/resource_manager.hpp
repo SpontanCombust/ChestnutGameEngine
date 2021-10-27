@@ -44,6 +44,8 @@ namespace chestnut::engine
         static std::shared_ptr<CFontResource> loadOrGetFontResource( const std::string& fontPath );
         static bool isFontResourceLoaded( const std::string& fontPath );
         static void freeFontResource( std::string& fontPath );
+
+        static void freeUnusedResources();
     };
 
 } // namespace chestnut::engine
