@@ -56,6 +56,8 @@ namespace chestnut::engine
         void hide();
         bool isHidden() const;
 
+        void setAsRenderTarget();
+
         void clear();
         void flipBuffer();
     };

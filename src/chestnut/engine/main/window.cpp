@@ -274,6 +274,11 @@ namespace chestnut::engine
         return ( flags & SDL_WINDOW_HIDDEN ) > 0;
     }
 
+    void CWindow::setAsRenderTarget() 
+    {
+        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    }
+
     void CWindow::clear() 
     {
         glClear( GL_COLOR_BUFFER_BIT );
