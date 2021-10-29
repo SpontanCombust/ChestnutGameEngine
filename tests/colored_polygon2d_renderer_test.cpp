@@ -12,7 +12,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Colored polygon renderer test - general presentation", "[interactive]" )
+TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "[interactive]" )
 {
     const char *testName = "Colored polygon renderer test";
 
@@ -79,7 +79,7 @@ TEST_CASE( "Colored polygon renderer test - general presentation", "[interactive
 
 using namespace chestnut::engine::colored_polygon_templates;
 
-TEST_CASE( "Colored polygon renderer test - template polygons", "[interactive]" )
+TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[interactive]" )
 {
     const char *testName = "Colored polygon renderer test - template polygons";
 

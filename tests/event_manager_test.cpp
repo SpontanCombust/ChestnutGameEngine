@@ -12,7 +12,7 @@ struct MyEvent
     int i;
 };
 
-TEST_CASE( "Event manager test - general" )
+TEST_CASE( "Events - Event manager test - general" )
 {
     int n1;
     auto l1 = std::make_shared< CEventListener<MyEvent> >( 
@@ -94,7 +94,7 @@ TEST_CASE( "Event manager test - general" )
 }
 
 
-TEST_CASE( "Event manager test - listener priority order" )
+TEST_CASE( "Events - Event manager test - listener priority order" )
 {
     CEventManager manager;
 

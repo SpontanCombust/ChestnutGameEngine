@@ -12,7 +12,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
+TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]" )
 {
     chestnutInit();
 
@@ -97,7 +97,7 @@ TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
     sleepFor(1000);
 }
 
-TEST_CASE( "Text renderer test - rendering text glyphs", "[interactive]" )
+TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interactive]" )
 {
     chestnutInit();
 

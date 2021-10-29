@@ -7,12 +7,12 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Window test - creating without initializing libraries" )
+TEST_CASE( "Window - Creating without initializing libraries" )
 {
     REQUIRE_FALSE( createWindow( "Window test - this window should not be created" ) );
 }
 
-TEST_CASE( "Window test - default state" )
+TEST_CASE( "Window - Default state" )
 {
     REQUIRE( chestnutInit() );
     auto window = createWindow( "Window test - Default state", 800, 600, EWindowDisplayMode::WINDOWED, 500, 400 );
@@ -33,7 +33,7 @@ TEST_CASE( "Window test - default state" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window test - changing title", "[interactive]" )
+TEST_CASE( "Window - Changing title", "[interactive]" )
 {
     std::string windowTitle = "Window test - Changing title";
     std::string newWindowTitle = "Window test - this is the other title";
@@ -51,7 +51,7 @@ TEST_CASE( "Window test - changing title", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window test - changing display mode", "[interactive]" )
+TEST_CASE( "Window - Changing display mode", "[interactive]" )
 {
     const char *testName = "Window test - changing display mode";
 
@@ -97,7 +97,7 @@ TEST_CASE( "Window test - changing display mode", "[interactive]" )
     sleepFor(1000);
 }
 
-TEST_CASE( "Window test - changing resizable", "[interactive]" )
+TEST_CASE( "Window - Changing resizable", "[interactive]" )
 {
     const char *testName = "Window test - changing resizable";
 
@@ -114,7 +114,7 @@ TEST_CASE( "Window test - changing resizable", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window test - changing window size", "[interactive]" )
+TEST_CASE( "Window - Changing window size", "[interactive]" )
 {
     const char *testName = "Window test - changing window size";
 
@@ -135,7 +135,7 @@ TEST_CASE( "Window test - changing window size", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window test - changing window posititon", "[interactive]" )
+TEST_CASE( "Window - Changing window posititon", "[interactive]" )
 {
     const char *testName = "Window test - changing window position";
 
@@ -153,7 +153,7 @@ TEST_CASE( "Window test - changing window posititon", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window test - minimizing and maximizing the window", "[interactive]" )
+TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
 {
     const char *testName = "Window test - minimizing and maximizing the window";
 
@@ -216,7 +216,7 @@ TEST_CASE( "Window test - minimizing and maximizing the window", "[interactive]"
     sleepFor(1000);
 }
 
-TEST_CASE( "Window test - hiding and showing the window", "[interactive]" )
+TEST_CASE( "Window - Hiding and showing the window", "[interactive]" )
 {
     const char *testName = "Window test - hiding and showing the window";
 
