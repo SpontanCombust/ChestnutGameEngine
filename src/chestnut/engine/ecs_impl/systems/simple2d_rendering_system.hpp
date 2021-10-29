@@ -4,6 +4,7 @@
 #include "../rendering_system.hpp"
 #include "../../graphics/sprite_renderer.hpp"
 #include "../../graphics/colored_polygon2d_renderer.hpp"
+#include "../../graphics/text_renderer.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
@@ -16,6 +17,8 @@ namespace chestnut::engine
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
+        CTextRenderer m_textRenderer;
+
 
     public:
         CSimpled2DRenderingSystem( CEngine& engine );
@@ -24,6 +27,13 @@ namespace chestnut::engine
         void update( float deltaTime ) override;
 
         void render() override;
+
+
+        CSpriteRenderer& getSpriteRenderer();
+
+        CColoredPolygon2DRenderer& getColoredPolygonRenderer();
+
+        CTextRenderer& getTextRenderer();
     };
 
 } // namespace chestnut::engine

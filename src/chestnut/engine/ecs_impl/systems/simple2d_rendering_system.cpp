@@ -26,11 +26,6 @@ namespace chestnut::engine
             LOG_ERROR( e.what() );
         }
 
-        m_spriteRenderer.bindShader();
-        m_spriteRenderer.setViewMatrix( mat4f() );
-        m_spriteRenderer.setProjectionMatrix( projection );
-
-
         try
         {
             shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
@@ -41,10 +36,15 @@ namespace chestnut::engine
             LOG_ERROR( e.what() );   
         }
         
-        m_polygonRenderer.bindShader();
-        m_polygonRenderer.setViewMatrix( mat4f() );
-        m_polygonRenderer.setProjectionMatrix( projection );
-        m_polygonRenderer.unbindShader();
+        try
+        {
+            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/text.vert", "../assets/shaders/text.frag" ) );
+            m_textRenderer.init( shader );
+        }
+        catch(const std::exception& e)
+        {
+            LOG_ERROR( e.what() );  
+        }
 
 
         m_modelWithTextureQueryID = getEngine().getEntityWorld().createQuery(
@@ -72,13 +72,11 @@ namespace chestnut::engine
             {
                 vec2f adjustScale;
 
-                float tmp;
                 switch( texture.adjust )
                 {
                 case EModel2DTextureAdjust::SCALED:
                     adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
-                    tmp = std::min( adjustScale.x, adjustScale.y );
-                    adjustScale = { tmp, tmp };
+                    adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
                     break;
 
                 case EModel2DTextureAdjust::SPANNED:
@@ -87,12 +85,11 @@ namespace chestnut::engine
                 
                 case EModel2DTextureAdjust::ZOOMED:
                     adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
-                    tmp = std::max( adjustScale.x, adjustScale.y );
-                    adjustScale = { tmp, tmp };
+                    adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
                     break;
 
                 default:
-                    adjustScale = { 1.f, 1.f };
+                    adjustScale = vec2f( 1.f );
                 }
 
                 m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
@@ -105,10 +102,30 @@ namespace chestnut::engine
         getEngine().getWindow().clear();
         
         m_spriteRenderer.bindShader();
-        m_spriteRenderer.render();
+        m_spriteRenderer.setViewMatrix( mat4f() );
+        m_spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f ) );
+        m_spriteRenderer.render( getEngine().getWindow().getFramebuffer() );
         m_spriteRenderer.unbindShader();
 
         getEngine().getWindow().flipBuffer();
+    }
+
+
+
+
+    CSpriteRenderer& CSimpled2DRenderingSystem::getSpriteRenderer() 
+    {
+        return m_spriteRenderer;
+    }
+
+    CColoredPolygon2DRenderer& CSimpled2DRenderingSystem::getColoredPolygonRenderer() 
+    {
+        return m_polygonRenderer;
+    }
+
+    CTextRenderer& CSimpled2DRenderingSystem::getTextRenderer() 
+    {
+        return m_textRenderer;
     }
 
 } // namespace chestnut::engine

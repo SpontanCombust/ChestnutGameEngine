@@ -106,7 +106,7 @@ namespace chestnut::engine
         // Origin values should be in range <0;1> representing the normalized texture coordinate from which it should be transformed 
         void submitSprite( const CTexture2D& texture, const vec2f& translation, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
         // requires bound renderer shader
-        void render() override;
+        void render( const CFramebuffer& targetFramebuffer ) override;
 
     protected:
         void onInit() override;

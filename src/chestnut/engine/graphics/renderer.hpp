@@ -3,6 +3,7 @@
 
 #include "shader_program.hpp"
 #include "../maths/matrix4.hpp"
+#include "framebuffer.hpp"
 
 #include <GL/glew.h>
 
@@ -33,7 +34,7 @@ namespace chestnut::engine
         // Method called to clear all the data used to render stuff
         virtual void clear() = 0;
         // Method called to render stuff with gathered data
-        virtual void render() = 0;
+        virtual void render( const CFramebuffer& targetFramebuffer ) = 0;
 
 
     protected:

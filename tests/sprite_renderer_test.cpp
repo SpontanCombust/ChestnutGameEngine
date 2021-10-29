@@ -45,7 +45,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
         window->clear();
             renderer.clear();
             renderer.submitSprite( missing, {0,0}, {0,0}, {64.f, 64.f} );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -54,7 +54,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
     window->clear();
         renderer.clear();
         renderer.submitSprite( tex, {0,0} );
-        renderer.render();
+        renderer.render( window->getFramebuffer() );
     window->flipBuffer();
 
     SECTION( "Default values" )
@@ -64,7 +64,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
         window->clear();
             renderer.clear();
             renderer.submitSprite( tex, {0,0} );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -79,7 +79,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
             window->clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {2.f,1.5f} );
-                renderer.render();
+                renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
             REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -94,7 +94,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
             window->clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {2.f,1.5f} );
-                renderer.render();
+                renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
             REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -110,7 +110,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
             window->clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {0.25f,0.5f} );
-                renderer.render();
+                renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
             REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -125,7 +125,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
             window->clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {0.25f,0.5f} );
-                renderer.render();
+                renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
             REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -139,7 +139,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
         window->clear();
             renderer.clear();
             renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {1,1}, CHESTNUT_PI / 2.f );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -156,7 +156,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
             window->clear();
                 renderer.clear();
                 renderer.submitSprite( tex, {0,0} );
-                renderer.render();
+                renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
             REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -171,7 +171,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
             window->clear();
                 renderer.clear();
                 renderer.submitSprite( tex, {0,0} );
-                renderer.render();
+                renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
             REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -188,7 +188,7 @@ TEST_CASE( "Sprite renderer test", "[interactive]" )
         window->clear();
             renderer.clear();
             renderer.submitSprite( tex, {0,0} );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         REQUIRE( showConfirmTestMessageBox( testName ) );

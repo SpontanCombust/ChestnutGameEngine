@@ -200,11 +200,13 @@ namespace chestnut::engine
         }
     }
 
-    void CTextRenderer::render() 
+    void CTextRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
         prepareBuffers();
 
         GLuint previousTexID = 0;
+
+        targetFramebuffer.bind();
 
         glBindVertexArray( m_vao );
         for( const STextRender_Batch& batch : m_vecBatches )
@@ -219,6 +221,8 @@ namespace chestnut::engine
             previousTexID = batch.texID;
         }
         glBindVertexArray(0);
+
+        targetFramebuffer.unbind();
     }
 
 } // namespace chestnut::engine

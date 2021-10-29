@@ -91,7 +91,7 @@ namespace chestnut::engine
         void submitText( const CText& text, vec2f translation, vec2f scale = { 1.f, 1.f } );
 
         // requires bound renderer shader
-        void render() override;
+        void render( const CFramebuffer& targetFramebuffer ) override;
 
     private:
         void onInit() override;

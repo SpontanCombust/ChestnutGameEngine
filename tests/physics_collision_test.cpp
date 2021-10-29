@@ -108,7 +108,7 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
             renderer.submitPolygon( aabb3, aabb3Pos );
             renderer.submitPolygon( aabb4, aabb4Pos, aabb4Scale );
             renderer.submitPolygon( point, pointPos );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
     } while( e.type != SDL_QUIT );
@@ -198,7 +198,7 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
             renderer.submitPolygon( circle2, circle2Pos );
             renderer.submitPolygon( circle3, circle3Pos, vec2f( circle3Scale ) );
             renderer.submitPolygon( point, pointPos );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
     } while( e.type != SDL_QUIT );
@@ -290,7 +290,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
             renderer.submitPolygon( circle2, circle2Pos );
             renderer.submitPolygon( circle3, circle3Pos, vec2f( circle3Scale ) );
             renderer.submitPolygon( circleUser, circleUserPos, vec2f( circleUserScale ) );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
     } while( e.type != SDL_QUIT );
@@ -398,7 +398,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
             renderer.submitPolygon( aabb3, aabb3Pos );
             renderer.submitPolygon( aabb4, aabb4Pos, aabb4Scale );
             renderer.submitPolygon( aabbUser, aabbUserPos );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
     } while( e.type != SDL_QUIT );
@@ -505,7 +505,7 @@ TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
             renderer.submitPolygon( aabb3, aabb3Pos, aabb3Scale );
             renderer.submitPolygon( aabb4, aabb4Pos );
             renderer.submitPolygon( circleUser, circleUserPos, vec2f( circleUserScale ) );
-            renderer.render();
+            renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
     } while( e.type != SDL_QUIT );

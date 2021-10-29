@@ -42,7 +42,7 @@ TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
         window->clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( normalSheet ), { 0.f, 0.f } );
-            spriteRenderer.render();
+            spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         showConfirmTestMessageBox( testName );
@@ -57,7 +57,7 @@ TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
         window->clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( boldSheet ), { 0.f, 0.f } );
-            spriteRenderer.render();
+            spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         showConfirmTestMessageBox( testName );
@@ -72,7 +72,7 @@ TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
         window->clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( italicSheet ), { 0.f, 0.f } );
-            spriteRenderer.render();
+            spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         showConfirmTestMessageBox( testName );
@@ -87,7 +87,7 @@ TEST_CASE( "Text renderer test - font style sheets", "[interactive]" )
         window->clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( underlineStrikethroughSheet ), { 0.f, 0.f } );
-            spriteRenderer.render();
+            spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
         showConfirmTestMessageBox( testName );
@@ -144,7 +144,7 @@ TEST_CASE( "Text renderer test - rendering text glyphs", "[interactive]" )
         text.generateData();
         textRenderer.submitText( text, { 650.f, 50.f }, { 1.5f, 1.5f } );
 
-        textRenderer.render();
+        textRenderer.render( window->getFramebuffer() );
     window->flipBuffer();
 
     showConfirmTestMessageBox( testName );

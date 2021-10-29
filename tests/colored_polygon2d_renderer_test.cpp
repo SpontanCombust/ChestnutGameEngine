@@ -70,7 +70,7 @@ TEST_CASE( "Colored polygon renderer test - general presentation", "[interactive
         renderer.submitPolygon( square, {50.f, 50.f} );
         renderer.submitPolygon( hexagon, {400.f, 200.f } );
         renderer.submitPolygon( triangle, { 200.f, 300.f } );
-        renderer.render();
+        renderer.render( window->getFramebuffer() );
     window->flipBuffer();
 
     REQUIRE( showConfirmTestMessageBox( testName ) );
@@ -119,7 +119,7 @@ TEST_CASE( "Colored polygon renderer test - template polygons", "[interactive]" 
         renderer.submitPolygon( square, { 400.f, 100.f } );
         renderer.submitPolygon( rectangle, { 100.f, 300.f } );
         renderer.submitPolygon( circle, { 200.f, 300.f } );
-        renderer.render();
+        renderer.render( window->getFramebuffer() );
     window->flipBuffer();
 
 

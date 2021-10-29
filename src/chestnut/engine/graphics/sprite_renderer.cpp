@@ -244,9 +244,11 @@ namespace chestnut::engine
         }
     }
 
-    void CSpriteRenderer::render() 
+    void CSpriteRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
         prepareBuffers();
+
+        targetFramebuffer.bind();
 
         glBindVertexArray( m_vao );
         for( const SSpriteRender_Batch& batch : m_vecBatches )
@@ -256,6 +258,8 @@ namespace chestnut::engine
             glDrawElementsInstancedBaseInstance( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, batch.instanceAmount, batch.instanceOffset );
         }
         glBindVertexArray(0);
+
+        targetFramebuffer.unbind();
 
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )

@@ -274,9 +274,9 @@ namespace chestnut::engine
         return ( flags & SDL_WINDOW_HIDDEN ) > 0;
     }
 
-    void CWindow::setAsRenderTarget() 
+    const CFramebuffer& CWindow::getFramebuffer() const
     {
-        glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+        return m_framebuffer;
     }
 
     void CWindow::clear() 

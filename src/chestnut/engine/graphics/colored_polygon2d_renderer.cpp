@@ -267,9 +267,11 @@ namespace chestnut::engine
 
     }
 
-    void CColoredPolygon2DRenderer::render() 
+    void CColoredPolygon2DRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
         prepareBuffers();
+
+        targetFramebuffer.bind();
         
         glBindVertexArray( m_vao );
             for( const SColoredPolygon2DRender_Batch& batch : m_vecBatches )
@@ -277,6 +279,8 @@ namespace chestnut::engine
                 glDrawElements( batch.drawMode, batch.indexCount, GL_UNSIGNED_INT, ( void * )( sizeof( GLuint ) * batch.indexOffset ) );
             }
         glBindVertexArray(0);
+
+        targetFramebuffer.unbind();
     }
     
 } // namespace chestnut::engine

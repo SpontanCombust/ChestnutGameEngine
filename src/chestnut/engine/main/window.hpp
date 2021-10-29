@@ -1,6 +1,8 @@
 #ifndef __CHESTNUT_ENGINE_WINDOW_H__
 #define __CHESTNUT_ENGINE_WINDOW_H__
 
+#include "../graphics/framebuffer.hpp"
+
 #include <memory>
 #include <string>
 
@@ -21,6 +23,7 @@ namespace chestnut::engine
     private:
         SDL_Window *m_sdlWindow;
         SDL_GLContext m_sdlGLContext;
+        CFramebuffer m_framebuffer; // for now just a dummy with no texture bound
 
     public:
         CWindow( SDL_Window *window, SDL_GLContext context );
@@ -56,7 +59,7 @@ namespace chestnut::engine
         void hide();
         bool isHidden() const;
 
-        void setAsRenderTarget();
+        const CFramebuffer& getFramebuffer() const;
 
         void clear();
         void flipBuffer();
