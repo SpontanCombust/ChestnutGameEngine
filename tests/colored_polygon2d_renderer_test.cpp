@@ -63,7 +63,7 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
     triangle.vecIndices.insert( triangle.vecIndices.end(), { 0, 1, 1, 2, 2, 0 } );
 
     
-    showRunTestMessageBox( testName, "Click to draw red square, rainbow hexagon and green triangle outline" );
+    showInfoMessageBox( testName, "Click to draw red square, rainbow hexagon and green triangle outline" );
     
     window->clear();
         renderer.clear();
@@ -73,7 +73,7 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
         renderer.render( window->getFramebuffer() );
     window->flipBuffer();
 
-    REQUIRE( showConfirmTestMessageBox( testName ) );
+    REQUIRE( showConfirmMessageBox( testName ) );
 }   
 
 
@@ -105,7 +105,7 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[in
     SColoredPolygon2D circle    = coloredPolygonCircle( 30.f, 36 );         circle.color    = { 0.f, 0.f, 1.f, 1.f };
 
 
-    showRunTestMessageBox( testName, "Click to render:\n"
+    showInfoMessageBox( testName, "Click to render:\n"
                                      "-red equal side triangle\n"
                                      "-yellow wide triangle\n"
                                      "-green square\n"
@@ -123,5 +123,5 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[in
     window->flipBuffer();
 
 
-    REQUIRE( showConfirmTestMessageBox( testName ) );
+    REQUIRE( showConfirmMessageBox( testName ) );
 }

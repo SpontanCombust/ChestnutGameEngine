@@ -41,12 +41,12 @@ TEST_CASE( "Window - Changing title", "[interactive]" )
     chestnutInit();
     auto window = createWindow( windowTitle );
 
-    showRunTestMessageBox( windowTitle.c_str(), "Click to change the title of the window" );
+    showInfoMessageBox( windowTitle.c_str(), "Click to change the title of the window" );
 
     window->setTitle( newWindowTitle ); 
     REQUIRE( window->getTitle() == newWindowTitle );
 
-    REQUIRE( showConfirmTestMessageBox( windowTitle.c_str() ) );
+    REQUIRE( showConfirmMessageBox( windowTitle.c_str() ) );
 
     chestnutQuit();
 }
@@ -61,36 +61,36 @@ TEST_CASE( "Window - Changing display mode", "[interactive]" )
     {
         auto window = createWindow( testName, 800, 600, EWindowDisplayMode::WINDOWED );
 
-        showRunTestMessageBox( testName, "Click to change display type from windowed to windowed-borderless" );
+        showInfoMessageBox( testName, "Click to change display type from windowed to windowed-borderless" );
 
         window->setDisplayMode( EWindowDisplayMode::WINDOWED_BORDLERLESS );
         REQUIRE( window->getDisplayMode() == EWindowDisplayMode::WINDOWED_BORDLERLESS );
         
-        REQUIRE( showConfirmTestMessageBox( testName ) );   
+        REQUIRE( showConfirmMessageBox( testName ) );   
     }
 
     SECTION( "Windowed-borderless to fullscreen" )
     {
         auto window = createWindow( testName, 800, 600, EWindowDisplayMode::WINDOWED_BORDLERLESS );
 
-        showRunTestMessageBox( testName, "Click to change display type from windowed-borderless to fullscreen" );    
+        showInfoMessageBox( testName, "Click to change display type from windowed-borderless to fullscreen" );    
 
         window->setDisplayMode( EWindowDisplayMode::FULLSCREEN );
         REQUIRE( window->getDisplayMode() == EWindowDisplayMode::FULLSCREEN );
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     SECTION( "Fullscreen to windowed" )
     {
         auto window = createWindow( testName, 800, 600, EWindowDisplayMode::FULLSCREEN );
 
-        showRunTestMessageBox( testName, "Click to change display type from fullscreen to windowed" );    
+        showInfoMessageBox( testName, "Click to change display type from fullscreen to windowed" );    
 
         window->setDisplayMode( EWindowDisplayMode::WINDOWED );
         REQUIRE( window->getDisplayMode() == EWindowDisplayMode::WINDOWED );
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );   
+        REQUIRE( showConfirmMessageBox( testName ) );   
     }
 
     chestnutQuit();
@@ -104,12 +104,12 @@ TEST_CASE( "Window - Changing resizable", "[interactive]" )
     chestnutInit();
     auto window = createWindow( testName );
 
-    showRunTestMessageBox( testName, "Click to make the window resizable" );
+    showInfoMessageBox( testName, "Click to make the window resizable" );
 
     window->setResizable(true);
     REQUIRE( window->isResizable() );
 
-    REQUIRE( showConfirmTestMessageBox( testName ) );
+    REQUIRE( showConfirmMessageBox( testName ) );
 
     chestnutQuit();
 }
@@ -121,7 +121,7 @@ TEST_CASE( "Window - Changing window size", "[interactive]" )
     chestnutInit();
     auto window = createWindow( testName );
 
-    showRunTestMessageBox( testName, "Click to make the window 2 times smaller" );
+    showInfoMessageBox( testName, "Click to make the window 2 times smaller" );
 
     int w = window->getSizeWidth();
     int h = window->getSizeHeight();
@@ -130,7 +130,7 @@ TEST_CASE( "Window - Changing window size", "[interactive]" )
     REQUIRE( window->getSizeWidth() == w / 2 );
     REQUIRE( window->getSizeHeight() == h / 2 );
 
-    REQUIRE( showConfirmTestMessageBox( testName ) );
+    REQUIRE( showConfirmMessageBox( testName ) );
 
     chestnutQuit();
 }
@@ -142,13 +142,13 @@ TEST_CASE( "Window - Changing window posititon", "[interactive]" )
     chestnutInit();
     auto window = createWindow( testName );
 
-    showRunTestMessageBox( testName, "Click to move the window upper left corner" );
+    showInfoMessageBox( testName, "Click to move the window upper left corner" );
     
     window->setPosition( 0, 0 );
     REQUIRE( window->getPositionX() == 0 );
     REQUIRE( window->getPositionY() == 0 );
 
-    REQUIRE( showConfirmTestMessageBox( testName ) );
+    REQUIRE( showConfirmMessageBox( testName ) );
 
     chestnutQuit();
 }
@@ -163,10 +163,10 @@ TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
     {
         auto window = createWindow( testName );
 
-        showRunTestMessageBox( testName, "Click to minimize the window" );
+        showInfoMessageBox( testName, "Click to minimize the window" );
         window->minimize();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
         REQUIRE( window->isMinimized() ); //FIXME Seems not to be working on Ubuntu 20.04
     }
 
@@ -176,11 +176,11 @@ TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
 
         window->minimize();
 
-        showRunTestMessageBox( testName, "Click to restore window from minimized state" );
+        showInfoMessageBox( testName, "Click to restore window from minimized state" );
 
         window->restore();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) ); //FIXME Seems not to be working on Ubuntu 20.04
+        REQUIRE( showConfirmMessageBox( testName ) ); //FIXME Seems not to be working on Ubuntu 20.04
         REQUIRE_FALSE( window->isMinimized() );
     }
 
@@ -189,11 +189,11 @@ TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
         auto window = createWindow( testName );
         window->setResizable(true);
 
-        showRunTestMessageBox( testName, "Click to maximize the window" );
+        showInfoMessageBox( testName, "Click to maximize the window" );
 
         window->maximize();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
         REQUIRE( window->isMaximized() );
     }
 
@@ -204,11 +204,11 @@ TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
         window->setResizable(true);
         window->maximize();
 
-        showRunTestMessageBox( testName, "Click to restore window from maximized state" );
+        showInfoMessageBox( testName, "Click to restore window from maximized state" );
 
         window->restore();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
         REQUIRE_FALSE( window->isMaximized() );
     }
 
@@ -226,26 +226,26 @@ TEST_CASE( "Window - Hiding and showing the window", "[interactive]" )
     {
         auto window = createWindow( testName, 800, 600, EWindowDisplayMode::WINDOWED, -1, -1, true );
 
-        showRunTestMessageBox( testName, "Click to hide the window" );
+        showInfoMessageBox( testName, "Click to hide the window" );
 
         window->hide();
 
         REQUIRE_FALSE( window->isShown() );
         REQUIRE( window->isHidden() );
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     SECTION( "Showing" )
     {
         auto window = createWindow( testName, 800, 600, EWindowDisplayMode::WINDOWED, -1, -1, false );
 
-        showRunTestMessageBox( testName, "Click to show the window" );
+        showInfoMessageBox( testName, "Click to show the window" );
 
         window->show();
 
         REQUIRE( window->isShown() );
         REQUIRE_FALSE( window->isHidden() );
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     chestnutQuit();

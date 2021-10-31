@@ -40,7 +40,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     {
         CTexture2D missing;
 
-        showRunTestMessageBox( testName, "Click to render an image with missing texture" );
+        showInfoMessageBox( testName, "Click to render an image with missing texture" );
 
         window->clear();
             renderer.clear();
@@ -48,7 +48,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
             renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     window->clear();
@@ -59,7 +59,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
     SECTION( "Default values" )
     {
-        showRunTestMessageBox( testName, "Click to render an image with default values" );
+        showInfoMessageBox( testName, "Click to render an image with default values" );
 
         window->clear();
             renderer.clear();
@@ -67,14 +67,14 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
             renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     SECTION( "Scaled up" )
     {
         SECTION( "With default linear filtering" )
         {
-            showRunTestMessageBox( testName, "Click to render a scaled up image around its center with linear filtering" );
+            showInfoMessageBox( testName, "Click to render a scaled up image around its center with linear filtering" );
 
             window->clear();
                 renderer.clear();
@@ -82,12 +82,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
                 renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
-            REQUIRE( showConfirmTestMessageBox( testName ) );
+            REQUIRE( showConfirmMessageBox( testName ) );
         }
 
         SECTION( "With nearest filtering" )
         {
-            showRunTestMessageBox( testName, "Click to render a scaled up image around its center with nearest filtering" );
+            showInfoMessageBox( testName, "Click to render a scaled up image around its center with nearest filtering" );
 
             tex.setFiltering( GL_NEAREST, GL_NEAREST );
 
@@ -97,7 +97,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
                 renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
-            REQUIRE( showConfirmTestMessageBox( testName ) );
+            REQUIRE( showConfirmMessageBox( testName ) );
         }
     }
 
@@ -105,7 +105,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     {
         SECTION( "With default linear filtering" )
         {
-            showRunTestMessageBox( testName, "Click to render a scaled down image around its center with linear filtering" );
+            showInfoMessageBox( testName, "Click to render a scaled down image around its center with linear filtering" );
 
             window->clear();
                 renderer.clear();
@@ -113,12 +113,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
                 renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
-            REQUIRE( showConfirmTestMessageBox( testName ) );
+            REQUIRE( showConfirmMessageBox( testName ) );
         }
 
         SECTION( "With nearest filtering" )
         {
-            showRunTestMessageBox( testName, "Click to render a scaled down image around its center with nearest filtering" );
+            showInfoMessageBox( testName, "Click to render a scaled down image around its center with nearest filtering" );
 
             tex.setFiltering( GL_NEAREST, GL_NEAREST );
 
@@ -128,13 +128,13 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
                 renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
-            REQUIRE( showConfirmTestMessageBox( testName ) );
+            REQUIRE( showConfirmMessageBox( testName ) );
         }
     }
 
     SECTION( "Rotated" )
     {
-        showRunTestMessageBox( testName, "Click to render a texture rotated around its center" );
+        showInfoMessageBox( testName, "Click to render a texture rotated around its center" );
 
         window->clear();
             renderer.clear();
@@ -142,14 +142,14 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
             renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     SECTION( "Clipping rectangle" )
     {
         SECTION( "Smaller than texture size" )
         {
-            showRunTestMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to center" );
+            showInfoMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to center" );
 
             tex.setClippingRect( SRectangle{ 0.f, 0.f, tex.getWidth() / 2.f, tex.getHeight() / 2.f } );
 
@@ -159,12 +159,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
                 renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
-            REQUIRE( showConfirmTestMessageBox( testName ) );
+            REQUIRE( showConfirmMessageBox( testName ) );
         }
 
         SECTION( "Bigger than texture size" )
         {
-            showRunTestMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to 1.5 times past lower right corner" );
+            showInfoMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to 1.5 times past lower right corner" );
 
             tex.setClippingRect( SRectangle{ 0.f, 0.f, tex.getWidth() * 1.5f, tex.getHeight() * 1.5f } );
 
@@ -174,13 +174,13 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
                 renderer.render( window->getFramebuffer() );
             window->flipBuffer();
 
-            REQUIRE( showConfirmTestMessageBox( testName ) );
+            REQUIRE( showConfirmMessageBox( testName ) );
         }
     }
 
     SECTION( "Tint" )
     {
-        showRunTestMessageBox( testName, "Click to render a texture with 50% red tint" );
+        showInfoMessageBox( testName, "Click to render a texture with 50% red tint" );
 
         tex.setTint( vec3f{ 1.f, 0.f, 0.f } );
         tex.setTintFactor( 0.5f );
@@ -191,7 +191,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
             renderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        REQUIRE( showConfirmTestMessageBox( testName ) );
+        REQUIRE( showConfirmMessageBox( testName ) );
     }
 
     chestnutQuit();

@@ -37,7 +37,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
     {
         const auto& normalSheet = fontResource->getConfig( 32, EFontStyle::NORMAL ).textureResource;
 
-        showRunTestMessageBox( testName, "Click to render a sheet with regular font" );
+        showInfoMessageBox( testName, "Click to render a sheet with regular font" );
 
         window->clear();
             spriteRenderer.clear();
@@ -45,14 +45,14 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        showConfirmTestMessageBox( testName );
+        showConfirmMessageBox( testName );
     }
 
     SECTION( "Bold font" )
     {
         const auto& boldSheet = fontResource->getConfig( 32, EFontStyle::BOLD ).textureResource;
 
-        showRunTestMessageBox( testName, "Click to render a sheet with bold font" );
+        showInfoMessageBox( testName, "Click to render a sheet with bold font" );
 
         window->clear();
             spriteRenderer.clear();
@@ -60,14 +60,14 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        showConfirmTestMessageBox( testName );
+        showConfirmMessageBox( testName );
     }
 
     SECTION( "Italic font" )
     {
         const auto& italicSheet = fontResource->getConfig( 32, EFontStyle::ITALIC ).textureResource;
 
-        showRunTestMessageBox( testName, "Click to render a sheet with italic font" );
+        showInfoMessageBox( testName, "Click to render a sheet with italic font" );
 
         window->clear();
             spriteRenderer.clear();
@@ -75,14 +75,14 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        showConfirmTestMessageBox( testName );
+        showConfirmMessageBox( testName );
     }
         
     SECTION( "Underline strikethrough font" )
     {
         const auto& underlineStrikethroughSheet = fontResource->getConfig( 32, EFontStyle::UNDERLINE | EFontStyle::STRIKETHROUGH ).textureResource;
 
-        showRunTestMessageBox( testName, "Click to render a sheet with underline strikethrough font" );
+        showInfoMessageBox( testName, "Click to render a sheet with underline strikethrough font" );
 
         window->clear();
             spriteRenderer.clear();
@@ -90,7 +90,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
-        showConfirmTestMessageBox( testName );
+        showConfirmMessageBox( testName );
     }
 
     chestnutQuit();
@@ -130,7 +130,7 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
     text.append( L"młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f } );
 
 
-    showRunTestMessageBox( testName, "Click to render some text" );
+    showInfoMessageBox( testName, "Click to render some text" );
 
     window->clear();
         textRenderer.clear();
@@ -147,7 +147,7 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
         textRenderer.render( window->getFramebuffer() );
     window->flipBuffer();
 
-    showConfirmTestMessageBox( testName );
+    showConfirmMessageBox( testName );
 
 
     chestnutQuit();

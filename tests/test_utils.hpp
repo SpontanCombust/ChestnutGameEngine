@@ -10,7 +10,7 @@
 
 static const SDL_MessageBoxButtonData runTestButtons[] =
 {
-    { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Run!" }
+    { SDL_MESSAGEBOX_BUTTON_RETURNKEY_DEFAULT, 0, "Continue" }
 };
 
 static const SDL_MessageBoxButtonData confirmTestButtons[] =
@@ -20,7 +20,7 @@ static const SDL_MessageBoxButtonData confirmTestButtons[] =
 };
 
 // Shows a message box informing a tester of what should happen when they hit "Run!"
-inline void showRunTestMessageBox( const char *testTitle, const char *testMessage )
+inline void showInfoMessageBox( const char *testTitle, const char *testMessage )
 {
     SDL_MessageBoxData data;
     data.flags          = SDL_MESSAGEBOX_INFORMATION;
@@ -36,13 +36,13 @@ inline void showRunTestMessageBox( const char *testTitle, const char *testMessag
 }
 
 // Shows a message box about test passing confirmation. Returns tester's verdict on whether test passed.
-inline bool showConfirmTestMessageBox( const char *testTitle )
+inline bool showConfirmMessageBox( const char *testTitle )
 {
     SDL_MessageBoxData data;
     data.flags          = SDL_MESSAGEBOX_INFORMATION;
     data.window         = nullptr;
     data.title          = testTitle;
-    data.message        = "Did it work?";
+    data.message        = "Did it work properly?";
     data.numbuttons     = SDL_arraysize( confirmTestButtons );
     data.buttons        = confirmTestButtons;
     data.colorScheme    = nullptr;
