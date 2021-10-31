@@ -115,50 +115,55 @@ namespace chestnut::engine
 
     void CTextRenderer::submitText( const CText& text, vec2f translation, vec2f scale ) 
     {
-        if( !text.isEmpty() )
+        const auto& vecTextLines = text.getData();
+
+        if( vecTextLines.empty() )
         {
-            std::unordered_map< GLuint, STextRender_VertexGroup > mapTexIDToVertexGroup;
-            
-            const auto& vecTextLines = text.getData();
-            for( const internal::STextLine& textLine : vecTextLines )
+            LOG_INFO( "Received text with no data to it. Try using generateData() on the CText." );
+            return;
+        }
+
+
+        std::unordered_map< GLuint, STextRender_VertexGroup > mapTexIDToVertexGroup;
+
+        for( const internal::STextLine& textLine : vecTextLines )
+        {
+            for( const internal::STextGlyph& textGlyph : textLine.vecGlyphs )
             {
-                for( const internal::STextGlyph& textGlyph : textLine.vecGlyphs )
-                {
-                    STextRender_Vertex vertex;
+                STextRender_Vertex vertex;
 
-                    vertex.color = textGlyph.color;
-                    vertex.translation = translation;
-                    vertex.scale = scale;
+                vertex.color = textGlyph.color;
+                vertex.translation = translation;
+                vertex.scale = scale;
 
-                    // upper left
-                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset );
-                    vertex.uv = textGlyph.uvOffsetNorm;
-                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
-                    
-                    // upper right
-                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + vec2i( textGlyph.size.x, 0 ) );
-                    vertex.uv = textGlyph.uvOffsetNorm + vec2f( textGlyph.uvSizeNorm.x, 0 );
-                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
+                // upper left
+                vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset );
+                vertex.uv = textGlyph.uvOffsetNorm;
+                mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
+                
+                // upper right
+                vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + vec2i( textGlyph.size.x, 0 ) );
+                vertex.uv = textGlyph.uvOffsetNorm + vec2f( textGlyph.uvSizeNorm.x, 0 );
+                mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
 
-                    // lower right
-                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + textGlyph.size );
-                    vertex.uv = textGlyph.uvOffsetNorm + textGlyph.uvSizeNorm;
-                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
+                // lower right
+                vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + textGlyph.size );
+                vertex.uv = textGlyph.uvOffsetNorm + textGlyph.uvSizeNorm;
+                mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
 
-                    // lower left
-                    vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + vec2i( 0, textGlyph.size.y ) );
-                    vertex.uv = textGlyph.uvOffsetNorm + vec2f( 0, textGlyph.uvSizeNorm.y );
-                    mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
-                }
+                // lower left
+                vertex.pos = vecCastType<float>( textLine.offset + textGlyph.lineOffset + vec2i( 0, textGlyph.size.y ) );
+                vertex.uv = textGlyph.uvOffsetNorm + vec2f( 0, textGlyph.uvSizeNorm.y );
+                mapTexIDToVertexGroup[ textGlyph.texID ].vecVertices.push_back( vertex );
             }
+        }
 
-            for( auto& [ texID , vertexGroup ] : mapTexIDToVertexGroup )
-            {
-                // IDs weren't set before for actual vertex groups, so we're doing it now
-                vertexGroup.texID = texID;
-                m_vecVertexGroups.push_back( vertexGroup );
-            }
-        }       
+        for( auto& [ texID , vertexGroup ] : mapTexIDToVertexGroup )
+        {
+            // IDs weren't set before for actual vertex groups, so we're doing it now
+            vertexGroup.texID = texID;
+            m_vecVertexGroups.push_back( vertexGroup );
+        }
     }
 
     void CTextRenderer::prepareBuffers() 
@@ -198,6 +203,27 @@ namespace chestnut::engine
             vertexOffsetBytes += vertexSizeBytes;
             elementOffset += elementCount;
         }
+    }
+
+    void CTextRenderer::render() 
+    {
+        prepareBuffers();
+
+        GLuint previousTexID = 0;
+
+        glBindVertexArray( m_vao );
+        for( const STextRender_Batch& batch : m_vecBatches )
+        {
+            if( batch.texID != previousTexID )
+            {
+                glBindTexture( GL_TEXTURE_2D, batch.texID );
+            }
+
+            glDrawElements( GL_TRIANGLES, batch.elementCount, GL_UNSIGNED_INT, (void *)( sizeof( GLuint ) * batch.elementOffset ) );
+            
+            previousTexID = batch.texID;
+        }
+        glBindVertexArray(0);
     }
 
     void CTextRenderer::render( const CFramebuffer& targetFramebuffer ) 

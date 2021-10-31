@@ -85,6 +85,9 @@ namespace chestnut::engine
         void submitPolygon( const SMulticoloredPolygon2D& polygonModel, const vec2f& translation, const vec2f& scale = { 1.f, 1.f }, float rotation = 0.f );
 
         // requires bound renderer shader
+        void render() override;
+
+        // requires bound renderer shader
         void render( const CFramebuffer& targetFramebuffer ) override;
 
     private:

@@ -267,6 +267,18 @@ namespace chestnut::engine
 
     }
 
+    void CColoredPolygon2DRenderer::render() 
+    {
+        prepareBuffers();
+
+        glBindVertexArray( m_vao );
+            for( const SColoredPolygon2DRender_Batch& batch : m_vecBatches )
+            {
+                glDrawElements( batch.drawMode, batch.indexCount, GL_UNSIGNED_INT, ( void * )( sizeof( GLuint ) * batch.indexOffset ) );
+            }
+        glBindVertexArray(0);
+    }
+
     void CColoredPolygon2DRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
         prepareBuffers();

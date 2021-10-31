@@ -244,6 +244,26 @@ namespace chestnut::engine
         }
     }
 
+    void CSpriteRenderer::render() 
+    {
+        prepareBuffers();
+
+        glBindVertexArray( m_vao );
+        for( const SSpriteRender_Batch& batch : m_vecBatches )
+        {
+            glBindTexture( GL_TEXTURE_2D, batch.texID );
+            m_shader.setVector2f( m_unifTexSizeLoc, batch.texSize );
+            glDrawElementsInstancedBaseInstance( GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, batch.instanceAmount, batch.instanceOffset );
+        }
+        glBindVertexArray(0);
+
+        GLenum err = glGetError();
+        if( err != GL_NO_ERROR )
+        {
+            LOG_ERROR( "Error occured while rendering: " << gluErrorString( err ) );
+        }
+    }
+
     void CSpriteRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
         prepareBuffers();

@@ -33,7 +33,9 @@ namespace chestnut::engine
 
         // Method called to clear all the data used to render stuff
         virtual void clear() = 0;
-        // Method called to render stuff with gathered data
+        // Method called to render stuff with gathered data to currently bound framebuffer
+        virtual void render() = 0;
+        // Method called to render stuff with gathered data to a specific framebuffer
         virtual void render( const CFramebuffer& targetFramebuffer ) = 0;
 
 
