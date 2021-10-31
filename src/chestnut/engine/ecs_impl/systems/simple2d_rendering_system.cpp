@@ -11,10 +11,9 @@
 
 namespace chestnut::engine
 {
-    CSimpled2DRenderingSystem::CSimpled2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
+    CSimple2DRenderingSystem::CSimple2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
     {
         CShaderProgram shader;
-        mat4f projection = matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f );
 
         try
         {
@@ -47,25 +46,30 @@ namespace chestnut::engine
         }
 
 
-        m_modelWithTextureQueryID = getEngine().getEntityWorld().createQuery(
+        m_textureWithModelQueryID = getEngine().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent  >(),
             ecs::makeEntitySignature()
         );
+
+        m_textureWithoutModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CTexture2DComponent >(),
+            ecs::makeEntitySignature< CModel2DComponent >()
+        );
     }
 
-    CSimpled2DRenderingSystem::~CSimpled2DRenderingSystem() 
+    CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_modelWithTextureQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_textureWithModelQueryID );
     }
 
-    void CSimpled2DRenderingSystem::update( float deltaTime ) 
+    void CSimple2DRenderingSystem::update( float deltaTime ) 
     {
+        m_spriteRenderer.clear();
+
+
         const ecs::CEntityQuery* query;
 
-
-        query = getEngine().getEntityWorld().queryEntities( m_modelWithTextureQueryID );
-
-        m_spriteRenderer.clear();
+        query = getEngine().getEntityWorld().queryEntities( m_textureWithModelQueryID );
 
         query->forEachEntityWith< CModel2DComponent, CTransform2DComponent, CTexture2DComponent >(
             [this]( CModel2DComponent& model, CTransform2DComponent& transform, CTexture2DComponent& texture )
@@ -74,16 +78,16 @@ namespace chestnut::engine
 
                 switch( texture.adjust )
                 {
-                case EModel2DTextureAdjust::SCALED:
+                case ETexture2DToModel2DAdjust::SCALED:
                     adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
                     adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
                     break;
 
-                case EModel2DTextureAdjust::SPANNED:
+                case ETexture2DToModel2DAdjust::SPANNED:
                     adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
                     break;
                 
-                case EModel2DTextureAdjust::ZOOMED:
+                case ETexture2DToModel2DAdjust::ZOOMED:
                     adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
                     adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
                     break;
@@ -95,15 +99,26 @@ namespace chestnut::engine
                 m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
         );
+
+
+        query = getEngine().getEntityWorld().queryEntities( m_textureWithoutModelQueryID );
+
+        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent >(
+            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture )
+            {
+                m_spriteRenderer.submitSprite( texture.texture, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+            }
+        );
     }
 
-    void CSimpled2DRenderingSystem::render()
+    void CSimple2DRenderingSystem::render()
     {
         getEngine().getWindow().clear();
         
         m_spriteRenderer.bindShader();
         m_spriteRenderer.setViewMatrix( mat4f() );
-        m_spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f ) );
+        m_spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, -1.f, 1.f ) );
+        glFinish(); // prevent CPU getting too hasty with sending requests to GPU
         m_spriteRenderer.render( getEngine().getWindow().getFramebuffer() );
         m_spriteRenderer.unbindShader();
 
@@ -113,17 +128,17 @@ namespace chestnut::engine
 
 
 
-    CSpriteRenderer& CSimpled2DRenderingSystem::getSpriteRenderer() 
+    CSpriteRenderer& CSimple2DRenderingSystem::getSpriteRenderer() 
     {
         return m_spriteRenderer;
     }
 
-    CColoredPolygon2DRenderer& CSimpled2DRenderingSystem::getColoredPolygonRenderer() 
+    CColoredPolygon2DRenderer& CSimple2DRenderingSystem::getColoredPolygonRenderer() 
     {
         return m_polygonRenderer;
     }
 
-    CTextRenderer& CSimpled2DRenderingSystem::getTextRenderer() 
+    CTextRenderer& CSimple2DRenderingSystem::getTextRenderer() 
     {
         return m_textRenderer;
     }

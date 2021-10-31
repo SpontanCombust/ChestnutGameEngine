@@ -1,6 +1,8 @@
 target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/components/collision2d_component.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/components/kinematics2d_component.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/components/model2d_component.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/components/texture2d_component.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/components/timer_component.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/components/transform2d_component.cpp
     

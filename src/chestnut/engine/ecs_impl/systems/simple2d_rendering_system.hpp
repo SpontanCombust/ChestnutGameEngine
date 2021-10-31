@@ -10,10 +10,11 @@
 
 namespace chestnut::engine
 {
-    class CSimpled2DRenderingSystem : public IRenderingSystem
+    class CSimple2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::queryid m_modelWithTextureQueryID;
+        ecs::queryid m_textureWithModelQueryID;
+        ecs::queryid m_textureWithoutModelQueryID;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
@@ -21,8 +22,8 @@ namespace chestnut::engine
 
 
     public:
-        CSimpled2DRenderingSystem( CEngine& engine );
-        ~CSimpled2DRenderingSystem();
+        CSimple2DRenderingSystem( CEngine& engine );
+        ~CSimple2DRenderingSystem();
 
         void update( float deltaTime ) override;
 

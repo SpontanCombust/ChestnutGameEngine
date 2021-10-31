@@ -6,7 +6,7 @@
 
 namespace chestnut::engine
 {
-    enum class EModel2DTextureAdjust
+    enum class ETexture2DToModel2DAdjust
     {
         NONE, // texture doesn't adjust to the model
         SCALED, // scale up/down keeping the aspect ratio to fit inside the model
@@ -17,7 +17,7 @@ namespace chestnut::engine
     struct CTexture2DComponent
     {
         CTexture2D texture;
-        EModel2DTextureAdjust adjust;
+        ETexture2DToModel2DAdjust adjust;
 
         CTexture2DComponent();
     };
