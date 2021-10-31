@@ -4,17 +4,20 @@
 
 namespace chestnut::engine
 {
-    CFramebuffer::CFramebuffer() 
+    CFramebuffer::CFramebuffer( int width, int height ) 
     {
         m_fbo = 0;
         m_rbo = 0;
+        m_width = width;
+        m_height = height;
+        m_clearColor = { 0.f, 0.f, 0.f, 1.f };
     }
 
     CFramebuffer::CFramebuffer( const CTexture2D& target ) 
     {
         m_fbo = 0;
         m_rbo = 0;
-
+        m_clearColor = { 0.f, 0.f, 0.f, 1.f };
         setTarget( target );
     }
 
@@ -22,9 +25,26 @@ namespace chestnut::engine
     {
         m_fbo = other.m_fbo;
         m_rbo = other.m_rbo;
+        m_width = other.m_width;
+        m_height = other.m_height;
+        m_clearColor = other.m_clearColor;
 
         other.m_fbo = 0;
         other.m_rbo = 0;
+    }
+
+    CFramebuffer& CFramebuffer::operator=( CFramebuffer&& other ) 
+    {
+        m_fbo = other.m_fbo;
+        m_rbo = other.m_rbo;
+        m_width = other.m_width;
+        m_height = other.m_height;
+        m_clearColor = other.m_clearColor;
+
+        other.m_fbo = 0;
+        other.m_rbo = 0;
+
+        return *this;
     }
 
     CFramebuffer::~CFramebuffer() 
@@ -37,14 +57,41 @@ namespace chestnut::engine
         return m_fbo;
     }
 
+    int CFramebuffer::getWidth() const
+    {
+        return m_width;
+    }
+
+    int CFramebuffer::getHeight() const
+    {
+        return m_height;
+    }
+
+    vec4f CFramebuffer::getClearColor() const
+    {
+        return m_clearColor;
+    }
+
+    void CFramebuffer::setClearColor( const vec4f& color ) 
+    {
+        m_clearColor = color;
+    }
+
     void CFramebuffer::bind() const
     {
         glBindFramebuffer( GL_FRAMEBUFFER, m_fbo );
+        glViewport( 0, 0, m_width, m_height );
+        glClearColor( m_clearColor.x, m_clearColor.y, m_clearColor.z, m_clearColor.w );
     }
 
     void CFramebuffer::unbind() const
     {
         glBindFramebuffer( GL_FRAMEBUFFER, 0 );
+    }
+
+    void CFramebuffer::clear() 
+    {
+        glClear( GL_COLOR_BUFFER_BIT );
     }
 
     void CFramebuffer::setTarget( const CTexture2D& target ) 
@@ -94,6 +141,8 @@ namespace chestnut::engine
 
         m_fbo = fbo;
         m_rbo = rbo;
+        m_width = target.getWidth();        
+        m_height = target.getHeight();
     }
 
     void CFramebuffer::resetTarget() 

@@ -2,6 +2,7 @@
 #define __CHESTNUT_ENGINE_FRAMEBUFFER_H__
 
 #include "texture2d.hpp"
+#include "../maths/vector4.hpp"
 
 namespace chestnut::engine
 {
@@ -10,11 +11,14 @@ namespace chestnut::engine
     private:
         GLuint m_fbo;
         GLuint m_rbo;
+        int m_width, m_height;
+        vec4f m_clearColor;
 
     public:
-        CFramebuffer();
-        CFramebuffer( const CFramebuffer& other ) = delete; // force using pointer/reference to pass the buffer
+        CFramebuffer( int width, int height );
+        CFramebuffer( const CFramebuffer& other ) = delete;
         CFramebuffer( CFramebuffer&& other );
+        CFramebuffer& operator=( CFramebuffer&& other );
         // Can throw exception on error
         CFramebuffer( const CTexture2D& target );
 
@@ -23,10 +27,17 @@ namespace chestnut::engine
 
         GLuint getID() const;
 
+        int getWidth() const;
+        int getHeight() const;
+
+        vec4f getClearColor() const;
+        void setClearColor( const vec4f& color );
+
 
         void bind() const;
-
         void unbind() const;
+        
+        void clear();
 
 
         // Can throw exception on error
@@ -38,7 +49,7 @@ namespace chestnut::engine
         bool hasTarget() const;
 
     private:
-        void destroyBufferIfSetToTexture();
+        void destroyBufferIfSetToTexture();  
     };
 
 } // namespace chestnut::engine

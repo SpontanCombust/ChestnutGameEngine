@@ -81,9 +81,6 @@ namespace chestnut::engine
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
 
-        glClearColor( 0.f, 0.f, 0.f, 1.f );
-        glClear( GL_COLOR_BUFFER_BIT );
-
         int interval = useVsync ? 1 : 0;
         SDL_GL_SetSwapInterval( interval );        
 
@@ -102,12 +99,18 @@ namespace chestnut::engine
     {
         m_sdlWindow = window;
         m_sdlGLContext = context;
+
+        int w, h;
+        SDL_GetWindowSize( window, &w, &h );
+        m_framebuffer = new CFramebuffer( w, h );
+        m_framebuffer->setClearColor( vec4f{ 0.f, 0.f, 0.f, 1.f } );
     }
 
     CWindow::~CWindow() 
     {
         SDL_GL_DeleteContext( m_sdlGLContext );
         SDL_DestroyWindow( m_sdlWindow );
+        delete m_framebuffer;
     }
 
     void CWindow::setTitle( const std::string& title ) 
@@ -173,21 +176,18 @@ namespace chestnut::engine
     void CWindow::setSize( int w, int h ) 
     {
         SDL_SetWindowSize( m_sdlWindow, w, h );
-        glViewport( 0, 0, w, h );
+        *m_framebuffer = std::move( CFramebuffer( w, h ) );
     }
 
     int CWindow::getSizeWidth() const
     {
-        int w;
-        SDL_GetWindowSize( m_sdlWindow, &w, NULL );
-        return w;
+        // might as well use framebuffer as it has the same size
+        return m_framebuffer->getWidth();
     }
 
     int CWindow::getSizeHeight() const
     {
-        int h;
-        SDL_GetWindowSize( m_sdlWindow, NULL, &h );
-        return h;
+        return m_framebuffer->getHeight();
     }
 
     void CWindow::setPosition( int x, int y ) 
@@ -276,12 +276,13 @@ namespace chestnut::engine
 
     const CFramebuffer& CWindow::getFramebuffer() const
     {
-        return m_framebuffer;
+        return *m_framebuffer;
     }
 
     void CWindow::clear() 
     {
-        glClear( GL_COLOR_BUFFER_BIT );
+        m_framebuffer->bind();
+        m_framebuffer->clear();
     }
 
     void CWindow::flipBuffer() 

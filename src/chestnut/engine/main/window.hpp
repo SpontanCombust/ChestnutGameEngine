@@ -23,7 +23,7 @@ namespace chestnut::engine
     private:
         SDL_Window *m_sdlWindow;
         SDL_GLContext m_sdlGLContext;
-        CFramebuffer m_framebuffer; // for now just a dummy with no texture bound
+        CFramebuffer *m_framebuffer; // for now just a dummy with no texture bound
 
     public:
         CWindow( SDL_Window *window, SDL_GLContext context );
