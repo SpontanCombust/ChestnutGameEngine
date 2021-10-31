@@ -122,13 +122,13 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
 
     CText text = CText( fontResource, 32 );
     text.setAligment( ETextAlignment::CENTER );
-    text.append( L"Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
-    text.append( L"kotek\n", EFontStyle::BOLD, { 1.f, 1.f, 0.0 } );
-    text.append( L"na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
-    text.append( L"płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f } );
+    text.append( "Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
+    text.append( "kotek\n", EFontStyle::BOLD, { 1.f, 1.f, 0.0 } );
+    text.append( "na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
+    text.append( "płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f } );
     text.newline();
-    text.append( L"Pierdolnął go\n", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
-    text.append( L"młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f } );
+    text.append( "Pierdolnął go\n", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
+    text.append( "młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f } );
 
 
     showInfoMessageBox( testName, "Click to render some text" );

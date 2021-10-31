@@ -2,6 +2,12 @@
 
 #include "../debug/log.hpp"
 
+#include <locale>
+#include <codecvt>
+
+
+std::wstring_convert< std::codecvt_utf8<wchar_t> > wstringConverter;
+
 namespace chestnut::engine
 {
     using namespace internal;
@@ -494,6 +500,12 @@ namespace chestnut::engine
         fragmRaw.color = color;
 
         m_vecRawFragments.push_back( fragmRaw );
+    }
+
+    void CText::append( std::string str, EFontStyle styleMask, vec3f color )
+    {
+        std::wstring wide = wstringConverter.from_bytes( str );
+        append( wide, styleMask, color );
     }
 
     void CText::newline() 
