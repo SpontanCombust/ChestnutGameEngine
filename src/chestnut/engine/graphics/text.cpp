@@ -1,5 +1,7 @@
 #include "text.hpp"
 
+#include "../debug/log.hpp"
+
 namespace chestnut::engine
 {
     using namespace internal;
@@ -521,7 +523,7 @@ namespace chestnut::engine
 
     int CText::getWidthPixels() const
     {
-        if( isEmpty() )
+        if( !m_resource || m_vecLines.empty() )
         {
             return 0;
         }
@@ -543,9 +545,9 @@ namespace chestnut::engine
 
     int CText::getHeightPixels() const
     {
-        if( isEmpty() )
+        if( !m_resource || m_vecLines.empty() )
         {
-            return 0.f;
+            return 0;
         }
 
         int height;
@@ -557,7 +559,7 @@ namespace chestnut::engine
 
     vec2i CText::getSizePixels() const
     {
-        if( isEmpty() )
+        if( !m_resource || m_vecLines.empty() )
         {
             return { 0, 0 };
         }
@@ -579,6 +581,12 @@ namespace chestnut::engine
 
     void CText::generateData() 
     {
+        if( !m_resource )
+        {
+            LOG_WARNING( "Can't generate data for text with invalid font resource!" );
+            return;
+        }
+
         m_vecLines.clear();
 
         for( const STextFragmentRaw& fragmRaw : m_vecRawFragments )

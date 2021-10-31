@@ -35,7 +35,14 @@ namespace chestnut::engine
     
     void CTexture2D::bind() const
     {
-        glBindTexture( GL_TEXTURE_2D, m_texResource->m_texID );
+        if( m_texResource )
+        {
+            glBindTexture( GL_TEXTURE_2D, m_texResource->m_texID );
+        }
+        else
+        {
+            glBindTexture( GL_TEXTURE_2D, 0 );
+        }
     }
 
     void CTexture2D::unbind() const
