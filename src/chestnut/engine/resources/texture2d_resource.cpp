@@ -5,17 +5,112 @@
 
 #include <SDL2/SDL_image.h>
 
+#include <cstring>
+
 namespace chestnut::engine
 {
-    GLuint loadOpenGLTexture2DFromPixels( void *pixels, int width, int height, GLenum pixelFormat )
+    int pixelFormatToBytesPerPixel( GLenum format )
+    {
+        switch( format )
+        {
+        case GL_RGBA:
+        case GL_BGRA:
+            return 4;
+        case GL_RGB:
+        case GL_BGR:
+            return 3;
+        case GL_RG:
+            return 2;
+        case GL_RED:
+            return 1;
+        default:
+            LOG_WARNING( "Unknown pixel format given: " << format );
+            return 1;
+        }
+    }
+
+    GLenum bytesPerPixelToPixelFormat( int bpp, bool redFirst )
+    {
+        switch( bpp )
+        {
+        case 4:
+            return redFirst ? GL_RGBA : GL_BGRA;
+        case 3:
+            return redFirst ? GL_RGB : GL_BGR;
+        case 2:
+            return GL_RG;
+        case 1:
+            return GL_RED;
+        default:
+            LOG_WARNING( "Invalid bytes per pixel given: " << bpp );
+            return 1;
+        }
+    }
+
+    // REMEMBER TO DELETE THE POINTER!
+    //
+    // When we send texture data to OpenGL it samples texture coordinates in row order opposite to how they are loaded from system
+    // We usually expect the (0,0) point to the upper left corner of the image, whereas OpenGL expects it to be the LOWER left corner
+    // So if we send them as-is, the rendered image is flipped upside down
+    // To mitigate this without 'hacking' the UV coordinates inside the renderer (that could break things down the road) 
+    // we're just gonna flip the image before we send it  
+    unsigned char *getPixelsFlippedVertically( const void *pixels, int width, int height, int bytesPerPixel )
+    {
+        const unsigned char *pixels8 = (const unsigned char *)pixels;
+        unsigned char *flipped8 = new unsigned char[ width * height * bytesPerPixel ];
+
+        for (int i = 0; i < height; i++)
+        {
+            // copy pixel rows in opposite order to how they are in "pixels"
+            // basically flip the image upside down
+            std::memcpy( flipped8 + ( height - 1 - i ) * ( width * bytesPerPixel ), 
+                         pixels8  + i * width * bytesPerPixel, 
+                         width * bytesPerPixel );
+        }
+
+        return flipped8;
+    }
+
+
+
+    GLuint loadOpenGLTexture2DFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
     {
         GLuint texID;
-
         glGenTextures( 1, &texID );
-
         glBindTexture( GL_TEXTURE_2D, texID );
+
+
+        int bpp = pixelFormatToBytesPerPixel( pixelFormat );
+
+        // in case we need to store 1-channel texture
+        if( bpp == 1 )
+        {
+            glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+        }
+        else
+        {
+            glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
+        }
         
-        glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, pixels );
+        
+        if( pixels )
+        {
+            if( flipPixelsVertically )
+            {
+                unsigned char *flipped = getPixelsFlippedVertically( pixels, width, height, bpp );
+                glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, flipped );
+                delete flipped;
+            }
+            else
+            {
+                glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, pixels ); 
+            }
+        }
+        else
+        {
+            glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, NULL );
+        }
+        
 
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
@@ -40,7 +135,7 @@ namespace chestnut::engine
         }
     }
 
-    GLuint loadOpenGLTexture2DFromFile( const std::string& path, int& width, int& height, GLenum& pixelFormat )
+    GLuint loadOpenGLTexture2DFromFile( const std::string& path, int *width, int *height, GLenum *pixelFormat )
     {
         SDL_Surface *surf = IMG_Load( path.c_str() );
 
@@ -54,43 +149,14 @@ namespace chestnut::engine
             LOG_WARNING( "Loading non-power-of-two texture from " << path );
         }
 
-        width = surf->w;
-        height = surf->h;
+        *width = surf->w;
+        *height = surf->h;
         void *pixels = surf->pixels;
 
         int bytesPerPixel = (int)surf->format->BytesPerPixel;
         bool firstRed = ( surf->format->Rmask == 0x000000ff );
 
-        if( bytesPerPixel == 4 )
-        {
-            if( firstRed )
-            {
-                pixelFormat = GL_RGBA;
-            }
-            else
-            {
-                pixelFormat = GL_BGRA;
-            }
-        }
-        else if( bytesPerPixel == 3 )
-        {
-            if( firstRed )
-            {
-                pixelFormat = GL_RGB;
-            }
-            else
-            {
-                pixelFormat = GL_BGR;
-            }
-        }
-        else if( bytesPerPixel == 2 )
-        {
-            pixelFormat = GL_RG;
-        }
-        else
-        {
-            pixelFormat = GL_RED;
-        }
+        *pixelFormat = bytesPerPixelToPixelFormat( bytesPerPixel, firstRed );
         
         GLuint texID;
         bool loaded;
@@ -98,7 +164,7 @@ namespace chestnut::engine
 
         try
         {
-            texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat );
+            texID = loadOpenGLTexture2DFromPixels( pixels, *width, *height, *pixelFormat, true );
             loaded = true;
         }
         catch( const std::exception& e )
@@ -152,10 +218,10 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, GLenum pixelFormat )
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
     {
         // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat );
+        GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat, flipPixelsVertically );
 
         CTexture2DResource *resource = new CTexture2DResource();
         resource->m_texID = texID;
@@ -174,7 +240,7 @@ namespace chestnut::engine
         GLenum pixelFormat;
 
         // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTexture2DFromFile( texturePath, width, height, pixelFormat );
+        GLuint texID = loadOpenGLTexture2DFromFile( texturePath, &width, &height, &pixelFormat );
 
         CTexture2DResource *resource = new CTexture2DResource();
         resource->m_texID = texID;

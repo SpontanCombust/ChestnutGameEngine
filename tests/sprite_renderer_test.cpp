@@ -149,7 +149,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     {
         SECTION( "Smaller than texture size" )
         {
-            showRunTestMessageBox( testName, "Click to render a texture with clipping rectangle smaller than texture size" );
+            showRunTestMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to center" );
 
             tex.setClippingRect( SRectangle{ 0.f, 0.f, tex.getWidth() / 2.f, tex.getHeight() / 2.f } );
 
@@ -164,7 +164,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
         SECTION( "Bigger than texture size" )
         {
-            showRunTestMessageBox( testName, "Click to render a texture with clipping rectangle bigger than texture size" );
+            showRunTestMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to 1.5 times past lower right corner" );
 
             tex.setClippingRect( SRectangle{ 0.f, 0.f, tex.getWidth() * 1.5f, tex.getHeight() * 1.5f } );
 

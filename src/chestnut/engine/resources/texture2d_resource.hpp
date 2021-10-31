@@ -32,7 +32,9 @@ namespace chestnut::engine
 
 
     // Throws exception if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, GLenum pixelFormat );
+    // Pass pixels as null if you want to allocate pixel memory for the texture
+    // pixelFormat should be one of: GL_RED, GL_RG, GL_RGB, GL_BGR, GL_RGBA, GL_BGRA
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically );
 
     // Throws exception if fails to load the texture
     std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath );

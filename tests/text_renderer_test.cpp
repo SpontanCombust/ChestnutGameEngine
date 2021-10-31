@@ -41,7 +41,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         window->clear();
             spriteRenderer.clear();
-            spriteRenderer.submitSprite( CTexture2D( normalSheet ), { 0.f, 0.f } );
+            spriteRenderer.submitSprite( CTexture2D( normalSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
@@ -56,7 +56,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         window->clear();
             spriteRenderer.clear();
-            spriteRenderer.submitSprite( CTexture2D( boldSheet ), { 0.f, 0.f } );
+            spriteRenderer.submitSprite( CTexture2D( boldSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
@@ -71,7 +71,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         window->clear();
             spriteRenderer.clear();
-            spriteRenderer.submitSprite( CTexture2D( italicSheet ), { 0.f, 0.f } );
+            spriteRenderer.submitSprite( CTexture2D( italicSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 
@@ -86,7 +86,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         window->clear();
             spriteRenderer.clear();
-            spriteRenderer.submitSprite( CTexture2D( underlineStrikethroughSheet ), { 0.f, 0.f } );
+            spriteRenderer.submitSprite( CTexture2D( underlineStrikethroughSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
             spriteRenderer.render( window->getFramebuffer() );
         window->flipBuffer();
 

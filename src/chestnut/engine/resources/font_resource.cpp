@@ -162,9 +162,7 @@ namespace chestnut::engine
 
         // ========== create the OpenGL texture resource ==========
 
-        glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
-        config.textureResource = loadTexture2DResourceFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED );
-        glPixelStorei( GL_UNPACK_ALIGNMENT, 4 );
+        config.textureResource = loadTexture2DResourceFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED, false );
 
         delete alphaPixels8; // we won't need it no more, data is copied to the GPU
 

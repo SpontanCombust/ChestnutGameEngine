@@ -23,7 +23,7 @@ namespace chestnut::engine
         m_spriteCapacity = 0;
         reserveBufferSpace( INIT_SPRITE_CAPACITY );
 
-        m_missingTexturePlaceholder = CTexture2D( loadTexture2DResourceFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB ) );
+        m_missingTexturePlaceholder = CTexture2D( loadTexture2DResourceFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );
     }
 
@@ -71,10 +71,10 @@ namespace chestnut::engine
     {
         GLfloat vertices[] = {
             // pos      // uv
-            0.0, 0.0,   0.0, 0.0,   // upper left
-            1.0, 0.0,   1.0, 0.0,   // upper right
-            1.0, 1.0,   1.0, 1.0,   // lower right
-            0.0, 1.0,   0.0, 1.0    // lower left
+            0.0, 0.0,   0.0, 1.0,   // upper left
+            1.0, 0.0,   1.0, 1.0,   // upper right
+            1.0, 1.0,   1.0, 0.0,   // lower right
+            0.0, 1.0,   0.0, 0.0    // lower left
         };
 
         GLuint indices[] = {
@@ -194,7 +194,7 @@ namespace chestnut::engine
         instance.transl = translation;
         instance.scale = scale;
         instance.rot = (float)rotation;
-        instance.clipRect = vec4f( rect.x, rect.y, rect.w, rect.h );    
+        instance.clipRect = vec4f( rect.x, 1.f - rect.y - rect.h, rect.w, rect.h ); // we have to shift Y around to adapt it to OpenGL's way of handling texture coords
         instance.tint = texture.getTint();
         instance.tintFactor = texture.getTintFactor();  
 
