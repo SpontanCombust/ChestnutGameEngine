@@ -1,8 +1,7 @@
 #include "sprite_renderer.hpp"
 
 #include "../debug/log.hpp"
-
-#define INIT_SPRITE_CAPACITY 100
+#include "../macros.hpp"
 
 namespace chestnut::engine
 {   
@@ -21,7 +20,7 @@ namespace chestnut::engine
     void CSpriteRenderer::onInit() 
     {
         m_spriteCapacity = 0;
-        reserveBufferSpace( INIT_SPRITE_CAPACITY );
+        reserveBufferSpace( CHESTNUT_SPRITE_RENDERER_INIT_SPRITE_CAPACITY );
 
         m_missingTexturePlaceholder = CTexture2D( loadTexture2DResourceFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );

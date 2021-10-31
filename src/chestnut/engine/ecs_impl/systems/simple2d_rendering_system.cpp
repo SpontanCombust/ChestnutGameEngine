@@ -8,6 +8,7 @@
 #include "../components/transform2d_component.hpp"
 #include "../components/texture2d_component.hpp"
 #include "../../debug/log.hpp"
+#include "../../macros.hpp"
 
 namespace chestnut::engine
 {
@@ -17,7 +18,7 @@ namespace chestnut::engine
 
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
+            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
             m_spriteRenderer.init( shader );
         }
         catch(const std::exception& e)
@@ -27,7 +28,7 @@ namespace chestnut::engine
 
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
+            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) );
             m_polygonRenderer.init( shader );
         }
         catch(const std::exception& e)
@@ -37,7 +38,7 @@ namespace chestnut::engine
         
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/text.vert", "../assets/shaders/text.frag" ) );
+            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) );
             m_textRenderer.init( shader );
         }
         catch(const std::exception& e)
@@ -118,7 +119,11 @@ namespace chestnut::engine
         m_spriteRenderer.bindShader();
         m_spriteRenderer.setViewMatrix( mat4f() );
         m_spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, -1.f, 1.f ) );
+
+#if CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_FORCE_GPU_SYNCHRONIZATION > 0
         glFinish(); // prevent CPU getting too hasty with sending requests to GPU
+#endif
+
         m_spriteRenderer.render( getEngine().getWindow().getFramebuffer() );
         m_spriteRenderer.unbindShader();
 

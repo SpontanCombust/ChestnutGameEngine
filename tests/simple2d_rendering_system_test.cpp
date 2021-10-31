@@ -8,6 +8,7 @@
 #include "../src/chestnut/engine/ecs_impl/components/texture2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "../src/chestnut/engine/macros.hpp"
 
 #include "system_test_utils.hpp"
 #include "test_utils.hpp"
@@ -55,7 +56,7 @@ public:
         modelHandle->size = { 100.f, 100.f };
 
         auto textureHandle = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( player );
-        textureHandle->texture = CTexture2D( CResourceManager::loadOrGetTexture2DResource( "../assets/images/awesomeface.png" ) );
+        textureHandle->texture = CTexture2D( CResourceManager::loadOrGetTexture2DResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
     }
 
     ~CSteeringSystem()

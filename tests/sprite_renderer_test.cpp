@@ -6,6 +6,7 @@
 #include "../src/chestnut/engine/main/window.hpp"
 #include "../src/chestnut/engine/graphics/sprite_renderer.hpp"
 #include "../src/chestnut/engine/constants.hpp"
+#include "../src/chestnut/engine/macros.hpp"
 
 
 using namespace chestnut::engine;
@@ -19,12 +20,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     auto window = createWindow( testName );
     REQUIRE( window );
 
-    CShaderProgram shader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
+    CShaderProgram shader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
 
     CSpriteRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
 
-    auto texResource = loadTexture2DResourceFromFile( "../assets/images/awesomeface.png" );
+    auto texResource = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
     REQUIRE( texResource->isValid() );
 
     CTexture2D tex( texResource );

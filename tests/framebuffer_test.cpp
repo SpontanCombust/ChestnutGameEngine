@@ -4,6 +4,7 @@
 #include "../src/chestnut/engine/main/window.hpp"
 #include "../src/chestnut/engine/graphics/text_renderer.hpp"
 #include "../src/chestnut/engine/graphics/sprite_renderer.hpp"
+#include "../src/chestnut/engine/macros.hpp"
 
 #include "test_utils.hpp"
 
@@ -18,14 +19,14 @@ TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
 
     auto window = createWindow( testName );
 
-    CShaderProgram textShader( loadShaderProgramResourceFromFiles( "../assets/shaders/text.vert", "../assets/shaders/text.frag" ) );
+    CShaderProgram textShader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) );
     CTextRenderer textRenderer;
     REQUIRE_NOTHROW( textRenderer.init( textShader ) );
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window->getSizeWidth(), window->getSizeHeight(), 0, -1, 1 ) ); 
 
-    CShaderProgram spriteShader( loadShaderProgramResourceFromFiles( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
+    CShaderProgram spriteShader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
     CSpriteRenderer spriteRenderer;
     REQUIRE_NOTHROW( spriteRenderer.init( spriteShader ) );
     spriteRenderer.bindShader();
@@ -36,7 +37,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
     showInfoMessageBox( testName, "This test should show the same results received through direct and indirect (through target texture) rendering of text." );
 
 
-    CText text( loadFontResourceFromFile( "../assets/fonts/arial.ttf" ), 32 );
+    CText text( loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ), 32 );
     text.append( L"This is an example text.\n" );
     text.append( L"Remember how it looks!", EFontStyle::BOLD, vec3f{ 1.f, 0.f, 0.f } );
     text.generateData();

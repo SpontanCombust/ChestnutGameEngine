@@ -1,9 +1,7 @@
 #include "colored_polygon2d_renderer.hpp"
 
 #include "../debug/log.hpp"
-
-#define INIT_POLYGON_VERTEX_CAPACITY 100
-#define INIT_VERTEX_INDEX_CAPACITY 150
+#include "../macros.hpp"
 
 namespace chestnut::engine
 {
@@ -11,7 +9,7 @@ namespace chestnut::engine
     {
         m_polygonVertexCapacity = 0;
         m_vertexIndexCapacity = 0;
-        reserveBufferSpace( INIT_POLYGON_VERTEX_CAPACITY, INIT_VERTEX_INDEX_CAPACITY );
+        reserveBufferSpace( CHESTNUT_POLYGON_RENDERER_INIT_VERTEX_CAPACITY, CHESTNUT_POLYGON_RENDERER_INIT_INDEX_CAPACITY );
     }
 
     void CColoredPolygon2DRenderer::deleteBuffers() 

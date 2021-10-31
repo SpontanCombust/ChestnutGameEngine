@@ -7,6 +7,7 @@
 #include "../src/chestnut/engine/graphics/colored_polygon2d.hpp"
 #include "../src/chestnut/engine/graphics/colored_polygon2d_renderer.hpp"
 #include "../src/chestnut/engine/maths/vector_cast.hpp"
+#include "../src/chestnut/engine/macros.hpp"
 
 #include <SDL2/SDL_events.h>
 
@@ -20,7 +21,7 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
     auto window = createWindow( "Point vs AABB collision" );
 
     CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) ) );
+    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
@@ -124,7 +125,7 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
     auto window = createWindow( "Point vs circle collision" );
 
     CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) ) );
+    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
@@ -214,7 +215,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
     auto window = createWindow( "Circle vs circle collision", 1280, 720 );
 
     CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) ) );
+    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
@@ -306,7 +307,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
     auto window = createWindow( "AABB vs AABB collision", 1280, 720 );
 
     CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) ) );
+    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
@@ -414,7 +415,7 @@ TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
     auto window = createWindow( "Circle vs AABB collision", 1280, 720 );
 
     CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) ) );
+    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );

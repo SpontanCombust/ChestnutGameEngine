@@ -8,6 +8,7 @@
 #include "../src/chestnut/engine/maths/vector2.hpp"
 #include "../src/chestnut/engine/maths/vector_transform.hpp"
 #include "../src/chestnut/engine/constants.hpp"
+#include "../src/chestnut/engine/macros.hpp"
 
 
 using namespace chestnut::engine;
@@ -20,7 +21,7 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
 
     auto window = createWindow( testName );
 
-    CShaderProgram shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
+    CShaderProgram shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
@@ -88,7 +89,7 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[in
     auto window = createWindow( testName );
     REQUIRE( window );
 
-    CShaderProgram shader = CShaderProgram( loadShaderProgramResourceFromFiles( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
+    CShaderProgram shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );

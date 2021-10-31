@@ -2,6 +2,7 @@
 
 #include "../misc/exception.hpp"
 #include "../resources/texture2d_resource.hpp"
+#include "../macros.hpp"
 
 #include <SDL2/SDL_ttf.h>
 
@@ -255,18 +256,15 @@ namespace chestnut::engine
 
 
 
-    #define INIT_FONT_POINT_SIZE 16
-    #define INIT_FONT_STYLE EFontStyle::NORMAL
-
     std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath ) 
     {
-        TTF_Font *font = TTF_OpenFont( fontPath.c_str(), INIT_FONT_POINT_SIZE );
+        TTF_Font *font = TTF_OpenFont( fontPath.c_str(), CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
 
         if( font )
         {
             auto unicodeValues = getUnicodeValueRanges();
-            SFontConfig initConfig = loadConfigInternal( font, INIT_FONT_POINT_SIZE, INIT_FONT_STYLE, unicodeValues );
-            size_t hash = getConfigHashInternal( INIT_FONT_POINT_SIZE, INIT_FONT_STYLE );
+            SFontConfig initConfig = loadConfigInternal( font, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE, unicodeValues );
+            size_t hash = getConfigHashInternal( CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE );
 
             CFontResource *resource = new CFontResource();
             resource->m_fontPath = fontPath;

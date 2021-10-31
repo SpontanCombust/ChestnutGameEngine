@@ -2,17 +2,16 @@
 
 #include "../debug/log.hpp"
 #include "../maths/vector_cast.hpp"
+#include "../macros.hpp"
 
 #include <unordered_map>
-
-#define INIT_GLYPH_CAPACITY 128
 
 namespace chestnut::engine
 {
     void CTextRenderer::onInit() 
     {
         m_glyphCapacity = 0;
-        reserveBufferSpace( INIT_GLYPH_CAPACITY );
+        reserveBufferSpace( CHESTNUT_TEXT_RENDERER_INIT_GLYPH_CAPACITY );
     }
 
     void CTextRenderer::deleteBuffers() 
