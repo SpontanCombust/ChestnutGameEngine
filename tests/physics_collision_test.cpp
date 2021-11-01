@@ -18,7 +18,8 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
 {
     chestnutInit();
 
-    auto window = createWindow( "Point vs AABB collision" );
+    CWindow window( "Point vs AABB collision" );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -102,15 +103,15 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
         }
         
         
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitPolygon( aabb1, aabb1Pos );
             renderer.submitPolygon( aabb2, aabb2Pos );
             renderer.submitPolygon( aabb3, aabb3Pos );
             renderer.submitPolygon( aabb4, aabb4Pos, aabb4Scale );
             renderer.submitPolygon( point, pointPos );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
     } while( e.type != SDL_QUIT );
 
@@ -122,7 +123,8 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
 {
     chestnutInit();
 
-    auto window = createWindow( "Point vs circle collision" );
+    CWindow window( "Point vs circle collision" );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -193,14 +195,14 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
         }
         
         
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitPolygon( circle1, circle1Pos );
             renderer.submitPolygon( circle2, circle2Pos );
             renderer.submitPolygon( circle3, circle3Pos, vec2f( circle3Scale ) );
             renderer.submitPolygon( point, pointPos );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
     } while( e.type != SDL_QUIT );
 
@@ -212,7 +214,8 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
 {
     chestnutInit();
 
-    auto window = createWindow( "Circle vs circle collision", 1280, 720 );
+    CWindow window( "Circle vs circle collision", 1280, 720 );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -285,14 +288,14 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
         }
         
         
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitPolygon( circle1, circle1Pos );
             renderer.submitPolygon( circle2, circle2Pos );
             renderer.submitPolygon( circle3, circle3Pos, vec2f( circle3Scale ) );
             renderer.submitPolygon( circleUser, circleUserPos, vec2f( circleUserScale ) );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
     } while( e.type != SDL_QUIT );
 
@@ -304,7 +307,8 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
 {
     chestnutInit();
 
-    auto window = createWindow( "AABB vs AABB collision", 1280, 720 );
+    CWindow window( "AABB vs AABB collision", 1280, 720 );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -392,15 +396,15 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
         }
         
         
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitPolygon( aabb1, aabb1Pos );
             renderer.submitPolygon( aabb2, aabb2Pos );
             renderer.submitPolygon( aabb3, aabb3Pos );
             renderer.submitPolygon( aabb4, aabb4Pos, aabb4Scale );
             renderer.submitPolygon( aabbUser, aabbUserPos );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
     } while( e.type != SDL_QUIT );
 
@@ -412,7 +416,8 @@ TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
 {
     chestnutInit();
 
-    auto window = createWindow( "Circle vs AABB collision", 1280, 720 );
+    CWindow window( "Circle vs AABB collision", 1280, 720 );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -499,15 +504,15 @@ TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
         }
         
         
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitPolygon( aabb1, aabb1Pos );
             renderer.submitPolygon( aabb2, aabb2Pos );
             renderer.submitPolygon( aabb3, aabb3Pos, aabb3Scale );
             renderer.submitPolygon( aabb4, aabb4Pos );
             renderer.submitPolygon( circleUser, circleUserPos, vec2f( circleUserScale ) );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
     } while( e.type != SDL_QUIT );
 

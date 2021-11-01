@@ -19,7 +19,8 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
 
     REQUIRE( chestnutInit( ) );
 
-    auto window = createWindow( testName );
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -67,13 +68,13 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
     
     showInfoMessageBox( testName, "Click to draw red square, rainbow hexagon and green triangle outline" );
     
-    window->clear();
+    window.clear();
         renderer.clear();
         renderer.submitPolygon( square, {50.f, 50.f} );
         renderer.submitPolygon( hexagon, {400.f, 200.f } );
         renderer.submitPolygon( triangle, { 200.f, 300.f } );
-        renderer.render( window->getFramebuffer() );
-    window->flipBuffer();
+        renderer.render( window.getFramebuffer() );
+    window.flipBuffer();
 
     REQUIRE( showConfirmMessageBox( testName ) );
 }   
@@ -87,8 +88,8 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[in
 
     REQUIRE( chestnutInit() );
 
-    auto window = createWindow( testName );
-    REQUIRE( window );
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -115,15 +116,15 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[in
                                      "-cyan rectangle\n"
                                      "-blue circle");
 
-    window->clear();
+    window.clear();
         renderer.clear();
         renderer.submitPolygon( triangle1, { 100.f, 100.f } );
         renderer.submitPolygon( triangle2, { 250.f, 100.f } );
         renderer.submitPolygon( square, { 400.f, 100.f } );
         renderer.submitPolygon( rectangle, { 100.f, 300.f } );
         renderer.submitPolygon( circle, { 200.f, 300.f } );
-        renderer.render( window->getFramebuffer() );
-    window->flipBuffer();
+        renderer.render( window.getFramebuffer() );
+    window.flipBuffer();
 
 
     REQUIRE( showConfirmMessageBox( testName ) );

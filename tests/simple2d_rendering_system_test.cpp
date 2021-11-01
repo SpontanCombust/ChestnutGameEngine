@@ -191,9 +191,10 @@ TEST_CASE( "Systems - Simple2D rendering system test", "[interactive][demo]" )
 {
     chestnutInit();
 
+    CWindow window( "Simple2D rendering system test", 1000 );
+    REQUIRE( window.isValid() );
 
-    auto window = createWindow( "Simple2D rendering system test", 1000 );
-    CEngine engine( window, 1.f / 60.f );
+    CEngine engine( &window, 1.f / 60.f );
 
     engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
     engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );

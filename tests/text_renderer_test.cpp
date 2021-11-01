@@ -22,8 +22,8 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
     std::shared_ptr< CFontResource > fontResource;
     REQUIRE_NOTHROW( fontResource = loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
 
-    std::shared_ptr< CWindow > window = createWindow( testName );
-    REQUIRE( window );
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
 
     CShaderProgram textureShader;
     REQUIRE_NOTHROW( textureShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
@@ -40,11 +40,11 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         showInfoMessageBox( testName, "Click to render a sheet with regular font" );
 
-        window->clear();
+        window.clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( normalSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
-            spriteRenderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            spriteRenderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         showConfirmMessageBox( testName );
     }
@@ -55,11 +55,11 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         showInfoMessageBox( testName, "Click to render a sheet with bold font" );
 
-        window->clear();
+        window.clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( boldSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
-            spriteRenderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            spriteRenderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         showConfirmMessageBox( testName );
     }
@@ -70,11 +70,11 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         showInfoMessageBox( testName, "Click to render a sheet with italic font" );
 
-        window->clear();
+        window.clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( italicSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
-            spriteRenderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            spriteRenderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         showConfirmMessageBox( testName );
     }
@@ -85,11 +85,11 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
         showInfoMessageBox( testName, "Click to render a sheet with underline strikethrough font" );
 
-        window->clear();
+        window.clear();
             spriteRenderer.clear();
             spriteRenderer.submitSprite( CTexture2D( underlineStrikethroughSheet ), { 0.f, 0.f }, { 0.f, 1.f }, {1.f, -1.f} ); // y scale is negative to flip the image vertically (sprite renderer normally takes textues already flipped)
-            spriteRenderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            spriteRenderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         showConfirmMessageBox( testName );
     }
@@ -108,8 +108,8 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
     REQUIRE_NOTHROW( fontResource = loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
     REQUIRE( fontResource );
 
-    std::shared_ptr< CWindow > window = createWindow( testName );
-    REQUIRE( window );
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
 
     CShaderProgram textShader;
     REQUIRE_NOTHROW( textShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
@@ -134,7 +134,7 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
 
     showInfoMessageBox( testName, "Click to render some text" );
 
-    window->clear();
+    window.clear();
         textRenderer.clear();
 
         text.generateData();
@@ -146,8 +146,8 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
         text.generateData();
         textRenderer.submitText( text, { 650.f, 50.f }, { 1.5f, 1.5f } );
 
-        textRenderer.render( window->getFramebuffer() );
-    window->flipBuffer();
+        textRenderer.render( window.getFramebuffer() );
+    window.flipBuffer();
 
     showConfirmMessageBox( testName );
 

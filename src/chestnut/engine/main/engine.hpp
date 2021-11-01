@@ -12,7 +12,6 @@
 #include <chestnut/ecs/entity_world.hpp>
 
 #include <list>
-#include <memory> // shared_ptr
 
 namespace chestnut::engine
 {
@@ -23,7 +22,7 @@ namespace chestnut::engine
 
         CAutoTimer *m_updateTimer;
 
-        std::shared_ptr<CWindow> m_window;
+        CWindow* m_window;
 
         ecs::CEntityWorld m_entityWorld;
         CEventManager m_eventManager;
@@ -49,7 +48,7 @@ namespace chestnut::engine
         // updateInterval:
         //      <= 0 unlocked update rate
         //       > 0 update rate locked to specified interval in seconds
-        CEngine( std::shared_ptr<CWindow> window, float updateInterval = -1 );
+        CEngine( CWindow* window, float updateInterval = -1 );
         ~CEngine();
 
 

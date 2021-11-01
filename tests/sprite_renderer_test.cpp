@@ -17,8 +17,8 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
     chestnutInit();
 
-    auto window = createWindow( testName );
-    REQUIRE( window );
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
 
     CShaderProgram shader;
     REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
@@ -42,30 +42,30 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
         showInfoMessageBox( testName, "Click to render an image with missing texture" );
 
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitSprite( missing, {0,0}, {0,0}, {64.f, 64.f} );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         REQUIRE( showConfirmMessageBox( testName ) );
     }
 
-    window->clear();
+    window.clear();
         renderer.clear();
         renderer.submitSprite( tex, {0,0} );
-        renderer.render( window->getFramebuffer() );
-    window->flipBuffer();
+        renderer.render( window.getFramebuffer() );
+    window.flipBuffer();
 
     SECTION( "Default values" )
     {
         showInfoMessageBox( testName, "Click to render an image with default values" );
 
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitSprite( tex, {0,0} );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         REQUIRE( showConfirmMessageBox( testName ) );
     }
@@ -76,11 +76,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
         {
             showInfoMessageBox( testName, "Click to render a scaled up image around its center with linear filtering" );
 
-            window->clear();
+            window.clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {2.f,1.5f} );
-                renderer.render( window->getFramebuffer() );
-            window->flipBuffer();
+                renderer.render( window.getFramebuffer() );
+            window.flipBuffer();
 
             REQUIRE( showConfirmMessageBox( testName ) );
         }
@@ -91,11 +91,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
             tex.setFiltering( GL_NEAREST, GL_NEAREST );
 
-            window->clear();
+            window.clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {2.f,1.5f} );
-                renderer.render( window->getFramebuffer() );
-            window->flipBuffer();
+                renderer.render( window.getFramebuffer() );
+            window.flipBuffer();
 
             REQUIRE( showConfirmMessageBox( testName ) );
         }
@@ -107,11 +107,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
         {
             showInfoMessageBox( testName, "Click to render a scaled down image around its center with linear filtering" );
 
-            window->clear();
+            window.clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {0.25f,0.5f} );
-                renderer.render( window->getFramebuffer() );
-            window->flipBuffer();
+                renderer.render( window.getFramebuffer() );
+            window.flipBuffer();
 
             REQUIRE( showConfirmMessageBox( testName ) );
         }
@@ -122,11 +122,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
             tex.setFiltering( GL_NEAREST, GL_NEAREST );
 
-            window->clear();
+            window.clear();
                 renderer.clear();
                 renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {0.25f,0.5f} );
-                renderer.render( window->getFramebuffer() );
-            window->flipBuffer();
+                renderer.render( window.getFramebuffer() );
+            window.flipBuffer();
 
             REQUIRE( showConfirmMessageBox( testName ) );
         }
@@ -136,11 +136,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     {
         showInfoMessageBox( testName, "Click to render a texture rotated around its center" );
 
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitSprite( tex, { tex.getWidth() / 2.f, tex.getHeight() / 2.f}, {0.5,0.5}, {1,1}, CHESTNUT_PI / 2.f );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         REQUIRE( showConfirmMessageBox( testName ) );
     }
@@ -153,11 +153,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
             tex.setClippingRect( SRectangle{ 0.f, 0.f, tex.getWidth() / 2.f, tex.getHeight() / 2.f } );
 
-            window->clear();
+            window.clear();
                 renderer.clear();
                 renderer.submitSprite( tex, {0,0} );
-                renderer.render( window->getFramebuffer() );
-            window->flipBuffer();
+                renderer.render( window.getFramebuffer() );
+            window.flipBuffer();
 
             REQUIRE( showConfirmMessageBox( testName ) );
         }
@@ -168,11 +168,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
 
             tex.setClippingRect( SRectangle{ 0.f, 0.f, tex.getWidth() * 1.5f, tex.getHeight() * 1.5f } );
 
-            window->clear();
+            window.clear();
                 renderer.clear();
                 renderer.submitSprite( tex, {0,0} );
-                renderer.render( window->getFramebuffer() );
-            window->flipBuffer();
+                renderer.render( window.getFramebuffer() );
+            window.flipBuffer();
 
             REQUIRE( showConfirmMessageBox( testName ) );
         }
@@ -185,11 +185,11 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
         tex.setTint( vec3f{ 1.f, 0.f, 0.f } );
         tex.setTintFactor( 0.5f );
 
-        window->clear();
+        window.clear();
             renderer.clear();
             renderer.submitSprite( tex, {0,0} );
-            renderer.render( window->getFramebuffer() );
-        window->flipBuffer();
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
 
         REQUIRE( showConfirmMessageBox( testName ) );
     }

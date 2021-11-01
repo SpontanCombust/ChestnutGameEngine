@@ -9,16 +9,17 @@
 
 namespace chestnut::engine
 {
-    std::shared_ptr<CWindow> createWindow( const std::string& title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
+    CWindow::CWindow( const std::string& title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
-        // if any error happens we'll just return default smart pointer with null inside 
-        std::shared_ptr<CWindow> ptr;
+        m_sdlWindow = nullptr;
+        m_sdlGLContext = nullptr;
+        m_framebuffer = nullptr;
+
 
         if( !chestnutWasInit() )
         {
-            LOG_ERROR( "Can't create a window without first initializing the dependency libraries!" );
-            LOG_ERROR( "Use chestnutInit() first!" );
-            return ptr;
+            LOG_ERROR( "Can't create a window without first initializing the dependency libraries! Use chestnutInit() first!" );
+            return;
         }
 
 
@@ -47,18 +48,16 @@ namespace chestnut::engine
         SDL_Window *window = SDL_CreateWindow( title.c_str(), x, y, width, height, windowFlags );
         if( !window )
         {
-            LOG_ERROR( "Failed to create window. Error: " );
-            LOG_ERROR( SDL_GetError() );
-            return ptr;
+            LOG_ERROR( "Failed to create window. Error: " << SDL_GetError() );
+            return;
         }
 
         SDL_GLContext context = SDL_GL_CreateContext( window );
         if( !context )
         {
-            LOG_ERROR( "Failed to create OpenGL context for the window. Error: " );
-            LOG_ERROR( SDL_GetError() );
+            LOG_ERROR( "Failed to create OpenGL context for the window. Error: " << SDL_GetError() );
             SDL_DestroyWindow( window );
-            return ptr;
+            return;
         }
 
 
@@ -68,11 +67,10 @@ namespace chestnut::engine
         GLenum err = glewInit();
         if( err != GLEW_OK )
         {
-            LOG_ERROR( "Failed to initialize GLEW! Error: " );
-            LOG_ERROR( glewGetErrorString( err ) );
+            LOG_ERROR( "Failed to initialize GLEW! Error: " << (const char *)glewGetErrorString( err ) );
             SDL_GL_DeleteContext( context );
             SDL_DestroyWindow( window );
-            return ptr;
+            return;
         }
 
         glViewport( 0, 0, width, height );
@@ -85,24 +83,11 @@ namespace chestnut::engine
         SDL_GL_SetSwapInterval( interval );        
 
 
-        ptr = std::shared_ptr<CWindow>( new CWindow( window, context ) );
 
-        return ptr;
-    }
-
-
-
-
-
-
-    CWindow::CWindow( SDL_Window *window, SDL_GLContext context ) 
-    {
         m_sdlWindow = window;
         m_sdlGLContext = context;
 
-        int w, h;
-        SDL_GetWindowSize( window, &w, &h );
-        m_framebuffer = new CFramebuffer( w, h );
+        m_framebuffer = new CFramebuffer( width, height );
         m_framebuffer->setClearColor( vec4f{ 0.f, 0.f, 0.f, 1.f } );
     }
 
@@ -111,6 +96,16 @@ namespace chestnut::engine
         SDL_GL_DeleteContext( m_sdlGLContext );
         SDL_DestroyWindow( m_sdlWindow );
         delete m_framebuffer;
+    }
+
+    bool CWindow::isValid() const
+    {
+        if( m_sdlWindow && m_sdlGLContext && m_framebuffer )
+        {
+            return true;
+        }
+
+        return false;
     }
 
     void CWindow::setTitle( const std::string& title ) 

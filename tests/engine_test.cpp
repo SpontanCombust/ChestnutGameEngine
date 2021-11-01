@@ -81,8 +81,7 @@ public:
 TEST_CASE( "Engine - Handling systems" )
 {
     // in this case we won't be doing any rendering, so a working window is not necessary
-    std::shared_ptr<CWindow> window;
-    CEngine engine( window );
+    CEngine engine( nullptr );
 
     SECTION( "Constructing, destroying and basic checking" )
     {
