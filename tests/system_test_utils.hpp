@@ -3,6 +3,7 @@
 
 #include "../src/chestnut/engine/ecs_impl/system.hpp"
 #include "../src/chestnut/engine/ecs_impl/event_listener.hpp"
+#include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 
 #include <SDL2/SDL_events.h>
 
@@ -11,7 +12,7 @@
 class CCloseWindowListeningSystem : public chestnut::engine::ISystem
 {
 private:
-    std::shared_ptr< chestnut::engine::IEventListener > m_quitListener;
+    chestnut::engine::CEventListenerGuard m_quitListenerGuard;
 
 public:
     CCloseWindowListeningSystem( chestnut::engine::CEngine& engine );

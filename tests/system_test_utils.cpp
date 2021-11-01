@@ -9,9 +9,9 @@ CCloseWindowListeningSystem::CCloseWindowListeningSystem( CEngine& engine )
 {
     auto listener = new CEventListener<SDL_QuitEvent>();
     listener->setHandler( &CCloseWindowListeningSystem::onQuitEvent, this );
+    getEngine().getEventManager().registerListener( listener );
 
-    m_quitListener = std::shared_ptr<IEventListener>( listener );
-    getEngine().getEventManager().registerListener( m_quitListener );
+    m_quitListenerGuard.reset( listener, &getEngine().getEventManager() );
 }
 
 event_function CCloseWindowListeningSystem::onQuitEvent( const SDL_QuitEvent& e ) 

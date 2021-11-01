@@ -1,6 +1,7 @@
 #include <catch2/catch.hpp>
 
 #include "../src/chestnut/engine/ecs_impl/event_manager.hpp"
+#include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 
 #include <string>
 
@@ -15,7 +16,7 @@ struct MyEvent
 TEST_CASE( "Events - Event manager test - general" )
 {
     int n1;
-    auto l1 = std::make_shared< CEventListener<MyEvent> >( 
+    auto l1 = new CEventListener<MyEvent>( 
         [&n1]( const MyEvent& e ) 
         {
             n1 += e.i;
@@ -23,7 +24,7 @@ TEST_CASE( "Events - Event manager test - general" )
     );
 
     int n2;
-    auto l2 = std::make_shared< CEventListener<MyEvent> >(
+    auto l2 = new CEventListener<MyEvent>(
         [&n2]( const MyEvent& e )
         {
             n2 *= e.i;
@@ -91,6 +92,9 @@ TEST_CASE( "Events - Event manager test - general" )
             REQUIRE( n2 == 4 );
         }
     }
+
+    delete l1;
+    delete l2;
 }
 
 
@@ -100,21 +104,21 @@ TEST_CASE( "Events - Event manager test - listener priority order" )
 
     std::string s;
 
-    auto la = std::make_shared< CEventListener<MyEvent> >(
+    auto la = new CEventListener<MyEvent>(
         [&s]( const MyEvent& e )
         {
             s += 'a';  
         }
     );
 
-    auto lb = std::make_shared< CEventListener<MyEvent> >(
+    auto lb = new CEventListener<MyEvent>(
         [&s]( const MyEvent& e )
         {
             s += 'b';
         }
     );
 
-    auto lc = std::make_shared< CEventListener<MyEvent> >(
+    auto lc = new CEventListener<MyEvent>(
         [&s]( const MyEvent& e )
         {
             s += 'c';
@@ -155,4 +159,37 @@ TEST_CASE( "Events - Event manager test - listener priority order" )
 
         REQUIRE( s == "bca" );
     }
+
+    delete la;
+    delete lb;
+    delete lc;
+}
+
+
+TEST_CASE( "Events - Event listener guard test" )
+{
+    CEventManager manager;
+
+    int i = 0;
+    {
+        auto l = new CEventListener<MyEvent>(
+            [&i]( const MyEvent& e )
+            {
+                i += e.i;
+            }
+        );
+
+        manager.registerListener(l);
+
+        CEventListenerGuard guard( l, &manager );
+
+
+        manager.raiseEvent( MyEvent{2} );
+
+        REQUIRE( i == 2 );
+    }
+
+    manager.raiseEvent( MyEvent{2} );
+
+    REQUIRE( i == 2 );
 }

@@ -3,6 +3,7 @@
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/engine.hpp"
 #include "../src/chestnut/engine/resources/resource_manager.hpp"
+#include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_rendering_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/texture2d_component.hpp"
@@ -32,7 +33,7 @@ const char *adjustToString( ETexture2DToModel2DAdjust adjust )
 class CSteeringSystem : public ISystem
 {
 private:
-    std::shared_ptr< IEventListener > listener;
+    CEventListenerGuard inputListenerGuard;
 
     ecs::entityid player;
     vec2f sizeDelta;
@@ -46,8 +47,9 @@ public:
     {
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &CSteeringSystem::handleInput, this );
-        listener = std::shared_ptr<IEventListener>(l);
-        getEngine().getEventManager().registerListener( listener );
+        getEngine().getEventManager().registerListener(l);
+
+        inputListenerGuard.reset( l, &getEngine().getEventManager() );
 
         player = getEngine().getEntityWorld().createEntity();
         getEngine().getEntityWorld().createComponent<CTransform2DComponent>( player );
