@@ -6,10 +6,10 @@
 
 #include <SDL2/SDL_ttf.h>
 
+#include <array>
 #include <cmath> // ceil, sqrt
 #include <map>
 #include <utility> // pair
-#include <vector>
 
 namespace chestnut::engine
 {
@@ -44,23 +44,14 @@ namespace chestnut::engine
         return sdlStyle;
     }
 
-    std::vector< std::pair< wchar_t, wchar_t > > getUnicodeValueRanges()
-    {
-        std::vector< std::pair< wchar_t, wchar_t > > vecValueRanges;
+    constexpr std::array< std::pair< wchar_t, wchar_t >, 4 > unicodeValueRanges = {{
+        { 0x0020, 0x007F },
+        { 0x00A1, 0x00FF },
+        { 0x0100, 0x017F },
+        { 0x0180, 0x024F }
+    }};
 
-        // basic latin
-        vecValueRanges.push_back( std::make_pair( 0x0020, 0x007F ) );
-        // latin 1 supplement
-        vecValueRanges.push_back( std::make_pair( 0x00A1, 0x00FF ) );
-        // latin extended A
-        vecValueRanges.push_back( std::make_pair( 0x0100, 0x017F ) );
-        // latin extended B
-        vecValueRanges.push_back( std::make_pair( 0x0180, 0x024F ) );
-
-        return vecValueRanges;
-    }
-
-    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask, const std::vector< std::pair< wchar_t, wchar_t > >& vecUnicodeRanges )
+    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask )
     {
         SFontConfig config;
 
@@ -78,7 +69,7 @@ namespace chestnut::engine
 
         std::map< wchar_t, SDL_Surface * > mapGlyphSurfaces;
         int maxGlyphSideLength = 0;
-        for( const auto& [ first, last ] : vecUnicodeRanges )
+        for( const auto& [ first, last ] : unicodeValueRanges )
         {
             for (wchar_t g = first; g <= last; g++)
             {
@@ -190,28 +181,18 @@ namespace chestnut::engine
         m_fontPath = "";
     }
 
-    bool CFontResource::isValid() const
+    CFontResource::~CFontResource() 
     {
-        if( !m_mapConfigHashToConfig.empty() )
-        {
-            return true;
-        }
-        return false;
+        m_mapConfigHashToConfig.clear();
     }
 
     void CFontResource::loadConfig( int pointSize, EFontStyle styleMask ) 
     {
-        if( !isValid() )
-        {
-            throw ChestnutException( "Font resource is not valid!" );
-        }
-
         if( !hasConfig( pointSize, styleMask ) )
         {
             TTF_Font *font = TTF_OpenFont( m_fontPath.c_str(), pointSize );
-            auto unicodeValues = getUnicodeValueRanges();
 
-            SFontConfig config = loadConfigInternal( font, pointSize, styleMask, unicodeValues );
+            SFontConfig config = loadConfigInternal( font, pointSize, styleMask );
             size_t hash = getConfigHash( pointSize, styleMask );
             m_mapConfigHashToConfig[ hash ] = config;
 
@@ -221,11 +202,6 @@ namespace chestnut::engine
 
     bool CFontResource::hasConfig( int pointSize, EFontStyle styleMask ) 
     {
-        if( !isValid() )
-        {
-            return false;
-        }
-
         size_t hash = getConfigHash( pointSize, styleMask );
 
         auto it = m_mapConfigHashToConfig.find( hash );
@@ -262,8 +238,7 @@ namespace chestnut::engine
 
         if( font )
         {
-            auto unicodeValues = getUnicodeValueRanges();
-            SFontConfig initConfig = loadConfigInternal( font, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE, unicodeValues );
+            SFontConfig initConfig = loadConfigInternal( font, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE );
             size_t hash = getConfigHashInternal( CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE );
 
             CFontResource *resource = new CFontResource();
@@ -276,7 +251,7 @@ namespace chestnut::engine
         }        
         else
         {
-            throw ChestnutException( "Failed to load font from file " + fontPath );
+            throw ChestnutResourceLoadException( "CFontResource", fontPath, "invalid font file" );
         }
     }
 

@@ -17,7 +17,10 @@ namespace chestnut::engine
     {
         m_fbo = 0;
         m_rbo = 0;
+        m_width = 0;
+        m_height = 0;
         m_clearColor = { 0.f, 0.f, 0.f, 1.f };
+
         setTarget( target );
     }
 
@@ -96,53 +99,50 @@ namespace chestnut::engine
 
     void CFramebuffer::setTarget( const CTexture2D& target ) 
     {
-        destroyBufferIfSetToTexture();
-
-
-
-        GLuint rbo;
-
-        glGenRenderbuffers( 1, &rbo );
-        glBindRenderbuffer( GL_RENDERBUFFER, rbo );
-        glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, target.getWidth(), target.getHeight() );
-
-        GLenum err = glGetError();
-        if( err != GL_NO_ERROR )
+        if( target.isValid() )
         {
-            LOG_ERROR( "Error occured while setting a target. Error: " << gluErrorString( err ) );
+            GLuint rbo;
+            glGenRenderbuffers( 1, &rbo );
+            glBindRenderbuffer( GL_RENDERBUFFER, rbo );
+            glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, target.getWidth(), target.getHeight() );
+
+            GLenum err = glGetError();
+            if( err != GL_NO_ERROR )
+            {
+                LOG_ERROR( "Error occured while setting a target. Error: " << gluErrorString( err ) );
+                glBindRenderbuffer( GL_RENDERBUFFER, 0 );
+                glDeleteRenderbuffers( 1, &rbo );
+                return;
+            }
+
             glBindRenderbuffer( GL_RENDERBUFFER, 0 );
-            glDeleteRenderbuffers( 1, &rbo );
 
-            throw ChestnutException( "Failed to create OpenGL renderbuffer for the framebuffer!" );
+
+            GLuint fbo;
+            glGenFramebuffers( 1, &fbo );
+            glBindFramebuffer( GL_FRAMEBUFFER, fbo );
+            glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, target.getID(), 0 );
+            glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo );
+
+            if( glCheckFramebufferStatus( GL_FRAMEBUFFER ) != GL_FRAMEBUFFER_COMPLETE )
+            {
+                LOG_ERROR( "Error occured while setting a target. Error: " << "Framebuffer is not complete" );
+                glDeleteRenderbuffers( 1, &rbo );
+                glDeleteFramebuffers( 1, &fbo );
+                return;
+            }
+
+            glBindRenderbuffer( GL_RENDERBUFFER, 0 );
+
+
+
+            destroyBufferIfSetToTexture();
+
+            m_fbo = fbo;
+            m_rbo = rbo;
+            m_width = target.getWidth();        
+            m_height = target.getHeight();
         }
-
-        glBindRenderbuffer( GL_RENDERBUFFER, 0 );
-
-
-
-        GLuint fbo;
-
-        glGenFramebuffers( 1, &fbo );
-        glBindFramebuffer( GL_FRAMEBUFFER, fbo );
-        glFramebufferTexture2D( GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, target.getID(), 0 );
-        glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo );
-
-        if( glCheckFramebufferStatus( GL_FRAMEBUFFER ) != GL_FRAMEBUFFER_COMPLETE )
-        {
-            LOG_ERROR( "Error occured while setting a target. Error: " << "Framebuffer is not complete" );
-            glDeleteRenderbuffers( 1, &rbo );
-            glDeleteFramebuffers( 1, &fbo );
-
-            throw ChestnutException( "Failed to complete OpenGL framebuffer!" );
-        }
-
-        glBindRenderbuffer( GL_RENDERBUFFER, 0 );
-
-
-        m_fbo = fbo;
-        m_rbo = rbo;
-        m_width = target.getWidth();        
-        m_height = target.getHeight();
     }
 
     void CFramebuffer::resetTarget() 

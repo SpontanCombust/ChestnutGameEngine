@@ -106,7 +106,6 @@ namespace chestnut::engine
         return shader;
     }
 
-    // Throws exception if fails to load the shader program
     GLuint loadOpenGLShaderProgramFromFiles( const std::string& vertPath, const std::string& fragPath )
     {
         GLuint program;
@@ -119,7 +118,7 @@ namespace chestnut::engine
         if( vertShader == 0 )
         {
             glDeleteProgram( program );
-            throw ChestnutException( "Failed to load vertex shader!" );
+            throw ChestnutResourceLoadException( "shader", vertPath, "vertex shader load failure" );
         }
         glAttachShader( program, vertShader );
 
@@ -128,7 +127,7 @@ namespace chestnut::engine
         {
             glDeleteShader( vertShader );
             glDeleteProgram( program );
-            throw ChestnutException( "Failed to load fragment shader!" );
+            throw ChestnutResourceLoadException( "shader", fragPath, "fragment shader load failure" );
         }
         glAttachShader( program, fragShader );
 
@@ -141,7 +140,7 @@ namespace chestnut::engine
             glDeleteShader( fragShader );
             glDeleteShader( vertShader );
             glDeleteProgram( program );
-            throw ChestnutException( "Failed to link shader program!" );
+            throw ChestnutResourceLoadException( "CShaderProgramResource", vertPath + " and " + fragPath, "shader program linkage failure" );
         }
 
         glDeleteShader( fragShader );
@@ -162,21 +161,9 @@ namespace chestnut::engine
         m_fragmentShaderPath = "";
     }
 
-    bool CShaderProgramResource::isValid() const
-    {
-        if( m_programID != 0 )
-        {
-            return true;
-        }
-        return false;
-    }
-
     CShaderProgramResource::~CShaderProgramResource() 
     {
-        if( isValid() )
-        {
-            glDeleteProgram( m_programID );
-        }
+        glDeleteProgram( m_programID );
     }
 
     GLint CShaderProgramResource::getAttributeLocation( std::string attrName ) 

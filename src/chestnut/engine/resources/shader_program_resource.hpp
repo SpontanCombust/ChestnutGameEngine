@@ -28,9 +28,6 @@ namespace chestnut::engine
         ~CShaderProgramResource();
 
 
-        bool isValid() const override;
-
-
         // Requires shader to be bound
         // Returns -1 if doesn't find the location
         GLint getAttributeLocation( std::string attrName );
@@ -40,7 +37,7 @@ namespace chestnut::engine
     };
 
 
-    // Throws exception if fails to load the shader program
+    // Throws ChestnutResourceLoadException if fails to load the shader program
     std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath );
 
 } // namespace chestnut::engine

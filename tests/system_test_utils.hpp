@@ -7,8 +7,6 @@
 
 #include <SDL2/SDL_events.h>
 
-#include <memory>
-
 class CCloseWindowListeningSystem : public chestnut::engine::ISystem
 {
 private:

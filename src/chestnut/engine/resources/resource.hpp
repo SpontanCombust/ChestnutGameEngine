@@ -7,8 +7,6 @@ namespace chestnut::engine
     {
     public:
         virtual ~IResource() = default;
-
-        virtual bool isValid() const = 0;
     };
 
 } // namespace chestnut::engine

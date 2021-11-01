@@ -37,7 +37,7 @@ namespace chestnut::engine
 
     bool CText::isValid() const
     {
-        if( m_resource && m_resource->isValid() )
+        if( m_resource )
         {
             return true;
         }

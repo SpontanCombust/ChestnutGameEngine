@@ -115,12 +115,12 @@ namespace chestnut::engine
         GLenum err = glGetError();
         if( err != GL_NO_ERROR )
         {
-            LOG_ERROR( "Error occured while loading texture from pixels! Error:" );
-            LOG_ERROR( gluErrorString( err ) );
+            const char *msg = (const char *)gluErrorString( err );
+            LOG_ERROR( "Error occured while loading texture from pixels! Error: " << msg );
             glDeleteTextures( 1, &texID );
             glBindTexture( GL_TEXTURE_2D, 0 );
             
-            throw ChestnutException( "Failed to send the texture data to the GPU!" );
+            throw ChestnutResourceLoadException( "CTexture2DResource", "[loaded directly from pixel data]", (char *)msg );
         }
         else
         {
@@ -141,7 +141,7 @@ namespace chestnut::engine
 
         if( !surf )
         {
-            throw ChestnutException( "Failed to load texture from file: " + path );
+            throw ChestnutResourceLoadException( "CTexture2DResource", path, "failed to load image file" );
         }
 
         if( surf->w != surf->h || ( surf->w & ( surf->w - 1 ) ) != 0 )
@@ -159,30 +159,19 @@ namespace chestnut::engine
         *pixelFormat = bytesPerPixelToPixelFormat( bytesPerPixel, firstRed );
         
         GLuint texID;
-        bool loaded;
-        std::string msg;
 
         try
         {
-            texID = loadOpenGLTexture2DFromPixels( pixels, *width, *height, *pixelFormat, true );
-            loaded = true;
+            texID = loadOpenGLTexture2DFromPixels( pixels, *width, *height, *pixelFormat, true );  
         }
-        catch( const std::exception& e )
+        catch( const ChestnutResourceLoadException& e )
         {
-            msg = e.what();
-            loaded = false;
+            SDL_FreeSurface( surf );
+            throw ChestnutResourceLoadException( "CTexture2DResource", path, e.reason );
         }
 
         SDL_FreeSurface( surf );
-
-        if( loaded )
-        {
-            return texID;
-        }
-        else
-        {
-            throw ChestnutException( msg );
-        }
+        return texID;
     }
 
 
@@ -198,21 +187,9 @@ namespace chestnut::engine
         m_height = 0;
     }
 
-    bool CTexture2DResource::isValid() const
-    {
-        if( m_texID != 0 )
-        {
-            return true;
-        }
-        return false;
-    }
-
     CTexture2DResource::~CTexture2DResource() 
     {
-        if( isValid() )
-        {
-            glDeleteTextures( 1, &m_texID );
-        }
+        glDeleteTextures( 1, &m_texID );
     }
 
 

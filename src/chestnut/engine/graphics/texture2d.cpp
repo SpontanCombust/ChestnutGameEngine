@@ -30,7 +30,12 @@ namespace chestnut::engine
     
     bool CTexture2D::isValid() const
     {
-        return m_texResource && m_texResource->m_texID != 0;
+        if( m_texResource )
+        {
+            return true;
+        }
+
+        return false;
     }
     
     void CTexture2D::bind() const

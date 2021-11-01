@@ -21,12 +21,12 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
 
     std::shared_ptr< CFontResource > fontResource;
     REQUIRE_NOTHROW( fontResource = loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
-    REQUIRE( fontResource );
 
     std::shared_ptr< CWindow > window = createWindow( testName );
     REQUIRE( window );
 
-    CShaderProgram textureShader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
+    CShaderProgram textureShader;
+    REQUIRE_NOTHROW( textureShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
     CSpriteRenderer spriteRenderer;
     REQUIRE_NOTHROW( spriteRenderer.init( textureShader ) );
 
@@ -111,7 +111,8 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
     std::shared_ptr< CWindow > window = createWindow( testName );
     REQUIRE( window );
 
-    CShaderProgram textShader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) );
+    CShaderProgram textShader;
+    REQUIRE_NOTHROW( textShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
     CTextRenderer textRenderer;
     REQUIRE_NOTHROW( textRenderer.init( textShader ) );
 

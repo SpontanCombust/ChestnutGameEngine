@@ -19,14 +19,16 @@ TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
 
     auto window = createWindow( testName );
 
-    CShaderProgram textShader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) );
+    CShaderProgram textShader;
+    REQUIRE_NOTHROW( textShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
     CTextRenderer textRenderer;
     REQUIRE_NOTHROW( textRenderer.init( textShader ) );
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window->getSizeWidth(), window->getSizeHeight(), 0, -1, 1 ) ); 
 
-    CShaderProgram spriteShader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
+    CShaderProgram spriteShader;
+    REQUIRE_NOTHROW( spriteShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
     CSpriteRenderer spriteRenderer;
     REQUIRE_NOTHROW( spriteRenderer.init( spriteShader ) );
     spriteRenderer.bindShader();
@@ -37,7 +39,8 @@ TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
     showInfoMessageBox( testName, "This test should show the same results received through direct and indirect (through target texture) rendering of text." );
 
 
-    CText text( loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ), 32 );
+    CText text;
+    REQUIRE_NOTHROW( text = CText( loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ), 32 ) );
     text.append( L"This is an example text.\n" );
     text.append( L"Remember how it looks!", EFontStyle::BOLD, vec3f{ 1.f, 0.f, 0.f } );
     text.generateData();
@@ -52,7 +55,8 @@ TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
     showInfoMessageBox( testName, "This is a text rendered directly onto screen." );
 
 
-    CTexture2D blank = CTexture2D( loadTexture2DResourceFromPixels( nullptr, window->getSizeWidth(), window->getSizeHeight(), GL_RGBA, false ) );
+    CTexture2D blank;
+    REQUIRE_NOTHROW( blank = CTexture2D( loadTexture2DResourceFromPixels( nullptr, window->getSizeWidth(), window->getSizeHeight(), GL_RGBA, false ) ) );
     CFramebuffer blankFramebuffer( blank );
     blankFramebuffer.setClearColor( vec4f( 0.f ) ); 
 

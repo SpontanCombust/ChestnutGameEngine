@@ -19,7 +19,7 @@ namespace chestnut::engine
         CFramebuffer( const CFramebuffer& other ) = delete;
         CFramebuffer( CFramebuffer&& other );
         CFramebuffer& operator=( CFramebuffer&& other );
-        // Can throw exception on error
+        // Will set to default framebuffer if target is invalid or error occurs
         CFramebuffer( const CTexture2D& target );
 
         ~CFramebuffer();
@@ -40,7 +40,7 @@ namespace chestnut::engine
         void clear();
 
 
-        // Can throw exception on error
+        // Won't change the target if given target is invalid or error occurs
         void setTarget( const CTexture2D& target );
         // The target will be the default OpenGL window buffer
         void resetTarget();

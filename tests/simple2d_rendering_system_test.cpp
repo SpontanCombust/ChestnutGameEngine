@@ -2,7 +2,6 @@
 
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/engine.hpp"
-#include "../src/chestnut/engine/resources/resource_manager.hpp"
 #include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_rendering_system.hpp"
@@ -58,7 +57,7 @@ public:
         modelHandle->size = { 100.f, 100.f };
 
         auto textureHandle = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( player );
-        textureHandle->texture = CTexture2D( CResourceManager::loadOrGetTexture2DResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
+        REQUIRE_NOTHROW( textureHandle->texture = CTexture2D( loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
     }
 
     ~CSteeringSystem()
@@ -194,7 +193,7 @@ TEST_CASE( "Systems - Simple2D rendering system test", "[interactive][demo]" )
 
 
     auto window = createWindow( "Simple2D rendering system test", 1000 );
-    CEngine engine( window );
+    CEngine engine( window, 1.f / 60.f );
 
     engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
     engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );

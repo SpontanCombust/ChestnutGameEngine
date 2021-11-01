@@ -14,21 +14,30 @@ namespace chestnut::engine
 
     GLuint CShaderProgram::getID() const
     {
-        return m_shaderResource->m_programID;
+        if( m_shaderResource )
+        {
+            return m_shaderResource->m_programID;
+        }
+
+        return 0;
     }
 
     bool CShaderProgram::isValid() const
     {
-        if( m_shaderResource && m_shaderResource->isValid() )
+        if( m_shaderResource )
         {
             return true;
         }
+
         return false;
     }
 
     void CShaderProgram::bind()
     {
-        glUseProgram( m_shaderResource->m_programID );
+        if( m_shaderResource )
+        {
+            glUseProgram( m_shaderResource->m_programID );
+        }
     }
 
     void CShaderProgram::unbind()
@@ -38,12 +47,22 @@ namespace chestnut::engine
 
     GLint CShaderProgram::getAttributeLocation( std::string attrName ) 
     {
-        return m_shaderResource->getAttributeLocation( attrName );
+        if( m_shaderResource )
+        {
+            return m_shaderResource->getAttributeLocation( attrName );
+        }
+
+        return -1;
     }
 
     GLint CShaderProgram::getUniformLocation( std::string uniformName ) 
     {
-        return m_shaderResource->getUniformLocation( uniformName );
+        if( m_shaderResource )
+        {
+            return m_shaderResource->getUniformLocation( uniformName );
+        }
+        
+        return -1;
     }
 
     bool CShaderProgram::setInt( const std::string& unifName, int val ) 
@@ -54,10 +73,8 @@ namespace chestnut::engine
             glUniform1i( loc, val );
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     bool CShaderProgram::setVector2f( const std::string& unifName, const vec2f& val ) 
@@ -68,10 +85,8 @@ namespace chestnut::engine
             glUniform2fv( loc, 1, val.data() );
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     bool CShaderProgram::setVector3f( const std::string& unifName, const vec3f& val ) 
@@ -82,10 +97,8 @@ namespace chestnut::engine
             glUniform3fv( loc, 1, val.data() );
             return true;
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
 
     bool CShaderProgram::setVector4f( const std::string& unifName, const vec4f& val ) 
@@ -96,10 +109,8 @@ namespace chestnut::engine
             glUniform4fv( loc, 1, val.data() );
             return true;
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
 
     bool CShaderProgram::setMatrix3f( const std::string& unifName, const mat3f& val ) 
@@ -110,10 +121,8 @@ namespace chestnut::engine
             glUniformMatrix3fv( loc, 1, GL_FALSE, val.data() );
             return true;
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
 
     bool CShaderProgram::setMatrix4f( const std::string& unifName, const mat4f& val ) 
@@ -124,10 +133,8 @@ namespace chestnut::engine
             glUniformMatrix4fv( loc, 1, GL_FALSE, val.data() ); 
             return true;  
         }
-        else
-        {
-            return false;
-        }
+        
+        return false;
     }
 
     void CShaderProgram::setInt( GLint loc, GLint val ) 

@@ -20,7 +20,7 @@ namespace chestnut::engine
     public:
         virtual ~IRenderer();
 
-        // Throws exception on error
+        // Throws ChestnutException on error
         void init( const CShaderProgram& shader );
 
         void bindShader();

@@ -20,15 +20,14 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     auto window = createWindow( testName );
     REQUIRE( window );
 
-    CShaderProgram shader( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
+    CShaderProgram shader;
+    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
 
     CSpriteRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( shader ) );
 
-    auto texResource = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
-    REQUIRE( texResource->isValid() );
-
-    CTexture2D tex( texResource );
+    CTexture2D tex;
+    REQUIRE_NOTHROW( tex = CTexture2D( loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
 
 
     renderer.bindShader();
