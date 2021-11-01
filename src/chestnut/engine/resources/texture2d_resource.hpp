@@ -32,6 +32,7 @@ namespace chestnut::engine
     // pixelFormat should be one of: GL_RED, GL_RG, GL_RGB, GL_BGR, GL_RGBA, GL_BGRA
     std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically );
 
+    // texturePath - path to either JPG, PNG or TIFF image
     // Throws ChestnutResourceLoadException if fails to load the texture
     std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath );
 

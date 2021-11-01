@@ -18,31 +18,51 @@ namespace chestnut::engine
         static std::hash< std::string > m_hasher;
 
     public:
+        // vertShaderPath - path to file with vertex shader
+        // fragShaderPath - path to file with fragment shader
         // Throws an exception if fails to load the resource
         static std::shared_ptr<CShaderProgramResource> loadShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
+        // vertShaderPath - path to file with vertex shader
+        // fragShaderPath - path to file with fragment shader
         // Returns invalid resource if that was not loaded beforehand
         static std::shared_ptr<CShaderProgramResource> getShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
+        // vertShaderPath - path to file with vertex shader
+        // fragShaderPath - path to file with fragment shader
         // Throws an exception if fails to load the resource
         static std::shared_ptr<CShaderProgramResource> loadOrGetShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
+        // vertShaderPath - path to file with vertex shader
+        // fragShaderPath - path to file with fragment shader
         static bool isShaderProgramResourceLoaded( const std::string& vertShaderPath, const std::string& fragShaderPath ); 
+        // vertShaderPath - path to file with vertex shader
+        // fragShaderPath - path to file with fragment shader
         static void freeShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
 
+        // texturePath - path to either JPG, PNG or TIFF image
         // Throws an exception if fails to load the resource
         static std::shared_ptr<CTexture2DResource> loadTexture2DResource( const std::string& texturePath );
+        // texturePath - path to either JPG, PNG or TIFF image
         // Returns invalid resource if that was not loaded beforehand
         static std::shared_ptr<CTexture2DResource> getTexture2DResource( const std::string& texturePath );
+        // texturePath - path to either JPG, PNG or TIFF image
         // Throws an exception if fails to load the resource
         static std::shared_ptr<CTexture2DResource> loadOrGetTexture2DResource( const std::string& texturePath );
+        // texturePath - path to either JPG, PNG or TIFF image
         static bool isTexture2DResourceLoaded( const std::string& texturePath );
+        // texturePath - path to either JPG, PNG or TIFF image
         static void freeTexture2DResource( std::string& texturePath );
 
+        // fontPath - path to .ttf file
         // Throws an exception if fails to load the resource
         static std::shared_ptr<CFontResource> loadFontResource( const std::string& fontPath );
+        // fontPath - path to .ttf file
         // Returns invalid resource if that was not loaded beforehand
         static std::shared_ptr<CFontResource> getFontResource( const std::string& fontPath );
+        // fontPath - path to .ttf file
         // Throws an exception if fails to load the resource
         static std::shared_ptr<CFontResource> loadOrGetFontResource( const std::string& fontPath );
+        // fontPath - path to .ttf file
         static bool isFontResourceLoaded( const std::string& fontPath );
+        // fontPath - path to .ttf file
         static void freeFontResource( std::string& fontPath );
 
         static void freeUnusedResources();

@@ -37,6 +37,8 @@ namespace chestnut::engine
     };
 
 
+    // vertPath - path to file with vertex shader
+    // fragPath - path to file with fragment shader
     // Throws ChestnutResourceLoadException if fails to load the shader program
     std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath );
 
