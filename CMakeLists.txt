@@ -15,7 +15,7 @@ find_package(SDL2_image REQUIRED)
 
 find_package(SDL2_ttf REQUIRED)
 
-# find_package(SDL2_mixer REQUIRED)
+find_package(SDL2_mixer REQUIRED)
 
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
@@ -38,7 +38,7 @@ target_link_libraries(${PROJECT_NAME} ChestnutECSCore)
 target_link_libraries(${PROJECT_NAME} SDL2::Main)
 target_link_libraries(${PROJECT_NAME} SDL2::Image)
 target_link_libraries(${PROJECT_NAME} SDL2::TTF)
-# target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
+target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})

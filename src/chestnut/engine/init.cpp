@@ -5,6 +5,7 @@
 #include <SDL2/SDL_opengl.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "debug/log.hpp"
 
@@ -16,31 +17,42 @@ namespace chestnut::engine
     {
         int flags;
 
-        flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS;
+
+        flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS | SDL_INIT_AUDIO;
         if( SDL_Init( flags ) < 0 )
         {
-            LOG_ERROR( "SDL failed to initialize!" );
-            LOG_ERROR( SDL_GetError() );
+            LOG_ERROR( "SDL failed to initialize! " << SDL_GetError() );
             return false;
         }
 
-        flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF | IMG_INIT_WEBP;
+
+        flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
         if( !( IMG_Init( flags ) & flags ) )
         {
-            LOG_ERROR( "SDL_image failed to initialize!" );
-            LOG_ERROR( IMG_GetError() );
+            LOG_ERROR( "SDL_image failed to initialize!" << IMG_GetError() );
             SDL_Quit();
             return false;
         }
 
+
         if( TTF_Init() < 0 )
         {
-            LOG_ERROR( "SDL_ttf failed to initialize!" );
-            LOG_ERROR( TTF_GetError() );
+            LOG_ERROR( "SDL_ttf failed to initialize!" << TTF_GetError() );
             IMG_Quit();
             SDL_Quit();
             return false;
         }
+
+
+        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+        {
+            LOG_ERROR( "SDL_mixer failed to initialize!" << Mix_GetError() );
+            TTF_Quit();
+            IMG_Quit();
+            SDL_Quit();
+            return false;
+        }
+
 
         if( SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, glVerMajor ) < 0 )
         {
@@ -83,6 +95,7 @@ namespace chestnut::engine
     {
         if( wasInit )
         {
+            Mix_CloseAudio();
             TTF_Quit();
             IMG_Quit();
             SDL_Quit();

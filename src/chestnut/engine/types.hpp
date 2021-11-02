@@ -14,6 +14,8 @@ namespace chestnut::engine
 
     typedef signed short systempriority_t;
 
+    typedef int audiochannel_t;
+
 } // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TYPES_H__

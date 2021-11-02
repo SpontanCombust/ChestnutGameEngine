@@ -2,6 +2,7 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/init.cpp
 )
 
+add_subdirectory(audio)
 add_subdirectory(debug)
 add_subdirectory(ecs_impl)
 add_subdirectory(graphics)
