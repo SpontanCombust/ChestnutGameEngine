@@ -25,10 +25,8 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[interactive]"
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CShaderProgram textureShader;
-    REQUIRE_NOTHROW( textureShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
     CSpriteRenderer spriteRenderer;
-    REQUIRE_NOTHROW( spriteRenderer.init( textureShader ) );
+    REQUIRE_NOTHROW( spriteRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
 
     spriteRenderer.bindShader();
     spriteRenderer.setViewMatrix( mat4f() );
@@ -111,10 +109,8 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[interacti
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CShaderProgram textShader;
-    REQUIRE_NOTHROW( textShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
     CTextRenderer textRenderer;
-    REQUIRE_NOTHROW( textRenderer.init( textShader ) );
+    REQUIRE_NOTHROW( textRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
 
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );

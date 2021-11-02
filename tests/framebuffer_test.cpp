@@ -20,18 +20,14 @@ TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CShaderProgram textShader;
-    REQUIRE_NOTHROW( textShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
     CTextRenderer textRenderer;
-    REQUIRE_NOTHROW( textRenderer.init( textShader ) );
+    REQUIRE_NOTHROW( textRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
 
-    CShaderProgram spriteShader;
-    REQUIRE_NOTHROW( spriteShader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
     CSpriteRenderer spriteRenderer;
-    REQUIRE_NOTHROW( spriteRenderer.init( spriteShader ) );
+    REQUIRE_NOTHROW( spriteRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
     spriteRenderer.bindShader();
     spriteRenderer.setViewMatrix( mat4f() );
     spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 

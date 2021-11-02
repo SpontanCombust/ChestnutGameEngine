@@ -4,19 +4,25 @@
 
 namespace chestnut::engine
 {    
-    void IRenderer::init( const CShaderProgram& shader ) 
+    void IRenderer::init( std::shared_ptr< CShaderProgramResource > shaderResource ) 
     {
-        m_shader = shader;
-        if( !m_shader.isValid() )
+        if( !shaderResource )
         {
-            throw ChestnutException( "Invalid shader program passed to the renderer!" );
+            throw ChestnutException( "Invalid shader resource program passed to the renderer!" );
         }
 
+        m_shader = CShaderProgram( shaderResource );
         m_shader.bind();
+
         if( !setProjectionAndViewMatrixLocations() )
         {
             throw ChestnutException( "Failed to set shader locations for projection and view matrice uniforms!" );
         }
+
+        // Initialize matrices
+        m_shader.setMatrix4f( m_unifProjectionLoc, mat4f() );
+        m_shader.setMatrix4f( m_unifViewLoc, mat4f() );
+
         if( !setShaderVariableLocations() )
         {
             throw ChestnutException( "Failed to set shader locations for attributes and/or uniforms!" );

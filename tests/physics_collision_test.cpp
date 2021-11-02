@@ -21,11 +21,8 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
     CWindow window( "Point vs AABB collision" );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
@@ -126,11 +123,8 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
     CWindow window( "Point vs circle collision" );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
@@ -217,11 +211,8 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
     CWindow window( "Circle vs circle collision", 1280, 720 );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 1280, 720, 0, -1, 1 ) );
@@ -310,11 +301,8 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
     CWindow window( "AABB vs AABB collision", 1280, 720 );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 1280, 720, 0, -1, 1 ) );
@@ -419,11 +407,8 @@ TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
     CWindow window( "Circle vs AABB collision", 1280, 720 );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 1280, 720, 0, -1, 1 ) );

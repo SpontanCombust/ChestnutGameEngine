@@ -21,7 +21,7 @@ namespace chestnut::engine
         virtual ~IRenderer();
 
         // Throws ChestnutException on error
-        void init( const CShaderProgram& shader );
+        void init( std::shared_ptr< CShaderProgramResource > shaderResource );
 
         void bindShader();
         void unbindShader();

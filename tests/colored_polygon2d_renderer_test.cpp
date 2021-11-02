@@ -22,11 +22,8 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
@@ -91,11 +88,8 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[in
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
-
     CColoredPolygon2DRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
     renderer.bindShader();
     renderer.setViewMatrix( mat4f() );

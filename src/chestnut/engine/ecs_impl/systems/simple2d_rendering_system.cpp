@@ -14,12 +14,9 @@ namespace chestnut::engine
 {
     CSimple2DRenderingSystem::CSimple2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
     {
-        CShaderProgram shader;
-
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
-            m_spriteRenderer.init( shader );
+            m_spriteRenderer.init( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) );
         }
         catch(const std::exception& e)
         {
@@ -28,8 +25,7 @@ namespace chestnut::engine
 
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) );
-            m_polygonRenderer.init( shader );
+            m_polygonRenderer.init( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) );
         }
         catch(const std::exception& e)
         {
@@ -38,8 +34,7 @@ namespace chestnut::engine
         
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) );
-            m_textRenderer.init( shader );
+            m_textRenderer.init( CResourceManager::loadOrGetShaderProgramResource( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) );
         }
         catch(const std::exception& e)
         {

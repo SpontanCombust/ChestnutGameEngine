@@ -20,11 +20,8 @@ TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CShaderProgram shader;
-    REQUIRE_NOTHROW( shader = CShaderProgram( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
-
     CSpriteRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( shader ) );
+    REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
 
     CTexture2D tex;
     REQUIRE_NOTHROW( tex = CTexture2D( loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
