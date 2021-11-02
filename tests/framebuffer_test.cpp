@@ -11,7 +11,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Renderers - Framebuffer test", "[interactive]" )
+TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 {
     const char *testName = "Renderers - Framebuffer test";
 

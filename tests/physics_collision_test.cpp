@@ -14,7 +14,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
+TEST_CASE( "Physics - point vs AABB collision", "[manual][demo]" )
 {
     chestnutInit();
 
@@ -117,7 +117,7 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
 }
 
 
-TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
+TEST_CASE( "Physics - point vs circle collision", "[manual][demo]" )
 {
     chestnutInit();
 
@@ -206,7 +206,7 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
 }
 
 
-TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
+TEST_CASE( "Physics - circle vs circle collision", "[manual][demo]" )
 {
     chestnutInit();
 
@@ -297,7 +297,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
 }
 
 
-TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
+TEST_CASE( "Physics - AABB vs AABB collision", "[manual][demo]" )
 {
     chestnutInit();
 
@@ -404,7 +404,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
 }
 
 
-TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
+TEST_CASE( "Physics - circle vs AABB collision", "[manual][demo]" )
 {
     chestnutInit();
 

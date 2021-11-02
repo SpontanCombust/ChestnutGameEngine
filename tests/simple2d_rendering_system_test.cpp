@@ -187,7 +187,7 @@ public:
 };
 
 
-TEST_CASE( "Systems - Simple2D rendering system test", "[interactive][demo]" )
+TEST_CASE( "Systems - Simple2D rendering system test", "[manual][demo]" )
 {
     chestnutInit();
 

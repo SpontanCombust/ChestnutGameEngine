@@ -34,7 +34,7 @@ TEST_CASE( "Window - Default state" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window - Changing title", "[interactive]" )
+TEST_CASE( "Window - Changing title", "[manual]" )
 {
     const char *windowTitle = "Window test - Changing title";
     const char *newWindowTitle = "Window test - this is the other title";
@@ -52,7 +52,7 @@ TEST_CASE( "Window - Changing title", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window - Changing display mode", "[interactive]" )
+TEST_CASE( "Window - Changing display mode", "[manual]" )
 {
     const char *testName = "Window test - changing display mode";
 
@@ -98,7 +98,7 @@ TEST_CASE( "Window - Changing display mode", "[interactive]" )
     sleepFor(1000);
 }
 
-TEST_CASE( "Window - Changing resizable", "[interactive]" )
+TEST_CASE( "Window - Changing resizable", "[manual]" )
 {
     const char *testName = "Window test - changing resizable";
 
@@ -115,7 +115,7 @@ TEST_CASE( "Window - Changing resizable", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window - Changing window size", "[interactive]" )
+TEST_CASE( "Window - Changing window size", "[manual]" )
 {
     const char *testName = "Window test - changing window size";
 
@@ -136,7 +136,7 @@ TEST_CASE( "Window - Changing window size", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window - Changing window posititon", "[interactive]" )
+TEST_CASE( "Window - Changing window posititon", "[manual]" )
 {
     const char *testName = "Window test - changing window position";
 
@@ -154,7 +154,7 @@ TEST_CASE( "Window - Changing window posititon", "[interactive]" )
     chestnutQuit();
 }
 
-TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
+TEST_CASE( "Window - Minimizing and maximizing the window", "[manual]" )
 {
     const char *testName = "Window test - minimizing and maximizing the window";
 
@@ -217,7 +217,7 @@ TEST_CASE( "Window - Minimizing and maximizing the window", "[interactive]" )
     sleepFor(1000);
 }
 
-TEST_CASE( "Window - Hiding and showing the window", "[interactive]" )
+TEST_CASE( "Window - Hiding and showing the window", "[manual]" )
 {
     const char *testName = "Window test - hiding and showing the window";
 

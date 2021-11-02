@@ -46,7 +46,7 @@ TEST_CASE( "Audio - Audio manager test - general" )
 }
 
 
-TEST_CASE( "Audio - Audio manager test - SFX", "[interactive]" )
+TEST_CASE( "Audio - Audio manager test - SFX", "[manual]" )
 {
     const char *testTitle = "Audio manager test - SFX";
 
@@ -115,7 +115,7 @@ TEST_CASE( "Audio - Audio manager test - SFX", "[interactive]" )
 }
 
 
-TEST_CASE( "Audio - Audio manager test - music", "[interactive]" )
+TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
 {
     const char *testTitle = "Audio manager test - music";
 

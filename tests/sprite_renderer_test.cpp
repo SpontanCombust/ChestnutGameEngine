@@ -11,7 +11,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Renderers - Sprite renderer test", "[interactive]" )
+TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
 {
     const char *testName = "Sprite renderer test";
 
