@@ -66,7 +66,7 @@ namespace chestnut::engine
         }
     }
 
-    GLuint loadShaderFromFile( const std::string& path, GLenum shaderType )
+    GLuint loadShaderFromFile( const char *path, GLenum shaderType )
     {
         GLuint shader;
 
@@ -106,7 +106,7 @@ namespace chestnut::engine
         return shader;
     }
 
-    GLuint loadOpenGLShaderProgramFromFiles( const std::string& vertPath, const std::string& fragPath )
+    GLuint loadOpenGLShaderProgramFromFiles( const char *vertPath, const char *fragPath )
     {
         GLuint program;
         GLuint vertShader;
@@ -140,7 +140,7 @@ namespace chestnut::engine
             glDeleteShader( fragShader );
             glDeleteShader( vertShader );
             glDeleteProgram( program );
-            throw ChestnutResourceLoadException( "CShaderProgramResource", vertPath + " and " + fragPath, "shader program linkage failure" );
+            throw ChestnutResourceLoadException( "CShaderProgramResource", vertPath + std::string(" and ") + fragPath, "shader program linkage failure" );
         }
 
         glDeleteShader( fragShader );
@@ -166,7 +166,7 @@ namespace chestnut::engine
         glDeleteProgram( m_programID );
     }
 
-    GLint CShaderProgramResource::getAttributeLocation( std::string attrName ) 
+    GLint CShaderProgramResource::getAttributeLocation( const char *attrName ) 
     {
         GLint loc;
 
@@ -176,7 +176,7 @@ namespace chestnut::engine
         }
         else
         {
-            loc = glGetAttribLocation( m_programID, attrName.c_str() );
+            loc = glGetAttribLocation( m_programID, attrName );
 
             if( loc == -1 )
             {
@@ -191,7 +191,7 @@ namespace chestnut::engine
         return loc;
     }
 
-    GLint CShaderProgramResource::getUniformLocation( std::string uniformName ) 
+    GLint CShaderProgramResource::getUniformLocation( const char *uniformName ) 
     {
         GLint loc;
 
@@ -201,7 +201,7 @@ namespace chestnut::engine
         }
         else
         {
-            loc = glGetUniformLocation( m_programID, uniformName.c_str() );
+            loc = glGetUniformLocation( m_programID, uniformName );
 
             if( loc == -1 )
             {
@@ -219,7 +219,7 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const std::string& vertPath, const std::string& fragPath )
+    std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const char *vertPath, const char *fragPath )
     {
         // let the possible exception propagate
         GLuint program = loadOpenGLShaderProgramFromFiles( vertPath, fragPath );

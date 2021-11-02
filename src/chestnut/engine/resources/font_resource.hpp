@@ -77,7 +77,7 @@ namespace chestnut::engine
 
     // fontPath - path to .ttf file
     // Throws ChestnutResourceLoadException if fails to load the font
-    std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath );
+    std::shared_ptr<CFontResource> loadFontResourceFromFile( const char *fontPath );
 
 } // namespace chestnut::engine
 

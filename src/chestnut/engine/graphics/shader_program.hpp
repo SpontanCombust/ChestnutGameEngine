@@ -32,17 +32,17 @@ namespace chestnut::engine
 
         // Requires shader to be bound
         // Returns -1 if doesn't find the location
-        GLint getAttributeLocation( std::string attrName );
+        GLint getAttributeLocation( const char *attrName );
         // Requires shader to be bound
         // Returns -1 if doesn't find the location
-        GLint getUniformLocation( std::string uniformName );
+        GLint getUniformLocation( const char *uniformName );
 
-        bool setInt( const std::string& unifName, GLint val );
-        bool setVector2f( const std::string& unifName, const vec2f& val );
-        bool setVector3f( const std::string& unifName, const vec3f& val );
-        bool setVector4f( const std::string& unifName, const vec4f& val );
-        bool setMatrix3f( const std::string& unifName, const mat3f& val );
-        bool setMatrix4f( const std::string& unifName, const mat4f& val );
+        bool setInt( const char *unifName, GLint val );
+        bool setVector2f( const char *unifName, const vec2f& val );
+        bool setVector3f( const char *unifName, const vec3f& val );
+        bool setVector4f( const char *unifName, const vec4f& val );
+        bool setMatrix3f( const char *unifName, const mat3f& val );
+        bool setMatrix4f( const char *unifName, const mat4f& val );
 
         void setInt( GLint loc, int val );
         void setVector2f( GLint loc, const vec2f& val );

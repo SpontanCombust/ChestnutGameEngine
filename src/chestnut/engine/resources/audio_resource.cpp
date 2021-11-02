@@ -7,9 +7,9 @@
 
 namespace chestnut::engine
 {
-    Mix_Chunk* loadMixerChunkFromFile( const std::string& sfxPath )
+    Mix_Chunk* loadMixerChunkFromFile( const char *sfxPath )
     {
-        Mix_Chunk *sample = Mix_LoadWAV( sfxPath.c_str() );
+        Mix_Chunk *sample = Mix_LoadWAV( sfxPath );
         if( !sample )
         {
             LOG_ERROR( "Failed to load sound effect from file " << sfxPath );
@@ -19,9 +19,9 @@ namespace chestnut::engine
         return sample;
     }
 
-    Mix_Music* loadMixerMusicFromFile( const std::string& musicPath )
+    Mix_Music* loadMixerMusicFromFile( const char *musicPath )
     {
-        Mix_Music *music = Mix_LoadMUS( musicPath.c_str() );
+        Mix_Music *music = Mix_LoadMUS( musicPath );
         if( !music )
         {
             LOG_ERROR( "Failed to load music from file " << musicPath );
@@ -52,7 +52,7 @@ namespace chestnut::engine
     }
 
 
-    std::shared_ptr< CAudioResource > loadAudioResourceFromFile( const std::string& audioPath, EAudioResourceType type )
+    std::shared_ptr< CAudioResource > loadAudioResourceFromFile( const char *audioPath, EAudioResourceType type )
     {
         CAudioResource::UAudio audio;
 

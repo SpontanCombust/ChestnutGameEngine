@@ -45,7 +45,7 @@ namespace chestnut::engine
         glUseProgram(0);
     }
 
-    GLint CShaderProgram::getAttributeLocation( std::string attrName ) 
+    GLint CShaderProgram::getAttributeLocation( const char *attrName ) 
     {
         if( m_shaderResource )
         {
@@ -55,7 +55,7 @@ namespace chestnut::engine
         return -1;
     }
 
-    GLint CShaderProgram::getUniformLocation( std::string uniformName ) 
+    GLint CShaderProgram::getUniformLocation( const char *uniformName ) 
     {
         if( m_shaderResource )
         {
@@ -65,7 +65,7 @@ namespace chestnut::engine
         return -1;
     }
 
-    bool CShaderProgram::setInt( const std::string& unifName, int val ) 
+    bool CShaderProgram::setInt( const char *unifName, int val ) 
     {
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
@@ -77,7 +77,7 @@ namespace chestnut::engine
         return false;
     }
 
-    bool CShaderProgram::setVector2f( const std::string& unifName, const vec2f& val ) 
+    bool CShaderProgram::setVector2f( const char *unifName, const vec2f& val ) 
     {
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
@@ -89,7 +89,7 @@ namespace chestnut::engine
         return false;
     }
 
-    bool CShaderProgram::setVector3f( const std::string& unifName, const vec3f& val ) 
+    bool CShaderProgram::setVector3f( const char *unifName, const vec3f& val ) 
     {
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
@@ -101,7 +101,7 @@ namespace chestnut::engine
         return false;
     }
 
-    bool CShaderProgram::setVector4f( const std::string& unifName, const vec4f& val ) 
+    bool CShaderProgram::setVector4f( const char *unifName, const vec4f& val ) 
     {
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
@@ -113,7 +113,7 @@ namespace chestnut::engine
         return false;
     }
 
-    bool CShaderProgram::setMatrix3f( const std::string& unifName, const mat3f& val ) 
+    bool CShaderProgram::setMatrix3f( const char *unifName, const mat3f& val ) 
     {
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )
@@ -125,7 +125,7 @@ namespace chestnut::engine
         return false;
     }
 
-    bool CShaderProgram::setMatrix4f( const std::string& unifName, const mat4f& val ) 
+    bool CShaderProgram::setMatrix4f( const char *unifName, const mat4f& val ) 
     {
         GLint loc = getUniformLocation( unifName );
         if( loc != -1 )

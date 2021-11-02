@@ -164,7 +164,7 @@ namespace chestnut::engine
 
     size_t getConfigHashInternal( int pointSize, EFontStyle styleMask ) 
     {
-        std::hash<std::string> hasher;
+        static std::hash<std::string> hasher;
 
         size_t pointSizeHash = hasher( std::to_string( pointSize ) );
         size_t styleHash = hasher( std::to_string( static_cast<int>( styleMask ) ) );
@@ -232,9 +232,9 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath ) 
+    std::shared_ptr<CFontResource> loadFontResourceFromFile( const char *fontPath ) 
     {
-        TTF_Font *font = TTF_OpenFont( fontPath.c_str(), CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
+        TTF_Font *font = TTF_OpenFont( fontPath, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
 
         if( font )
         {

@@ -9,7 +9,7 @@
 
 namespace chestnut::engine
 {
-    CWindow::CWindow( const std::string& title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
+    CWindow::CWindow( const char *title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
         m_sdlWindow = nullptr;
         m_sdlGLContext = nullptr;
@@ -45,7 +45,7 @@ namespace chestnut::engine
         x = ( x < 0 ) ? SDL_WINDOWPOS_CENTERED : x;
         y = ( y < 0 ) ? SDL_WINDOWPOS_CENTERED : y;
 
-        SDL_Window *window = SDL_CreateWindow( title.c_str(), x, y, width, height, windowFlags );
+        SDL_Window *window = SDL_CreateWindow( title, x, y, width, height, windowFlags );
         if( !window )
         {
             LOG_ERROR( "Failed to create window. Error: " << SDL_GetError() );
@@ -113,9 +113,14 @@ namespace chestnut::engine
         SDL_SetWindowTitle( m_sdlWindow, title.c_str() );
     }
 
-    std::string CWindow::getTitle() const 
+    void CWindow::setTitle( const char *title ) 
     {
-        return std::string( SDL_GetWindowTitle( m_sdlWindow ) );
+        SDL_SetWindowTitle( m_sdlWindow, title );
+    }
+
+    const char *CWindow::getTitle() const 
+    {
+        return SDL_GetWindowTitle( m_sdlWindow );
     }
 
     void CWindow::setDisplayMode( EWindowDisplayMode displayMode ) 

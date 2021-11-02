@@ -135,9 +135,9 @@ namespace chestnut::engine
         }
     }
 
-    GLuint loadOpenGLTexture2DFromFile( const std::string& path, int *width, int *height, GLenum *pixelFormat )
+    GLuint loadOpenGLTexture2DFromFile( const char *path, int *width, int *height, GLenum *pixelFormat )
     {
-        SDL_Surface *surf = IMG_Load( path.c_str() );
+        SDL_Surface *surf = IMG_Load( path );
 
         if( !surf )
         {
@@ -211,7 +211,7 @@ namespace chestnut::engine
         return std::shared_ptr<CTexture2DResource>( resource );
     }
 
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath )
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const char *texturePath )
     {
         int width, height;
         GLenum pixelFormat;

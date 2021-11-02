@@ -29,7 +29,7 @@ namespace chestnut::engine
         // To configure more aspects of how OpenGL will behave use SDL_GL_SetAttribute() after chestnutInit()
         // See https://wiki.libsdl.org/SDL_GL_SetAttribute
         // -1 for x and/or y to position the window on the center of the screen
-        CWindow( const std::string& title, 
+        CWindow( const char *title, 
                  int width = 800, 
                  int height = 600, 
                  EWindowDisplayMode displayMode = EWindowDisplayMode::WINDOWED, 
@@ -43,7 +43,8 @@ namespace chestnut::engine
         bool isValid() const;
 
         void setTitle( const std::string& title );
-        std::string getTitle() const;
+        void setTitle( const char *title );
+        const char *getTitle() const;
 
         void setDisplayMode( EWindowDisplayMode displayMode );
         EWindowDisplayMode getDisplayMode() const;

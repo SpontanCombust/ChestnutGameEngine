@@ -7,7 +7,7 @@ namespace chestnut::engine
     std::hash< std::string > CResourceManager::m_hasher;
 
 
-    std::shared_ptr<CShaderProgramResource> CResourceManager::loadShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
+    std::shared_ptr<CShaderProgramResource> CResourceManager::loadShaderProgramResource( const char *vertShaderPath, const char *fragShaderPath ) 
     {
         // a hash created from 2 other hashes (by using XOR)
         size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
@@ -21,7 +21,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    std::shared_ptr<CShaderProgramResource> CResourceManager::getShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
+    std::shared_ptr<CShaderProgramResource> CResourceManager::getShaderProgramResource( const char *vertShaderPath, const char *fragShaderPath ) 
     {
         size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
 
@@ -37,7 +37,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    std::shared_ptr<CShaderProgramResource> CResourceManager::loadOrGetShaderProgramResource(const std::string& vertShaderPath, const std::string& fragShaderPath) 
+    std::shared_ptr<CShaderProgramResource> CResourceManager::loadOrGetShaderProgramResource(const char *vertShaderPath, const char *fragShaderPath) 
     {
         size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
 
@@ -58,7 +58,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    bool CResourceManager::isShaderProgramResourceLoaded( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
+    bool CResourceManager::isShaderProgramResourceLoaded( const char *vertShaderPath, const char *fragShaderPath ) 
     {
         size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
 
@@ -70,7 +70,7 @@ namespace chestnut::engine
         return false;
     }
 
-    void CResourceManager::freeShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath ) 
+    void CResourceManager::freeShaderProgramResource( const char *vertShaderPath, const char *fragShaderPath ) 
     {
         size_t hash = m_hasher( vertShaderPath ) ^ m_hasher( fragShaderPath );
 
@@ -80,7 +80,7 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CTexture2DResource> CResourceManager::loadTexture2DResource( const std::string& texturePath ) 
+    std::shared_ptr<CTexture2DResource> CResourceManager::loadTexture2DResource( const char *texturePath ) 
     {
         size_t hash = m_hasher( texturePath );
 
@@ -93,7 +93,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    std::shared_ptr<CTexture2DResource> CResourceManager::getTexture2DResource( const std::string& texturePath ) 
+    std::shared_ptr<CTexture2DResource> CResourceManager::getTexture2DResource( const char *texturePath ) 
     {
         size_t hash = m_hasher( texturePath );
 
@@ -109,7 +109,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    std::shared_ptr<CTexture2DResource> CResourceManager::loadOrGetTexture2DResource(const std::string& texturePath) 
+    std::shared_ptr<CTexture2DResource> CResourceManager::loadOrGetTexture2DResource(const char *texturePath) 
     {
         size_t hash = m_hasher( texturePath );
 
@@ -130,7 +130,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    bool CResourceManager::isTexture2DResourceLoaded( const std::string& texturePath ) 
+    bool CResourceManager::isTexture2DResourceLoaded( const char *texturePath ) 
     {
         size_t hash = m_hasher( texturePath );
 
@@ -142,7 +142,7 @@ namespace chestnut::engine
         return false;
     }
 
-    void CResourceManager::freeTexture2DResource( std::string& texturePath ) 
+    void CResourceManager::freeTexture2DResource( const char *texturePath ) 
     {
         size_t hash = m_hasher( texturePath );
 
@@ -152,7 +152,7 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CFontResource> CResourceManager::loadFontResource( const std::string& fontPath ) 
+    std::shared_ptr<CFontResource> CResourceManager::loadFontResource( const char *fontPath ) 
     {
         size_t hash = m_hasher( fontPath );
 
@@ -165,7 +165,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    std::shared_ptr<CFontResource> CResourceManager::getFontResource( const std::string& fontPath ) 
+    std::shared_ptr<CFontResource> CResourceManager::getFontResource( const char *fontPath ) 
     {
         size_t hash = m_hasher( fontPath );
 
@@ -181,7 +181,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    std::shared_ptr<CFontResource> CResourceManager::loadOrGetFontResource(const std::string& fontPath) 
+    std::shared_ptr<CFontResource> CResourceManager::loadOrGetFontResource(const char *fontPath) 
     {
         size_t hash = m_hasher( fontPath );
 
@@ -201,7 +201,7 @@ namespace chestnut::engine
         return resource;
     }
 
-    bool CResourceManager::isFontResourceLoaded( const std::string& fontPath ) 
+    bool CResourceManager::isFontResourceLoaded( const char *fontPath ) 
     {
         size_t hash = m_hasher( fontPath );
 
@@ -213,7 +213,7 @@ namespace chestnut::engine
         return false;
     }
 
-    void CResourceManager::freeFontResource( std::string& fontPath ) 
+    void CResourceManager::freeFontResource( const char *fontPath ) 
     {
         size_t hash = m_hasher( fontPath );
 

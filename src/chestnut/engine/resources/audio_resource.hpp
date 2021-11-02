@@ -35,7 +35,7 @@ namespace chestnut::engine
     // File types for SFX: WAVE, AIFF, RIFF, OGG, VOC
     // File types for music: WAVE, MOD, MIDI, OGG, MP3, FLAC
     // Throws ChestnutResourceLoadException on error
-    std::shared_ptr< CAudioResource > loadAudioResourceFromFile( const std::string& audioPath, EAudioResourceType type );
+    std::shared_ptr< CAudioResource > loadAudioResourceFromFile( const char *audioPath, EAudioResourceType type );
 
 } // namespace chestnut::engine
 

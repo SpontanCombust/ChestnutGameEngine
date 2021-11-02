@@ -34,7 +34,7 @@ namespace chestnut::engine
 
     // texturePath - path to either JPG, PNG or TIFF image
     // Throws ChestnutResourceLoadException if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath );
+    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const char *texturePath );
 
 } // namespace chestnut::engine
 

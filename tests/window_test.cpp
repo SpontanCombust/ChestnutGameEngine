@@ -19,7 +19,7 @@ TEST_CASE( "Window - Default state" )
     CWindow window( "Window test - Default state", 800, 600, EWindowDisplayMode::WINDOWED, 500, 400 );
 
     REQUIRE( window.isValid() );
-    REQUIRE( window.getTitle() == "Window test - Default state" );
+    REQUIRE( window.getTitle() == std::string( "Window test - Default state" ) );
     REQUIRE( window.getDisplayMode() == EWindowDisplayMode::WINDOWED );
     REQUIRE( window.getSizeWidth() == 800 );
     REQUIRE( window.getSizeHeight() == 600 );
@@ -36,18 +36,18 @@ TEST_CASE( "Window - Default state" )
 
 TEST_CASE( "Window - Changing title", "[interactive]" )
 {
-    std::string windowTitle = "Window test - Changing title";
-    std::string newWindowTitle = "Window test - this is the other title";
+    const char *windowTitle = "Window test - Changing title";
+    const char *newWindowTitle = "Window test - this is the other title";
 
     chestnutInit();
     CWindow window( windowTitle );
 
-    showInfoMessageBox( windowTitle.c_str(), "Click to change the title of the window" );
+    showInfoMessageBox( windowTitle, "Click to change the title of the window" );
 
     window.setTitle( newWindowTitle ); 
-    REQUIRE( window.getTitle() == newWindowTitle );
+    REQUIRE( strcmp( window.getTitle(), newWindowTitle ) == 0 );
 
-    REQUIRE( showConfirmMessageBox( windowTitle.c_str() ) );
+    REQUIRE( showConfirmMessageBox( windowTitle ) );
 
     chestnutQuit();
 }

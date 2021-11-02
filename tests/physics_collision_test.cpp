@@ -20,6 +20,7 @@ TEST_CASE( "Physics - point vs AABB collision", "[interactive][demo]" )
 
     CWindow window( "Point vs AABB collision" );
     REQUIRE( window.isValid() );
+    window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -122,6 +123,7 @@ TEST_CASE( "Physics - point vs circle collision", "[interactive][demo]" )
 
     CWindow window( "Point vs circle collision" );
     REQUIRE( window.isValid() );
+    window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -210,6 +212,7 @@ TEST_CASE( "Physics - circle vs circle collision", "[interactive][demo]" )
 
     CWindow window( "Circle vs circle collision", 1280, 720 );
     REQUIRE( window.isValid() );
+    window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -300,6 +303,7 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[interactive][demo]" )
 
     CWindow window( "AABB vs AABB collision", 1280, 720 );
     REQUIRE( window.isValid() );
+    window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
@@ -406,6 +410,7 @@ TEST_CASE( "Physics - circle vs AABB collision", "[interactive][demo]" )
 
     CWindow window( "Circle vs AABB collision", 1280, 720 );
     REQUIRE( window.isValid() );
+    window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
