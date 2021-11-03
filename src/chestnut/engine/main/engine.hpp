@@ -6,6 +6,7 @@
 #include "../constants.hpp"
 #include "../misc/auto_timer.hpp"
 #include "../ecs_impl/event_manager.hpp"
+#include "../audio/audio_manager.hpp"
 #include "../ecs_impl/system.hpp"
 #include "../ecs_impl/rendering_system.hpp"
 
@@ -26,6 +27,7 @@ namespace chestnut::engine
 
         ecs::CEntityWorld m_entityWorld;
         CEventManager m_eventManager;
+        CAudioManager m_audioManager;
 
 
 
@@ -57,6 +59,8 @@ namespace chestnut::engine
         ecs::CEntityWorld& getEntityWorld();
 
         CEventManager& getEventManager();
+
+        CAudioManager& getAudioManager();
 
 
 

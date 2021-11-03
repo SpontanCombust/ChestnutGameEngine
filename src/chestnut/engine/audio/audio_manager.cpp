@@ -138,6 +138,23 @@ namespace chestnut::engine
         }
     }
 
+    void CAudioManager::playMusicFadeIn( const char *musicAlias, float fadeInSeconds, int loops ) 
+    {
+        auto it = m_mapAudioAliasToResource.find( musicAlias );
+        if( it != m_mapAudioAliasToResource.end() )
+        {
+            if( it->second->m_type == EAudioResourceType::MUSIC )
+            {
+                Mix_FadeInMusic( it->second->m_uData.music, loops, (int)( fadeInSeconds * 1000.f ) );
+            }
+        }
+    }
+
+    void CAudioManager::fadeOutMusic( float fadeOutSeconds ) 
+    {
+        Mix_FadeOutMusic( (int)( fadeOutSeconds * 1000.f ) );
+    }
+
     void CAudioManager::setMusicVolume( float volume ) 
     {
         volume = std::clamp( volume, 0.f, 1.f );

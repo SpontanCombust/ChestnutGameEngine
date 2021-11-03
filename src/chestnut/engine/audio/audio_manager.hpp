@@ -61,6 +61,11 @@ namespace chestnut::engine
         // loops = -1 for infinite loops
         void playMusic( const char *musicAlias, int loops = 0 );
 
+        // loops = -1 for infinite loops
+        void playMusicFadeIn( const char *musicAlias, float fadeInSeconds, int loops = 0 );
+
+        void fadeOutMusic( float fadeOutSeconds );
+
         // Volume should be between 0 (total silence) and 1 (max volume). Otherwise it'll get clamped to it.
         void setMusicVolume( float volume );
 

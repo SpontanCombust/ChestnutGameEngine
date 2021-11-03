@@ -167,6 +167,21 @@ TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
         REQUIRE( showConfirmMessageBox( testTitle ) );
     }
 
+    SECTION( "Fade in music" )
+    {
+        showInfoMessageBox( testTitle, "Click to play music with 3 second fade in" );
+        manager.playMusicFadeIn( "music", 3.f );
+        REQUIRE( showConfirmMessageBox( testTitle ) );
+    }
+
+    SECTION( "Fade out music" )
+    {
+        manager.playMusic( "music" );
+        showInfoMessageBox( testTitle, "Click to fade out music over the course of 5 seconds" );
+        manager.fadeOutMusic(5.f);
+        REQUIRE( showConfirmMessageBox( testTitle ) );
+    }
+
 
     chestnutQuit();
 }

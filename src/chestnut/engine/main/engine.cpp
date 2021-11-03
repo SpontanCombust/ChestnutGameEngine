@@ -59,6 +59,11 @@ namespace chestnut::engine
         return m_eventManager;
     }
 
+    CAudioManager& CEngine::getAudioManager() 
+    {
+        return m_audioManager;
+    }
+
     void CEngine::start() 
     {
         if( m_listLogicSystemNodes.empty() )
