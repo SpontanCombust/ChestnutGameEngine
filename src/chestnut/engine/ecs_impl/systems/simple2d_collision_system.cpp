@@ -34,7 +34,7 @@ namespace chestnut::engine
         const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_collisionQueryID );
 
         query->forEachEntityPairWith< CTransform2DComponent, CCollision2DComponent >(
-            [this]( ecs::entityid ent1, CTransform2DComponent& transform1, CCollision2DComponent& collision1, ecs::entityid ent2, CTransform2DComponent& transform2, CCollision2DComponent& collision2 )
+            [this]( ecs::entityid_t ent1, CTransform2DComponent& transform1, CCollision2DComponent& collision1, ecs::entityid_t ent2, CTransform2DComponent& transform2, CCollision2DComponent& collision2 )
             {
                 bool collisionHappened = false;
 

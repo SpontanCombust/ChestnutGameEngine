@@ -13,8 +13,8 @@ namespace chestnut::engine
     class CSimple2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::queryid m_textureWithModelQueryID;
-        ecs::queryid m_textureWithoutModelQueryID;
+        ecs::queryid_t m_textureWithModelQueryID;
+        ecs::queryid_t m_textureWithoutModelQueryID;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;

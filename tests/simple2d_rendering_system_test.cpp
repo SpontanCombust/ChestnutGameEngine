@@ -34,7 +34,7 @@ class CSteeringSystem : public ISystem
 private:
     CEventListenerGuard inputListenerGuard;
 
-    ecs::entityid player;
+    ecs::entityid_t player;
     vec2f sizeDelta;
     vec2f posDelta;
     vec2f scaleDelta;

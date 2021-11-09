@@ -10,7 +10,7 @@ namespace chestnut::engine
     class CTimerSystem : public ISystem
     {
     private:
-        ecs::queryid m_timerQueryID;
+        ecs::queryid_t m_timerQueryID;
 
     public:
         CTimerSystem( CEngine& engine );

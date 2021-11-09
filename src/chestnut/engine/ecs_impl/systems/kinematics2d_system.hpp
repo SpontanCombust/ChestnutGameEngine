@@ -10,7 +10,7 @@ namespace chestnut::engine
     class CKinematics2DSystem : public ISystem
     {
     private:
-        ecs::queryid m_kinematicQueryID;
+        ecs::queryid_t m_kinematicQueryID;
         
     public:
         CKinematics2DSystem( CEngine& engine );

@@ -10,8 +10,8 @@ namespace chestnut::engine
 {
     struct SCollisionEvent
     {
-        ecs::entityid entity1;
-        ecs::entityid entity2;
+        ecs::entityid_t entity1;
+        ecs::entityid_t entity2;
     };
 
 } // namespace chestnut::engine
