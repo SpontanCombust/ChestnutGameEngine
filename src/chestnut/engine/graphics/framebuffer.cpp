@@ -132,7 +132,7 @@ namespace chestnut::engine
                 return;
             }
 
-            glBindRenderbuffer( GL_RENDERBUFFER, 0 );
+            glBindFramebuffer( GL_FRAMEBUFFER, 0 );
 
 
 

@@ -56,9 +56,10 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     REQUIRE_NOTHROW( blank = CTexture2D( loadTexture2DResourceFromPixels( nullptr, window.getSizeWidth(), window.getSizeHeight(), GL_RGBA, false ) ) );
     CFramebuffer blankFramebuffer( blank );
     blankFramebuffer.setClearColor( vec4f( 0.f ) ); 
+    blankFramebuffer.bind();
+    blankFramebuffer.clear();
 
     window.clear();
-        blankFramebuffer.bind();
         textRenderer.bindShader();
         textRenderer.render( blankFramebuffer ); // retains the render data from previous pass
 
