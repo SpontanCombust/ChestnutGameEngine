@@ -8,7 +8,9 @@
 #include "../src/chestnut/engine/ecs_impl/components/texture2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "../src/chestnut/engine/ecs_impl/components/render_layer_component.hpp"
 #include "../src/chestnut/engine/macros.hpp"
+#include "../src/chestnut/engine/maths/vector_cast.hpp"
 
 #include "system_test_utils.hpp"
 #include "test_utils.hpp"
@@ -29,7 +31,7 @@ const char *adjustToString( ETexture2DToModel2DAdjust adjust )
     }
 }
 
-class CSteeringSystem : public ISystem
+class CSpriteSteeringSystem : public ISystem
 {
 private:
     CEventListenerGuard inputListenerGuard;
@@ -42,10 +44,10 @@ private:
     ETexture2DToModel2DAdjust texAdjust;
 
 public:
-    CSteeringSystem( CEngine& engine ) : ISystem( engine )
+    CSpriteSteeringSystem( CEngine& engine ) : ISystem( engine )
     {
         auto l = new CEventListener<SDL_KeyboardEvent>();
-        l->setHandler( &CSteeringSystem::handleInput, this );
+        l->setHandler( &CSpriteSteeringSystem::handleInput, this );
         getEngine().getEventManager().registerListener(l);
 
         inputListenerGuard.reset( l, &getEngine().getEventManager() );
@@ -60,7 +62,7 @@ public:
         REQUIRE_NOTHROW( textureHandle->texture = CTexture2D( loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
     }
 
-    ~CSteeringSystem()
+    ~CSpriteSteeringSystem()
     {
         getEngine().getEntityWorld().destroyEntity( player );
     }
@@ -120,10 +122,10 @@ public:
                 scaleDelta.x = 0.5f;
                 break;
             case SDLK_q:
-                rotDelta = -0.5f;
+                rotDelta = 0.5f;
                 break;
             case SDLK_e:
-                rotDelta = 0.5f;
+                rotDelta = -0.5f;
                 break;
             case SDLK_j:
                 sizeDelta.x = -100.f;
@@ -187,21 +189,23 @@ public:
 };
 
 
-TEST_CASE( "Systems - Simple2D rendering system test", "[manual][demo]" )
+TEST_CASE( "Systems - Simple2D rendering system test - general", "[manual][demo]" )
 {
+    const char *testName = "Simple2D rendering system test - general";
+
     chestnutInit();
 
-    CWindow window( "Simple2D rendering system test", 1000 );
+    CWindow window( testName, 1000 );
     REQUIRE( window.isValid() );
 
     CEngine engine( &window, 1.f / 60.f );
 
     engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
     engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );
-    engine.attachLogicSystem<CSteeringSystem>( SYSTEM_PRIORITY_HIGHEST + 2 );
+    engine.attachLogicSystem<CSpriteSteeringSystem>( SYSTEM_PRIORITY_HIGHEST + 2 );
     engine.attachRenderingSystem<CSimple2DRenderingSystem>( SYSTEM_PRIORITY_HIGHEST );
 
-    showInfoMessageBox( "Systems - Simple2D rendering system test",
+    showInfoMessageBox( testName,
         "UP-DOWN-LEFT-RIGHT - change transformation position\n"
         "W-A-S-D - change transformation scale\n"
         "Q-E - change transformation rotation\n"
@@ -211,6 +215,280 @@ TEST_CASE( "Systems - Simple2D rendering system test", "[manual][demo]" )
 
     engine.start();
 
+    chestnutQuit();
+
+
+    REQUIRE( showConfirmMessageBox( testName ) );
+}
+
+
+
+
+
+
+const char *orderToString( EDefaultRenderOrder order )
+{
+    switch( order )
+    {
+    case EDefaultRenderOrder::BOTTOM_TO_TOP:
+        return "BOTTOM_TO_TOP";
+    case EDefaultRenderOrder::TOP_TO_BOTTOM:
+        return "TOP_TO_BOTTOM";
+    case EDefaultRenderOrder::LEFT_TO_RIGHT:
+        return "LEFT_TO_RIGHT";
+    default:
+        return "RIGHT_TO_LEFT";
+    }
+}
+
+class COrderingDemonstationSystem : public ISystem
+{
+public:
+    std::vector< ecs::entityid_t > ents;
+    EDefaultRenderOrder order;
+    CEventListenerGuard listenerGuard;
+
+    COrderingDemonstationSystem( CEngine& engine ) : ISystem( engine ) 
+    {
+        auto tex = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        
+        ecs::CComponentHandle< CTransform2DComponent > transform;
+        ecs::CComponentHandle< CTexture2DComponent > texture;
+        ecs::CComponentHandle< CModel2DComponent > model;
+
+        const float w = (float)getEngine().getWindow().getSizeWidth();
+        const float h = (float)getEngine().getWindow().getSizeHeight();
+
+        ents = getEngine().getEntityWorld().createEntities(9);
+        for( ecs::entityid_t ent : ents )
+        {
+            getEngine().getEntityWorld().createComponent<CTransform2DComponent>( ent );
+            model = getEngine().getEntityWorld().createComponent<CModel2DComponent>( ent );
+            model->size = { 100.f, 100.f };
+            texture = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( ent );
+            texture->texture = CTexture2D( tex );
+        }
+
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
+        transform->position = vec2f{ w / 2, h / 2 };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[1] );
+        transform->position = vec2f{ w / 2, h / 2 - 75.f };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[2] );
+        transform->position = vec2f{ w / 2, h / 2 - 150.f };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[3] );
+        transform->position = vec2f{ w / 2, h / 2 + 75.f };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[4] );
+        transform->position = vec2f{ w / 2, h / 2 + 150.f };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[5] );
+        transform->position = vec2f{ w / 2 - 75.f, h / 2 };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[6] );
+        transform->position = vec2f{ w / 2 - 150.f, h / 2 };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[7] );
+        transform->position = vec2f{ w / 2 + 75.f, h / 2 };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[8] );
+        transform->position = vec2f{ w / 2 + 150.f, h / 2 };
+
+        auto l = new CEventListener<SDL_KeyboardEvent>();
+        l->setHandler( &COrderingDemonstationSystem::handleInput, this );
+        l->setFilter( []( const SDL_KeyboardEvent& e ) 
+        {
+            return e.type == SDL_KEYDOWN && e.keysym.sym == SDLK_f;
+        });
+        getEngine().getEventManager().registerListener(l);
+        listenerGuard.reset( l, &getEngine().getEventManager() );
+
+        order = EDefaultRenderOrder::BOTTOM_TO_TOP;
+    }
+
+    ~COrderingDemonstationSystem()
+    {
+        getEngine().getEntityWorld().destroyEntities( ents );
+    }
+
+    void update( float dt ) override
+    {
+
+    }
+
+    event_function handleInput( const SDL_KeyboardEvent& e )
+    {
+        switch( order )
+        {
+        case EDefaultRenderOrder::BOTTOM_TO_TOP:
+            order = EDefaultRenderOrder::TOP_TO_BOTTOM;
+            break;
+        case EDefaultRenderOrder::TOP_TO_BOTTOM:
+            order = EDefaultRenderOrder::LEFT_TO_RIGHT;
+            break;
+        case EDefaultRenderOrder::LEFT_TO_RIGHT:
+            order = EDefaultRenderOrder::RIGHT_TO_LEFT;
+            break;
+        default:
+            order = EDefaultRenderOrder::BOTTOM_TO_TOP;
+        }
+        
+        CSimple2DRenderingSystem *system = getEngine().getSystem<CSimple2DRenderingSystem>();
+        if( system ) 
+        {
+            system->setDefaultRenderOrder( order );
+        }
+
+        std::string s = "Ordering type: ";
+        s += orderToString( order );
+        getEngine().getWindow().setTitle( s.c_str() );
+    }
+};
+
+
+TEST_CASE( "Systems - Simple2D rendering system test - default ordering", "[manual][demo]" )
+{
+    const char *testName = "Simple2D rendering system test - default ordering";
+
+    chestnutInit();
+
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
+
+    CEngine engine( &window, 1.f / 60.f );
+
+    engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
+    engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );
+    engine.attachLogicSystem<COrderingDemonstationSystem>( SYSTEM_PRIORITY_HIGHEST + 2 );
+    engine.attachRenderingSystem<CSimple2DRenderingSystem>( SYSTEM_PRIORITY_HIGHEST );
+
+    showInfoMessageBox( testName,
+        "F - switch ordering type"
+    );
+
+    engine.start();
 
     chestnutQuit();
+
+
+    REQUIRE( showConfirmMessageBox( testName ) );
+}
+
+
+
+
+
+class CLayeringDemonstrationSystem : public ISystem
+{
+public:
+    std::vector< ecs::entityid_t > ents;
+    CEventListenerGuard listenerGuard;
+
+    CLayeringDemonstrationSystem( CEngine& engine ) : ISystem( engine )
+    {
+        auto tex = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        
+        ecs::CComponentHandle< CTransform2DComponent > transform;
+        ecs::CComponentHandle< CTexture2DComponent > texture;
+        ecs::CComponentHandle< CModel2DComponent > model;
+        ecs::CComponentHandle< CRenderLayerComponent > layer;
+
+        const float w = (float)getEngine().getWindow().getSizeWidth();
+        const float h = (float)getEngine().getWindow().getSizeHeight();
+
+        ents = getEngine().getEntityWorld().createEntities(3);
+        for( ecs::entityid_t ent : ents )
+        {
+            getEngine().getEntityWorld().createComponent<CTransform2DComponent>( ent );
+            model = getEngine().getEntityWorld().createComponent<CModel2DComponent>( ent );
+            model->size = { 100.f, 100.f };
+            texture = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( ent );
+            texture->texture = CTexture2D( tex );
+            getEngine().getEntityWorld().createComponent<CRenderLayerComponent>( ent ); // should default to layer 0
+        }  
+
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
+        transform->position = vec2f{ w / 2 - 75.f, h / 2 }; 
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[1] );
+        transform->position = vec2f{ w / 2, h / 2 };
+        transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[2] );
+        transform->position = vec2f{ w / 2 + 75.f, h / 2 }; 
+
+
+        auto l = new CEventListener<SDL_KeyboardEvent>();
+        l->setHandler( &CLayeringDemonstrationSystem::handleInput, this );
+        l->setFilter( []( const SDL_KeyboardEvent& e ) 
+        {
+            return e.type == SDL_KEYDOWN;
+        });
+        getEngine().getEventManager().registerListener(l);
+        listenerGuard.reset( l, &getEngine().getEventManager() );
+    }
+
+    ~CLayeringDemonstrationSystem()
+    {
+        getEngine().getEntityWorld().destroyEntities( ents );
+    }
+
+    void update( float dt ) override
+    {
+
+    }
+
+    event_function handleInput( const SDL_KeyboardEvent& e )
+    {
+        ecs::CComponentHandle<CRenderLayerComponent> handle;
+
+        switch( e.keysym.sym )
+        {
+        case SDLK_q:
+            handle = getEngine().getEntityWorld().getComponent<CRenderLayerComponent>( ents[0] );
+            handle->layer++;
+            break;
+        case SDLK_a:
+            handle = getEngine().getEntityWorld().getComponent<CRenderLayerComponent>( ents[0] );
+            handle->layer--;
+            break;
+        case SDLK_w:
+            handle = getEngine().getEntityWorld().getComponent<CRenderLayerComponent>( ents[1] );
+            handle->layer++;
+            break;
+        case SDLK_s:
+            handle = getEngine().getEntityWorld().getComponent<CRenderLayerComponent>( ents[1] );
+            handle->layer--;
+            break;
+        case SDLK_e:
+            handle = getEngine().getEntityWorld().getComponent<CRenderLayerComponent>( ents[2] );
+            handle->layer++;
+            break;
+        case SDLK_d:
+            handle = getEngine().getEntityWorld().getComponent<CRenderLayerComponent>( ents[2] );
+            handle->layer--;
+            break;
+        }
+    }
+};
+
+TEST_CASE( "Systems - Simple2D rendering system test - layering", "[manual][demo]" )
+{
+    const char *testName = "Simple2D rendering system test - layering";
+
+    chestnutInit();
+
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
+
+    CEngine engine( &window, 1.f / 60.f );
+
+    engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
+    engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );
+    engine.attachLogicSystem<CLayeringDemonstrationSystem>( SYSTEM_PRIORITY_HIGHEST + 2 );
+    engine.attachRenderingSystem<CSimple2DRenderingSystem>( SYSTEM_PRIORITY_HIGHEST );
+
+    showInfoMessageBox( testName,
+        "Q/A - raise/lower object 1 layer\n"
+        "W/S - raise/lower object 2 layer\n"
+        "E/D - raise/lower object 3 layer\n"
+    );
+
+    engine.start();
+
+    chestnutQuit();
+    
+
+    REQUIRE( showConfirmMessageBox( testName ) );
 }
