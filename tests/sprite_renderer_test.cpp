@@ -48,12 +48,6 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
         REQUIRE( showConfirmMessageBox( testName ) );
     }
 
-    window.clear();
-        renderer.clear();
-        renderer.submitSprite( tex, {0,0} );
-        renderer.render( window.getFramebuffer() );
-    window.flipBuffer();
-
     SECTION( "Default values" )
     {
         showInfoMessageBox( testName, "Click to render an image with default values" );
@@ -69,6 +63,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
 
     SECTION( "Scaled up" )
     {
+        window.clear();
+            renderer.clear();
+            renderer.submitSprite( tex, {0,0} );
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
+
         SECTION( "With default linear filtering" )
         {
             showInfoMessageBox( testName, "Click to render a scaled up image around its center with linear filtering" );
@@ -100,6 +100,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
 
     SECTION( "Scaled down" )
     {
+        window.clear();
+            renderer.clear();
+            renderer.submitSprite( tex, {0,0} );
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
+        
         SECTION( "With default linear filtering" )
         {
             showInfoMessageBox( testName, "Click to render a scaled down image around its center with linear filtering" );
@@ -131,6 +137,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
 
     SECTION( "Rotated" )
     {
+        window.clear();
+            renderer.clear();
+            renderer.submitSprite( tex, {0,0} );
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
+
         showInfoMessageBox( testName, "Click to render a texture rotated around its center" );
 
         window.clear();
@@ -144,6 +156,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
 
     SECTION( "Clipping rectangle" )
     {
+        window.clear();
+            renderer.clear();
+            renderer.submitSprite( tex, {0,0} );
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
+
         SECTION( "Smaller than texture size" )
         {
             showInfoMessageBox( testName, "Click to render a texture with clipping rectangle going from upper left corner to center" );
@@ -177,6 +195,12 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
 
     SECTION( "Tint" )
     {
+        window.clear();
+            renderer.clear();
+            renderer.submitSprite( tex, {0,0} );
+            renderer.render( window.getFramebuffer() );
+        window.flipBuffer();
+
         showInfoMessageBox( testName, "Click to render a texture with 50% red tint" );
 
         tex.setTint( vec3f{ 1.f, 0.f, 0.f } );
