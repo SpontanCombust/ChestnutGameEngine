@@ -1,3 +1,5 @@
+//TODO at least allowing to not group render calls by texture ID - maybe use 3D texture?
+
 #ifndef __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 #define __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 

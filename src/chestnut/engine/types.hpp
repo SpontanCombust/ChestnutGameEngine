@@ -16,6 +16,8 @@ namespace chestnut::engine
 
     typedef int audiochannel_t;
 
+    typedef signed char renderlayer_t;
+
 } // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_TYPES_H__

@@ -7,6 +7,7 @@
 #include "../components/model2d_component.hpp"
 #include "../components/transform2d_component.hpp"
 #include "../components/texture2d_component.hpp"
+#include "../components/render_layer_component.hpp"
 #include "../../debug/log.hpp"
 #include "../../macros.hpp"
 
@@ -42,67 +43,197 @@ namespace chestnut::engine
         }
 
 
-        m_textureWithModelQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent  >(),
-            ecs::makeEntitySignature()
+        m_textureQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CTexture2DComponent >(),
+            ecs::makeEntitySignature< CModel2DComponent, CRenderLayerComponent >()
         );
 
-        m_textureWithoutModelQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CTransform2DComponent, CTexture2DComponent >(),
+        m_textureModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent  >(),
+            ecs::makeEntitySignature< CRenderLayerComponent >()
+        );
+
+        m_layerTextureQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature< CModel2DComponent >()
+        );
+
+        m_layerTextureModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(),
+            ecs::makeEntitySignature()
         );
     }
 
     CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_textureWithModelQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_textureModelQueryID );
+    }
+
+
+
+    inline vec2f getAdjustScale( const CModel2DComponent& model, const CTexture2DComponent& texture )
+    {
+        vec2f adjustScale;
+
+        switch( texture.adjust )
+        {
+        case ETexture2DToModel2DAdjust::SCALED:
+            adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+            adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
+            break;
+
+        case ETexture2DToModel2DAdjust::SPANNED:
+            adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+            break;
+        
+        case ETexture2DToModel2DAdjust::ZOOMED:
+            adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+            adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
+            break;
+
+        default:
+            adjustScale = vec2f( 1.f );
+        }
+
+        return adjustScale;
+    }
+
+
+    bool topToBottomCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.y < t2.position.y;
+    }
+
+    bool bottomToTopCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.y > t2.position.y;
+    }
+
+    bool leftToRightCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.x < t2.position.x;
+    }
+
+    bool rightToLeftCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.x > t2.position.x;
+    }
+
+    bool topToBottomCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.y < t2.position.y;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    bool bottomToTopCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.y > t2.position.y;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    bool leftToRightCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.x < t2.position.x;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    bool rightToLeftCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.x > t2.position.x;
+        }
+
+        return l1.layer < l2.layer;
     }
 
     void CSimple2DRenderingSystem::update( float deltaTime ) 
     {
+        bool (*comparator)( const CTransform2DComponent&, const CTransform2DComponent& );
+        bool (*comparatorLayered)( const CTransform2DComponent&, const CRenderLayerComponent&, const CTransform2DComponent&, const CRenderLayerComponent& );
+        switch( m_defaultRenderOrder )
+        {
+        case EDefaultRenderOrder::BOTTOM_TO_TOP:
+            comparator = bottomToTopCompare;
+            comparatorLayered = bottomToTopCompareLayered;
+            break;
+        case EDefaultRenderOrder::LEFT_TO_RIGHT:
+            comparator = leftToRightCompare;
+            comparatorLayered = leftToRightCompareLayered;
+            break;
+        case EDefaultRenderOrder::RIGHT_TO_LEFT:
+            comparator = rightToLeftCompare;
+            comparatorLayered = rightToLeftCompareLayered;
+            break;
+        default:
+            comparator = topToBottomCompare;
+            comparatorLayered = topToBottomCompareLayered;
+        }
+
+
         m_spriteRenderer.clear();
 
-
-        const ecs::CEntityQuery* query;
-
-        query = getEngine().getEntityWorld().queryEntities( m_textureWithModelQueryID );
-
-        query->forEachEntityWith< CModel2DComponent, CTransform2DComponent, CTexture2DComponent >(
-            [this]( CModel2DComponent& model, CTransform2DComponent& transform, CTexture2DComponent& texture )
-            {
-                vec2f adjustScale;
-
-                switch( texture.adjust )
-                {
-                case ETexture2DToModel2DAdjust::SCALED:
-                    adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
-                    adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
-                    break;
-
-                case ETexture2DToModel2DAdjust::SPANNED:
-                    adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
-                    break;
-                
-                case ETexture2DToModel2DAdjust::ZOOMED:
-                    adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
-                    adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
-                    break;
-
-                default:
-                    adjustScale = vec2f( 1.f );
-                }
-
-                m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
-            }
-        );
+        ecs::CEntityQuery* query;
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_textureWithoutModelQueryID );
+        query = getEngine().getEntityWorld().queryEntities( m_textureQueryID );
+
+        query->sort<CTransform2DComponent>( comparator );
 
         query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent >(
             [this]( CTransform2DComponent& transform, CTexture2DComponent& texture )
             {
                 m_spriteRenderer.submitSprite( texture.texture, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+            }
+        );
+        
+
+        query = getEngine().getEntityWorld().queryEntities( m_textureModelQueryID );
+        
+        query->sort<CTransform2DComponent>( comparator );
+
+        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent, CModel2DComponent >(
+            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture, CModel2DComponent& model )
+            {
+                vec2f adjustScale = getAdjustScale( model, texture );
+                m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
+            }
+        );
+
+
+        query = getEngine().getEntityWorld().queryEntities( m_layerTextureQueryID );
+
+        query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
+
+        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(
+            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture, CRenderLayerComponent& layer )
+            {
+                m_spriteRenderer.submitSprite( texture.texture, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+            }
+        );
+
+
+        query = getEngine().getEntityWorld().queryEntities( m_layerTextureModelQueryID );
+        
+        query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
+        
+        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent, CModel2DComponent, CRenderLayerComponent >(
+            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture, CModel2DComponent& model, CRenderLayerComponent& layer )
+            {
+                vec2f adjustScale = getAdjustScale( model, texture );
+                m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
         );
     }
@@ -141,6 +272,19 @@ namespace chestnut::engine
     CTextRenderer& CSimple2DRenderingSystem::getTextRenderer() 
     {
         return m_textRenderer;
+    }
+
+
+
+
+    void CSimple2DRenderingSystem::setDefaultRenderOrder( EDefaultRenderOrder order ) 
+    {
+        m_defaultRenderOrder = order;
+    }
+
+    EDefaultRenderOrder CSimple2DRenderingSystem::getDefaultRenderOrder() const
+    {
+        return m_defaultRenderOrder;
     }
 
 } // namespace chestnut::engine
