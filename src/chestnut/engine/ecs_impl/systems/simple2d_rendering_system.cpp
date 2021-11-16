@@ -71,23 +71,24 @@ namespace chestnut::engine
 
 
 
-    inline vec2f getAdjustScale( const CModel2DComponent& model, const CTexture2DComponent& texture )
+    vec2f getAdjustScale( const CModel2DComponent& model, const CTexture2DComponent& texture )
     {
+        SRectangle clip = texture.texture.getClippingRect();
         vec2f adjustScale;
 
         switch( texture.adjust )
         {
         case ETexture2DToModel2DAdjust::SCALED:
-            adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+            adjustScale = model.size / vec2f{ clip.w, clip.h };
             adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
             break;
 
         case ETexture2DToModel2DAdjust::SPANNED:
-            adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+            adjustScale = model.size / vec2f{ clip.w, clip.h };
             break;
         
         case ETexture2DToModel2DAdjust::ZOOMED:
-            adjustScale = model.size / vecCastType<float>( texture.texture.getSize() );
+            adjustScale = model.size / vec2f{ clip.w, clip.h };
             adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
             break;
 
