@@ -492,3 +492,159 @@ TEST_CASE( "Systems - Simple2D rendering system test - layering", "[manual][demo
 
     REQUIRE( showConfirmMessageBox( testName ) );
 }
+
+
+
+
+
+
+class CCameraDemonstrationSystem : public ISystem
+{
+public:
+    ecs::entityid_t ent;
+    CEventListenerGuard listenerGuard;
+
+    vec2f posDelta;
+    vec2f dimDelta;
+    float zoomDelta;
+
+    CCameraDemonstrationSystem( CEngine& engine ) : ISystem( engine )
+    {
+        auto tex = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        
+        ecs::CComponentHandle< CTransform2DComponent > transform;
+        ecs::CComponentHandle< CTexture2DComponent > texture;
+        ecs::CComponentHandle< CModel2DComponent > model;
+
+        ent = engine.getEntityWorld().createEntity();
+
+        transform = engine.getEntityWorld().createComponent<CTransform2DComponent>( ent );
+        transform->position = { engine.getWindow().getSizeWidth() / 2.f, engine.getWindow().getSizeHeight() / 2.f };
+        model = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
+        model->size = { 100.f, 100.f };
+        texture = engine.getEntityWorld().createComponent<CTexture2DComponent>( ent );
+        texture->texture = CTexture2D( tex );
+
+
+        auto l = new CEventListener<SDL_KeyboardEvent>();
+        l->setHandler( &CCameraDemonstrationSystem::handleInput, this );
+        getEngine().getEventManager().registerListener(l);
+        listenerGuard.reset( l, &getEngine().getEventManager() );
+    }
+
+    ~CCameraDemonstrationSystem()
+    {
+        getEngine().getEntityWorld().destroyEntity( ent );
+    }
+
+    void update( float dt ) override
+    {
+        CSimple2DRenderingSystem *sys = getEngine().getSystem<CSimple2DRenderingSystem>();
+
+        if( sys )
+        {
+            CCamera2D& camera = sys->getCamera();
+
+            camera.m_position += posDelta * dt;
+            camera.m_dimensions += dimDelta * dt;
+            camera.m_zoom += zoomDelta * dt;
+        }
+    }
+
+    event_function handleInput( const SDL_KeyboardEvent& e )
+    {
+        if( e.type == SDL_KEYDOWN )
+        {
+            switch( e.keysym.sym )
+            {
+            case SDLK_UP:
+                posDelta.y = -100.f;
+                break;
+            case SDLK_DOWN:
+                posDelta.y = 100.f;
+                break;
+            case SDLK_LEFT:
+                posDelta.x = -100.f;
+                break;
+            case SDLK_RIGHT:
+                posDelta.x = 100.f;
+                break;
+            case SDLK_w:
+                dimDelta.y = 100.f;
+                break;
+            case SDLK_s:
+                dimDelta.y = -100.f;
+                break;
+            case SDLK_a:
+                dimDelta.x = -100.f;
+                break;
+            case SDLK_d:
+                dimDelta.x = 100.f;
+                break;
+            case SDLK_q:
+                zoomDelta = -0.5f;
+                break;
+            case SDLK_e:
+                zoomDelta = 0.5f;
+                break;
+            }
+        }
+        else if( e.type == SDL_KEYUP )
+        {
+            switch( e.keysym.sym )
+            {
+            case SDLK_UP:
+            case SDLK_DOWN:
+                posDelta.y = 0.f;
+                break;
+            case SDLK_LEFT:
+            case SDLK_RIGHT:
+                posDelta.x = 0.f;
+                break;
+            case SDLK_w:
+            case SDLK_s:
+                dimDelta.y = 0.f;
+                break;
+            case SDLK_a:
+            case SDLK_d:
+                dimDelta.x = 0.f;
+                break;
+            case SDLK_q:
+            case SDLK_e:
+                zoomDelta = 0.f;
+                break;
+            }
+        }
+    }
+};
+
+TEST_CASE( "Systems - Simple2D rendering system test - camera", "[manual][demo]" )
+{
+    const char *testName = "Simple2D rendering system test - camera";
+
+    chestnutInit();
+
+    CWindow window( testName );
+    REQUIRE( window.isValid() );
+
+    CEngine engine( &window, 1.f / 60.f );
+
+    engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
+    engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );
+    engine.attachLogicSystem<CCameraDemonstrationSystem>( SYSTEM_PRIORITY_HIGHEST + 2 );
+    engine.attachRenderingSystem<CSimple2DRenderingSystem>( SYSTEM_PRIORITY_HIGHEST );
+
+    showInfoMessageBox( testName,
+        "UP/DOWN/LEFT/RIGHT - move camera\n"
+        "S/W - make view smaller/bigger in y axis\n"
+        "A/D - make view smaller/bigger in x axis\n"
+        "Q/E - zoom out/in\n"
+    );
+
+    engine.start();
+
+    chestnutQuit();
+    
+
+    REQUIRE( showConfirmMessageBox( testName ) );
+}
