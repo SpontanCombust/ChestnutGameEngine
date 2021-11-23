@@ -62,6 +62,10 @@ namespace chestnut::engine
             ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature()
         );
+
+
+        const CWindow& win = getEngine().getWindow();
+        m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
     }
 
     CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
@@ -244,8 +248,9 @@ namespace chestnut::engine
         getEngine().getWindow().clear();
         
         m_spriteRenderer.bindShader();
-        m_spriteRenderer.setViewMatrix( mat4f() );
-        m_spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, -1.f, 1.f ) );
+        m_camera.calculateMatrices();
+        m_spriteRenderer.setViewMatrix( m_camera.getViewMatrix() );
+        m_spriteRenderer.setProjectionMatrix( m_camera.getProjectionMatrix() );
 
 #if CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_FORCE_GPU_SYNCHRONIZATION > 0
         glFinish(); // prevent CPU getting too hasty with sending requests to GPU
@@ -286,6 +291,19 @@ namespace chestnut::engine
     EDefaultRenderOrder CSimple2DRenderingSystem::getDefaultRenderOrder() const
     {
         return m_defaultRenderOrder;
+    }
+
+
+
+
+    const CCamera2D& CSimple2DRenderingSystem::getCamera() const
+    {
+        return m_camera;
+    }
+
+    CCamera2D& CSimple2DRenderingSystem::getCamera() 
+    {
+        return m_camera;
     }
 
 } // namespace chestnut::engine

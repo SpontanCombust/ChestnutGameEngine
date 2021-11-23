@@ -5,6 +5,7 @@
 #include "../../graphics/sprite_renderer.hpp"
 #include "../../graphics/colored_polygon2d_renderer.hpp"
 #include "../../graphics/text_renderer.hpp"
+#include "../../graphics/camera2d.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
@@ -34,6 +35,8 @@ namespace chestnut::engine
 
         EDefaultRenderOrder m_defaultRenderOrder;
 
+        CCamera2D m_camera;
+
 
     public:
         CSimple2DRenderingSystem( CEngine& engine );
@@ -53,6 +56,10 @@ namespace chestnut::engine
 
         void setDefaultRenderOrder( EDefaultRenderOrder order );
         EDefaultRenderOrder getDefaultRenderOrder() const;
+
+
+        const CCamera2D& getCamera() const;
+        CCamera2D& getCamera();
     };
 
 } // namespace chestnut::engine

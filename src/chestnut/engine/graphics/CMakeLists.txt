@@ -1,5 +1,6 @@
 target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/animation2d.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d_renderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/framebuffer.cpp
