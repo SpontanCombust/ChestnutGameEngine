@@ -4,23 +4,49 @@ project(ChestnutGameEngine VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/cmake/sdl2)
+
+# =================================== Library dependencies ===================================
+
+include(FetchContent)
+
+FetchContent_Declare(
+    ChestnutECSCore
+    GIT_REPOSITORY https://github.com/SpontanCombust/ChestnutECSCore
+    GIT_TAG master #TODO will need version tag for ECS library!
+)
+FetchContent_Declare(
+    SDL2
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL
+    GIT_TAG release-2.0.16
+)
+FetchContent_Declare(
+    SDL2_image
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_image
+    GIT_TAG release-2.0.5
+)
+FetchContent_Declare(
+    SDL2_ttf
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
+    GIT_TAG release-2.0.15
+)
+FetchContent_Declare(
+    SDL2_mixer
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
+    GIT_TAG release-2.0.4
+)
+
+FetchContent_MakeAvailable(ChestnutECSCore SDL2 SDL2_image SDL2_ttf SDL2_mixer)
 
 
-# =================================== Finding libraries ===================================
+# findOpenGL and findGLEW should come with CMake installation
+if(UNIX)
+    set(OpenGL_GL_PREFERENCE GLVND)
+endif()
 
-find_package(SDL2 REQUIRED)
-
-find_package(SDL2_image REQUIRED)
-
-find_package(SDL2_ttf REQUIRED)
-
-find_package(SDL2_mixer REQUIRED)
-
-set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 
 find_package(GLEW REQUIRED)
+
 
 
 # ====================================== CGE library ======================================
@@ -32,32 +58,40 @@ add_subdirectory(src/chestnut/engine)
 target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
 
 
-add_subdirectory(dependencies/ChestnutECSCore)
 target_link_libraries(${PROJECT_NAME} ChestnutECSCore)
+target_link_libraries(${PROJECT_NAME} SDL2)
+target_link_libraries(${PROJECT_NAME} SDL2_image)
+target_link_libraries(${PROJECT_NAME} SDL2_ttf)
+target_link_libraries(${PROJECT_NAME} SDL2_mixer)
 
-target_link_libraries(${PROJECT_NAME} SDL2::Main)
-target_link_libraries(${PROJECT_NAME} SDL2::Image)
-target_link_libraries(${PROJECT_NAME} SDL2::TTF)
-target_link_libraries(${PROJECT_NAME} SDL2::Mixer)
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIRS})
+target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRECTORIES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
 
 #TODO readd install targets later
 
+
+
+
 # ====================================== Tests executable ======================================
 
 add_executable(${PROJECT_NAME}_Test)
-
-target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
-
 add_subdirectory(tests)
 
-find_package(Catch2)
+include(FetchContent)
 
+FetchContent_Declare(
+    catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2
+    GIT_TAG v2.13.7
+)
+
+FetchContent_MakeAvailable(catch2)
+list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
+    
+    
 target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
 target_link_libraries(${PROJECT_NAME}_Test Catch2::Catch2)
 
