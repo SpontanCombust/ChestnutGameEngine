@@ -4,7 +4,6 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/src",
-                "${workspaceFolder}/dependencies/ChestnutECSCore/include",
                 "/usr/include/SDL2/"
             ],
             "defines": [],

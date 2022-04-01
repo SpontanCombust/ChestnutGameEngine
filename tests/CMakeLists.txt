@@ -18,7 +18,9 @@ target_sources(${PROJECT_NAME}_Test PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/simple2d_animation_system_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/simple2d_rendering_system_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sprite_renderer_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/system_test_utils.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/system_test_utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/test_utils.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text_renderer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/timer_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/window_test.cpp

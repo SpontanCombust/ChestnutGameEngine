@@ -1,5 +1,9 @@
 target_sources(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/constants.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/init.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/init.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/macros.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/types.hpp
 )
 
 add_subdirectory(audio)
