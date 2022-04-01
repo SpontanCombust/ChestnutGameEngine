@@ -1,6 +1,8 @@
 target_sources(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/collider.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/collider.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/collision_resolution.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/collision_resolution.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/collider_attributes.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/collider_attributes.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/collider2d_collision_detection.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/collider2d_collision_detection.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/collider2d.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/collider2d.cpp
 )

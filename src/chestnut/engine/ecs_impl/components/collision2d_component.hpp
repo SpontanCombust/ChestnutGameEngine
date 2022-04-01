@@ -1,24 +1,18 @@
 #ifndef __CHESTNUT_ENGINE_COLLISION2D_COMPONENT_H__
 #define __CHESTNUT_ENGINE_COLLISION2D_COMPONENT_H__
 
-#include "../../physics/collider.hpp"
+#include "../../physics/collider2d.hpp"
 
-#include <variant>
+#include <memory>
+
 
 namespace chestnut::engine
 {
-    typedef std::variant< SColliderBodyPoint2D,
-                          SColliderBodyAABB2D,
-                          SColliderBodyCircle2D > CColliderBodyVariant;
-
     struct CCollision2DComponent
     {
-        EColliderActivity activity;
-        EColliderBodyType bodyType;
-        CColliderBodyVariant bodyVariant;
-        ECollisionPolicyFlags policyFlags;
+        std::unique_ptr<CCollider2D> collider;
 
-        CCollision2DComponent();
+        CCollision2DComponent() = default;
     };
 
 } // namespace chestnut::engine

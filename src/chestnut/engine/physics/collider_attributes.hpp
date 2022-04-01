@@ -1,9 +1,7 @@
-#ifndef __CHESTNUT_ENGINE_COLLIDER_H__
-#define __CHESTNUT_ENGINE_COLLIDER_H__
+#ifndef __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
+#define __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
 
 #include "../misc/flags.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/rectangle.hpp"
 
 namespace chestnut::engine
 {
@@ -12,14 +10,6 @@ namespace chestnut::engine
     {
         STATIC, // object is typically staying in the same place
         DYNAMIC // object can move around
-    };
-
-
-    enum class EColliderBodyType
-    {
-        POINT,
-        AABB, // axis aligned bounding box
-        CIRCLE
     };
 
     // Flags describing how a collider object should interact with other objects
@@ -40,23 +30,7 @@ namespace chestnut::engine
 
     DECLARE_ENUM_FLAG_OPERATORS( ECollisionPolicyFlags )
 
-
-    // point's body on its own has no properties
-    struct SColliderBodyPoint2D
-    {
-
-    };
-
-    struct SColliderBodyAABB2D
-    {
-        vec2f size;
-    };
-
-    struct SColliderBodyCircle2D
-    {
-        float radius;
-    };
-
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_COLLIDER_H__
+
+#endif // __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
