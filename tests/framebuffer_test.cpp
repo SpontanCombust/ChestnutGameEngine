@@ -21,13 +21,13 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     REQUIRE( window.isValid() );
 
     CTextRenderer textRenderer;
-    REQUIRE_NOTHROW( textRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
+    REQUIRE_NOTHROW( textRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
 
     CSpriteRenderer spriteRenderer;
-    REQUIRE_NOTHROW( spriteRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
+    REQUIRE_NOTHROW( spriteRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
     spriteRenderer.bindShader();
     spriteRenderer.setViewMatrix( mat4f() );
     spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
@@ -37,7 +37,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 
 
     CText text;
-    REQUIRE_NOTHROW( text = CText( loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ), 32 ) );
+    REQUIRE_NOTHROW( text = CText( CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ), 32 ) );
     text.append( L"This is an example text.\n" );
     text.append( L"Remember how it looks!", EFontStyle::BOLD, vec3f{ 1.f, 0.f, 0.f } );
     text.generateData();
@@ -53,7 +53,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 
 
     CTexture2D blank;
-    REQUIRE_NOTHROW( blank = CTexture2D( loadTexture2DResourceFromPixels( nullptr, window.getSizeWidth(), window.getSizeHeight(), GL_RGBA, false ) ) );
+    REQUIRE_NOTHROW( blank = CTexture2D( CTexture2DResource::loadFromPixels( nullptr, window.getSizeWidth(), window.getSizeHeight(), GL_RGBA, false ) ) );
     CFramebuffer blankFramebuffer( blank );
     blankFramebuffer.setClearColor( vec4f( 0.f ) ); 
     blankFramebuffer.bind();

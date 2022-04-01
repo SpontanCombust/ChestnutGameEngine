@@ -17,10 +17,10 @@ TEST_CASE( "Audio - Audio manager test - general" )
     CAudioManager manager;
 
     std::shared_ptr< CAudioResource > sfx;
-    REQUIRE_NOTHROW( sfx = loadAudioResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/timgormly__8-bit-explosion2.aiff", EAudioResourceType::SFX ) );
+    REQUIRE_NOTHROW( sfx = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/timgormly__8-bit-explosion2.aiff", EAudioResourceType::SFX ) );
 
     std::shared_ptr< CAudioResource > music;
-    REQUIRE_NOTHROW( music = loadAudioResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/puredesigngirl__dramatic-music.mp3", EAudioResourceType::MUSIC ) );
+    REQUIRE_NOTHROW( music = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/puredesigngirl__dramatic-music.mp3", EAudioResourceType::MUSIC ) );
 
 
     SECTION( "Add-get-remove" )
@@ -56,7 +56,7 @@ TEST_CASE( "Audio - Audio manager test - SFX", "[manual]" )
     CAudioManager manager;
 
     std::shared_ptr< CAudioResource > sfx;
-    REQUIRE_NOTHROW( sfx = loadAudioResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/timgormly__8-bit-explosion2.aiff", EAudioResourceType::SFX ) );
+    REQUIRE_NOTHROW( sfx = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/timgormly__8-bit-explosion2.aiff", EAudioResourceType::SFX ) );
 
     manager.addAudio( sfx, "sfx" );
 
@@ -125,7 +125,7 @@ TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
     CAudioManager manager;
 
     std::shared_ptr< CAudioResource > music;
-    REQUIRE_NOTHROW( music = loadAudioResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/puredesigngirl__dramatic-music.mp3", EAudioResourceType::MUSIC ) );
+    REQUIRE_NOTHROW( music = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/audio/puredesigngirl__dramatic-music.mp3", EAudioResourceType::MUSIC ) );
 
     manager.addAudio( music, "music" );
 

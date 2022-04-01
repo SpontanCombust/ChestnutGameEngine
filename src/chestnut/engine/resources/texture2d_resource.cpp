@@ -47,14 +47,12 @@ namespace chestnut::engine
         }
     }
 
-    // REMEMBER TO DELETE THE POINTER!
-    //
     // When we send texture data to OpenGL it samples texture coordinates in row order opposite to how they are loaded from system
     // We usually expect the (0,0) point to the upper left corner of the image, whereas OpenGL expects it to be the LOWER left corner
     // So if we send them as-is, the rendered image is flipped upside down
     // To mitigate this without 'hacking' the UV coordinates inside the renderer (that could break things down the road) 
     // we're just gonna flip the image before we send it  
-    unsigned char *getPixelsFlippedVertically( const void *pixels, int width, int height, int bytesPerPixel )
+    std::unique_ptr<unsigned char> getPixelsFlippedVertically( const void *pixels, int width, int height, int bytesPerPixel )
     {
         const unsigned char *pixels8 = (const unsigned char *)pixels;
         unsigned char *flipped8 = new unsigned char[ width * height * bytesPerPixel ];
@@ -68,7 +66,7 @@ namespace chestnut::engine
                          width * bytesPerPixel );
         }
 
-        return flipped8;
+        return std::unique_ptr<unsigned char>(flipped8);
     }
 
 
@@ -97,9 +95,8 @@ namespace chestnut::engine
         {
             if( flipPixelsVertically )
             {
-                unsigned char *flipped = getPixelsFlippedVertically( pixels, width, height, bpp );
-                glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, flipped );
-                delete flipped;
+                auto flipped = getPixelsFlippedVertically( pixels, width, height, bpp );
+                glTexImage2D( GL_TEXTURE_2D, 0, pixelFormat, width, height, 0, pixelFormat, GL_UNSIGNED_BYTE, flipped.get() );
             }
             else
             {
@@ -195,7 +192,7 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
+    std::shared_ptr<CTexture2DResource> CTexture2DResource::loadFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
     {
         // let the exception propagate if it happens
         GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat, flipPixelsVertically );
@@ -211,7 +208,7 @@ namespace chestnut::engine
         return std::shared_ptr<CTexture2DResource>( resource );
     }
 
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const char *texturePath )
+    std::shared_ptr<CTexture2DResource> CTexture2DResource::loadFromFile( const char *texturePath )
     {
         int width, height;
         GLenum pixelFormat;

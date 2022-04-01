@@ -72,12 +72,12 @@ namespace chestnut::engine
         const SFontConfig& getConfig( int pointSize, EFontStyle styleMask );
 
         size_t getConfigHash( int pointSize, EFontStyle styleMask );
+
+
+        // fontPath - path to .ttf file
+        // Throws ChestnutResourceLoadException if fails to load the font
+        static std::shared_ptr<CFontResource> loadFromFile( const char *fontPath );
     };
-
-
-    // fontPath - path to .ttf file
-    // Throws ChestnutResourceLoadException if fails to load the font
-    std::shared_ptr<CFontResource> loadFontResourceFromFile( const char *fontPath );
 
 } // namespace chestnut::engine
 

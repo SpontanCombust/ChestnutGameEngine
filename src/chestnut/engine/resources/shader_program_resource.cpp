@@ -219,7 +219,7 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const char *vertPath, const char *fragPath )
+    std::shared_ptr<CShaderProgramResource> CShaderProgramResource::loadFromFiles( const char *vertPath, const char *fragPath )
     {
         // let the possible exception propagate
         GLuint program = loadOpenGLShaderProgramFromFiles( vertPath, fragPath );

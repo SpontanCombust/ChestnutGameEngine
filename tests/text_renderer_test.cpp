@@ -20,13 +20,13 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[manual]" )
     const char *testName = "Text test - font style sheets";
 
     std::shared_ptr< CFontResource > fontResource;
-    REQUIRE_NOTHROW( fontResource = loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
+    REQUIRE_NOTHROW( fontResource = CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
 
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
     CSpriteRenderer spriteRenderer;
-    REQUIRE_NOTHROW( spriteRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
+    REQUIRE_NOTHROW( spriteRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
 
     spriteRenderer.bindShader();
     spriteRenderer.setViewMatrix( mat4f() );
@@ -103,14 +103,14 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
     const char *testName = "Text test - rendering text glyphs";
 
     std::shared_ptr< CFontResource > fontResource;
-    REQUIRE_NOTHROW( fontResource = loadFontResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
+    REQUIRE_NOTHROW( fontResource = CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ) );  
     REQUIRE( fontResource );
 
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
     CTextRenderer textRenderer;
-    REQUIRE_NOTHROW( textRenderer.init( loadShaderProgramResourceFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
+    REQUIRE_NOTHROW( textRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
 
     textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );

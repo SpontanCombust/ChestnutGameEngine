@@ -154,7 +154,7 @@ namespace chestnut::engine
 
         // ========== create the OpenGL texture resource ==========
 
-        config.textureResource = loadTexture2DResourceFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED, false );
+        config.textureResource = CTexture2DResource::loadFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED, false );
 
         delete alphaPixels8; // we won't need it no more, data is copied to the GPU
 
@@ -231,8 +231,7 @@ namespace chestnut::engine
 
 
 
-
-    std::shared_ptr<CFontResource> loadFontResourceFromFile( const char *fontPath ) 
+    std::shared_ptr<CFontResource> CFontResource::loadFromFile(const char *fontPath)
     {
         TTF_Font *font = TTF_OpenFont( fontPath, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
 

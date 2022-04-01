@@ -68,7 +68,7 @@ public:
         modelHandle->size = vec2f{ 200.f, 200.f };
 
         auto textureHandle = engine.getEntityWorld().createComponent<CTexture2DComponent>( ent );
-        auto tex = CTexture2D( loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) );
+        auto tex = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) );
         tex.setFiltering( GL_NEAREST, GL_NEAREST );
         textureHandle->texture = tex;
 

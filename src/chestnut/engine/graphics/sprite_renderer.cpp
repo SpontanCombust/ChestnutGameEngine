@@ -22,7 +22,7 @@ namespace chestnut::engine
         m_spriteCapacity = 0;
         reserveBufferSpace( CHESTNUT_SPRITE_RENDERER_INIT_SPRITE_CAPACITY );
 
-        m_missingTexturePlaceholder = CTexture2D( loadTexture2DResourceFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
+        m_missingTexturePlaceholder = CTexture2D( CTexture2DResource::loadFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );
     }
 

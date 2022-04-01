@@ -59,7 +59,7 @@ public:
         modelHandle->size = { 100.f, 100.f };
 
         auto textureHandle = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( player );
-        REQUIRE_NOTHROW( textureHandle->texture = CTexture2D( loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
+        REQUIRE_NOTHROW( textureHandle->texture = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
     }
 
     ~CSpriteSteeringSystem()
@@ -250,7 +250,7 @@ public:
 
     COrderingDemonstationSystem( CEngine& engine ) : ISystem( engine ) 
     {
-        auto tex = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CTexture2DComponent > texture;
@@ -380,7 +380,7 @@ public:
 
     CLayeringDemonstrationSystem( CEngine& engine ) : ISystem( engine )
     {
-        auto tex = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CTexture2DComponent > texture;
@@ -510,7 +510,7 @@ public:
 
     CCameraDemonstrationSystem( CEngine& engine ) : ISystem( engine )
     {
-        auto tex = loadTexture2DResourceFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CTexture2DComponent > texture;

@@ -34,13 +34,15 @@ namespace chestnut::engine
         // Requires shader to be bound
         // Returns -1 if doesn't find the location
         GLint getUniformLocation( const char *uniformName );
+
+
+        // vertPath - path to file with vertex shader
+        // fragPath - path to file with fragment shader
+        // Throws ChestnutResourceLoadException if fails to load the shader program
+        static std::shared_ptr<CShaderProgramResource> loadFromFiles( const char *vertPath, const char *fragPath );
     };
 
 
-    // vertPath - path to file with vertex shader
-    // fragPath - path to file with fragment shader
-    // Throws ChestnutResourceLoadException if fails to load the shader program
-    std::shared_ptr<CShaderProgramResource> loadShaderProgramResourceFromFiles( const char *vertPath, const char *fragPath );
 
 } // namespace chestnut::engine
 

@@ -51,8 +51,7 @@ namespace chestnut::engine
         }
     }
 
-
-    std::shared_ptr< CAudioResource > loadAudioResourceFromFile( const char *audioPath, EAudioResourceType type )
+    std::shared_ptr<CAudioResource> CAudioResource::loadFromFile(const char *audioPath, EAudioResourceType type)
     {
         CAudioResource::UAudio audio;
 
