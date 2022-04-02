@@ -1,11 +1,6 @@
-target_sources(${PROJECT_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/framebuffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/framebuffer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/shader_program.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/shader_program.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/texture2d.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/opengl/texture2d.cpp
-    
+add_subdirectory(opengl)
+
+target_sources(${PROJECT_NAME} PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/colored_polygon2d_renderer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/colored_polygon2d_renderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/renderer.hpp

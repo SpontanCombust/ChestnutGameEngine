@@ -7,6 +7,9 @@
 #include "../../maths/matrix3.hpp"
 #include "../../maths/matrix4.hpp"
 #include "../../resources/shader_program_resource.hpp"
+#include "vertex_attribute.hpp"
+
+#include <tl/optional.hpp>
 
 #include <string>
 #include <unordered_map>
@@ -50,9 +53,16 @@ namespace chestnut::engine
         void setVector4f( GLint loc, const vec4f& val );
         void setMatrix3f( GLint loc, const mat3f& val );
         void setMatrix4f( GLint loc, const mat4f& val );
+
+
+        template<typename T, GLuint size>
+        tl::optional<CVertexAttribute> getAttribute(const char *name, GLuint divisor = 0);
     };
     
 } // namespace chestnut::engine
+
+
+#include "shader_program.inl"
 
 
 #endif // __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
