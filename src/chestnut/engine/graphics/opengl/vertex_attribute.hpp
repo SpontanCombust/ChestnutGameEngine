@@ -24,16 +24,16 @@ namespace chestnut::engine
 
     private:
         std::string m_name;
-        GLuint m_location;
+        GLint m_location;
         EType m_type;
         GLint m_length;
         GLuint m_divisor;
 
     public:
-        CVertexAttribute(std::string name, GLuint location, EType type, GLint length, bool isInstanced);
+        CVertexAttribute(std::string name, GLint location, EType type, GLint length, bool isInstanced);
 
         const std::string& getName() const;
-        GLuint getLocation() const;
+        GLint getLocation() const;
         EType getType() const;
         size_t getTypeSize() const;
         GLint getLength() const;

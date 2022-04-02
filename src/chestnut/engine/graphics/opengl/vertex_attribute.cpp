@@ -2,7 +2,7 @@
 
 namespace chestnut::engine
 {
-    CVertexAttribute::CVertexAttribute(std::string name, GLuint location, EType type, GLint length, bool isInstanced)
+    CVertexAttribute::CVertexAttribute(std::string name, GLint location, EType type, GLint length, bool isInstanced)
     : m_name(name), m_location(location), m_type(type), m_length(length)
     {
         if(isInstanced)
@@ -20,7 +20,7 @@ namespace chestnut::engine
         return m_name;
     }
 
-    GLuint CVertexAttribute::getLocation() const
+    GLint CVertexAttribute::getLocation() const
     {
         return m_location;
     }
