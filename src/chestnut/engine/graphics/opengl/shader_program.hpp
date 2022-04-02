@@ -8,6 +8,7 @@
 #include "../../maths/matrix4.hpp"
 #include "../../resources/shader_program_resource.hpp"
 #include "vertex_attribute.hpp"
+#include "uniform.hpp"
 
 #include <tl/optional.hpp>
 
@@ -16,6 +17,7 @@
 
 namespace chestnut::engine
 {
+    //TODO cleanup methods after OpenGL abstraction classes are ready
     class CShaderProgram
     {
     private:
@@ -57,6 +59,9 @@ namespace chestnut::engine
 
         template<typename T, GLuint size>
         tl::optional<CVertexAttribute> getAttribute(const char *name, GLuint divisor = 0);
+
+        template<typename T>
+        tl::optional<CUniform<T>> getUniform(const char *name);
     };
     
 } // namespace chestnut::engine

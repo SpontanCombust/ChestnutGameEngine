@@ -24,4 +24,21 @@ namespace chestnut::engine
         return tl::nullopt;
     }
 
+    template<typename T>
+    tl::optional<CUniform<T>> CShaderProgram::getUniform(const char *name)
+    {
+        if(!m_shaderResource) 
+        {
+            return tl::nullopt;
+        }
+
+        GLint location = m_shaderResource->getUniformLocation(name);
+        if(location == -1)
+        {
+            return tl::nullopt;
+        }
+
+        return CUniform<T>(name, location);
+    }
+
 } // namespace chestnut::engine
