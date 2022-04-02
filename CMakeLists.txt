@@ -35,8 +35,20 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
     GIT_TAG release-2.0.4
 )
+FetchContent_Declare(
+    TL_Optional
+    GIT_REPOSITORY https://github.com/TartanLlama/optional
+    GIT_TAG v1.0.0
+)
 
-FetchContent_MakeAvailable(ChestnutECSCore SDL2 SDL2_image SDL2_ttf SDL2_mixer)
+FetchContent_MakeAvailable(
+    ChestnutECSCore 
+    SDL2 
+    SDL2_image 
+    SDL2_ttf 
+    SDL2_mixer
+    TL_Optional
+)
 
 
 # findOpenGL and findGLEW should come with CMake installation
@@ -65,13 +77,13 @@ target_link_libraries(${PROJECT_NAME} SDL2_image)
 target_link_libraries(${PROJECT_NAME} SDL2_ttf)
 target_link_libraries(${PROJECT_NAME} SDL2_mixer)
 
+target_include_directories(${PROJECT_NAME} PUBLIC ${tl_optional_SOURCE_DIR}/include)
+
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
-
-#TODO readd install targets later
 
 
 
