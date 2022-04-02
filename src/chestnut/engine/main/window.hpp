@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_WINDOW_H__
 #define __CHESTNUT_ENGINE_WINDOW_H__
 
-#include "../graphics/framebuffer.hpp"
+#include "../graphics/opengl/framebuffer.hpp"
 
 #include <string>
 

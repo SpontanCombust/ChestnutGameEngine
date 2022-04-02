@@ -1,10 +1,10 @@
 #ifndef __CHESTNUT_ENGINE_TEXTURE2D_H__
 #define __CHESTNUT_ENGINE_TEXTURE2D_H__
 
-#include "../resources/texture2d_resource.hpp"
-#include "../maths/rectangle.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/vector3.hpp"
+#include "../../resources/texture2d_resource.hpp"
+#include "../../maths/rectangle.hpp"
+#include "../../maths/vector2.hpp"
+#include "../../maths/vector3.hpp"
 
 namespace chestnut::engine
 {

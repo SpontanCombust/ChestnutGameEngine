@@ -2,7 +2,7 @@
 #define __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
 
 #include "renderer.hpp"
-#include "colored_polygon2d.hpp"
+#include "../colored_polygon2d.hpp"
 
 #include <unordered_map>
 #include <vector>

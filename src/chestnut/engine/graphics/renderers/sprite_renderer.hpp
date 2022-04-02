@@ -4,9 +4,9 @@
 #define __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 
 #include "renderer.hpp"
-#include "texture2d.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/matrix3.hpp"
+#include "../opengl/texture2d.hpp"
+#include "../../maths/vector2.hpp"
+#include "../../maths/matrix3.hpp"
 
 #include <vector>
 #include <unordered_map>

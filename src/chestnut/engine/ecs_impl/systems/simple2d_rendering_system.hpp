@@ -2,9 +2,9 @@
 #define __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
 
 #include "../rendering_system.hpp"
-#include "../../graphics/sprite_renderer.hpp"
-#include "../../graphics/colored_polygon2d_renderer.hpp"
-#include "../../graphics/text_renderer.hpp"
+#include "../../graphics/renderers/sprite_renderer.hpp"
+#include "../../graphics/renderers/colored_polygon2d_renderer.hpp"
+#include "../../graphics/renderers/text_renderer.hpp"
 #include "../../graphics/camera2d.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>

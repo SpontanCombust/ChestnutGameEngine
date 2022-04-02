@@ -4,7 +4,7 @@
 #include "../src/chestnut/engine/main/window.hpp"
 #include "../src/chestnut/engine/physics/collider2d.hpp"
 #include "../src/chestnut/engine/graphics/colored_polygon2d.hpp"
-#include "../src/chestnut/engine/graphics/colored_polygon2d_renderer.hpp"
+#include "../src/chestnut/engine/graphics/renderers/colored_polygon2d_renderer.hpp"
 #include "../src/chestnut/engine/maths/vector_cast.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 

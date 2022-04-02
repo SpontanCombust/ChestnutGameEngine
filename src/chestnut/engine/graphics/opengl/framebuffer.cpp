@@ -1,6 +1,6 @@
 #include "framebuffer.hpp"
 
-#include "../debug/log.hpp"
+#include "../../debug/log.hpp"
 
 namespace chestnut::engine
 {

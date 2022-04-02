@@ -1,8 +1,8 @@
 #include "text_renderer.hpp"
 
-#include "../debug/log.hpp"
-#include "../maths/vector_cast.hpp"
-#include "../macros.hpp"
+#include "../../debug/log.hpp"
+#include "../../maths/vector_cast.hpp"
+#include "../../macros.hpp"
 
 #include <unordered_map>
 

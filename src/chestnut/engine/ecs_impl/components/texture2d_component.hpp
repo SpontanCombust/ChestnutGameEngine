@@ -2,7 +2,7 @@
 #define __CHESTNUT_ENGINE_TEXTURE2D_COMPONENT_H__
 
 #include "../../maths/vector2.hpp"
-#include "../../graphics/texture2d.hpp"
+#include "../../graphics/opengl/texture2d.hpp"
 
 namespace chestnut::engine
 {

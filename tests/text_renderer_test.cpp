@@ -3,9 +3,9 @@
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/resources/font_resource.hpp"
 #include "../src/chestnut/engine/main/window.hpp"
-#include "../src/chestnut/engine/graphics/shader_program.hpp"
-#include "../src/chestnut/engine/graphics/sprite_renderer.hpp"
-#include "../src/chestnut/engine/graphics/text_renderer.hpp"
+#include "../src/chestnut/engine/graphics/opengl/shader_program.hpp"
+#include "../src/chestnut/engine/graphics/renderers/sprite_renderer.hpp"
+#include "../src/chestnut/engine/graphics/renderers/text_renderer.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 
 #include "test_utils.hpp"

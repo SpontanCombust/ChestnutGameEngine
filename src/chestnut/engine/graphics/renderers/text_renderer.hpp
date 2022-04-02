@@ -2,7 +2,7 @@
 #define __CHESTNUT_ENGINE_TEXT_RENDERER_H__
 
 #include "renderer.hpp"
-#include "text.hpp"
+#include "../text.hpp"
 
 #include <vector>
 

@@ -2,7 +2,7 @@
 #define __CHESTNUT_ENGINE_FRAMEBUFFER_H__
 
 #include "texture2d.hpp"
-#include "../maths/vector4.hpp"
+#include "../../maths/vector4.hpp"
 
 namespace chestnut::engine
 {

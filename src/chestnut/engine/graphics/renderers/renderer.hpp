@@ -1,9 +1,9 @@
 #ifndef __CHESTNUT_ENGINE_RENDERER_H__
 #define __CHESTNUT_ENGINE_RENDERER_H__
 
-#include "shader_program.hpp"
-#include "../maths/matrix4.hpp"
-#include "framebuffer.hpp"
+#include "../../maths/matrix4.hpp"
+#include "../opengl/shader_program.hpp"
+#include "../opengl/framebuffer.hpp"
 
 #include <GL/glew.h>
 

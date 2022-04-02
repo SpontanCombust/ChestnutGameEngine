@@ -1,12 +1,12 @@
 #ifndef __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
 #define __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
 
-#include "../maths/vector2.hpp"
-#include "../maths/vector3.hpp"
-#include "../maths/vector4.hpp"
-#include "../maths/matrix3.hpp"
-#include "../maths/matrix4.hpp"
-#include "../resources/shader_program_resource.hpp"
+#include "../../maths/vector2.hpp"
+#include "../../maths/vector3.hpp"
+#include "../../maths/vector4.hpp"
+#include "../../maths/matrix3.hpp"
+#include "../../maths/matrix4.hpp"
+#include "../../resources/shader_program_resource.hpp"
 
 #include <string>
 #include <unordered_map>

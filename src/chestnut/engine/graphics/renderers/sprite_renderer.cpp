@@ -1,7 +1,7 @@
 #include "sprite_renderer.hpp"
 
-#include "../debug/log.hpp"
-#include "../macros.hpp"
+#include "../../debug/log.hpp"
+#include "../../macros.hpp"
 
 namespace chestnut::engine
 {   
