@@ -14,7 +14,10 @@ namespace chestnut::engine
     public:
         enum ELayout
         {
+            // This type of buffer will need to have its attributes rebound whenever the buffer size changes
+            // and when new attributes get added
             STRUCT_OF_ARRAYS,
+            // This type of buffer needs to have its attributes rebound only when new attributes get added
             ARRAY_OF_STRUCTS
             // for now custom layouts are not supported
         };
@@ -43,7 +46,7 @@ namespace chestnut::engine
         void rebindAttributes();
 
 
-        void allocate(size_t size) override;
+        void reserve(size_t size) override;
 
 
     private:

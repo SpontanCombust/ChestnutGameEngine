@@ -25,13 +25,13 @@ namespace chestnut::engine
     {
         glGenBuffers(1, &m_id);
         m_usage = other.m_usage;
-        allocate(other.m_currentSize);
+        reserve(other.m_currentSize);
     }
 
     IBuffer& IBuffer::operator=(const IBuffer& other)
     {
         m_usage = other.m_usage;
-        allocate(other.m_currentSize);
+        reserve(other.m_currentSize);
         
         return *this;
     }
@@ -74,17 +74,20 @@ namespace chestnut::engine
         glBindBuffer(getTypeEnum(), 0);
     }
 
-    void IBuffer::allocate(size_t size)
+    void IBuffer::reserve(size_t size)
     {
+        bind();
         glBufferData(getTypeEnum(), size, NULL, m_usage);
         m_currentSize = size; 
     }
 
     void IBuffer::update(const void* data, size_t size, size_t offset)
     {
+        bind();
+        
         if(offset + size > m_currentSize)
         {
-            allocate(size + offset);
+            reserve(size + offset);
         }
         
         glBufferSubData(getTypeEnum(), offset, size, data);

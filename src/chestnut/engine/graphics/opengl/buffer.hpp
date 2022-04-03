@@ -37,7 +37,7 @@ namespace chestnut::engine
         void unbind();
 
 
-        virtual void allocate(size_t size);
+        virtual void reserve(size_t size);
 
         // If size exceeds current size, the buffer will be resized, but its current data will be lost
         // For better control use allocate() beforehand

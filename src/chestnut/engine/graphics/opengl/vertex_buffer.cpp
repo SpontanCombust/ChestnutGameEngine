@@ -70,6 +70,8 @@ namespace chestnut::engine
 
     void CVertexBuffer::rebindAttributes()
     {
+        bind();
+        
         if (m_layout == ELayout::STRUCT_OF_ARRAYS)
         {
             rebindAttributesSOA();
@@ -171,9 +173,9 @@ namespace chestnut::engine
         return GL_ARRAY_BUFFER;
     }
 
-    void CVertexBuffer::allocate(size_t size)
+    void CVertexBuffer::reserve(size_t size)
     {
-        IBuffer::allocate(size);
+        IBuffer::reserve(size);
 
         if(m_layout == ELayout::STRUCT_OF_ARRAYS)
         {

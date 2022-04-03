@@ -35,6 +35,7 @@ namespace chestnut::engine
 
         void addBuffer(std::shared_ptr<IBuffer> buffer);
 
+        // Recomposes VAO by binding all stored buffers and associated with them attributes
         void update();
         bool shouldUpdate() const;
     };
