@@ -43,8 +43,17 @@ namespace chestnut::engine
         
 
     public:
+        CBuffer();
         CBuffer(EType type, EUsage usage, ELayout layout);
         ~CBuffer();
+
+        CBuffer(const CBuffer& other);
+        CBuffer& operator=(const CBuffer& other);
+
+        // move consturctor and assign declarations
+        CBuffer(CBuffer&& other);
+        CBuffer& operator=(CBuffer&& other);
+
 
         void bind();
         void unbind();

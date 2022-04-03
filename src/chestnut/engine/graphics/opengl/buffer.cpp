@@ -5,16 +5,87 @@
 
 namespace chestnut::engine
 {
-    CBuffer::CBuffer(EType type, EUsage usage, ELayout layout)
-    : m_type(type), m_usage(usage), m_layout(layout), m_currentSize(0), m_shouldRebindAttribs(false)
+    CBuffer::CBuffer()
+    : m_type(EType::VERTEX), m_usage(EUsage::STATIC_DRAW), m_layout(ELayout::ARRAY_OF_STRUCTS)
     {
         glGenBuffers(1, &m_id);
+        m_currentSize = 0;
+        m_shouldRebindAttribs = false;
+    }
+
+    CBuffer::CBuffer(EType type, EUsage usage, ELayout layout)
+    : m_type(type), m_usage(usage), m_layout(layout)
+    {
+        glGenBuffers(1, &m_id);
+        m_currentSize = 0;
+        m_shouldRebindAttribs = false;
     }
 
     CBuffer::~CBuffer()
     {
         glDeleteBuffers(1, &m_id);
     }
+
+    CBuffer::CBuffer(const CBuffer& other)
+    {
+        glGenBuffers(1, &m_id);
+        m_type = other.m_type;
+        m_usage = other.m_usage;
+        m_layout = other.m_layout;
+        m_currentSize = other.m_currentSize;
+        m_shouldRebindAttribs = !other.m_vecVertexAttributes.empty(); // because it's a different buffer
+        m_vecVertexAttributes = other.m_vecVertexAttributes;
+    }
+
+    CBuffer& CBuffer::operator=(const CBuffer& other)
+    {
+        m_type = other.m_type;
+        m_usage = other.m_usage;
+        m_layout = other.m_layout;
+        m_currentSize = other.m_currentSize;
+        m_shouldRebindAttribs = !other.m_vecVertexAttributes.empty(); // because it's a different buffer
+        m_vecVertexAttributes = other.m_vecVertexAttributes;
+        
+        return *this;
+    }
+
+    CBuffer::CBuffer(CBuffer&& other)
+    {
+        m_id = other.m_id;
+        m_type = other.m_type;
+        m_usage = other.m_usage;
+        m_layout = other.m_layout;
+        m_currentSize = other.m_currentSize;
+        m_shouldRebindAttribs = other.m_shouldRebindAttribs; // because it's a different buffer
+        m_vecVertexAttributes = other.m_vecVertexAttributes;
+
+        other.m_id = 0;
+        other.m_currentSize = 0;
+        other.m_shouldRebindAttribs = false;
+        other.m_vecVertexAttributes.clear();
+    }
+
+    CBuffer& CBuffer::operator=(CBuffer&& other)
+    {
+        m_id = other.m_id;
+        m_type = other.m_type;
+        m_usage = other.m_usage;
+        m_layout = other.m_layout;
+        m_currentSize = other.m_currentSize;
+        m_shouldRebindAttribs = other.m_shouldRebindAttribs; // because it's a different buffer
+        m_vecVertexAttributes = other.m_vecVertexAttributes;
+
+        other.m_id = 0;
+        other.m_currentSize = 0;
+        other.m_shouldRebindAttribs = false;
+        other.m_vecVertexAttributes.clear();
+
+        return *this;
+    }
+
+
+
+
 
     void CBuffer::bind()
     {

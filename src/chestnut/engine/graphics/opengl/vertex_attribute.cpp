@@ -2,6 +2,12 @@
 
 namespace chestnut::engine
 {
+    CVertexAttribute::CVertexAttribute()
+    : m_name(""), m_location(-1), m_type(EType::FLOAT), m_length(0), m_divisor(0)
+    {
+
+    }
+
     CVertexAttribute::CVertexAttribute(const std::string& name, GLint location, EType type, GLint length, bool isInstanced)
     : m_name(name), m_location(location), m_type(type), m_length(length)
     {

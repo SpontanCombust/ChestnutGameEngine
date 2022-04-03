@@ -9,6 +9,13 @@
 namespace chestnut::engine
 {
     template<typename T>
+    CUniform<T>::CUniform()
+    : m_name(""), m_location(-1)
+    {
+
+    }
+
+    template<typename T>
     CUniform<T>::CUniform(const std::string& name, GLint location)
     : m_name(name), m_location(location)
     {

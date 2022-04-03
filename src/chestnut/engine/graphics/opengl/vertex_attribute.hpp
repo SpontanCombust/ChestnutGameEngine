@@ -25,8 +25,11 @@ namespace chestnut::engine
         GLuint m_divisor;
 
     public:
+        CVertexAttribute();
+
         template<typename T>
         static CVertexAttribute create(const std::string& name, GLint location, bool isInstanced);
+
 
         const std::string& getName() const;
         GLint getLocation() const;

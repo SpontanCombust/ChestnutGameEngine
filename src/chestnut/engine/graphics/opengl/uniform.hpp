@@ -16,6 +16,7 @@ namespace chestnut::engine
         GLint m_location;
 
     public:
+        CUniform();
         CUniform(const std::string& name, GLint location);
 
         void set(const T& value);
