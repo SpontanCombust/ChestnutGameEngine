@@ -10,7 +10,7 @@ namespace chestnut::engine
             return tl::nullopt;
         }
 
-        GLuint location = m_shaderResource->getAttributeLocation(name);
+        GLint location = m_shaderResource->getAttributeLocation(name);
         if(location == -1)
         {
             return tl::nullopt;

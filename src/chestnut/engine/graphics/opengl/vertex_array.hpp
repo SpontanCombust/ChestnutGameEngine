@@ -16,16 +16,24 @@ namespace chestnut::engine
     private:
         GLuint m_id;
 
-        std::vector<std::shared_ptr<CBuffer>> m_vecBuffers;
+        mutable bool m_shouldUpdate;
+        std::vector<std::shared_ptr<IBuffer>> m_vecBuffers;
 
     public:
         CVertexArray();
         ~CVertexArray();
 
+        CVertexArray(const CVertexArray& other);
+        CVertexArray& operator=(const CVertexArray& other);
+
+        CVertexArray(CVertexArray&& other);
+        CVertexArray& operator=(CVertexArray&& other);
+
+
         void bind();
         void unbind();
 
-        void addBuffer(std::shared_ptr<CBuffer> buffer);
+        void addBuffer(std::shared_ptr<IBuffer> buffer);
 
         void update();
         bool shouldUpdate() const;
