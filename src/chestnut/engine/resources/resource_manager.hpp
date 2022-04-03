@@ -1,9 +1,12 @@
 #ifndef __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
 #define __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
 
+#include "resource.hpp"
+
 #include <cstdint>
 #include <memory>
 #include <string>
+#include <typeindex>
 #include <unordered_map>
 
 namespace chestnut::engine
@@ -12,6 +15,7 @@ namespace chestnut::engine
     {
     private:
         static std::unordered_map< size_t, std::shared_ptr<IResource> > m_mapHashToResource;
+        static std::hash<std::string> m_pathHasher;
         
     public:
         // Forwards arguments to the resource type specified in template
@@ -34,6 +38,15 @@ namespace chestnut::engine
         static bool freeResource(Args&&... args);
 
         static void freeUnusedResources();
+
+
+    private:
+        static size_t hashPaths(const std::string& p);
+
+        template<typename ...Args>
+        static size_t hashPaths(const std::string& p, Args&& ...args);
+
+        static size_t hashType(std::type_index tindex);
     };
 
 } // namespace chestnut::engine
