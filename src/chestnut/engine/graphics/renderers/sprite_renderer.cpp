@@ -2,6 +2,8 @@
 
 #include "../../debug/log.hpp"
 #include "../../macros.hpp"
+#include "../../resources/resource_manager.hpp"
+#include "../../resources/shader_program_resource.hpp"
 
 namespace chestnut::engine
 {   
@@ -19,6 +21,26 @@ namespace chestnut::engine
 
 
 
+
+    bool CSpriteRenderer::setShaderProgram()
+    {
+        try
+        {
+            auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
+                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", 
+                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag"
+            );
+
+            m_shader = CShaderProgram(shader);
+        }
+        catch(const ChestnutException& e)
+        {
+            LOG_ERROR(e.what());
+            return false;
+        }
+        
+        return true;
+    }
 
     bool CSpriteRenderer::initBuffers() 
     {

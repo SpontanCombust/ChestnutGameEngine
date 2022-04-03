@@ -1,13 +1,35 @@
 #include "text_renderer.hpp"
 
-#include "../../debug/log.hpp"
 #include "../../maths/vector_cast.hpp"
+#include "../../debug/log.hpp"
 #include "../../macros.hpp"
+#include "../../resources/resource_manager.hpp"
+#include "../../resources/shader_program_resource.hpp"
 
 #include <unordered_map>
 
 namespace chestnut::engine
 {
+    bool CTextRenderer::setShaderProgram()
+    {
+        try
+        {
+            auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
+                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", 
+                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag"
+            );
+
+            m_shader = CShaderProgram(shader);
+        }
+        catch(const ChestnutException& e)
+        {
+            LOG_ERROR(e.what());
+            return false;
+        }
+        
+        return true;
+    }
+
     bool CTextRenderer::initBuffers() 
     {
         try

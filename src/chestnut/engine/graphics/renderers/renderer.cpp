@@ -4,14 +4,13 @@
 
 namespace chestnut::engine
 {    
-    void IRenderer::init( std::shared_ptr< CShaderProgramResource > shaderResource ) 
+    void IRenderer::init() 
     {
-        if( !shaderResource )
+        if( !setShaderProgram() )
         {
-            throw ChestnutException( "Invalid shader resource program passed to the renderer!" );
+            throw ChestnutException( "Failed to set renderer shader!" );
         }
 
-        m_shader = CShaderProgram( shaderResource );
         m_shader.bind();
 
         if( !initProjectionAndViewMatrices() )

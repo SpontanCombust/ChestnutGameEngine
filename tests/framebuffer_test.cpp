@@ -21,12 +21,12 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     REQUIRE( window.isValid() );
 
     CTextRenderer textRenderer;
-    REQUIRE_NOTHROW( textRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
+    REQUIRE_NOTHROW( textRenderer.init() );
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
 
     CSpriteRenderer spriteRenderer;
-    REQUIRE_NOTHROW( spriteRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
+    REQUIRE_NOTHROW( spriteRenderer.init() );
     spriteRenderer.setViewMatrix( mat4f() );
     spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
 

@@ -21,7 +21,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
     REQUIRE( window.isValid() );
 
     CSpriteRenderer renderer;
-    REQUIRE_NOTHROW( renderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
+    REQUIRE_NOTHROW( renderer.init() );
 
     CTexture2D tex;
     REQUIRE_NOTHROW( tex = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );

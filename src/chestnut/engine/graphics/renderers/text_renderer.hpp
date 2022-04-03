@@ -94,9 +94,9 @@ namespace chestnut::engine
 
 
     private:
-        void onInit() override;
-
+        bool setShaderProgram() override;
         bool initBuffers() override;
+        void onInit() override;
 
         void prepareBuffers();
     };

@@ -105,9 +105,9 @@ namespace chestnut::engine
         void render( const CFramebuffer& targetFramebuffer ) override;
 
     protected:
-        void onInit() override;
-
+        bool setShaderProgram() override;
         bool initBuffers() override;
+        void onInit() override;
 
         void prepareBuffers();
     };

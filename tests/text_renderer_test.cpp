@@ -26,7 +26,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[manual]" )
     REQUIRE( window.isValid() );
 
     CSpriteRenderer spriteRenderer;
-    REQUIRE_NOTHROW( spriteRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
+    REQUIRE_NOTHROW( spriteRenderer.init() );
 
     spriteRenderer.setViewMatrix( mat4f() );
     spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
@@ -109,7 +109,7 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
     REQUIRE( window.isValid() );
 
     CTextRenderer textRenderer;
-    REQUIRE_NOTHROW( textRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
+    REQUIRE_NOTHROW( textRenderer.init() );
 
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );

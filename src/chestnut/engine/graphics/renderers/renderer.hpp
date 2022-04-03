@@ -23,8 +23,9 @@ namespace chestnut::engine
         virtual ~IRenderer() = default;
 
         // Throws ChestnutException on error
-        //TODO renderers themselves know which shadere they should use
-        void init( std::shared_ptr< CShaderProgramResource > shaderResource );
+        // This method is here because we want to call virtual methods on initialization 
+        // and that shouldn't be done in the constructor
+        void init();
 
         void setProjectionMatrix( const mat4f& mat );
         void setViewMatrix( const mat4f& mat );
@@ -38,6 +39,7 @@ namespace chestnut::engine
 
 
     protected:
+        virtual bool setShaderProgram() = 0;
         // Set variable locations for view and projection matrices
         virtual bool initProjectionAndViewMatrices();
         // Called on initialization to setup buffers for further use
