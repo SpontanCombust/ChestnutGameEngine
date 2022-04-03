@@ -2,7 +2,7 @@
 
 namespace chestnut::engine
 {
-    CVertexAttribute::CVertexAttribute(std::string name, GLint location, EType type, GLint length, bool isInstanced)
+    CVertexAttribute::CVertexAttribute(const std::string& name, GLint location, EType type, GLint length, bool isInstanced)
     : m_name(name), m_location(location), m_type(type), m_length(length)
     {
         if(isInstanced)
@@ -39,12 +39,6 @@ namespace chestnut::engine
     {
         switch(m_type)
         {
-        case EType::BYTE:
-        case EType::UBYTE:
-            return 1;
-        case EType::SHORT:
-        case EType::USHORT:
-            return 2;
         case EType::INT:
         case EType::UINT:
         case EType::FLOAT:

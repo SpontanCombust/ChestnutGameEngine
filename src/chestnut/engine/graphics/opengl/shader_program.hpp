@@ -57,8 +57,8 @@ namespace chestnut::engine
         void setMatrix4f( GLint loc, const mat4f& val );
 
 
-        template<typename T, GLuint size>
-        tl::optional<CVertexAttribute> getAttribute(const char *name, GLuint divisor = 0);
+        template<typename T>
+        tl::optional<CVertexAttribute> getAttribute(const char *name, bool isInstanced = false);
 
         template<typename T>
         tl::optional<CUniform<T>> getUniform(const char *name);

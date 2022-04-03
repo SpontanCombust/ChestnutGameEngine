@@ -2,7 +2,6 @@
 #define __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_H__
 
 #include <GL/glew.h>
-#include <tl/optional.hpp>
 
 #include <string>
 
@@ -13,10 +12,6 @@ namespace chestnut::engine
     public:
         enum EType
         {
-            BYTE    = GL_BYTE,
-            UBYTE   = GL_UNSIGNED_BYTE,
-            SHORT   = GL_SHORT,
-            USHORT  = GL_UNSIGNED_SHORT,
             INT     = GL_INT,
             UINT    = GL_UNSIGNED_INT,
             FLOAT   = GL_FLOAT
@@ -30,7 +25,8 @@ namespace chestnut::engine
         GLuint m_divisor;
 
     public:
-        CVertexAttribute(std::string name, GLint location, EType type, GLint length, bool isInstanced);
+        template<typename T>
+        static CVertexAttribute create(const std::string& name, GLint location, bool isInstanced);
 
         const std::string& getName() const;
         GLint getLocation() const;
@@ -39,8 +35,8 @@ namespace chestnut::engine
         GLint getLength() const;
         GLuint getDivisor() const;
 
-        template<typename T>
-        static tl::optional<EType> deduceTypeEnum();
+    private:
+        CVertexAttribute(const std::string& name, GLint location, EType type, GLint length, bool isInstanced);
     };
 
 } // namespace chestnut::engine

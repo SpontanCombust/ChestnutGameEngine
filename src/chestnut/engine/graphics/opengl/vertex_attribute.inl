@@ -1,40 +1,59 @@
+#include "../../maths/vector2.hpp"
+#include "../../maths/vector3.hpp"
+#include "../../maths/vector4.hpp"
+
 #include <type_traits>
 
 namespace chestnut::engine
 {
     template<typename T>
-    tl::optional<CVertexAttribute::EType> CVertexAttribute::deduceTypeEnum()
+    CVertexAttribute CVertexAttribute::create(const std::string& name, GLint location, bool isInstanced)
     {
-        if constexpr(std::is_same_v<T, GLbyte>)
+        EType type;
+        GLint length;
+
+        if constexpr(std::is_same_v<T, int>)
         {
-            return CVertexAttribute::EType::BYTE;
+            type = EType::INT;
+            length = 1;
         }
-        if constexpr(std::is_same_v<T, GLubyte>)
+        else if constexpr(std::is_same_v<T, vec2i>)
         {
-            return CVertexAttribute::EType::UBYTE;
+            type = EType::INT;
+            length = 2;
         }
-        if constexpr(std::is_same_v<T, GLshort>)
+        else if constexpr(std::is_same_v<T, unsigned int>)
         {
-            return CVertexAttribute::EType::SHORT;
+            type = EType::UINT;
+            length = 1;
         }
-        if constexpr(std::is_same_v<T, GLushort>)
+        else if constexpr(std::is_same_v<T, float>)
         {
-            return CVertexAttribute::EType::USHORT;
+            type = EType::FLOAT;
+            length = 1;
         }
-        if constexpr(std::is_same_v<T, GLint>)
+        else if constexpr(std::is_same_v<T, vec2f>)
         {
-            return CVertexAttribute::EType::INT;
+            type = EType::FLOAT;
+            length = 2;
         }
-        if constexpr(std::is_same_v<T, GLuint>)
+        else if constexpr(std::is_same_v<T, vec3f>)
         {
-            return CVertexAttribute::EType::UINT;
+            type = EType::FLOAT;
+            length = 3;
         }
-        if constexpr(std::is_same_v<T, GLfloat>)
+        else if constexpr(std::is_same_v<T, vec4f>)
         {
-            return CVertexAttribute::EType::FLOAT;
+            type = EType::FLOAT;
+            length = 4;
+        }
+        else
+        {
+            static_assert(sizeof(T) == 0, "Template type not supported as vertex attribute type!");
         }
         
-        return tl::nullopt;
+
+        return CVertexAttribute(name, location, type, length, isInstanced);
     }
 
 } // namespace chestnut::engine
