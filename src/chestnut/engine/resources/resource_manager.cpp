@@ -23,4 +23,9 @@ namespace chestnut::engine
         }
     }
 
+    void CResourceManager::freeAllResources()
+    {
+        m_mapHashToResource.clear();
+    }
+
 } // namespace chestnut::engine

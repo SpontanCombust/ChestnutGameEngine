@@ -38,6 +38,8 @@ namespace chestnut::engine
         static bool freeResource(Args&&... args);
 
         static void freeUnusedResources();
+        // If something is still using one of the resources it won't be freed until that something lets go of it 
+        static void freeAllResources();
 
 
     private:

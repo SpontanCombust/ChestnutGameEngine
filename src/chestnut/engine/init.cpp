@@ -1,5 +1,8 @@
 #include "init.hpp"
 
+#include "debug/log.hpp"
+#include "resources/resource_manager.hpp"
+
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
@@ -7,7 +10,6 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
-#include "debug/log.hpp"
 
 namespace chestnut::engine
 {
@@ -93,6 +95,14 @@ namespace chestnut::engine
 
     void chestnutQuit()
     {
+        // When you delete the current OpenGL context, create a new one and then try to GET a resource
+        // it will give you a resource associated with the previous context, because it was not freed.
+        // In order to prevent this we have to free all the resources that are associated with
+        // the current context when we delete said context. It should be done in the window class,
+        // as that's where the context is created, but this will do for now as I don't intend this engine to work
+        // with multiple windows (and with that multiple OpenGL contexts).
+        CResourceManager::freeAllResources();
+
         if( wasInit )
         {
             Mix_CloseAudio();
