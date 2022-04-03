@@ -22,13 +22,11 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 
     CTextRenderer textRenderer;
     REQUIRE_NOTHROW( textRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag" ) ) );
-    textRenderer.bindShader();
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
 
     CSpriteRenderer spriteRenderer;
     REQUIRE_NOTHROW( spriteRenderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag" ) ) );
-    spriteRenderer.bindShader();
     spriteRenderer.setViewMatrix( mat4f() );
     spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, window.getSizeWidth(), window.getSizeHeight(), 0, -1, 1 ) ); 
 
@@ -43,7 +41,6 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     text.generateData();
 
     window.clear();
-        textRenderer.bindShader();
         textRenderer.clear();
         textRenderer.submitText( text, vec2f{ 50.f, 50.f } );
         textRenderer.render( window.getFramebuffer() );
@@ -60,10 +57,8 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     blankFramebuffer.clear();
 
     window.clear();
-        textRenderer.bindShader();
         textRenderer.render( blankFramebuffer ); // retains the render data from previous pass
 
-        spriteRenderer.bindShader();
         spriteRenderer.submitSprite( blank, vec2f( 0.f ) );
         spriteRenderer.render( window.getFramebuffer() );
     window.flipBuffer();

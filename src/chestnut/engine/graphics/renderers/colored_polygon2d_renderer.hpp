@@ -3,6 +3,9 @@
 
 #include "renderer.hpp"
 #include "../colored_polygon2d.hpp"
+#include "../opengl/vertex_buffer.hpp"
+#include "../opengl/index_buffer.hpp"
+#include "../opengl/vertex_array.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -61,21 +64,15 @@ namespace chestnut::engine
         std::unordered_map< GLenum, SColoredPolygon2DRender_VertexGroup > m_mapDrawModeToVertexGroup;
         std::vector< SColoredPolygon2DRender_Batch > m_vecBatches;
 
-        GLuint m_vbo;
-        GLuint m_ebo;
-        GLuint m_vao;
+        std::shared_ptr<CVertexBuffer> m_vbo;
+        std::shared_ptr<CIndexBuffer> m_ibo;
+        CVertexArray m_vao;
 
         GLsizei m_polygonVertexCapacity;
         GLsizei m_vertexIndexCapacity;
 
-        GLint m_attrVertPosLoc;
-        GLint m_attrVertColorLoc;
-        GLint m_attrVertTranslLoc;
-        GLint m_attrVertScaleLoc;
-        GLint m_attrVertRotLoc;
 
     public:
-        // requires bound renderer shader
         void reserveBufferSpace( GLsizei targetPolygonVertexCapacity, GLsizei targetVertexIndexCapacity );
 
         void clear() override;
@@ -84,22 +81,16 @@ namespace chestnut::engine
         
         void submitPolygon( const SMulticoloredPolygon2D& polygonModel, const vec2f& translation, const vec2f& scale = { 1.f, 1.f }, float rotation = 0.f );
 
-        // requires bound renderer shader
         void render() override;
 
-        // requires bound renderer shader
         void render( const CFramebuffer& targetFramebuffer ) override;
 
     private:
         void onInit() override;
 
-        bool setShaderVariableLocations() override;
-
-        void initBuffers() override;
+        bool initBuffers() override;
 
         void prepareBuffers();
-
-        void deleteBuffers() override;
     };
 
 } // namespace chestnut::engine

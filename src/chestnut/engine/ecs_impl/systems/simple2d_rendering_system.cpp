@@ -247,7 +247,6 @@ namespace chestnut::engine
     {
         getEngine().getWindow().clear();
         
-        m_spriteRenderer.bindShader();
         m_camera.calculateMatrices();
         m_spriteRenderer.setViewMatrix( m_camera.getViewMatrix() );
         m_spriteRenderer.setProjectionMatrix( m_camera.getProjectionMatrix() );
@@ -257,7 +256,6 @@ namespace chestnut::engine
 #endif
 
         m_spriteRenderer.render( getEngine().getWindow().getFramebuffer() );
-        m_spriteRenderer.unbindShader();
 
         getEngine().getWindow().flipBuffer();
     }

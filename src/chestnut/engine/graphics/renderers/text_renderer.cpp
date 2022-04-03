@@ -8,55 +8,52 @@
 
 namespace chestnut::engine
 {
+    bool CTextRenderer::initBuffers() 
+    {
+        try
+        {
+            m_vbo = std::make_shared<CVertexBuffer>(
+                CVertexBuffer::EUsage::DYNAMIC_DRAW,
+                CVertexBuffer::ELayout::ARRAY_OF_STRUCTS
+            );
+            m_ibo = std::make_shared<CIndexBuffer>(
+                CIndexBuffer::EUsage::STATIC_DRAW
+            );
+
+            m_vbo->addAttribute(m_shader.getAttribute<vec3f>( "avColor" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avPos" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avUV" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avTranslation" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avScale" ).value());
+            m_vao.addBuffer(m_vbo);
+
+            m_vao.addBuffer(m_ibo);
+
+            m_vao.update();
+        }
+        catch(const tl::bad_optional_access& e)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     void CTextRenderer::onInit() 
     {
         m_glyphCapacity = 0;
         reserveBufferSpace( CHESTNUT_TEXT_RENDERER_INIT_GLYPH_CAPACITY );
     }
 
-    void CTextRenderer::deleteBuffers() 
-    {
-        glDeleteVertexArrays( 1, &m_vao );
-        glDeleteBuffers( 1, &m_ebo );
-        glDeleteBuffers( 1, &m_vbo );
-    }
-
-    void CTextRenderer::initBuffers() 
-    {
-        glGenBuffers( 1, &m_vbo );
-        glGenBuffers( 1, &m_ebo );
-        glGenVertexArrays( 1, &m_vao );
-
-        glBindVertexArray( m_vao );
-
-            glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-            glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
-
-            glEnableVertexAttribArray( m_attrVertColorLoc );
-            glVertexAttribPointer( m_attrVertColorLoc, 3, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, color ) );
-
-            glEnableVertexAttribArray( m_attrVertPosLoc );
-            glVertexAttribPointer( m_attrVertPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, pos ) );
-
-            glEnableVertexAttribArray( m_attrVertUVLoc );
-            glVertexAttribPointer( m_attrVertUVLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, uv ) );
-
-            glEnableVertexAttribArray( m_attrVertTranslationLoc );
-            glVertexAttribPointer( m_attrVertTranslationLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, translation ) );
-
-            glEnableVertexAttribArray( m_attrVertScaleLoc );
-            glVertexAttribPointer( m_attrVertScaleLoc, 2, GL_FLOAT, GL_FALSE, sizeof( STextRender_Vertex ), (void *)offsetof( STextRender_Vertex, scale ) );
-
-        glBindVertexArray( 0 );
-    }
-
     void CTextRenderer::reserveBufferSpace( GLsizei targetGlyphCapacity ) 
     {
+        m_shader.bind();
+
         if( targetGlyphCapacity > m_glyphCapacity )
         {
-            glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-            glBufferData( GL_ARRAY_BUFFER, targetGlyphCapacity * sizeof( STextRender_Vertex ) * 4, nullptr, GL_DYNAMIC_DRAW );
-
+            m_vbo->reserve(
+                targetGlyphCapacity * sizeof( STextRender_Vertex ) * 4
+            );
 
             std::vector< GLuint > vecElements;
             GLuint elementOffset = 0;
@@ -72,38 +69,13 @@ namespace chestnut::engine
                 elementOffset += 4;
             }
             
-            glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
-            glBufferData( GL_ELEMENT_ARRAY_BUFFER, targetGlyphCapacity * sizeof( GLuint ) * 6, vecElements.data(), GL_STATIC_DRAW );
-
-
-            GLenum err = glGetError();
-            if( err != GL_NO_ERROR )
-            {
-                LOG_ERROR( "Error occured while initializing buffers: " << gluErrorString( err ) );
-            }
-
+            m_ibo->update(
+                vecElements.data(),
+                targetGlyphCapacity * sizeof( GLuint ) * 6
+            );
+            
             m_glyphCapacity = targetGlyphCapacity;
         }
-    }
-
-    bool CTextRenderer::setShaderVariableLocations() 
-    {
-        m_attrVertPosLoc            = m_shader.getAttributeLocation( "avPos" );
-        m_attrVertUVLoc             = m_shader.getAttributeLocation( "avUV" );
-        m_attrVertColorLoc          = m_shader.getAttributeLocation( "avColor" );
-        m_attrVertTranslationLoc    = m_shader.getAttributeLocation( "avTranslation" );
-        m_attrVertScaleLoc          = m_shader.getAttributeLocation( "avScale" );
-
-        if(    m_attrVertPosLoc         == -1 
-            || m_attrVertUVLoc          == -1
-            || m_attrVertColorLoc       == -1
-            || m_attrVertTranslationLoc == -1
-            || m_attrVertScaleLoc       == -1 )
-        {
-            return false;
-        }
-
-        return true;
     }
 
     void CTextRenderer::clear() 
@@ -184,14 +156,17 @@ namespace chestnut::engine
         GLint elementOffset = 0;
         STextRender_Batch batch;
 
-        glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
         for( const auto& vertexGroup : m_vecVertexGroups )
         {
             vertexCount = vertexGroup.vecVertices.size();
             vertexSizeBytes = sizeof( STextRender_Vertex ) * vertexCount;
             elementCount = vertexCount / 4 * 6;
 
-            glBufferSubData( GL_ARRAY_BUFFER, vertexOffsetBytes, vertexSizeBytes, vertexGroup.vecVertices.data() );
+            m_vbo->update(
+                vertexGroup.vecVertices.data(),
+                vertexSizeBytes,
+                vertexOffsetBytes
+            );
 
             batch.texID = vertexGroup.texID;
             batch.elementCount = elementCount;
@@ -206,11 +181,13 @@ namespace chestnut::engine
 
     void CTextRenderer::render() 
     {
+        m_shader.bind();
+
         prepareBuffers();
 
         GLuint previousTexID = 0;
 
-        glBindVertexArray( m_vao );
+        m_vao.bind();
         for( const STextRender_Batch& batch : m_vecBatches )
         {
             if( batch.texID != previousTexID )
@@ -222,18 +199,20 @@ namespace chestnut::engine
             
             previousTexID = batch.texID;
         }
-        glBindVertexArray(0);
+        m_vao.unbind();
     }
 
     void CTextRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
+        m_shader.bind();
+
         prepareBuffers();
 
         GLuint previousTexID = 0;
 
         targetFramebuffer.bind();
 
-        glBindVertexArray( m_vao );
+        m_vao.bind();
         for( const STextRender_Batch& batch : m_vecBatches )
         {
             if( batch.texID != previousTexID )
@@ -245,7 +224,7 @@ namespace chestnut::engine
             
             previousTexID = batch.texID;
         }
-        glBindVertexArray(0);
+        m_vao.unbind();
 
         targetFramebuffer.unbind();
     }

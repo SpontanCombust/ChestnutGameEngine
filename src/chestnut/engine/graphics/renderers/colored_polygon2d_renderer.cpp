@@ -5,33 +5,30 @@
 
 namespace chestnut::engine
 {
-    void CColoredPolygon2DRenderer::onInit() 
+    bool CColoredPolygon2DRenderer::initBuffers() 
     {
-        m_polygonVertexCapacity = 0;
-        m_vertexIndexCapacity = 0;
-        reserveBufferSpace( CHESTNUT_POLYGON_RENDERER_INIT_VERTEX_CAPACITY, CHESTNUT_POLYGON_RENDERER_INIT_INDEX_CAPACITY );
-    }
+        try
+        {
+            m_vbo = std::make_shared<CVertexBuffer>(
+                CVertexBuffer::EUsage::DYNAMIC_DRAW,
+                CVertexBuffer::ELayout::ARRAY_OF_STRUCTS
+            );
+            m_ibo = std::make_shared<CIndexBuffer>(
+                CIndexBuffer::EUsage::DYNAMIC_DRAW
+            );
 
-    void CColoredPolygon2DRenderer::deleteBuffers() 
-    {
-        glDeleteVertexArrays( 1, &m_vao );
-        glDeleteBuffers( 1, &m_ebo );
-        glDeleteBuffers( 1, &m_vbo );
-    }
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avPos" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec4f>( "avColor" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avTransl" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avScale" ).value());
+            m_vbo->addAttribute(m_shader.getAttribute<float>( "avRot" ).value());
+            m_vao.addBuffer(m_vbo);
 
-    bool CColoredPolygon2DRenderer::setShaderVariableLocations()
-    {
-        m_attrVertPosLoc = m_shader.getAttributeLocation( "avPos" );
-        m_attrVertColorLoc = m_shader.getAttributeLocation( "avColor" );
-        m_attrVertTranslLoc = m_shader.getAttributeLocation( "avTransl" );
-        m_attrVertScaleLoc = m_shader.getAttributeLocation( "avScale" );
-        m_attrVertRotLoc = m_shader.getAttributeLocation( "avRot" );
+            m_vao.addBuffer(m_ibo);
 
-        if(    m_attrVertPosLoc     == -1
-            || m_attrVertColorLoc   == -1
-            || m_attrVertTranslLoc  == -1
-            || m_attrVertScaleLoc   == -1
-            || m_attrVertRotLoc     == -1 )
+            m_vao.update();
+        }
+        catch(const tl::bad_optional_access& e)
         {
             return false;
         }
@@ -39,54 +36,26 @@ namespace chestnut::engine
         return true;
     }
 
-    void CColoredPolygon2DRenderer::initBuffers() 
+    void CColoredPolygon2DRenderer::onInit() 
     {
-        glGenBuffers( 1, &m_vbo );
-        glGenBuffers( 1, &m_ebo );
-        glGenVertexArrays( 1, &m_vao );
-
-        glBindVertexArray( m_vao );
-
-            glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-            glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
-
-            glEnableVertexAttribArray( m_attrVertPosLoc );
-            glVertexAttribPointer( m_attrVertPosLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, position ) );
-
-            glEnableVertexAttribArray( m_attrVertColorLoc );
-            glVertexAttribPointer( m_attrVertColorLoc, 4, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, color ) );
-
-            glEnableVertexAttribArray( m_attrVertTranslLoc );
-            glVertexAttribPointer( m_attrVertTranslLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, translation ) );
-
-            glEnableVertexAttribArray( m_attrVertScaleLoc );
-            glVertexAttribPointer( m_attrVertScaleLoc, 2, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, scale ) );
-
-            glEnableVertexAttribArray( m_attrVertRotLoc );
-            glVertexAttribPointer( m_attrVertRotLoc, 1, GL_FLOAT, GL_FALSE, sizeof( SColoredPolygon2DRender_Vertex ), (void *)offsetof( SColoredPolygon2DRender_Vertex, rotation ) );
-
-        glBindVertexArray(0);
+        m_polygonVertexCapacity = 0;
+        m_vertexIndexCapacity = 0;
+        reserveBufferSpace( CHESTNUT_POLYGON_RENDERER_INIT_VERTEX_CAPACITY, CHESTNUT_POLYGON_RENDERER_INIT_INDEX_CAPACITY );
     }
 
     void CColoredPolygon2DRenderer::reserveBufferSpace( GLsizei targetPolygonVertexCapacity, GLsizei targetVertexIndexCapacity ) 
     {
+        m_shader.bind();
+
         if( targetPolygonVertexCapacity > m_polygonVertexCapacity )
         {
-            glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-            glBufferData( GL_ARRAY_BUFFER, sizeof( SColoredPolygon2DRender_Vertex ) * targetPolygonVertexCapacity, nullptr, GL_DYNAMIC_DRAW );
+            m_vbo->reserve(sizeof( SColoredPolygon2DRender_Vertex ) * targetPolygonVertexCapacity);
             m_polygonVertexCapacity = targetPolygonVertexCapacity;
         }
         if( targetVertexIndexCapacity > m_vertexIndexCapacity )
         {
-            glBindBuffer( GL_ARRAY_BUFFER, m_ebo );
-            glBufferData( GL_ARRAY_BUFFER, sizeof( GLuint ) * targetVertexIndexCapacity, nullptr, GL_DYNAMIC_DRAW );
+            m_ibo->reserve(sizeof( GLuint ) * targetVertexIndexCapacity);
             m_vertexIndexCapacity = targetVertexIndexCapacity;
-        }
-
-        GLenum err = glGetError();
-        if( err != GL_NO_ERROR )
-        {
-            LOG_ERROR( "Error occured while reserving buffer space: " << gluErrorString( err ) );
         }
     }
 
@@ -235,29 +204,33 @@ namespace chestnut::engine
 
             // we have to add one more offset to indices of a vertex group
             // the way it is done now with single buffer with contiguous sections for specific drawing modes
-            // and a map to store the data for these modes, there's not an easy way of storing valid indices
+            // and a map to store the data for these modes, there's no easy way of storing valid indices
             // if we can submit polygons with different drawing modes in random order
             // that's why here when we're going over every draw mode in the map we keep track of previously
-            // checked vertex group index count and apply an offset to the next one to make these groups be contiguous in the EBO
+            // checked vertex group index count and apply an offset to the next one to make these groups be contiguous in the IBO
             // and to not overwrite each other
             for( GLuint& index : vertexGroup.vecRenderIndices )
             {
                 index += vertexOffset;
             }
 
-            glBindBuffer( GL_ARRAY_BUFFER, m_vbo );
-            glBufferSubData( GL_ARRAY_BUFFER, sizeof( SColoredPolygon2DRender_Vertex ) * vertexOffset, sizeof( SColoredPolygon2DRender_Vertex ) * vertexCount, vertexGroup.vecRenderVertices.data() );
+            m_vbo->update(
+                vertexGroup.vecRenderVertices.data(),
+                sizeof( SColoredPolygon2DRender_Vertex ) * vertexCount,
+                sizeof( SColoredPolygon2DRender_Vertex ) * vertexOffset
+            );
 
-            glBindBuffer( GL_ELEMENT_ARRAY_BUFFER, m_ebo );
-            glBufferSubData( GL_ELEMENT_ARRAY_BUFFER, sizeof( GLuint ) * indexOffset, sizeof( GLuint ) * indexCount, vertexGroup.vecRenderIndices.data() );
-
+            m_ibo->update(
+                vertexGroup.vecRenderIndices.data(),
+                sizeof( GLuint ) * indexCount,
+                sizeof( GLuint ) * indexOffset
+            );
 
             SColoredPolygon2DRender_Batch batch;
             batch.drawMode = drawMode;
             batch.indexCount = indexCount;
             batch.indexOffset = indexOffset;
             m_vecBatches.push_back( batch );
-
 
             vertexOffset += vertexCount;
             indexOffset += indexCount;
@@ -267,28 +240,32 @@ namespace chestnut::engine
 
     void CColoredPolygon2DRenderer::render() 
     {
+        m_shader.bind();
+
         prepareBuffers();
 
-        glBindVertexArray( m_vao );
+        m_vao.bind();
             for( const SColoredPolygon2DRender_Batch& batch : m_vecBatches )
             {
                 glDrawElements( batch.drawMode, batch.indexCount, GL_UNSIGNED_INT, ( void * )( sizeof( GLuint ) * batch.indexOffset ) );
             }
-        glBindVertexArray(0);
+        m_vao.unbind();
     }
 
     void CColoredPolygon2DRenderer::render( const CFramebuffer& targetFramebuffer ) 
     {
+        m_shader.bind();
+
         prepareBuffers();
 
         targetFramebuffer.bind();
         
-        glBindVertexArray( m_vao );
+        m_vao.bind();
             for( const SColoredPolygon2DRender_Batch& batch : m_vecBatches )
             {
                 glDrawElements( batch.drawMode, batch.indexCount, GL_UNSIGNED_INT, ( void * )( sizeof( GLuint ) * batch.indexOffset ) );
             }
-        glBindVertexArray(0);
+        m_vao.unbind();
 
         targetFramebuffer.unbind();
     }

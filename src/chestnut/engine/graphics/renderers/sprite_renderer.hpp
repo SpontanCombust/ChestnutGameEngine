@@ -5,9 +5,15 @@
 
 #include "renderer.hpp"
 #include "../opengl/texture2d.hpp"
+#include "../opengl/vertex_buffer.hpp"
+#include "../opengl/index_buffer.hpp"
+#include "../opengl/uniform.hpp"
+#include "../opengl/vertex_array.hpp"
 #include "../../maths/vector2.hpp"
-#include "../../maths/matrix3.hpp"
+#include "../../maths/vector3.hpp"
+#include "../../maths/vector4.hpp"
 
+#include <memory>
 #include <vector>
 #include <unordered_map>
 
@@ -51,10 +57,10 @@ namespace chestnut::engine
             vec2f origin;
             vec2f transl;
             vec2f scale;
+            float rot;
             vec4f clipRect;
             vec3f tint;
             float tintFactor;
-            float rot;
         };
 
         struct SSpriteRender_InstanceGroup
@@ -76,52 +82,34 @@ namespace chestnut::engine
         std::unordered_map< GLuint, SSpriteRender_InstanceGroup > m_mapTexIDToInstanceGroup;
         std::vector< SSpriteRender_Batch > m_vecBatches;
 
-        GLuint m_vao;
-        GLuint m_vboVert;
-        GLuint m_vboInst;
-        GLuint m_ebo;
+        std::shared_ptr<CVertexBuffer> m_vboInst;
+        CVertexArray m_vao;
+        CUniform<vec2f> m_unifTexSize;
+
         GLsizei m_spriteCapacity;
-
-
-        GLint m_attrVertPosLoc;
-        GLint m_attrVertUVPosLoc;
-
-        GLint m_unifTexSizeLoc;
-
-        GLint m_attrInstOriginLoc;
-        GLint m_attrInstTranslLoc;
-        GLint m_attrInstScaleLoc;
-        GLint m_attrInstRotLoc;
-        GLint m_attrInstClipRectLoc;
-        GLint m_attrInstTint;
-        GLint m_attrInstTintFactor;
-
 
         CTexture2D m_missingTexturePlaceholder;
         
 
     public:
-        // requires bound renderer shader
+        CSpriteRenderer() = default;
+
         void reserveBufferSpace( GLsizei targetSpriteCapacity );
 
         void clear() override;
         // Origin values should be in range <0;1> representing the normalized texture coordinate from which it should be transformed 
         void submitSprite( const CTexture2D& texture, const vec2f& translation, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
-        // requires bound renderer shader
+        
         void render() override;
-        // requires bound renderer shader
+        
         void render( const CFramebuffer& targetFramebuffer ) override;
 
     protected:
         void onInit() override;
 
-        bool setShaderVariableLocations() override;
-
-        void initBuffers() override;
+        bool initBuffers() override;
 
         void prepareBuffers();
-
-        void deleteBuffers() override;
     };
 
 } // namespace chestnut::engine

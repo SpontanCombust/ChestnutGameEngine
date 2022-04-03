@@ -3,9 +3,11 @@
 
 #include "../../maths/matrix4.hpp"
 #include "../opengl/shader_program.hpp"
+#include "../opengl/uniform.hpp"
 #include "../opengl/framebuffer.hpp"
 
 #include <GL/glew.h>
+
 
 namespace chestnut::engine
 {
@@ -14,21 +16,17 @@ namespace chestnut::engine
     protected:
         CShaderProgram m_shader;
 
-        GLint m_unifViewLoc;
-        GLint m_unifProjectionLoc;
+        CUniform<mat4f> m_unifView;
+        CUniform<mat4f> m_unifProjection;
 
     public:
-        virtual ~IRenderer();
+        virtual ~IRenderer() = default;
 
         // Throws ChestnutException on error
+        //TODO renderers themselves know which shadere they should use
         void init( std::shared_ptr< CShaderProgramResource > shaderResource );
 
-        void bindShader();
-        void unbindShader();
-
-        // requires bound renderer shader
         void setProjectionMatrix( const mat4f& mat );
-        // requires bound renderer shader
         void setViewMatrix( const mat4f& mat );
 
         // Method called to clear all the data used to render stuff
@@ -40,15 +38,12 @@ namespace chestnut::engine
 
 
     protected:
-        virtual void onInit() = 0;
         // Set variable locations for view and projection matrices
-        virtual bool setProjectionAndViewMatrixLocations();
-        // Called on initialization to fetch custom shader variables' locations
-        virtual bool setShaderVariableLocations() = 0;
+        virtual bool initProjectionAndViewMatrices();
         // Called on initialization to setup buffers for further use
-        virtual void initBuffers() = 0;
-        // Called on renderer destruction
-        virtual void deleteBuffers() {};
+        virtual bool initBuffers() = 0;
+        // called after buffers are initialized
+        virtual void onInit() {}
     };
 
 } // namespace chestnut::engine

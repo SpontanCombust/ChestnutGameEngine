@@ -14,60 +14,48 @@ namespace chestnut::engine
         m_shader = CShaderProgram( shaderResource );
         m_shader.bind();
 
-        if( !setProjectionAndViewMatrixLocations() )
+        if( !initProjectionAndViewMatrices() )
         {
             throw ChestnutException( "Failed to set shader locations for projection and view matrice uniforms!" );
         }
 
         // Initialize matrices
-        m_shader.setMatrix4f( m_unifProjectionLoc, mat4f() );
-        m_shader.setMatrix4f( m_unifViewLoc, mat4f() );
+        setViewMatrix(mat4f());
+        setProjectionMatrix(mat4f());
 
-        if( !setShaderVariableLocations() )
+        if( !initBuffers() )
         {
-            throw ChestnutException( "Failed to set shader locations for attributes and/or uniforms!" );
+            throw ChestnutException( "Failed to initialize buffers!" );
         }
-
-        initBuffers();
 
         onInit();
     }
 
-    IRenderer::~IRenderer() 
+    bool IRenderer::initProjectionAndViewMatrices() 
     {
-        deleteBuffers();
-    }
-
-    void IRenderer::bindShader() 
-    {
-        m_shader.bind();
-    }
-
-    void IRenderer::unbindShader() 
-    {
-        m_shader.unbind();
-    }
-
-    bool IRenderer::setProjectionAndViewMatrixLocations() 
-    {
-        m_unifViewLoc       = m_shader.getUniformLocation( "uView" );
-        m_unifProjectionLoc = m_shader.getUniformLocation( "uProjection" );
-
-        if( m_unifViewLoc == -1 || m_unifProjectionLoc  == -1 )
+        try
+        {
+            m_unifView = m_shader.getUniform<mat4f>( "uView" ).value();
+            m_unifProjection = m_shader.getUniform<mat4f>( "uProjection" ).value();
+        }
+        catch(const tl::bad_optional_access& e)
         {
             return false;
         }
+       
         return true;
     }
 
     void IRenderer::setProjectionMatrix( const mat4f& mat ) 
     {
-        m_shader.setMatrix4f( m_unifProjectionLoc, mat );
+        m_shader.bind();
+        m_unifProjection.set(mat);
     }
 
     void IRenderer::setViewMatrix( const mat4f& mat ) 
     {
-        m_shader.setMatrix4f( m_unifViewLoc, mat );
+        m_shader.bind();
+        m_unifView.set(mat);
     }
 
 } // namespace chesntut

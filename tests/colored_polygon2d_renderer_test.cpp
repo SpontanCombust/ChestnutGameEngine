@@ -25,7 +25,6 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
-    renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
@@ -91,7 +90,6 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[ma
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init( CShaderProgramResource::loadFromFiles( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag" ) ) );
 
-    renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 

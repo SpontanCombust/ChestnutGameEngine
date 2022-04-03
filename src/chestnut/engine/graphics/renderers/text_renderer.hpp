@@ -3,6 +3,9 @@
 
 #include "renderer.hpp"
 #include "../text.hpp"
+#include "../opengl/vertex_buffer.hpp"
+#include "../opengl/index_buffer.hpp"
+#include "../opengl/vertex_array.hpp"
 
 #include <vector>
 
@@ -71,17 +74,12 @@ namespace chestnut::engine
         std::vector< STextRender_VertexGroup > m_vecVertexGroups;
         std::vector< STextRender_Batch > m_vecBatches;
 
-        GLuint m_vao;
-        GLuint m_vbo;
-        GLuint m_ebo;
+        CVertexArray m_vao;
+        std::shared_ptr<CVertexBuffer> m_vbo;
+        std::shared_ptr<CIndexBuffer> m_ibo;
 
         GLsizei m_glyphCapacity;
 
-        GLint m_attrVertPosLoc;
-        GLint m_attrVertUVLoc;
-        GLint m_attrVertColorLoc;
-        GLint m_attrVertTranslationLoc;
-        GLint m_attrVertScaleLoc;
 
     public:
         void reserveBufferSpace( GLsizei targetGlyphCapacity );
@@ -90,22 +88,17 @@ namespace chestnut::engine
 
         void submitText( const CText& text, vec2f translation, vec2f scale = { 1.f, 1.f } );
 
-        // requires bound renderer shader
         void render() override;
 
-        // requires bound renderer shader
         void render( const CFramebuffer& targetFramebuffer ) override;
+
 
     private:
         void onInit() override;
 
-        bool setShaderVariableLocations() override;
-
-        void initBuffers() override;
+        bool initBuffers() override;
 
         void prepareBuffers();
-
-        void deleteBuffers() override;
     };
     
 } // namespace chestnut::engine

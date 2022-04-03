@@ -27,7 +27,6 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
     REQUIRE_NOTHROW( tex = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
 
 
-    renderer.bindShader();
     renderer.setViewMatrix( mat4f() );
     renderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
