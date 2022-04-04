@@ -4,13 +4,13 @@
 #define __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 
 #include "renderer.hpp"
-#include "../opengl/texture2d.hpp"
 #include "../opengl/buffer.hpp"
 #include "../opengl/uniform.hpp"
 #include "../opengl/vertex_array.hpp"
 #include "../../maths/vector2.hpp"
 #include "../../maths/vector3.hpp"
 #include "../../maths/vector4.hpp"
+#include "../sprite.hpp"
 
 #include <memory>
 #include <vector>
@@ -23,7 +23,7 @@ namespace chestnut::engine
      * 
      * @details
      * Renderer receives data by using submitSprite() method, which takes:
-     * - CTexture2D object (which texture to use and with which properties), 
+     * - CSprite object (which texture to use and with which properties), 
      * - translation vector (where sprite should be moved),
      * - origin vector (which point relative to texture body should be used as its "anchor" for transformations,
      *   values are normalized, typically range between 0 and 1, point (0,0) being upper left corner of the texture and (1,1) being lower right corner
@@ -87,7 +87,7 @@ namespace chestnut::engine
 
         GLsizei m_spriteCapacity;
 
-        CTexture2D m_missingTexturePlaceholder;
+        CSprite m_missingTexturePlaceholder;
         
 
     public:
@@ -96,9 +96,15 @@ namespace chestnut::engine
         void reserveBufferSpace( GLsizei targetSpriteCapacity );
 
         void clear() override;
+
         // Origin values should be in range <0;1> representing the normalized texture coordinate from which it should be transformed 
-        void submitSprite( const CTexture2D& texture, const vec2f& translation, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
+        void submitSprite( const CSprite& sprite, const vec2f& translation, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
         
+        // Origin values should be in range <0;1> representing the normalized texture coordinate from which it should be transformed 
+        // Method that takes the base CTexture2D object and proceeds with default values for CSprite specific fields
+        void submitTexture( const CTexture2D& texture, const vec2f& translation, const vec2f& origin = { 0.f, 0.f }, const vec2f& scale = { 1.f, 1.f }, double rotation = 0.0 );
+
+
         void render() override;
         
         void render( const CFramebuffer& targetFramebuffer ) override;

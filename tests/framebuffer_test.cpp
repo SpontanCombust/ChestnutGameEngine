@@ -59,7 +59,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     window.clear();
         textRenderer.render( blankFramebuffer ); // retains the render data from previous pass
 
-        spriteRenderer.submitSprite( blank, vec2f( 0.f ) );
+        spriteRenderer.submitTexture( blank, vec2f( 0.f ) );
         spriteRenderer.render( window.getFramebuffer() );
     window.flipBuffer();
 

@@ -122,7 +122,7 @@ namespace chestnut::engine
         m_spriteCapacity = 0;
         reserveBufferSpace( CHESTNUT_SPRITE_RENDERER_INIT_SPRITE_CAPACITY );
 
-        m_missingTexturePlaceholder = CTexture2D( CTexture2DResource::loadFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
+        m_missingTexturePlaceholder = CSprite( CTexture2DResource::loadFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );
     }
 
@@ -146,18 +146,18 @@ namespace chestnut::engine
         m_vecBatches.clear();
     }
 
-    void CSpriteRenderer::submitSprite( const CTexture2D& texture, const vec2f& translation, const vec2f& origin, const vec2f& scale, double rotation ) 
+    void CSpriteRenderer::submitSprite( const CSprite& sprite, const vec2f& translation, const vec2f& origin, const vec2f& scale, double rotation ) 
     {
         GLuint id;
         int w, h;
         SRectangle rect;
 
-        if( texture.isValid() )
+        if( sprite.isValid() )
         {
-            id = texture.getID();
-            w = texture.getWidth();
-            h = texture.getHeight();
-            rect = texture.getClippingRect();
+            id = sprite.getID();
+            w = sprite.getWidth();
+            h = sprite.getHeight();
+            rect = sprite.getClippingRect();
         }
         else
         {
@@ -174,8 +174,42 @@ namespace chestnut::engine
         instance.scale = scale;
         instance.rot = (float)rotation;
         instance.clipRect = vec4f( rect.x, 1.f - rect.y - rect.h, rect.w, rect.h ); // we have to shift Y around to adapt it to OpenGL's way of handling texture coords
-        instance.tint = texture.getTint();
-        instance.tintFactor = texture.getTintFactor();  
+        instance.tint = sprite.getTint();
+        instance.tintFactor = sprite.getTintFactor();  
+
+        auto& group = m_mapTexIDToInstanceGroup[id];
+        group.texID = id;
+        group.texSize = { (float)w, (float)h };
+        group.vecInstances.push_back( instance );
+    }
+
+    void CSpriteRenderer::submitTexture( const CTexture2D& texture, const vec2f& translation, const vec2f& origin, const vec2f& scale, double rotation)
+    {
+        GLuint id;
+        int w, h;
+
+        if( texture.isValid() )
+        {
+            id = texture.getID();
+            w = texture.getWidth();
+            h = texture.getHeight();
+        }
+        else
+        {
+            id = m_missingTexturePlaceholder.getID();
+            w = m_missingTexturePlaceholder.getWidth();
+            h = m_missingTexturePlaceholder.getHeight();
+        }
+        
+
+        SSpriteRender_Instance instance;
+        instance.origin = origin;
+        instance.transl = translation;
+        instance.scale = scale;
+        instance.rot = (float)rotation;
+        instance.clipRect = { 0, 0, (float)w, (float)h };
+        instance.tint = vec3f(1.f);
+        instance.tintFactor = 0.f;
 
         auto& group = m_mapTexIDToInstanceGroup[id];
         group.texID = id;
