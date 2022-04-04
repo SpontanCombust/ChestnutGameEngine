@@ -1,16 +1,11 @@
 #include "vertex_array.hpp"
 
-#include "vertex_buffer.hpp"
-
-#include <algorithm>
-
 
 namespace chestnut::engine
 {
     CVertexArray::CVertexArray()
     {
         glGenVertexArrays(1, &m_id);
-        m_shouldUpdate = false;
     }
 
     CVertexArray::~CVertexArray()
@@ -20,14 +15,12 @@ namespace chestnut::engine
 
     CVertexArray::CVertexArray(const CVertexArray& other)
     {
-        m_shouldUpdate = true;
-        m_vecBuffers = other.m_vecBuffers;
+        m_vecBufferBindings = other.m_vecBufferBindings;
     }
 
     CVertexArray& CVertexArray::operator=(const CVertexArray& other)
     {
-        m_shouldUpdate = true;
-        m_vecBuffers = other.m_vecBuffers;
+        m_vecBufferBindings = other.m_vecBufferBindings;
 
         return *this;
     }
@@ -35,8 +28,7 @@ namespace chestnut::engine
     CVertexArray::CVertexArray(CVertexArray&& other)
     {
         m_id = other.m_id;
-        m_shouldUpdate = other.m_shouldUpdate;
-        m_vecBuffers = std::move(other.m_vecBuffers);
+        m_vecBufferBindings = std::move(other.m_vecBufferBindings);
 
         other.m_id = 0;
     }
@@ -44,14 +36,19 @@ namespace chestnut::engine
     CVertexArray& CVertexArray::operator=(CVertexArray&& other)
     {
         m_id = other.m_id;
-        m_shouldUpdate = other.m_shouldUpdate;
-        m_vecBuffers = std::move(other.m_vecBuffers);
+        m_vecBufferBindings = std::move(other.m_vecBufferBindings);
 
         other.m_id = 0;
 
         return *this;
     }
 
+
+
+    GLuint CVertexArray::getID() const
+    {
+        return m_id;
+    }
 
 
 
@@ -65,43 +62,29 @@ namespace chestnut::engine
         glBindVertexArray(0);
     }
 
-    void CVertexArray::addBuffer(std::shared_ptr<IBuffer> buffer)
+    void CVertexArray::addBuffer(std::shared_ptr<CBuffer> buffer)
     {
-        m_vecBuffers.push_back(buffer);
-        m_shouldUpdate = true;
+        m_vecBufferBindings.push_back({buffer, tl::nullopt});
     }
 
-    void CVertexArray::update()
+    void CVertexArray::addBuffer(std::shared_ptr<CBuffer> buffer, const CVertexAttributeArray& attributeArray)
+    {
+        m_vecBufferBindings.push_back({buffer, attributeArray});
+    }
+
+    void CVertexArray::compose()
     {
         bind();
-        for(auto& buffer : m_vecBuffers)
+        for(auto& binding : m_vecBufferBindings)
         {
-            buffer->bind();
+            binding.buffer->bind();
 
-            if(auto vertexBuffer = std::dynamic_pointer_cast<CVertexBuffer>(buffer))
+            if(binding.attributeArray.has_value())
             {
-                vertexBuffer->rebindAttributes();
+                binding.attributeArray.value().enableFor(*binding.buffer);
             }
         }
         unbind();
-
-        m_shouldUpdate = false;
-    }
-
-    bool CVertexArray::shouldUpdate() const
-    {
-        m_shouldUpdate |= std::any_of(m_vecBuffers.begin(), m_vecBuffers.end(), 
-            [](const std::shared_ptr<IBuffer>& buffer) {
-                if(auto vertexBuffer = std::dynamic_pointer_cast<CVertexBuffer>(buffer))
-                {
-                    return vertexBuffer->shouldRebindAttributes();
-                }
-                
-                return false;
-            }
-        );
-
-        return m_shouldUpdate;
     }
     
 } // namespace chestnut::engine

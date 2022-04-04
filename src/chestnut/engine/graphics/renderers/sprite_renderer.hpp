@@ -5,8 +5,7 @@
 
 #include "renderer.hpp"
 #include "../opengl/texture2d.hpp"
-#include "../opengl/vertex_buffer.hpp"
-#include "../opengl/index_buffer.hpp"
+#include "../opengl/buffer.hpp"
 #include "../opengl/uniform.hpp"
 #include "../opengl/vertex_array.hpp"
 #include "../../maths/vector2.hpp"
@@ -82,7 +81,7 @@ namespace chestnut::engine
         std::unordered_map< GLuint, SSpriteRender_InstanceGroup > m_mapTexIDToInstanceGroup;
         std::vector< SSpriteRender_Batch > m_vecBatches;
 
-        std::shared_ptr<CVertexBuffer> m_vboInst;
+        std::shared_ptr<CBuffer> m_vboInst;
         CVertexArray m_vao;
         CUniform<vec2f> m_unifTexSize;
 

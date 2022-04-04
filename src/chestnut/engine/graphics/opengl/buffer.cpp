@@ -2,56 +2,64 @@
 
 namespace chestnut::engine
 {
-    IBuffer::IBuffer()
+    CBuffer::CBuffer()
     {
         glGenBuffers(1, &m_id);
+        m_type = EType::VERTEX;
         m_usage = EUsage::STATIC_DRAW;
+        m_layout = ELayout::SINGLE_ARRAY;
         m_currentSize = 0;
     }
 
-    IBuffer::IBuffer(EUsage usage)
-    : m_usage(usage)
+    CBuffer::CBuffer(EType type, EUsage usage, ELayout layout)
+    : m_type(type), m_usage(usage), m_layout(layout)
     {
         glGenBuffers(1, &m_id);
         m_currentSize = 0;
     }
 
-    IBuffer::~IBuffer()
+    CBuffer::~CBuffer()
     {
         glDeleteBuffers(1, &m_id);
     }
 
-    IBuffer::IBuffer(const IBuffer& other)
+    CBuffer::CBuffer(const CBuffer& other)
     {
         glGenBuffers(1, &m_id);
+        m_type = other.m_type;
         m_usage = other.m_usage;
+        m_layout = other.m_layout;
         reserve(other.m_currentSize);
     }
 
-    IBuffer& IBuffer::operator=(const IBuffer& other)
+    CBuffer& CBuffer::operator=(const CBuffer& other)
     {
+        m_type = other.m_type;
         m_usage = other.m_usage;
+        m_layout = other.m_layout;
         reserve(other.m_currentSize);
         
         return *this;
     }
 
-    IBuffer::IBuffer(IBuffer&& other)
+    CBuffer::CBuffer(CBuffer&& other)
     {
-        m_id = other.m_id;
+        m_type = other.m_type;
         m_usage = other.m_usage;
+        m_layout = other.m_layout;
         m_currentSize = other.m_currentSize;
 
         other.m_id = 0;
         other.m_currentSize = 0;
     }
 
-    IBuffer& IBuffer::operator=(IBuffer&& other)
+    CBuffer& CBuffer::operator=(CBuffer&& other)
     {
         glDeleteBuffers(1, &m_id);
         
-        m_id = other.m_id;
+        m_type = other.m_type;
         m_usage = other.m_usage;
+        m_layout = other.m_layout;
         m_currentSize = other.m_currentSize;
 
         other.m_id = 0;
@@ -64,24 +72,53 @@ namespace chestnut::engine
 
 
 
-    void IBuffer::bind()
+    GLuint CBuffer::getID() const
     {
-        glBindBuffer(getTypeEnum(), m_id);
+        return m_id;
     }
 
-    void IBuffer::unbind()
+    CBuffer::EType CBuffer::getType() const
     {
-        glBindBuffer(getTypeEnum(), 0);
+        return m_type;
     }
 
-    void IBuffer::reserve(size_t size)
+    CBuffer::EUsage CBuffer::getUsage() const
+    {
+        return m_usage;
+    }
+
+    CBuffer::ELayout CBuffer::getLayout() const
+    {
+        return m_layout;
+    }
+
+    size_t CBuffer::getCurrentSize() const
+    {
+        return m_currentSize;
+    }
+
+
+
+
+
+    void CBuffer::bind()
+    {
+        glBindBuffer(m_type, m_id);
+    }
+
+    void CBuffer::unbind()
+    {
+        glBindBuffer(m_type, 0);
+    }
+
+    void CBuffer::reserve(size_t size)
     {
         bind();
-        glBufferData(getTypeEnum(), size, NULL, m_usage);
+        glBufferData(m_type, size, NULL, m_usage);
         m_currentSize = size; 
     }
 
-    void IBuffer::update(const void* data, size_t size, size_t offset)
+    void CBuffer::update(const void* data, size_t size, size_t offset)
     {
         bind();
         
@@ -90,7 +127,7 @@ namespace chestnut::engine
             reserve(size + offset);
         }
         
-        glBufferSubData(getTypeEnum(), offset, size, data);
+        glBufferSubData(m_type, offset, size, data);
     }
     
 } // namespace chestnut::engine

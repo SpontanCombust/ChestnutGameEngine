@@ -3,8 +3,7 @@
 
 #include "renderer.hpp"
 #include "../colored_polygon2d.hpp"
-#include "../opengl/vertex_buffer.hpp"
-#include "../opengl/index_buffer.hpp"
+#include "../opengl/buffer.hpp"
 #include "../opengl/vertex_array.hpp"
 
 #include <unordered_map>
@@ -64,8 +63,8 @@ namespace chestnut::engine
         std::unordered_map< GLenum, SColoredPolygon2DRender_VertexGroup > m_mapDrawModeToVertexGroup;
         std::vector< SColoredPolygon2DRender_Batch > m_vecBatches;
 
-        std::shared_ptr<CVertexBuffer> m_vbo;
-        std::shared_ptr<CIndexBuffer> m_ibo;
+        std::shared_ptr<CBuffer> m_vbo;
+        std::shared_ptr<CBuffer> m_ibo;
         CVertexArray m_vao;
 
         GLsizei m_polygonVertexCapacity;

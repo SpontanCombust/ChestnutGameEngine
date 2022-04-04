@@ -3,8 +3,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/buffer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/framebuffer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/framebuffer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/index_buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/index_buffer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/shader_program.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/shader_program.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/shader_program.inl
@@ -14,9 +12,9 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/uniform.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/vertex_array.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vertex_array.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/vertex_attribute_array.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/vertex_attribute_array.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vertex_attribute.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vertex_attribute.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/vertex_attribute.inl
-    ${CMAKE_CURRENT_SOURCE_DIR}/vertex_buffer.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vertex_buffer.cpp
 )

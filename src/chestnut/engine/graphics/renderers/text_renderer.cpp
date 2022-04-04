@@ -5,6 +5,7 @@
 #include "../../macros.hpp"
 #include "../../resources/resource_manager.hpp"
 #include "../../resources/shader_program_resource.hpp"
+#include "../opengl/vertex_attribute_array.hpp"
 
 #include <unordered_map>
 
@@ -34,24 +35,34 @@ namespace chestnut::engine
     {
         try
         {
-            m_vbo = std::make_shared<CVertexBuffer>(
-                CVertexBuffer::EUsage::DYNAMIC_DRAW,
-                CVertexBuffer::ELayout::ARRAY_OF_STRUCTS
-            );
-            m_ibo = std::make_shared<CIndexBuffer>(
-                CIndexBuffer::EUsage::STATIC_DRAW
+            m_vbo = std::make_shared<CBuffer>(
+                CBuffer::EType::VERTEX,
+                CBuffer::EUsage::DYNAMIC_DRAW,
+                CBuffer::ELayout::ARRAY_OF_STRUCTS
             );
 
-            m_vbo->addAttribute(m_shader.getAttribute<vec3f>( "avColor" ).value());
-            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avPos" ).value());
-            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avUV" ).value());
-            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avTranslation" ).value());
-            m_vbo->addAttribute(m_shader.getAttribute<vec2f>( "avScale" ).value());
-            m_vao.addBuffer(m_vbo);
+            CVertexAttributeArray vertAttribs;
+            vertAttribs.add(m_shader.getAttribute<vec3f>( "avColor" ).value());
+            vertAttribs.add(m_shader.getAttribute<vec2f>( "avPos" ).value());
+            vertAttribs.add(m_shader.getAttribute<vec2f>( "avUV" ).value());
+            vertAttribs.add(m_shader.getAttribute<vec2f>( "avTranslation" ).value());
+            vertAttribs.add(m_shader.getAttribute<vec2f>( "avScale" ).value());
 
+            m_vao.addBuffer(m_vbo, vertAttribs);
+
+
+
+            m_ibo = std::make_shared<CBuffer>(
+                CBuffer::EType::INDEX,
+                CBuffer::EUsage::DYNAMIC_DRAW,
+                CBuffer::ELayout::SINGLE_ARRAY
+            );
+            
             m_vao.addBuffer(m_ibo);
 
-            m_vao.update();
+
+
+            m_vao.compose();
         }
         catch(const tl::bad_optional_access& e)
         {

@@ -143,7 +143,7 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
         textRenderer.render( window.getFramebuffer() );
     window.flipBuffer();
 
-    showConfirmMessageBox( testName );
+    REQUIRE(showConfirmMessageBox( testName ));
 
 
     chestnutQuit();

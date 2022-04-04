@@ -3,8 +3,7 @@
 
 #include "renderer.hpp"
 #include "../text.hpp"
-#include "../opengl/vertex_buffer.hpp"
-#include "../opengl/index_buffer.hpp"
+#include "../opengl/buffer.hpp"
 #include "../opengl/vertex_array.hpp"
 
 #include <vector>
@@ -75,8 +74,8 @@ namespace chestnut::engine
         std::vector< STextRender_Batch > m_vecBatches;
 
         CVertexArray m_vao;
-        std::shared_ptr<CVertexBuffer> m_vbo;
-        std::shared_ptr<CIndexBuffer> m_ibo;
+        std::shared_ptr<CBuffer> m_vbo;
+        std::shared_ptr<CBuffer> m_ibo;
 
         GLsizei m_glyphCapacity;
 

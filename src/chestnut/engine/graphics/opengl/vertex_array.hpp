@@ -2,8 +2,10 @@
 #define __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
 
 #include "buffer.hpp"
+#include "vertex_attribute_array.hpp"
 
 #include <GL/glew.h>
+#include <tl/optional.hpp>
 
 #include <memory>
 #include <vector>
@@ -14,10 +16,14 @@ namespace chestnut::engine
     class CVertexArray
     {
     private:
-        GLuint m_id;
+        struct SBufferBinding
+        {
+            std::shared_ptr<CBuffer> buffer;
+            tl::optional<CVertexAttributeArray> attributeArray;
+        };
 
-        mutable bool m_shouldUpdate;
-        std::vector<std::shared_ptr<IBuffer>> m_vecBuffers;
+        GLuint m_id;
+        std::vector<SBufferBinding> m_vecBufferBindings;
 
     public:
         CVertexArray();
@@ -30,14 +36,18 @@ namespace chestnut::engine
         CVertexArray& operator=(CVertexArray&& other);
 
 
+        GLuint getID() const;
+
+
         void bind();
         void unbind();
 
-        void addBuffer(std::shared_ptr<IBuffer> buffer);
+        void addBuffer(std::shared_ptr<CBuffer> buffer);
+        void addBuffer(std::shared_ptr<CBuffer> buffer, const CVertexAttributeArray& attributeArray);
 
-        // Recomposes VAO by binding all stored buffers and associated with them attributes
-        void update();
-        bool shouldUpdate() const;
+
+        // Bind all stored buffers and associated with them attributes to the VAO
+        void compose();
     };
 
 } // namespace chestnut::engine
