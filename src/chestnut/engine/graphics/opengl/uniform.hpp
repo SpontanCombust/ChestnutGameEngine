@@ -1,6 +1,8 @@
 #ifndef __CHESTNUT_ENGINE_UNIFORM_H__
 #define __CHESTNUT_ENGINE_UNIFORM_H__
 
+#include "../../resources/shader_program_resource.hpp"
+
 #include <GL/glew.h>
 
 #include <string>
@@ -12,12 +14,17 @@ namespace chestnut::engine
     class CUniform
     {
     private:
+        // Added to make autobinding possible.
+        // It couldn't be CShaderProgram, because that one already needs CUniform
+        // So this is a little hacky way to make it work.
+        std::shared_ptr<CShaderProgramResource> m_shaderResource;
+
         std::string m_name;
         GLint m_location;
 
     public:
         CUniform();
-        CUniform(const std::string& name, GLint location);
+        CUniform(const std::string& name, GLint location, std::shared_ptr<CShaderProgramResource> m_shaderResource);
 
         void set(const T& value);
     };

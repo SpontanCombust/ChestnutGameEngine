@@ -47,13 +47,11 @@ namespace chestnut::engine
 
     void IRenderer::setProjectionMatrix( const mat4f& mat ) 
     {
-        m_shader.bind();
         m_unifProjection.set(mat);
     }
 
     void IRenderer::setViewMatrix( const mat4f& mat ) 
     {
-        m_shader.bind();
         m_unifView.set(mat);
     }
 

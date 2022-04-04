@@ -33,7 +33,7 @@ namespace chestnut::engine
             return tl::nullopt;
         }
 
-        return CUniform<T>(name, location);
+        return CUniform<T>(name, location, m_shaderResource);
     }
 
 } // namespace chestnut::engine

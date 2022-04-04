@@ -16,8 +16,8 @@ namespace chestnut::engine
     }
 
     template<typename T>
-    CUniform<T>::CUniform(const std::string& name, GLint location)
-    : m_name(name), m_location(location)
+    CUniform<T>::CUniform(const std::string& name, GLint location, std::shared_ptr<CShaderProgramResource> shaderResource)
+    : m_shaderResource(shaderResource), m_name(name), m_location(location)
     {
         
     }
@@ -25,6 +25,8 @@ namespace chestnut::engine
     template<typename T>
     void CUniform<T>::set(const T& value)
     {
+        glUseProgram(m_shaderResource->m_programID);
+
         if constexpr(std::is_same_v<T, int>)
         {
             glUniform1i(m_location, value);
