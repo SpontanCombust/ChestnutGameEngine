@@ -1,7 +1,7 @@
 #include "simple2d_animation_system.hpp"
 
 #include "../../main/engine.hpp"
-#include "../components/texture2d_component.hpp"
+#include "../components/sprite_component.hpp"
 #include "../components/animation2d_component.hpp"
 #include "../events/animation_finish_event.hpp"
 
@@ -13,7 +13,7 @@ namespace chestnut::engine
     : ISystem( engine ) 
     {
         m_animatedTextureQueryID = engine.getEntityWorld().createQuery(
-            ecs::makeEntitySignature<CTexture2DComponent, CAnimation2DComponent>(),
+            ecs::makeEntitySignature<CSpriteComponent, CAnimation2DComponent>(),
             ecs::makeEntitySignature()
         );
     }
@@ -21,8 +21,8 @@ namespace chestnut::engine
     void CSimple2DAnimationSystem::update( float dt ) 
     {
         ecs::CEntityQuery *query = getEngine().getEntityWorld().queryEntities( m_animatedTextureQueryID );
-        query->forEachEntityWith<CTexture2DComponent, CAnimation2DComponent>( 
-            [dt, this]( ecs::entityid_t id, CTexture2DComponent& texture, CAnimation2DComponent& animation )
+        query->forEachEntityWith<CSpriteComponent, CAnimation2DComponent>( 
+            [dt, this]( ecs::entityid_t id, CSpriteComponent& texture, CAnimation2DComponent& animation )
             {
                 SRectangle clipRect;
 
@@ -66,7 +66,7 @@ namespace chestnut::engine
                     clipRect = animation.animSet.vecKeyFrameClipRects[ animation.animSet.defaultAnimFrameIndex ];
                 }
 
-                texture.texture.setClippingRect( clipRect );
+                texture.sprite.setClippingRect( clipRect );
             }
         );
     }

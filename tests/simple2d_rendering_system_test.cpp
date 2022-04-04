@@ -5,7 +5,7 @@
 #include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_rendering_system.hpp"
-#include "../src/chestnut/engine/ecs_impl/components/texture2d_component.hpp"
+#include "../src/chestnut/engine/ecs_impl/components/sprite_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/transform2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/render_layer_component.hpp"
@@ -19,14 +19,14 @@
 using namespace chestnut;
 using namespace chestnut::engine;
 
-const char *adjustToString( ETexture2DToModel2DAdjust adjust )
+const char *adjustToString( ESpriteToModel2DAdjust adjust )
 {
     switch( adjust )
     {
-    case ETexture2DToModel2DAdjust::NONE: return "NONE";
-    case ETexture2DToModel2DAdjust::SCALED: return "SCALED";
-    case ETexture2DToModel2DAdjust::SPANNED: return "SPANNED";
-    case ETexture2DToModel2DAdjust::ZOOMED: return "ZOOMED";
+    case ESpriteToModel2DAdjust::NONE: return "NONE";
+    case ESpriteToModel2DAdjust::SCALED: return "SCALED";
+    case ESpriteToModel2DAdjust::SPANNED: return "SPANNED";
+    case ESpriteToModel2DAdjust::ZOOMED: return "ZOOMED";
     default: return "";
     }
 }
@@ -41,7 +41,7 @@ private:
     vec2f posDelta;
     vec2f scaleDelta;
     float rotDelta;
-    ETexture2DToModel2DAdjust texAdjust;
+    ESpriteToModel2DAdjust texAdjust;
 
 public:
     CSpriteSteeringSystem( CEngine& engine ) : ISystem( engine )
@@ -58,8 +58,8 @@ public:
         auto modelHandle = getEngine().getEntityWorld().createComponent<CModel2DComponent>( player );
         modelHandle->size = { 100.f, 100.f };
 
-        auto textureHandle = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( player );
-        REQUIRE_NOTHROW( textureHandle->texture = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
+        auto spriteHandle = getEngine().getEntityWorld().createComponent<CSpriteComponent>( player );
+        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
     }
 
     ~CSpriteSteeringSystem()
@@ -77,8 +77,8 @@ public:
         transformHandle->scale += scaleDelta * dt;
         transformHandle->rotation += rotDelta * dt;
 
-        auto textureHandle = getEngine().getEntityWorld().getComponent<CTexture2DComponent>( player );
-        textureHandle->adjust = texAdjust;
+        auto spriteHandle = getEngine().getEntityWorld().getComponent<CSpriteComponent>( player );
+        spriteHandle->adjust = texAdjust;
 
 
         getEngine().getWindow().setTitle(
@@ -87,7 +87,7 @@ public:
             ", Scale=" + vecToString( transformHandle->scale ) +
             ", Rot=" + std::to_string( transformHandle->rotation ) +
             ", Model=" + vecToString( modelHandle->size ) +
-            ", Adjust=" + adjustToString( textureHandle->adjust )
+            ", Adjust=" + adjustToString( spriteHandle->adjust )
         );
     }
 
@@ -140,14 +140,14 @@ public:
                 sizeDelta.y = 100.f;
                 break;
             case SDLK_f:
-                if( texAdjust == ETexture2DToModel2DAdjust::NONE )
-                    texAdjust = ETexture2DToModel2DAdjust::SCALED;
-                else if( texAdjust == ETexture2DToModel2DAdjust::SCALED )
-                    texAdjust = ETexture2DToModel2DAdjust::SPANNED;
-                else if( texAdjust == ETexture2DToModel2DAdjust::SPANNED )
-                    texAdjust = ETexture2DToModel2DAdjust::ZOOMED;
+                if( texAdjust == ESpriteToModel2DAdjust::NONE )
+                    texAdjust = ESpriteToModel2DAdjust::SCALED;
+                else if( texAdjust == ESpriteToModel2DAdjust::SCALED )
+                    texAdjust = ESpriteToModel2DAdjust::SPANNED;
+                else if( texAdjust == ESpriteToModel2DAdjust::SPANNED )
+                    texAdjust = ESpriteToModel2DAdjust::ZOOMED;
                 else
-                    texAdjust = ETexture2DToModel2DAdjust::NONE;
+                    texAdjust = ESpriteToModel2DAdjust::NONE;
                 break;
             }
         }
@@ -210,7 +210,7 @@ TEST_CASE( "Systems - Simple2D rendering system test - general", "[manual][demo]
         "W-A-S-D - change transformation scale\n"
         "Q-E - change transformation rotation\n"
         "I-J-K-L - change model size\n"
-        "F - change texture to model adjust type"
+        "F - change sprite to model adjust type"
     );
 
     engine.start();
@@ -253,7 +253,7 @@ public:
         auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
-        ecs::CComponentHandle< CTexture2DComponent > texture;
+        ecs::CComponentHandle< CSpriteComponent > sprite;
         ecs::CComponentHandle< CModel2DComponent > model;
 
         const float w = (float)getEngine().getWindow().getSizeWidth();
@@ -265,8 +265,8 @@ public:
             getEngine().getEntityWorld().createComponent<CTransform2DComponent>( ent );
             model = getEngine().getEntityWorld().createComponent<CModel2DComponent>( ent );
             model->size = { 100.f, 100.f };
-            texture = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( ent );
-            texture->texture = CTexture2D( tex );
+            sprite = getEngine().getEntityWorld().createComponent<CSpriteComponent>( ent );
+            sprite->sprite = CSprite( tex );
         }
 
         transform = getEngine().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
@@ -383,7 +383,7 @@ public:
         auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
-        ecs::CComponentHandle< CTexture2DComponent > texture;
+        ecs::CComponentHandle< CSpriteComponent > sprite;
         ecs::CComponentHandle< CModel2DComponent > model;
         ecs::CComponentHandle< CRenderLayerComponent > layer;
 
@@ -396,8 +396,8 @@ public:
             getEngine().getEntityWorld().createComponent<CTransform2DComponent>( ent );
             model = getEngine().getEntityWorld().createComponent<CModel2DComponent>( ent );
             model->size = { 100.f, 100.f };
-            texture = getEngine().getEntityWorld().createComponent<CTexture2DComponent>( ent );
-            texture->texture = CTexture2D( tex );
+            sprite = getEngine().getEntityWorld().createComponent<CSpriteComponent>( ent );
+            sprite->sprite = CSprite( tex );
             getEngine().getEntityWorld().createComponent<CRenderLayerComponent>( ent ); // should default to layer 0
         }  
 
@@ -513,7 +513,7 @@ public:
         auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
-        ecs::CComponentHandle< CTexture2DComponent > texture;
+        ecs::CComponentHandle< CSpriteComponent > sprite;
         ecs::CComponentHandle< CModel2DComponent > model;
 
         ent = engine.getEntityWorld().createEntity();
@@ -522,8 +522,8 @@ public:
         transform->position = { engine.getWindow().getSizeWidth() / 2.f, engine.getWindow().getSizeHeight() / 2.f };
         model = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
         model->size = { 100.f, 100.f };
-        texture = engine.getEntityWorld().createComponent<CTexture2DComponent>( ent );
-        texture->texture = CTexture2D( tex );
+        sprite = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );
+        sprite->sprite = CSprite( tex );
 
 
         auto l = new CEventListener<SDL_KeyboardEvent>();

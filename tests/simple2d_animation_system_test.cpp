@@ -9,7 +9,7 @@
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_animation_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_rendering_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/transform2d_component.hpp"
-#include "../src/chestnut/engine/ecs_impl/components/texture2d_component.hpp"
+#include "../src/chestnut/engine/ecs_impl/components/sprite_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/animation2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
@@ -67,10 +67,10 @@ public:
         auto modelHandle = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
         modelHandle->size = vec2f{ 200.f, 200.f };
 
-        auto textureHandle = engine.getEntityWorld().createComponent<CTexture2DComponent>( ent );
-        auto tex = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) );
+        auto textureHandle = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );
+        auto tex = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) );
         tex.setFiltering( GL_NEAREST, GL_NEAREST );
-        textureHandle->texture = tex;
+        textureHandle->sprite = tex;
 
 
         auto animHandle = engine.getEntityWorld().createComponent<CAnimation2DComponent>( ent );

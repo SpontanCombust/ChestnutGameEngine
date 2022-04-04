@@ -6,7 +6,7 @@
 #include "../../maths/vector_cast.hpp"
 #include "../components/model2d_component.hpp"
 #include "../components/transform2d_component.hpp"
-#include "../components/texture2d_component.hpp"
+#include "../components/sprite_component.hpp"
 #include "../components/render_layer_component.hpp"
 #include "../../debug/log.hpp"
 #include "../../macros.hpp"
@@ -43,23 +43,23 @@ namespace chestnut::engine
         }
 
 
-        m_textureQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CTransform2DComponent, CTexture2DComponent >(),
+        m_spriteQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent >(),
             ecs::makeEntitySignature< CModel2DComponent, CRenderLayerComponent >()
         );
 
-        m_textureModelQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent  >(),
+        m_spriteModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent  >(),
             ecs::makeEntitySignature< CRenderLayerComponent >()
         );
 
-        m_layerTextureQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(),
+        m_layerSpriteQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature< CModel2DComponent >()
         );
 
-        m_layerTextureModelQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(),
+        m_layerSpriteModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature()
         );
 
@@ -70,28 +70,28 @@ namespace chestnut::engine
 
     CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_textureModelQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_spriteModelQueryID );
     }
 
 
 
-    vec2f getAdjustScale( const CModel2DComponent& model, const CTexture2DComponent& texture )
+    vec2f getAdjustScale( const CModel2DComponent& model, const CSpriteComponent& texture )
     {
-        SRectangle clip = texture.texture.getClippingRect();
+        SRectangle clip = texture.sprite.getClippingRect();
         vec2f adjustScale;
 
         switch( texture.adjust )
         {
-        case ETexture2DToModel2DAdjust::SCALED:
+        case ESpriteToModel2DAdjust::SCALED:
             adjustScale = model.size / vec2f{ clip.w, clip.h };
             adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
             break;
 
-        case ETexture2DToModel2DAdjust::SPANNED:
+        case ESpriteToModel2DAdjust::SPANNED:
             adjustScale = model.size / vec2f{ clip.w, clip.h };
             break;
         
-        case ETexture2DToModel2DAdjust::ZOOMED:
+        case ESpriteToModel2DAdjust::ZOOMED:
             adjustScale = model.size / vec2f{ clip.w, clip.h };
             adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
             break;
@@ -193,52 +193,52 @@ namespace chestnut::engine
         ecs::CEntityQuery* query;
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_textureQueryID );
+        query = getEngine().getEntityWorld().queryEntities( m_spriteQueryID );
 
         query->sort<CTransform2DComponent>( comparator );
 
-        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent >(
-            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture )
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture )
             {
-                m_spriteRenderer.submitSprite( texture.texture, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
             }
         );
         
 
-        query = getEngine().getEntityWorld().queryEntities( m_textureModelQueryID );
+        query = getEngine().getEntityWorld().queryEntities( m_spriteModelQueryID );
         
         query->sort<CTransform2DComponent>( comparator );
 
-        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent, CModel2DComponent >(
-            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture, CModel2DComponent& model )
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CModel2DComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CModel2DComponent& model )
             {
                 vec2f adjustScale = getAdjustScale( model, texture );
-                m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
         );
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_layerTextureQueryID );
+        query = getEngine().getEntityWorld().queryEntities( m_layerSpriteQueryID );
 
         query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
 
-        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent, CRenderLayerComponent >(
-            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture, CRenderLayerComponent& layer )
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CRenderLayerComponent& layer )
             {
-                m_spriteRenderer.submitSprite( texture.texture, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
             }
         );
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_layerTextureModelQueryID );
+        query = getEngine().getEntityWorld().queryEntities( m_layerSpriteModelQueryID );
         
         query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
         
-        query->forEachEntityWith< CTransform2DComponent, CTexture2DComponent, CModel2DComponent, CRenderLayerComponent >(
-            [this]( CTransform2DComponent& transform, CTexture2DComponent& texture, CModel2DComponent& model, CRenderLayerComponent& layer )
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CModel2DComponent, CRenderLayerComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CModel2DComponent& model, CRenderLayerComponent& layer )
             {
                 vec2f adjustScale = getAdjustScale( model, texture );
-                m_spriteRenderer.submitSprite( texture.texture, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
         );
     }
