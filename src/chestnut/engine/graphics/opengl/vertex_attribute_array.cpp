@@ -4,7 +4,12 @@
 
 
 namespace chestnut::engine
-{    
+{
+    CVertexAttributeArray::CVertexAttributeArray(std::initializer_list<CVertexAttribute> attribs)
+    {
+        m_vecAttributes.insert(m_vecAttributes.end(), attribs.begin(), attribs.end());
+    }
+
     void CVertexAttributeArray::add(const CVertexAttribute& attribute)
     {
         m_vecAttributes.push_back(attribute);

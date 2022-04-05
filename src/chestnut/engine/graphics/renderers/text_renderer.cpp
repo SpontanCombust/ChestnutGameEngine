@@ -41,15 +41,13 @@ namespace chestnut::engine
                 CBuffer::ELayout::ARRAY_OF_STRUCTS
             );
 
-            CVertexAttributeArray vertAttribs;
-            vertAttribs.add(m_shader.getAttribute<vec3f>( "avColor" ).value());
-            vertAttribs.add(m_shader.getAttribute<vec2f>( "avPos" ).value());
-            vertAttribs.add(m_shader.getAttribute<vec2f>( "avUV" ).value());
-            vertAttribs.add(m_shader.getAttribute<vec2f>( "avTranslation" ).value());
-            vertAttribs.add(m_shader.getAttribute<vec2f>( "avScale" ).value());
-
-            m_vao.addBuffer(m_vbo, vertAttribs);
-
+            m_vao.addBuffer(m_vbo, {
+                m_shader.getAttribute<vec3f>( "avColor" ).value(),
+                m_shader.getAttribute<vec2f>( "avPos" ).value(),
+                m_shader.getAttribute<vec2f>( "avUV" ).value(),
+                m_shader.getAttribute<vec2f>( "avTranslation" ).value(),
+                m_shader.getAttribute<vec2f>( "avScale" ).value()
+            });
 
 
             m_ibo = std::make_shared<CBuffer>(
@@ -59,7 +57,6 @@ namespace chestnut::engine
             );
             
             m_vao.addBuffer(m_ibo);
-
 
 
             m_vao.compose();

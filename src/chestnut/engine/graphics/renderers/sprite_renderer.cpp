@@ -67,12 +67,10 @@ namespace chestnut::engine
             );
             vboVert->update(vertices, sizeof(vertices));
 
-            CVertexAttributeArray vertAttribs;
-            vertAttribs.add(m_shader.getAttribute<vec2f>( "avPos", false ).value());
-            vertAttribs.add(m_shader.getAttribute<vec2f>( "avUVPos", false ).value());
-
-            m_vao.addBuffer(vboVert, vertAttribs);
-
+            m_vao.addBuffer(vboVert, {
+                m_shader.getAttribute<vec2f>( "avPos", false ).value(),
+                m_shader.getAttribute<vec2f>( "avUVPos", false ).value()
+            });
 
 
             auto ibo = std::make_shared<CBuffer>(
@@ -85,23 +83,21 @@ namespace chestnut::engine
             m_vao.addBuffer(ibo);
 
 
-
             m_vboInst = std::make_shared<CBuffer>(
                 CBuffer::EType::VERTEX,
                 CBuffer::EUsage::DYNAMIC_DRAW, 
                 CBuffer::ELayout::ARRAY_OF_STRUCTS
             );
 
-            CVertexAttributeArray instAttribs;
-            instAttribs.add(m_shader.getAttribute<vec2f>( "aiOrigin", true ).value());
-            instAttribs.add(m_shader.getAttribute<vec2f>( "aiTransl", true ).value());
-            instAttribs.add(m_shader.getAttribute<vec2f>( "aiScale", true ).value());
-            instAttribs.add(m_shader.getAttribute<float>( "aiRot", true ).value());
-            instAttribs.add(m_shader.getAttribute<vec4f>( "aiClipRect", true ).value());
-            instAttribs.add(m_shader.getAttribute<vec3f>( "aiTint", true ).value());
-            instAttribs.add(m_shader.getAttribute<float>( "aiTintFactor", true ).value());
-
-            m_vao.addBuffer(m_vboInst, instAttribs);
+            m_vao.addBuffer(m_vboInst, {
+                m_shader.getAttribute<vec2f>( "aiOrigin", true ).value(),
+                m_shader.getAttribute<vec2f>( "aiTransl", true ).value(),
+                m_shader.getAttribute<vec2f>( "aiScale", true ).value(),
+                m_shader.getAttribute<float>( "aiRot", true ).value(),
+                m_shader.getAttribute<vec4f>( "aiClipRect", true ).value(),
+                m_shader.getAttribute<vec3f>( "aiTint", true ).value(),
+                m_shader.getAttribute<float>( "aiTintFactor", true ).value()
+            });
             
 
             m_vao.compose();

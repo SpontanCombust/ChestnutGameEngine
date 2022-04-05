@@ -4,6 +4,7 @@
 #include "vertex_attribute.hpp"
 #include "buffer.hpp"
 
+#include <initializer_list>
 #include <vector>
 
 
@@ -15,6 +16,9 @@ namespace chestnut::engine
         std::vector<CVertexAttribute> m_vecAttributes;
 
     public:
+        CVertexAttributeArray() = default;
+        CVertexAttributeArray(std::initializer_list<CVertexAttribute> attribs);
+        
         void add(const CVertexAttribute& attribute);
 
         void enableFor(const CBuffer& buffer) const;
