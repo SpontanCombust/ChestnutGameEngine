@@ -1,7 +1,7 @@
 # Chestnut Game Engine
 
-A project to create a simple 2D game engine in order to rework the bomberman prototype I've made for uni project. This time in C++.
-
+C++ Entity Component System aided game engine using OpenGL as its rendering API.
+Very much work in progress.
 
 
 ## Test assets used
