@@ -1,14 +1,13 @@
 #include "shader_program_resource.hpp"
 
 #include "../debug/log.hpp"
-#include "../misc/exception.hpp"
 
 #include <fstream>
 #include <sstream>
 
 namespace chestnut::engine
 {    
-    bool checkShaderCompiled( GLuint shader, std::string& msgBuff )
+    bool checkShaderCompiled( GLuint shader, std::string& msgBuff ) noexcept
     {
         GLint compiled;
 
@@ -37,7 +36,7 @@ namespace chestnut::engine
         }
     }
 
-    bool checkProgramLinked( GLuint program, std::string& msgBuff )
+    bool checkProgramLinked( GLuint program, std::string& msgBuff ) noexcept
     {
         GLint linked;
 
@@ -66,10 +65,8 @@ namespace chestnut::engine
         }
     }
 
-    GLuint loadShaderFromFile( const char *path, GLenum shaderType )
+    tl::expected<GLuint, const char *> loadShaderFromFile( const char *path, GLenum shaderType ) noexcept
     {
-        GLuint shader;
-
         std::ifstream f = std::ifstream( path, std::ios::in );
         if( f.good() )
         {
@@ -84,7 +81,7 @@ namespace chestnut::engine
             f.close();
 
 
-            shader = glCreateShader( shaderType );
+            GLuint shader = glCreateShader( shaderType );
             glShaderSource( shader, 1, &shaderSourceRawStr, NULL );
             glCompileShader( shader );
 
@@ -94,59 +91,64 @@ namespace chestnut::engine
                 LOG_ERROR( "Failed to compile the shader from file: " << path );
                 LOG_ERROR( "Error: " << errMsg );
                 glDeleteShader( shader );
-                shader = 0;
+                return tl::make_unexpected<const char *>("Shader compilation error");
+            }
+            else
+            {
+                return shader;
             }
         }
         else
         {
             LOG_ERROR( "Failed to open shader source file: " << path );
-            shader = 0;
+            return tl::make_unexpected<const char *>("Shader file open error");
         }
-
-        return shader;
     }
 
-    GLuint loadOpenGLShaderProgramFromFiles( const char *vertPath, const char *fragPath )
+    tl::expected<GLuint, const char *> createAndLinkShaderProgram(GLuint vertexShader, GLuint fragmentShader) noexcept
     {
-        GLuint program;
-        GLuint vertShader;
-        GLuint fragShader;
-
-        program = glCreateProgram();
-
-        vertShader = loadShaderFromFile( vertPath, GL_VERTEX_SHADER );
-        if( vertShader == 0 )
-        {
-            glDeleteProgram( program );
-            throw ChestnutResourceLoadException( "shader", vertPath, "vertex shader load failure" );
-        }
-        glAttachShader( program, vertShader );
-
-        fragShader = loadShaderFromFile( fragPath, GL_FRAGMENT_SHADER );
-        if( fragShader == 0 )
-        {
-            glDeleteShader( vertShader );
-            glDeleteProgram( program );
-            throw ChestnutResourceLoadException( "shader", fragPath, "fragment shader load failure" );
-        }
-        glAttachShader( program, fragShader );
-
+        GLuint program = glCreateProgram();
+        glAttachShader( program, vertexShader );
+        glAttachShader( program, fragmentShader );
         glLinkProgram( program );
+
+        glDetachShader( program, fragmentShader );
+        glDetachShader( program, vertexShader );
+        glDeleteShader( fragmentShader );
+        glDeleteShader( vertexShader );
+
         std::string errMsg;
         if( !checkProgramLinked( program, errMsg ) )
         {
-            LOG_ERROR( "Failed to link the program for vertex shader " << vertPath << " and fragment shader " << fragPath );
+            LOG_ERROR( "Failed to link the shader program" );
             LOG_ERROR( "Error: " << errMsg );
-            glDeleteShader( fragShader );
-            glDeleteShader( vertShader );
             glDeleteProgram( program );
-            throw ChestnutResourceLoadException( "CShaderProgramResource", vertPath + std::string(" and ") + fragPath, "shader program linkage failure" );
+            return tl::make_unexpected<const char *>("Shader program linking error");
+        }
+        else
+        {
+            return program;
+        }
+    }
+
+    tl::expected<GLuint, const char *> loadOpenGLShaderProgramFromFiles( const char *vertPath, const char *fragPath ) noexcept
+    {
+        GLuint vertShader;
+        GLuint fragShader;
+        
+        if( auto shader = loadShaderFromFile( vertPath, GL_VERTEX_SHADER ) ) {
+            vertShader = *shader;
+        } else {
+            return tl::unexpected(shader.error());
+        }
+        
+        if( auto shader = loadShaderFromFile( fragPath, GL_FRAGMENT_SHADER ) ) {
+            fragShader = *shader;
+        } else {
+            return tl::unexpected(shader.error());
         }
 
-        glDeleteShader( fragShader );
-        glDeleteShader( vertShader );
-
-        return program;
+        return createAndLinkShaderProgram( vertShader, fragShader );
     }
 
     
@@ -154,19 +156,19 @@ namespace chestnut::engine
 
 
 
-    CShaderProgramResource::CShaderProgramResource() 
+    CShaderProgramResource::CShaderProgramResource() noexcept
     {
         m_programID = 0;
         m_vertexShaderPath = "";
         m_fragmentShaderPath = "";
     }
 
-    CShaderProgramResource::~CShaderProgramResource() 
+    CShaderProgramResource::~CShaderProgramResource() noexcept
     {
         glDeleteProgram( m_programID );
     }
 
-    GLint CShaderProgramResource::getAttributeLocation( const char *attrName ) 
+    GLint CShaderProgramResource::getAttributeLocation( const char *attrName ) noexcept
     {
         GLint loc;
 
@@ -191,7 +193,7 @@ namespace chestnut::engine
         return loc;
     }
 
-    GLint CShaderProgramResource::getUniformLocation( const char *uniformName ) 
+    GLint CShaderProgramResource::getUniformLocation( const char *uniformName ) noexcept
     {
         GLint loc;
 
@@ -219,17 +221,23 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CShaderProgramResource> CShaderProgramResource::loadFromFiles( const char *vertPath, const char *fragPath )
+    tl::expected<std::shared_ptr<CShaderProgramResource>, const char *> CShaderProgramResource::loadFromFiles( const char *vertPath, const char *fragPath ) noexcept
     {
-        // let the possible exception propagate
-        GLuint program = loadOpenGLShaderProgramFromFiles( vertPath, fragPath );
+        LOG_INFO("Loading shader program from files: " << vertPath << " and " << fragPath << "..." );
 
-        CShaderProgramResource *resource = new CShaderProgramResource();
-        resource->m_programID = program;
-        resource->m_vertexShaderPath = vertPath;
-        resource->m_fragmentShaderPath = fragPath;
+        auto program = loadOpenGLShaderProgramFromFiles( vertPath, fragPath );
 
-        return std::shared_ptr<CShaderProgramResource>( resource );
+        if( program ) 
+        {
+            CShaderProgramResource *resource = new CShaderProgramResource();
+            resource->m_programID = *program;
+            resource->m_vertexShaderPath = vertPath;
+            resource->m_fragmentShaderPath = fragPath;
+
+            return std::shared_ptr<CShaderProgramResource>( resource );
+        } 
+        
+        return tl::unexpected(program.error());
     }
 
 } // namespace chestnut::engine

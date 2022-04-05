@@ -1,45 +1,46 @@
 #include "audio_resource.hpp"
 
 #include "../debug/log.hpp"
-#include "../misc/exception.hpp"
 
 #include <SDL2/SDL_mixer.h>
 
 namespace chestnut::engine
 {
-    Mix_Chunk* loadMixerChunkFromFile( const char *sfxPath )
+    tl::expected<Mix_Chunk*, const char *> loadMixerChunkFromFile( const char *sfxPath ) noexcept
     {
         Mix_Chunk *sample = Mix_LoadWAV( sfxPath );
         if( !sample )
         {
             LOG_ERROR( "Failed to load sound effect from file " << sfxPath );
-            throw ChestnutResourceLoadException( "CAudioResource", sfxPath, Mix_GetError() );
+            LOG_ERROR( "SDL_mixer Error: " << Mix_GetError() );
+            return tl::unexpected(Mix_GetError());
         }
 
         return sample;
     }
 
-    Mix_Music* loadMixerMusicFromFile( const char *musicPath )
+    tl::expected<Mix_Music*, const char *> loadMixerMusicFromFile( const char *musicPath ) noexcept
     {
         Mix_Music *music = Mix_LoadMUS( musicPath );
         if( !music )
         {
             LOG_ERROR( "Failed to load music from file " << musicPath );
-            throw ChestnutResourceLoadException( "CAudioResource", musicPath, Mix_GetError() );
+            LOG_ERROR( "SDL_mixer Error: " << Mix_GetError() );
+            return tl::unexpected(Mix_GetError());
         }
 
         return music;
     }
 
 
-    chestnut::engine::CAudioResource::CAudioResource() 
+    chestnut::engine::CAudioResource::CAudioResource() noexcept
     {
         m_audioPath = "";
         m_type = EAudioResourceType::SFX;
         m_uData.sfx = nullptr;
     }
 
-    chestnut::engine::CAudioResource::~CAudioResource() 
+    chestnut::engine::CAudioResource::~CAudioResource() noexcept
     {
         if( m_type == EAudioResourceType::SFX )
         {
@@ -51,19 +52,35 @@ namespace chestnut::engine
         }
     }
 
-    std::shared_ptr<CAudioResource> CAudioResource::loadFromFile(const char *audioPath, EAudioResourceType type)
+    tl::expected<std::shared_ptr<CAudioResource>, const char *> CAudioResource::loadFromFile(const char *audioPath, EAudioResourceType type) noexcept
     {
         CAudioResource::UAudio audio;
 
+        LOG_INFO("Loading audio resource from file " << audioPath << "...");
+
         if( type == EAudioResourceType::SFX )
         {
-            // let the exception propagate if happens
-            audio.sfx = loadMixerChunkFromFile( audioPath );
+            auto sfx = loadMixerChunkFromFile( audioPath );
+            if(sfx.has_value())
+            {
+                audio.sfx = sfx.value();
+            }
+            else
+            {
+                return tl::unexpected(sfx.error());
+            }
         }
         else
         {
-            // let the exception propagate if happens
-            audio.music = loadMixerMusicFromFile( audioPath );
+            auto music = loadMixerMusicFromFile( audioPath );
+            if(music.has_value())
+            {
+                audio.music = music.value();
+            }
+            else
+            {
+                return tl::unexpected(music.error());
+            }
         }
 
         CAudioResource *resource = new CAudioResource();

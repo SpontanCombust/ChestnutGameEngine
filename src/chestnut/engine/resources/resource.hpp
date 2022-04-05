@@ -1,7 +1,10 @@
 #ifndef __CHESTNUT_ENGINE_RESOURCE_H__
 #define __CHESTNUT_ENGINE_RESOURCE_H__
 
-#include <cstddef>
+// these headers are used by all deriving resource classes
+#include <tl/expected.hpp>
+
+#include <memory>
 
 
 namespace chestnut::engine

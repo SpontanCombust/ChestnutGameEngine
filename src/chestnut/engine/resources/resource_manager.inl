@@ -28,11 +28,11 @@ namespace chestnut::engine
 
 
     template<typename R, typename ...Args>
-    std::shared_ptr<R> CResourceManager::loadResource(Args&&... args)
+    tl::expected<std::shared_ptr<R>, const char *> CResourceManager::loadResource(Args&&... args)
     {
         const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
 
-        std::shared_ptr<IResource> resource;
+        tl::expected<std::shared_ptr<R>, const char *> resource = tl::make_unexpected("");
 
         if constexpr( std::is_same_v<R, CShaderProgramResource> ) {
             resource = R::loadFromFiles(std::forward<Args>(args)...);
@@ -40,33 +40,32 @@ namespace chestnut::engine
             resource = R::loadFromFile(std::forward<Args>(args)...);
         }
 
-        m_mapHashToResource[hash] = resource;
+        if(resource) {
+            m_mapHashToResource[hash] = resource.value();
+        }
 
         return resource;
     }
 
     template<typename R, typename ...Args>
-    std::shared_ptr<R> CResourceManager::getResource(Args&&... args)
+    tl::optional<std::shared_ptr<R>> CResourceManager::getResource(Args&&... args)
     {
         const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
-
-        std::shared_ptr<IResource> resource;
 
         auto it = m_mapHashToResource.find( hash );
         if( it != m_mapHashToResource.end() ) {
-            resource = std::dynamic_pointer_cast<R>(it->second);
+            return std::dynamic_pointer_cast<R>(it->second);
         }
-        // otherwise the resource will stay invalid and will be returned as such
 
-        return resource;
+        return tl::nullopt;
     }
 
     template<typename R, typename ...Args>
-    std::shared_ptr<R> CResourceManager::getOrLoadResource(Args&&... args)
+    tl::expected<std::shared_ptr<R>, const char *> CResourceManager::getOrLoadResource(Args&&... args)
     {
         const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
 
-        std::shared_ptr<R> resource;
+        tl::expected<std::shared_ptr<R>, const char *> resource = tl::make_unexpected("");
 
         auto it = m_mapHashToResource.find( hash );
         if( it != m_mapHashToResource.end() ) {
@@ -77,7 +76,10 @@ namespace chestnut::engine
             } else {
                 resource = R::loadFromFile(std::forward<Args>(args)...);
             }
-            m_mapHashToResource[hash] = resource;
+
+            if(resource) {
+                m_mapHashToResource[hash] = resource.value();
+            }
         }
 
         return resource;

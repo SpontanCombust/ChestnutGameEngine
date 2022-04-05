@@ -1,7 +1,6 @@
 #include "texture2d_resource.hpp"
 
 #include "../debug/log.hpp"
-#include "../misc/exception.hpp"
 
 #include <SDL2/SDL_image.h>
 
@@ -71,7 +70,7 @@ namespace chestnut::engine
 
 
 
-    GLuint loadOpenGLTexture2DFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
+    tl::expected<GLuint, const char *> loadOpenGLTexture2DFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
     {
         GLuint texID;
         glGenTextures( 1, &texID );
@@ -117,7 +116,7 @@ namespace chestnut::engine
             glDeleteTextures( 1, &texID );
             glBindTexture( GL_TEXTURE_2D, 0 );
             
-            throw ChestnutResourceLoadException( "CTexture2DResource", "[loaded directly from pixel data]", (char *)msg );
+            return tl::unexpected( msg );
         }
         else
         {
@@ -132,13 +131,13 @@ namespace chestnut::engine
         }
     }
 
-    GLuint loadOpenGLTexture2DFromFile( const char *path, int *width, int *height, GLenum *pixelFormat )
+    tl::expected<GLuint, const char *> loadOpenGLTexture2DFromFile( const char *path, int *width, int *height, GLenum *pixelFormat )
     {
         SDL_Surface *surf = IMG_Load( path );
 
         if( !surf )
         {
-            throw ChestnutResourceLoadException( "CTexture2DResource", path, "failed to load image file" );
+            return tl::unexpected( IMG_GetError() );
         }
 
         if( surf->w != surf->h || ( surf->w & ( surf->w - 1 ) ) != 0 )
@@ -155,26 +154,16 @@ namespace chestnut::engine
 
         *pixelFormat = bytesPerPixelToPixelFormat( bytesPerPixel, firstRed );
         
-        GLuint texID;
-
-        try
-        {
-            texID = loadOpenGLTexture2DFromPixels( pixels, *width, *height, *pixelFormat, true );  
-        }
-        catch( const ChestnutResourceLoadException& e )
-        {
-            SDL_FreeSurface( surf );
-            throw ChestnutResourceLoadException( "CTexture2DResource", path, e.reason );
-        }
-
+        auto texID = loadOpenGLTexture2DFromPixels( pixels, *width, *height, *pixelFormat, true );
         SDL_FreeSurface( surf );
+
         return texID;
     }
 
 
 
 
-    CTexture2DResource::CTexture2DResource() 
+    CTexture2DResource::CTexture2DResource() noexcept
     {
         m_texID = 0;
         m_texturePath.reset();
@@ -183,7 +172,7 @@ namespace chestnut::engine
         m_height = 0;
     }
 
-    CTexture2DResource::~CTexture2DResource() 
+    CTexture2DResource::~CTexture2DResource() noexcept
     {
         glDeleteTextures( 1, &m_texID );
     }
@@ -191,36 +180,48 @@ namespace chestnut::engine
 
 
 
-    std::shared_ptr<CTexture2DResource> CTexture2DResource::loadFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically )
+    tl::expected<std::shared_ptr<CTexture2DResource>, const char *> CTexture2DResource::loadFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically ) noexcept
     {
-        // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat, flipPixelsVertically );
+        LOG_INFO( "Loading texture from pixels..." );
 
-        CTexture2DResource *resource = new CTexture2DResource();
-        resource->m_texID = texID;
-        resource->m_pixelFormat = pixelFormat;
-        resource->m_width = width;
-        resource->m_height = height;
+        auto texID = loadOpenGLTexture2DFromPixels( pixels, width, height, pixelFormat, flipPixelsVertically );
 
-        return std::shared_ptr<CTexture2DResource>( resource );
+        if(texID)
+        {
+            CTexture2DResource *resource = new CTexture2DResource();
+            resource->m_texID = *texID;
+            resource->m_pixelFormat = pixelFormat;
+            resource->m_width = width;
+            resource->m_height = height;
+
+            return std::shared_ptr<CTexture2DResource>( resource );
+        }
+
+        return tl::unexpected(texID.error());
     }
 
-    std::shared_ptr<CTexture2DResource> CTexture2DResource::loadFromFile( const char *texturePath )
+    tl::expected<std::shared_ptr<CTexture2DResource>, const char *> CTexture2DResource::loadFromFile( const char *texturePath ) noexcept
     {
+        LOG_INFO( "Loading texture from file: " << texturePath << "..." );
+
         int width, height;
         GLenum pixelFormat;
 
-        // let the exception propagate if it happens
-        GLuint texID = loadOpenGLTexture2DFromFile( texturePath, &width, &height, &pixelFormat );
+        auto texID = loadOpenGLTexture2DFromFile( texturePath, &width, &height, &pixelFormat );
 
-        CTexture2DResource *resource = new CTexture2DResource();
-        resource->m_texID = texID;
-        resource->m_texturePath = texturePath;
-        resource->m_pixelFormat = pixelFormat;
-        resource->m_width = width;
-        resource->m_height = height;
+        if( texID )
+        {
+            CTexture2DResource *resource = new CTexture2DResource();
+            resource->m_texID = *texID;
+            resource->m_texturePath = texturePath;
+            resource->m_pixelFormat = pixelFormat;
+            resource->m_width = width;
+            resource->m_height = height;
 
-        return std::shared_ptr<CTexture2DResource>( resource );
+            return std::shared_ptr<CTexture2DResource>( resource );
+        }
+
+        return tl::unexpected(texID.error());
     }
 
 } // namespace chestnut::engine

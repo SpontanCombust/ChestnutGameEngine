@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # =================================== Library dependencies ===================================
 
 include(FetchContent)
-set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+# set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
 
 FetchContent_Declare(
     ChestnutECSCore
@@ -36,9 +36,14 @@ FetchContent_Declare(
     GIT_TAG release-2.0.4
 )
 FetchContent_Declare(
-    TL_Optional
+    tl_optional
     GIT_REPOSITORY https://github.com/TartanLlama/optional
-    GIT_TAG v1.0.0
+    GIT_TAG master # the latest version tags for tl's libraries link to very old commits with bad CMakeLists.txt
+)
+FetchContent_Declare(
+    tl_expected
+    GIT_REPOSITORY https://github.com/TartanLlama/expected
+    GIT_TAG master
 )
 
 FetchContent_MakeAvailable(
@@ -47,7 +52,8 @@ FetchContent_MakeAvailable(
     SDL2_image 
     SDL2_ttf 
     SDL2_mixer
-    TL_Optional
+    tl_optional
+    tl_expected
 )
 
 
@@ -61,6 +67,9 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 
 
+# configure libs
+set(OPTIONAL_BUILD_TESTS OFF)
+set(EXPECTED_BUILD_TESTS OFF)
 
 # ====================================== CGE library ======================================
 
@@ -71,13 +80,15 @@ add_subdirectory(src/chestnut/engine)
 target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
 
 
-target_link_libraries(${PROJECT_NAME} ChestnutECSCore)
-target_link_libraries(${PROJECT_NAME} SDL2)
-target_link_libraries(${PROJECT_NAME} SDL2_image)
-target_link_libraries(${PROJECT_NAME} SDL2_ttf)
-target_link_libraries(${PROJECT_NAME} SDL2_mixer)
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${tl_optional_SOURCE_DIR}/include)
+target_link_libraries(${PROJECT_NAME} 
+    ChestnutECSCore
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    SDL2_mixer
+    optional
+    expected
+)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
 target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})

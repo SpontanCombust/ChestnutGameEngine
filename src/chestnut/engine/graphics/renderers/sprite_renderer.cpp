@@ -25,18 +25,15 @@ namespace chestnut::engine
 
     bool CSpriteRenderer::setShaderProgram()
     {
-        try
-        {
-            auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
-                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", 
-                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag"
-            );
+        auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
+            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", 
+            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag"
+        );
 
-            m_shader = CShaderProgram(shader);
-        }
-        catch(const ChestnutException& e)
-        {
-            LOG_ERROR(e.what());
+        if(shader) {
+            m_shader = CShaderProgram(shader.value());
+        } else {
+            LOG_ERROR(shader.error());
             return false;
         }
         
@@ -118,7 +115,7 @@ namespace chestnut::engine
         m_spriteCapacity = 0;
         reserveBufferSpace( CHESTNUT_SPRITE_RENDERER_INIT_SPRITE_CAPACITY );
 
-        m_missingTexturePlaceholder = CSprite( CTexture2DResource::loadFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
+        m_missingTexturePlaceholder = CSprite( *CTexture2DResource::loadFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );
     }
 

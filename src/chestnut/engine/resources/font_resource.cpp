@@ -1,6 +1,6 @@
 #include "font_resource.hpp"
 
-#include "../misc/exception.hpp"
+#include "../debug/log.hpp"
 #include "../resources/texture2d_resource.hpp"
 #include "../macros.hpp"
 
@@ -16,7 +16,7 @@ namespace chestnut::engine
     DEFINE_ENUM_FLAG_OPERATORS(EFontStyle)
 
 
-    int convertToSDLFontStyle( EFontStyle styleMask )
+    static int convertToSDLFontStyle( EFontStyle styleMask ) noexcept
     {
         int sdlStyle = 0;
 
@@ -51,7 +51,7 @@ namespace chestnut::engine
         { 0x0180, 0x024F }
     }};
 
-    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask )
+    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask ) noexcept
     {
         SFontConfig config;
 
@@ -154,15 +154,21 @@ namespace chestnut::engine
 
         // ========== create the OpenGL texture resource ==========
 
-        config.textureResource = CTexture2DResource::loadFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED, false );
-
+        if(auto spritesheetTexture = CTexture2DResource::loadFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED, false ) )
+        {
+            config.textureResource = *spritesheetTexture;
+        }
+        else
+        {
+            LOG_WARNING("Failed to create texture resource from font spritesheet");
+        }
+        
         delete alphaPixels8; // we won't need it no more, data is copied to the GPU
-
 
         return config;
     }
 
-    size_t getConfigHashInternal( int pointSize, EFontStyle styleMask ) 
+    size_t getConfigHashInternal( int pointSize, EFontStyle styleMask ) noexcept
     {
         static std::hash<std::string> hasher;
 
@@ -176,17 +182,17 @@ namespace chestnut::engine
 
 
 
-    CFontResource::CFontResource() 
+    CFontResource::CFontResource() noexcept
     {
         m_fontPath = "";
     }
 
-    CFontResource::~CFontResource() 
+    CFontResource::~CFontResource() noexcept
     {
         m_mapConfigHashToConfig.clear();
     }
 
-    void CFontResource::loadConfig( int pointSize, EFontStyle styleMask ) 
+    bool CFontResource::loadConfig( int pointSize, EFontStyle styleMask ) noexcept
     {
         if( !hasConfig( pointSize, styleMask ) )
         {
@@ -197,10 +203,13 @@ namespace chestnut::engine
             m_mapConfigHashToConfig[ hash ] = config;
 
             TTF_CloseFont( font );
+            return true;
         }
+
+        return false;
     }
 
-    bool CFontResource::hasConfig( int pointSize, EFontStyle styleMask ) 
+    bool CFontResource::hasConfig( int pointSize, EFontStyle styleMask ) noexcept
     {
         size_t hash = getConfigHash( pointSize, styleMask );
 
@@ -214,9 +223,8 @@ namespace chestnut::engine
         return false;
     }
 
-    const SFontConfig& CFontResource::getConfig( int pointSize, EFontStyle styleMask ) 
+    const SFontConfig& CFontResource::getConfig( int pointSize, EFontStyle styleMask ) noexcept
     {
-        // let the exception propagate if it happens
         // checks for whether config is already loaded are already in that function
         loadConfig( pointSize, styleMask );
 
@@ -224,15 +232,17 @@ namespace chestnut::engine
         return m_mapConfigHashToConfig[ hash ];
     }
 
-    size_t CFontResource::getConfigHash( int pointSize, EFontStyle styleMask ) 
+    size_t CFontResource::getConfigHash( int pointSize, EFontStyle styleMask ) noexcept
     {
         return getConfigHashInternal( pointSize, styleMask );
     }
 
 
 
-    std::shared_ptr<CFontResource> CFontResource::loadFromFile(const char *fontPath)
+    tl::expected<std::shared_ptr<CFontResource>, const char *> CFontResource::loadFromFile(const char *fontPath) noexcept
     {
+        LOG_INFO( "Loading font resource from file: " << fontPath );
+
         TTF_Font *font = TTF_OpenFont( fontPath, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
 
         if( font )
@@ -250,7 +260,7 @@ namespace chestnut::engine
         }        
         else
         {
-            throw ChestnutResourceLoadException( "CFontResource", fontPath, "invalid font file" );
+            return tl::make_unexpected<const char *>("Failed to load font from file");
         }
     }
 

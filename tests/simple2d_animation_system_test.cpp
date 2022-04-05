@@ -68,9 +68,10 @@ public:
         modelHandle->size = vec2f{ 200.f, 200.f };
 
         auto textureHandle = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );
-        auto tex = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) );
-        tex.setFiltering( GL_NEAREST, GL_NEAREST );
-        textureHandle->sprite = tex;
+        CSprite sprite;
+        REQUIRE_NOTHROW( sprite = CSprite( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) ) );
+        sprite.setFiltering( GL_NEAREST, GL_NEAREST );
+        textureHandle->sprite = sprite;
 
 
         auto animHandle = engine.getEntityWorld().createComponent<CAnimation2DComponent>( ent );

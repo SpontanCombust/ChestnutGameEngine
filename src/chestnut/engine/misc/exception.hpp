@@ -21,23 +21,6 @@ namespace chestnut::engine
         }
     };
 
-    struct ChestnutResourceLoadException : std::exception
-    {
-        const std::string reason;
-        std::string msg;
-
-        ChestnutResourceLoadException( const std::string& _resourceName, const std::string& _path, const std::string& _reason ) 
-        : reason( _reason )
-        {
-            msg = "Failed to load " + _resourceName + " resource from file: " + _path + ". Cause: " + _reason + ".";
-        }
-
-        const char* what() const throw()
-        {
-            return msg.c_str();
-        }
-    };
-
 } // namespace chestnut::engine
 
 #endif // __CHESTNUT_ENGINE_EXCEPTION_H__

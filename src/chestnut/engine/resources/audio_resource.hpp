@@ -5,7 +5,6 @@
 
 #include <SDL2/SDL_mixer.h> //FIXME It'd better if this wasn't here, but whatever for now...
 
-#include <memory> // shared_ptr
 #include <string>
 
 namespace chestnut::engine
@@ -27,13 +26,12 @@ namespace chestnut::engine
         } m_uData;
 
     public:
-        CAudioResource();
-        ~CAudioResource();
+        CAudioResource() noexcept;
+        ~CAudioResource() noexcept;
 
         // File types for SFX: WAVE, AIFF, RIFF, OGG, VOC
         // File types for music: WAVE, MOD, MIDI, OGG, MP3, FLAC
-        // Throws ChestnutResourceLoadException on error
-        static std::shared_ptr<CAudioResource> loadFromFile(const char *audioPath, EAudioResourceType type);
+        static tl::expected<std::shared_ptr<CAudioResource>, const char *> loadFromFile(const char *audioPath, EAudioResourceType type) noexcept;
     };
 
 } // namespace chestnut::engine

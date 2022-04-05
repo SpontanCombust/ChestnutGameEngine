@@ -59,7 +59,7 @@ public:
         modelHandle->size = { 100.f, 100.f };
 
         auto spriteHandle = getEngine().getEntityWorld().createComponent<CSpriteComponent>( player );
-        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
+        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
     }
 
     ~CSpriteSteeringSystem()
@@ -250,7 +250,8 @@ public:
 
     COrderingDemonstationSystem( CEngine& engine ) : ISystem( engine ) 
     {
-        auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        std::shared_ptr<CTexture2DResource> tex;
+        REQUIRE_NOTHROW(tex = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -380,7 +381,8 @@ public:
 
     CLayeringDemonstrationSystem( CEngine& engine ) : ISystem( engine )
     {
-        auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        std::shared_ptr<CTexture2DResource> tex;
+        REQUIRE_NOTHROW( tex = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -510,7 +512,8 @@ public:
 
     CCameraDemonstrationSystem( CEngine& engine ) : ISystem( engine )
     {
-        auto tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" );
+        std::shared_ptr<CTexture2DResource> tex;
+        REQUIRE_NOTHROW( tex = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;

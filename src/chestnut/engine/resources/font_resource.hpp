@@ -8,7 +8,6 @@
 
 #include <string>
 #include <map>
-#include <memory> // std::shared_ptr
 #include <set>
 #include <unordered_map>
 
@@ -57,26 +56,23 @@ namespace chestnut::engine
         std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
     public:
-        CFontResource();
+        CFontResource() noexcept;
         
-        ~CFontResource();
+        ~CFontResource() noexcept;
 
 
-        // Throws an exception if resource is not valid
-        void loadConfig( int pointSize, EFontStyle styleMask );
+        bool loadConfig( int pointSize, EFontStyle styleMask ) noexcept;
 
-        bool hasConfig( int pointSize, EFontStyle styleMask );
+        bool hasConfig( int pointSize, EFontStyle styleMask ) noexcept;
         
-        // Throws an exception if resource is not valid
-        // Otherwise, if doesn't find a config, loads it and then returns it
-        const SFontConfig& getConfig( int pointSize, EFontStyle styleMask );
+        // TODO optional reference wrapper
+        const SFontConfig& getConfig( int pointSize, EFontStyle styleMask ) noexcept;
 
-        size_t getConfigHash( int pointSize, EFontStyle styleMask );
+        size_t getConfigHash( int pointSize, EFontStyle styleMask ) noexcept;
 
 
         // fontPath - path to .ttf file
-        // Throws ChestnutResourceLoadException if fails to load the font
-        static std::shared_ptr<CFontResource> loadFromFile( const char *fontPath );
+        static tl::expected<std::shared_ptr<CFontResource>, const char *> loadFromFile( const char *fontPath ) noexcept;
     };
 
 } // namespace chestnut::engine

@@ -24,7 +24,7 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
     REQUIRE_NOTHROW( renderer.init() );
 
     CSprite sprite;
-    REQUIRE_NOTHROW( sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
+    REQUIRE_NOTHROW( sprite = CSprite( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
 
 
     renderer.setViewMatrix( mat4f() );

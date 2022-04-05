@@ -4,9 +4,9 @@
 #include "resource.hpp"
 
 #include <GL/glew.h>
+#include <tl/expected.hpp>
 #include <tl/optional.hpp>
 
-#include <memory>
 #include <string>
 
 namespace chestnut::engine
@@ -22,17 +22,17 @@ namespace chestnut::engine
         int m_width, m_height;
 
     public:
-        CTexture2DResource();
-        ~CTexture2DResource();
+        CTexture2DResource() noexcept;
+        ~CTexture2DResource() noexcept;
 
         // Throws ChestnutResourceLoadException if fails to load the texture
         // Pass pixels as null if you want to allocate pixel memory for the texture
         // pixelFormat should be one of: GL_RED, GL_RG, GL_RGB, GL_BGR, GL_RGBA, GL_BGRA
-        static std::shared_ptr<CTexture2DResource> loadFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically );
+        static tl::expected<std::shared_ptr<CTexture2DResource>, const char *> loadFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically ) noexcept;
 
         // texturePath - path to either JPG, PNG or TIFF image
         // Throws ChestnutResourceLoadException if fails to load the texture
-        static std::shared_ptr<CTexture2DResource> loadFromFile( const char *texturePath );
+        static tl::expected<std::shared_ptr<CTexture2DResource>, const char *> loadFromFile( const char *texturePath ) noexcept;
     };
 
 

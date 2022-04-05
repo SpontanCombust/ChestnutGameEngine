@@ -9,18 +9,15 @@ namespace chestnut::engine
 {
     bool CColoredPolygon2DRenderer::setShaderProgram()
     {
-        try
-        {
-            auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
-                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", 
-                CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag"
-            );
+        auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
+            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", 
+            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag"
+        );
 
-            m_shader = CShaderProgram(shader);
-        }
-        catch(const ChestnutException& e)
-        {
-            LOG_ERROR(e.what());
+        if(shader) {
+            m_shader = CShaderProgram(shader.value());
+        } else {
+            LOG_ERROR(shader.error());
             return false;
         }
         

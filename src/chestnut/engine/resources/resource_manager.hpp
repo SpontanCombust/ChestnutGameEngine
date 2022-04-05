@@ -3,6 +3,9 @@
 
 #include "resource.hpp"
 
+#include <tl/optional.hpp>
+#include <tl/expected.hpp>
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -20,16 +23,16 @@ namespace chestnut::engine
     public:
         // Forwards arguments to the resource type specified in template
         template<typename R, typename ...Args> 
-        static std::shared_ptr<R> loadResource(Args&&... args);
+        static tl::expected<std::shared_ptr<R>, const char *> loadResource(Args&&... args);
 
         // Forwards arguments to the resource type specified in template
         // Returns empty shared_ptr if doesn't find the resource
         template<typename R, typename ...Args> 
-        static std::shared_ptr<R> getResource(Args&&... args);
+        static tl::optional<std::shared_ptr<R>> getResource(Args&&... args);
 
         // Forwards arguments to the resource type specified in template
         template<typename R, typename ...Args> 
-        static std::shared_ptr<R> getOrLoadResource(Args&&... args);
+        static tl::expected<std::shared_ptr<R>, const char *> getOrLoadResource(Args&&... args);
 
         template<typename R, typename ...Args> 
         static bool isResourceLoaded(Args&&... args);

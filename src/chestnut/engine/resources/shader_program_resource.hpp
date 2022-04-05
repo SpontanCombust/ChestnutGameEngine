@@ -5,8 +5,8 @@
 
 #include <GL/glew.h>
 
-#include <memory>
 #include <unordered_map>
+
 
 namespace chestnut::engine
 {
@@ -23,23 +23,22 @@ namespace chestnut::engine
         std::unordered_map< std::string, GLint > m_mapAttributeNameToLocation;
 
     public:
-        CShaderProgramResource();
+        CShaderProgramResource() noexcept;
 
-        ~CShaderProgramResource();
+        ~CShaderProgramResource() noexcept;
 
 
         // Requires shader to be bound
         // Returns -1 if doesn't find the location
-        GLint getAttributeLocation( const char *attrName );
+        GLint getAttributeLocation( const char *attrName ) noexcept;
         // Requires shader to be bound
         // Returns -1 if doesn't find the location
-        GLint getUniformLocation( const char *uniformName );
+        GLint getUniformLocation( const char *uniformName ) noexcept;
 
 
         // vertPath - path to file with vertex shader
         // fragPath - path to file with fragment shader
-        // Throws ChestnutResourceLoadException if fails to load the shader program
-        static std::shared_ptr<CShaderProgramResource> loadFromFiles( const char *vertPath, const char *fragPath );
+        static tl::expected<std::shared_ptr<CShaderProgramResource>, const char *> loadFromFiles( const char *vertPath, const char *fragPath ) noexcept;
     };
 
 
