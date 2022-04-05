@@ -10,10 +10,11 @@ namespace chestnut::engine
     class CKinematics2DSystem : public ISystem
     {
     private:
-        ecs::SEntityQuery m_transformKinematicQuery;
+        ecs::queryid_t m_kinematicQueryID;
         
     public:
         CKinematics2DSystem( CEngine& engine );
+        ~CKinematics2DSystem();
 
         void update( float deltaTime ) override;
     };

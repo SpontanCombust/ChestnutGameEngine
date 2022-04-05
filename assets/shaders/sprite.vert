@@ -46,8 +46,8 @@ mat4 mat4Rotation( float angle )
     float cosine = cos(angle);
 
     return mat4(
-        cosine,     sine,       0.0,        0.0,
-       -sine,       cosine,     0.0,        0.0,
+        cosine,     -sine,       0.0,        0.0,
+        sine,       cosine,     0.0,        0.0,
         0.0,        0.0,        1.0,        0.0,
         0.0,        0.0,        0.0,        1.0
     );
@@ -70,9 +70,9 @@ mat4 makeModel()
 
 mat4 makeClipping()
 {
-    //                              rect.w / tex.w                  rect.h / tex.h
+    //                                  rect.w / tex.w             rect.h / tex.h
     mat4 scale = mat4Scale( vec2( aiClipRect.z / uTexSize.x, aiClipRect.w / uTexSize.y ) );
-    //                                              rect.x / tex.w              rect.y / tex.h
+    //                                              rect.x / tex.w             rect.y / tex.h
     mat4 translation = mat4Translation( vec2( aiClipRect.x / uTexSize.x, aiClipRect.y / uTexSize.y ) );
 
     return translation * scale;

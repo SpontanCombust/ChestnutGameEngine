@@ -4,6 +4,7 @@
 #include "resource.hpp"
 
 #include <GL/glew.h>
+#include <tl/optional.hpp>
 
 #include <memory>
 #include <string>
@@ -14,8 +15,7 @@ namespace chestnut::engine
     class CTexture2DResource : public IResource
     {
     public:
-        std::string m_texturePath;
-        bool m_wasLoadedFromFile;
+        std::optional<std::string> m_texturePath;
 
         GLuint m_texID;
         GLenum m_pixelFormat;
@@ -23,19 +23,19 @@ namespace chestnut::engine
 
     public:
         CTexture2DResource();
-
         ~CTexture2DResource();
 
+        // Throws ChestnutResourceLoadException if fails to load the texture
+        // Pass pixels as null if you want to allocate pixel memory for the texture
+        // pixelFormat should be one of: GL_RED, GL_RG, GL_RGB, GL_BGR, GL_RGBA, GL_BGRA
+        static std::shared_ptr<CTexture2DResource> loadFromPixels( const void *pixels, int width, int height, GLenum pixelFormat, bool flipPixelsVertically );
 
-        bool isValid() const override;
+        // texturePath - path to either JPG, PNG or TIFF image
+        // Throws ChestnutResourceLoadException if fails to load the texture
+        static std::shared_ptr<CTexture2DResource> loadFromFile( const char *texturePath );
     };
 
 
-    // Throws exception if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromPixels( void *pixels, int width, int height, GLenum pixelFormat );
-
-    // Throws exception if fails to load the texture
-    std::shared_ptr< CTexture2DResource > loadTexture2DResourceFromFile( const std::string& texturePath );
 
 } // namespace chestnut::engine
 

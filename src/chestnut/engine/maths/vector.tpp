@@ -65,6 +65,12 @@ namespace chestnut::engine
         return *this;
     }
 
+    template< typename T, size_t n >
+    Vector<T,n>& Vector<T, n>::operator/=( T s )
+    {
+        *this = vecScalarQuotient<T,n>( *this, s );
+        return *this;
+    }
 
 
 
@@ -83,8 +89,6 @@ namespace chestnut::engine
         return std::sqrt( prod );
     }
 
-
-
     template< typename T, size_t n >
     Vector<T,n> vecNormalized( const Vector<T,n>& v )
     {
@@ -102,8 +106,6 @@ namespace chestnut::engine
         return other;
     }
 
-
-
     template< typename T, size_t n >
     Vector<T,n> vecNegated( const Vector<T,n>& v )
     {
@@ -118,14 +120,6 @@ namespace chestnut::engine
 
         return other;
     }
-
-    template< typename T, size_t n >
-    Vector<T,n> operator-( const Vector<T,n>& v )
-    {
-        return vecNegated<T,n>(v);
-    }
-
-
 
     template< typename T, size_t n >
     Vector<T,n> vecSum( const Vector<T,n>& v1, const Vector<T,n>& v2 )
@@ -144,14 +138,6 @@ namespace chestnut::engine
     }
 
     template< typename T, size_t n >
-    Vector<T,n> operator+( const Vector<T,n>& v1, const Vector<T,n>& v2 )
-    {
-        return vecSum<T,n>(v1,v2);
-    }
-
-
-
-    template< typename T, size_t n >
     Vector<T,n> vecDifference( const Vector<T,n>& v1, const Vector<T,n>& v2 )
     {
         Vector<T,n> diff;
@@ -166,14 +152,6 @@ namespace chestnut::engine
 
         return diff;
     }
-
-    template<typename T, size_t n>
-    Vector<T,n> operator-( const Vector<T,n>& v1, const Vector<T,n>& v2 )
-    {
-        return vecDifference<T,n>(v1,v2);
-    }
-
-
 
     template< typename T, size_t n >
     Vector<T,n> vecScalarProduct( const Vector<T,n>& v, T s )
@@ -191,18 +169,19 @@ namespace chestnut::engine
     }
 
     template< typename T, size_t n >
-    Vector<T,n> operator*( T s, const Vector<T,n>& v )
+    Vector<T,n> vecScalarQuotient( const Vector<T,n>& v, T s )
     {
-        return vecScalarProduct<T,n>(v,s);
+        Vector<T,n> scaled;
+        const T *dat = v.data();
+        T *datScaled = scaled.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            datScaled[i] = dat[i] / s;
+        }
+
+        return scaled;   
     }
-
-    template< typename T, size_t n >
-    Vector<T,n> operator*( const Vector<T,n>& v, T s )
-    {
-        return vecScalarProduct<T,n>(v,s);
-    }
-
-
 
     template< typename T, size_t n >
     T vecDotProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 )
@@ -218,8 +197,6 @@ namespace chestnut::engine
         
         return prod;
     }
-
-
 
     template< typename T, size_t n >
     Vector<T,n> vecComponentProduct( const Vector<T,n>& v1, const Vector<T,n>& v2 )
@@ -237,14 +214,6 @@ namespace chestnut::engine
 
         return prod;
     }
-
-    template< typename T, size_t n >
-    Vector<T,n> operator*( const Vector<T,n>& v1, const Vector<T,n>& v2 )
-    {
-        return vecComponentProduct<T,n>(v1,v2);
-    }
-
-
     
     template< typename T, size_t n >
     Vector<T,n> vecComponentQuotient( const Vector<T,n>& v1, const Vector<T,n>& v2 )
@@ -262,14 +231,6 @@ namespace chestnut::engine
 
         return quot;
     }
-
-    template< typename T, size_t n >
-    Vector<T,n> operator/( const Vector<T,n>& v1, const Vector<T,n>& v2 )
-    {
-        return vecComponentQuotient( v1, v2 );
-    }
-
-
 
     template< typename T, size_t n >
     std::string vecToString( const Vector<T,n>& v )

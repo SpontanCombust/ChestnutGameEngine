@@ -1,0 +1,55 @@
+#ifndef __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
+#define __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
+
+#include "buffer.hpp"
+#include "vertex_attribute_array.hpp"
+
+#include <GL/glew.h>
+#include <tl/optional.hpp>
+
+#include <memory>
+#include <vector>
+
+
+namespace chestnut::engine
+{
+    class CVertexArray
+    {
+    private:
+        struct SBufferBinding
+        {
+            std::shared_ptr<CBuffer> buffer;
+            tl::optional<CVertexAttributeArray> attributeArray;
+        };
+
+        GLuint m_id;
+        std::vector<SBufferBinding> m_vecBufferBindings;
+
+    public:
+        CVertexArray();
+        ~CVertexArray();
+
+        CVertexArray(const CVertexArray& other);
+        CVertexArray& operator=(const CVertexArray& other);
+
+        CVertexArray(CVertexArray&& other);
+        CVertexArray& operator=(CVertexArray&& other);
+
+
+        GLuint getID() const;
+
+
+        void bind();
+        void unbind();
+
+        void addBuffer(std::shared_ptr<CBuffer> buffer);
+        void addBuffer(std::shared_ptr<CBuffer> buffer, const CVertexAttributeArray& attributeArray);
+
+
+        // Bind all stored buffers and associated with them attributes to the VAO
+        void compose();
+    };
+
+} // namespace chestnut::engine
+
+#endif // __CHESTNUT_ENGINE_VERTEX_ARRAY_H__

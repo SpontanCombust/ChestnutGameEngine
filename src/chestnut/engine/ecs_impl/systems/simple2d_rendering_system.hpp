@@ -2,33 +2,64 @@
 #define __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
 
 #include "../rendering_system.hpp"
-#include "../../graphics/sprite_renderer.hpp"
-#include "../../graphics/colored_polygon2d_renderer.hpp"
+#include "../../graphics/renderers/sprite_renderer.hpp"
+#include "../../graphics/renderers/colored_polygon2d_renderer.hpp"
+#include "../../graphics/renderers/text_renderer.hpp"
+#include "../../graphics/camera2d.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
 namespace chestnut::engine
 {
-    //!WARNING this system is very much still in development!
-    class CSimpled2DRenderingSystem : public IRenderingSystem
+    // Enum that tells the simple2D rendering system how it should handle ordering objects
+    // when they don't have render layer data or are on the same layer
+    enum class EDefaultRenderOrder
+    {
+        TOP_TO_BOTTOM,
+        BOTTOM_TO_TOP,
+        LEFT_TO_RIGHT,
+        RIGHT_TO_LEFT
+    };
+
+    class CSimple2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::SEntityQuery m_textureQuery;
-        ecs::SEntityQuery m_polygonQuery;
+        ecs::queryid_t m_spriteQueryID;
+        ecs::queryid_t m_layerSpriteQueryID;
+        ecs::queryid_t m_spriteModelQueryID;
+        ecs::queryid_t m_layerSpriteModelQueryID;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
+        CTextRenderer m_textRenderer;
+
+        EDefaultRenderOrder m_defaultRenderOrder;
+
+        CCamera2D m_camera;
+
 
     public:
-        CSimpled2DRenderingSystem( CEngine& engine );
+        CSimple2DRenderingSystem( CEngine& engine );
+        ~CSimple2DRenderingSystem();
 
         void update( float deltaTime ) override;
 
         void render() override;
 
-    private:
-        void renderTextures();
-        void renderColoredPolygons();
+
+        CSpriteRenderer& getSpriteRenderer();
+
+        CColoredPolygon2DRenderer& getColoredPolygonRenderer();
+
+        CTextRenderer& getTextRenderer();
+
+
+        void setDefaultRenderOrder( EDefaultRenderOrder order );
+        EDefaultRenderOrder getDefaultRenderOrder() const;
+
+
+        const CCamera2D& getCamera() const;
+        CCamera2D& getCamera();
     };
 
 } // namespace chestnut::engine

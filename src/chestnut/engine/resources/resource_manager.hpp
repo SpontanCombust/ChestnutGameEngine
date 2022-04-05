@@ -2,11 +2,11 @@
 #define __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
 
 #include "resource.hpp"
-#include "texture2d_resource.hpp"
-#include "shader_program_resource.hpp"
-#include "font_resource.hpp"
 
+#include <cstdint>
+#include <memory>
 #include <string>
+#include <typeindex>
 #include <unordered_map>
 
 namespace chestnut::engine
@@ -15,37 +15,46 @@ namespace chestnut::engine
     {
     private:
         static std::unordered_map< size_t, std::shared_ptr<IResource> > m_mapHashToResource;
-        static std::hash< std::string > m_hasher;
-
+        static std::hash<std::string> m_pathHasher;
+        
     public:
-        // Throws an exception if fails to load the resource
-        static std::shared_ptr<CShaderProgramResource> loadShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
-        // Returns invalid resource if that was not loaded beforehand
-        static std::shared_ptr<CShaderProgramResource> getShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
-        // Throws an exception if fails to load the resource
-        static std::shared_ptr<CShaderProgramResource> loadOrGetShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
-        static bool isShaderProgramResourceLoaded( const std::string& vertShaderPath, const std::string& fragShaderPath ); 
-        static void freeShaderProgramResource( const std::string& vertShaderPath, const std::string& fragShaderPath );
+        // Forwards arguments to the resource type specified in template
+        template<typename R, typename ...Args> 
+        static std::shared_ptr<R> loadResource(Args&&... args);
 
-        // Throws an exception if fails to load the resource
-        static std::shared_ptr<CTexture2DResource> loadTexture2DResource( const std::string& texturePath );
-        // Returns invalid resource if that was not loaded beforehand
-        static std::shared_ptr<CTexture2DResource> getTexture2DResource( const std::string& texturePath );
-        // Throws an exception if fails to load the resource
-        static std::shared_ptr<CTexture2DResource> loadOrGetTexture2DResource( const std::string& texturePath );
-        static bool isTexture2DResourceLoaded( const std::string& texturePath );
-        static void freeTexture2DResource( std::string& texturePath );
+        // Forwards arguments to the resource type specified in template
+        // Returns empty shared_ptr if doesn't find the resource
+        template<typename R, typename ...Args> 
+        static std::shared_ptr<R> getResource(Args&&... args);
 
-        // Throws an exception if fails to load the resource
-        static std::shared_ptr<CFontResource> loadFontResource( const std::string& fontPath );
-        // Returns invalid resource if that was not loaded beforehand
-        static std::shared_ptr<CFontResource> getFontResource( const std::string& fontPath );
-        // Throws an exception if fails to load the resource
-        static std::shared_ptr<CFontResource> loadOrGetFontResource( const std::string& fontPath );
-        static bool isFontResourceLoaded( const std::string& fontPath );
-        static void freeFontResource( std::string& fontPath );
+        // Forwards arguments to the resource type specified in template
+        template<typename R, typename ...Args> 
+        static std::shared_ptr<R> getOrLoadResource(Args&&... args);
+
+        template<typename R, typename ...Args> 
+        static bool isResourceLoaded(Args&&... args);
+
+        template<typename R, typename ...Args> 
+        static bool freeResource(Args&&... args);
+
+        static void freeUnusedResources();
+        // If something is still using one of the resources it won't be freed until that something lets go of it 
+        static void freeAllResources();
+
+
+    private:
+        static size_t hashPaths(const std::string& p);
+
+        template<typename ...Args>
+        static size_t hashPaths(const std::string& p, Args&& ...args);
+
+        static size_t hashType(std::type_index tindex);
     };
 
 } // namespace chestnut::engine
+
+
+#include "resource_manager.inl"
+
 
 #endif // __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__

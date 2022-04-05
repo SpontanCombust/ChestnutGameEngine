@@ -24,6 +24,7 @@ namespace chestnut::engine
         Vector& operator*=( const Vector& v );
         Vector& operator/=( const Vector& v );
         Vector& operator*=( T s );
+        Vector& operator/=( T s );
     };
 
 

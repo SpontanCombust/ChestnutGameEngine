@@ -1,5 +1,13 @@
 #include "text.hpp"
 
+#include "../debug/log.hpp"
+
+#include <locale>
+#include <codecvt>
+
+
+std::wstring_convert< std::codecvt_utf8<wchar_t> > wstringConverter;
+
 namespace chestnut::engine
 {
     using namespace internal;
@@ -29,7 +37,7 @@ namespace chestnut::engine
 
     bool CText::isValid() const
     {
-        if( m_resource && m_resource->isValid() )
+        if( m_resource )
         {
             return true;
         }
@@ -494,6 +502,12 @@ namespace chestnut::engine
         m_vecRawFragments.push_back( fragmRaw );
     }
 
+    void CText::append( std::string str, EFontStyle styleMask, vec3f color )
+    {
+        std::wstring wide = wstringConverter.from_bytes( str );
+        append( wide, styleMask, color );
+    }
+
     void CText::newline() 
     {
         append( L"\n" );
@@ -521,7 +535,7 @@ namespace chestnut::engine
 
     int CText::getWidthPixels() const
     {
-        if( isEmpty() )
+        if( !m_resource || m_vecLines.empty() )
         {
             return 0;
         }
@@ -543,9 +557,9 @@ namespace chestnut::engine
 
     int CText::getHeightPixels() const
     {
-        if( isEmpty() )
+        if( !m_resource || m_vecLines.empty() )
         {
-            return 0.f;
+            return 0;
         }
 
         int height;
@@ -557,7 +571,7 @@ namespace chestnut::engine
 
     vec2i CText::getSizePixels() const
     {
-        if( isEmpty() )
+        if( !m_resource || m_vecLines.empty() )
         {
             return { 0, 0 };
         }
@@ -579,6 +593,12 @@ namespace chestnut::engine
 
     void CText::generateData() 
     {
+        if( !m_resource )
+        {
+            LOG_WARNING( "Can't generate data for text with invalid font resource!" );
+            return;
+        }
+
         m_vecLines.clear();
 
         for( const STextFragmentRaw& fragmRaw : m_vecRawFragments )

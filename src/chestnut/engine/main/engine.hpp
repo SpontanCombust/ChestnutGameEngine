@@ -6,13 +6,13 @@
 #include "../constants.hpp"
 #include "../misc/auto_timer.hpp"
 #include "../ecs_impl/event_manager.hpp"
+#include "../audio/audio_manager.hpp"
 #include "../ecs_impl/system.hpp"
 #include "../ecs_impl/rendering_system.hpp"
 
 #include <chestnut/ecs/entity_world.hpp>
 
 #include <list>
-#include <memory> // shared_ptr
 
 namespace chestnut::engine
 {
@@ -23,10 +23,11 @@ namespace chestnut::engine
 
         CAutoTimer *m_updateTimer;
 
-        std::shared_ptr<CWindow> m_window;
+        CWindow* m_window;
 
         ecs::CEntityWorld m_entityWorld;
         CEventManager m_eventManager;
+        CAudioManager m_audioManager;
 
 
 
@@ -49,7 +50,7 @@ namespace chestnut::engine
         // updateInterval:
         //      <= 0 unlocked update rate
         //       > 0 update rate locked to specified interval in seconds
-        CEngine( std::shared_ptr<CWindow> window, float updateInterval = -1 );
+        CEngine( CWindow* window, float updateInterval = -1 );
         ~CEngine();
 
 
@@ -58,6 +59,8 @@ namespace chestnut::engine
         ecs::CEntityWorld& getEntityWorld();
 
         CEventManager& getEventManager();
+
+        CAudioManager& getAudioManager();
 
 
 

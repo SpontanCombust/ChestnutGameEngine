@@ -7,7 +7,7 @@ using namespace chestnut::engine;
 
 typedef Matrix<float,4> mat4f;
 
-TEST_CASE( "N-size matrix test" )
+TEST_CASE( "Math - N-size matrix test" )
 {
     SECTION( "Setters and getters consistency" )
     {

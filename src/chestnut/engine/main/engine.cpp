@@ -2,11 +2,17 @@
 
 #include "../misc/locked_auto_timer.hpp"
 #include "../misc/exception.hpp"
+#include "../debug/log.hpp"
 
 namespace chestnut::engine
 {    
-    CEngine::CEngine( std::shared_ptr<CWindow> window, float updateInterval )
+    CEngine::CEngine( CWindow* window, float updateInterval )
     {
+        if( !window )
+        {
+            LOG_WARNING( "Null window pointer passed to the engine" );
+        }
+        
         m_window = window;
 
         if( updateInterval <= 0 )
@@ -40,7 +46,7 @@ namespace chestnut::engine
 
     CWindow& CEngine::getWindow() 
     {
-        return *m_window.get();
+        return *m_window;
     }
 
     ecs::CEntityWorld& CEngine::getEntityWorld() 
@@ -51,6 +57,11 @@ namespace chestnut::engine
     CEventManager& CEngine::getEventManager() 
     {
         return m_eventManager;
+    }
+
+    CAudioManager& CEngine::getAudioManager() 
+    {
+        return m_audioManager;
     }
 
     void CEngine::start() 

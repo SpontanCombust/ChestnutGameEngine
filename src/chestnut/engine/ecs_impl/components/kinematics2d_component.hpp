@@ -3,11 +3,9 @@
 
 #include "../../maths/vector2.hpp"
 
-#include <chestnut/ecs/component.hpp>
-
 namespace chestnut::engine
 {
-    struct CKinematics2DComponent : public ecs::CComponent
+    struct CKinematics2DComponent
     {
         vec2f linearVelocity;
         vec2f linearAcceleration;

@@ -3,110 +3,305 @@
 #include "../../main/engine.hpp"
 #include "../../resources/resource_manager.hpp"
 #include "../../maths/matrix4.hpp"
+#include "../../maths/vector_cast.hpp"
+#include "../components/model2d_component.hpp"
 #include "../components/transform2d_component.hpp"
-#include "../components/texture2d_component.hpp"
-#include "../components/polygon2d_canvas_component.hpp"
+#include "../components/sprite_component.hpp"
+#include "../components/render_layer_component.hpp"
 #include "../../debug/log.hpp"
+#include "../../macros.hpp"
 
 namespace chestnut::engine
 {
-    CSimpled2DRenderingSystem::CSimpled2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
+    CSimple2DRenderingSystem::CSimple2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
     {
-        CShaderProgram shader;
-        mat4f projection = matMakeOrthographic<float>( 0.f, getEngine().getWindow().getSizeWidth(), getEngine().getWindow().getSizeHeight(), 0.f, 1.f, -1.f );
-
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/sprite.vert", "../assets/shaders/sprite.frag" ) );
-            m_spriteRenderer.init( shader );
+            m_spriteRenderer.init();
         }
         catch(const std::exception& e)
         {
             LOG_ERROR( e.what() );
         }
 
-        m_spriteRenderer.bindShader();
-        m_spriteRenderer.setViewMatrix( mat4f() );
-        m_spriteRenderer.setProjectionMatrix( projection );
-
         try
         {
-            shader = CShaderProgram( CResourceManager::loadOrGetShaderProgramResource( "../assets/shaders/coloredPolygon2D.vert", "../assets/shaders/coloredPolygon2D.frag" ) );
-            m_polygonRenderer.init( shader );
+            m_polygonRenderer.init();
         }
         catch(const std::exception& e)
         {
             LOG_ERROR( e.what() );   
         }
         
-        m_polygonRenderer.bindShader();
-        m_polygonRenderer.setViewMatrix( mat4f() );
-        m_polygonRenderer.setProjectionMatrix( projection );
-        m_polygonRenderer.unbindShader();
-
-
-
-        m_textureQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
+        try
         {
-            return sign.has<CTransform2DComponent>() && sign.has<CTextureComponent>();
-        };
-
-        m_polygonQuery.entitySignCond = []( const ecs::CEntitySignature& sign )
+            m_textRenderer.init();
+        }
+        catch(const std::exception& e)
         {
-            return sign.has<CTransform2DComponent>() && sign.has<CPolygon2DCanvasComponent>();
-        };
+            LOG_ERROR( e.what() );  
+        }
+
+
+        m_spriteQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent >(),
+            ecs::makeEntitySignature< CModel2DComponent, CRenderLayerComponent >()
+        );
+
+        m_spriteModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent  >(),
+            ecs::makeEntitySignature< CRenderLayerComponent >()
+        );
+
+        m_layerSpriteQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
+            ecs::makeEntitySignature< CModel2DComponent >()
+        );
+
+        m_layerSpriteModelQueryID = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
+            ecs::makeEntitySignature()
+        );
+
+
+        const CWindow& win = getEngine().getWindow();
+        m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
     }
 
-    void CSimpled2DRenderingSystem::update( float deltaTime ) 
+    CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().queryEntities( m_textureQuery );
+        getEngine().getEntityWorld().destroyQuery( m_spriteModelQueryID );
+    }
+
+
+
+    vec2f getAdjustScale( const CModel2DComponent& model, const CSpriteComponent& texture )
+    {
+        SRectangle clip = texture.sprite.getClippingRect();
+        vec2f adjustScale;
+
+        switch( texture.adjust )
+        {
+        case ESpriteToModel2DAdjust::SCALED:
+            adjustScale = model.size / vec2f{ clip.w, clip.h };
+            adjustScale = vec2f( std::min( adjustScale.x, adjustScale.y ) );
+            break;
+
+        case ESpriteToModel2DAdjust::SPANNED:
+            adjustScale = model.size / vec2f{ clip.w, clip.h };
+            break;
+        
+        case ESpriteToModel2DAdjust::ZOOMED:
+            adjustScale = model.size / vec2f{ clip.w, clip.h };
+            adjustScale = vec2f( std::max( adjustScale.x, adjustScale.y ) );
+            break;
+
+        default:
+            adjustScale = vec2f( 1.f );
+        }
+
+        return adjustScale;
+    }
+
+
+    bool topToBottomCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.y < t2.position.y;
+    }
+
+    bool bottomToTopCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.y > t2.position.y;
+    }
+
+    bool leftToRightCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.x < t2.position.x;
+    }
+
+    bool rightToLeftCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    {
+        return t1.position.x > t2.position.x;
+    }
+
+    bool topToBottomCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.y < t2.position.y;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    bool bottomToTopCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.y > t2.position.y;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    bool leftToRightCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.x < t2.position.x;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    bool rightToLeftCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    {
+        if( l1.layer == l2.layer )
+        {
+            return t1.position.x > t2.position.x;
+        }
+
+        return l1.layer < l2.layer;
+    }
+
+    void CSimple2DRenderingSystem::update( float deltaTime ) 
+    {
+        bool (*comparator)( const CTransform2DComponent&, const CTransform2DComponent& );
+        bool (*comparatorLayered)( const CTransform2DComponent&, const CRenderLayerComponent&, const CTransform2DComponent&, const CRenderLayerComponent& );
+        switch( m_defaultRenderOrder )
+        {
+        case EDefaultRenderOrder::BOTTOM_TO_TOP:
+            comparator = bottomToTopCompare;
+            comparatorLayered = bottomToTopCompareLayered;
+            break;
+        case EDefaultRenderOrder::LEFT_TO_RIGHT:
+            comparator = leftToRightCompare;
+            comparatorLayered = leftToRightCompareLayered;
+            break;
+        case EDefaultRenderOrder::RIGHT_TO_LEFT:
+            comparator = rightToLeftCompare;
+            comparatorLayered = rightToLeftCompareLayered;
+            break;
+        default:
+            comparator = topToBottomCompare;
+            comparatorLayered = topToBottomCompareLayered;
+        }
+
 
         m_spriteRenderer.clear();
 
-        ecs::forEachEntityInQuery< CTransform2DComponent, CTextureComponent >( m_textureQuery,
-        [this]( CTransform2DComponent& transform, CTextureComponent& texture )
-        {
-            m_spriteRenderer.submitSprite( texture.texture, transform.position, texture.origin, transform.scale, transform.rotation );
-        });
+        ecs::CEntityQuery* query;
 
 
+        query = getEngine().getEntityWorld().queryEntities( m_spriteQueryID );
 
-        getEngine().getEntityWorld().queryEntities( m_polygonQuery );
+        query->sort<CTransform2DComponent>( comparator );
 
-        m_polygonRenderer.clear();
-
-        ecs::forEachEntityInQuery< CTransform2DComponent, CPolygon2DCanvasComponent >( m_polygonQuery, 
-        [this]( CTransform2DComponent& transform, CPolygon2DCanvasComponent& canvas )
-        {
-            for( const CColoredPolygon2D& polygon : canvas.vecPolygons )
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture )
             {
-                m_polygonRenderer.submitPolygon( polygon, transform.position, transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
             }
-        });
+        );
+        
+
+        query = getEngine().getEntityWorld().queryEntities( m_spriteModelQueryID );
+        
+        query->sort<CTransform2DComponent>( comparator );
+
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CModel2DComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CModel2DComponent& model )
+            {
+                vec2f adjustScale = getAdjustScale( model, texture );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
+            }
+        );
+
+
+        query = getEngine().getEntityWorld().queryEntities( m_layerSpriteQueryID );
+
+        query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
+
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CRenderLayerComponent& layer )
+            {
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+            }
+        );
+
+
+        query = getEngine().getEntityWorld().queryEntities( m_layerSpriteModelQueryID );
+        
+        query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
+        
+        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CModel2DComponent, CRenderLayerComponent >(
+            [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CModel2DComponent& model, CRenderLayerComponent& layer )
+            {
+                vec2f adjustScale = getAdjustScale( model, texture );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
+            }
+        );
     }
 
-    void CSimpled2DRenderingSystem::render()
+    void CSimple2DRenderingSystem::render()
     {
         getEngine().getWindow().clear();
         
-        renderTextures();
-        renderColoredPolygons();
+        m_camera.calculateMatrices();
+        m_spriteRenderer.setViewMatrix( m_camera.getViewMatrix() );
+        m_spriteRenderer.setProjectionMatrix( m_camera.getProjectionMatrix() );
+
+#if CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_FORCE_GPU_SYNCHRONIZATION > 0
+        glFinish(); // prevent CPU getting too hasty with sending requests to GPU
+#endif
+
+        m_spriteRenderer.render( getEngine().getWindow().getFramebuffer() );
 
         getEngine().getWindow().flipBuffer();
     }
 
-    void CSimpled2DRenderingSystem::renderTextures()
+
+
+
+    CSpriteRenderer& CSimple2DRenderingSystem::getSpriteRenderer() 
     {
-        m_spriteRenderer.bindShader();
-        m_spriteRenderer.render();
-        m_spriteRenderer.unbindShader();
+        return m_spriteRenderer;
     }
 
-    void CSimpled2DRenderingSystem::renderColoredPolygons() 
+    CColoredPolygon2DRenderer& CSimple2DRenderingSystem::getColoredPolygonRenderer() 
     {
-        m_polygonRenderer.bindShader();
-        m_polygonRenderer.render();
-        m_polygonRenderer.unbindShader();
+        return m_polygonRenderer;
+    }
+
+    CTextRenderer& CSimple2DRenderingSystem::getTextRenderer() 
+    {
+        return m_textRenderer;
+    }
+
+
+
+
+    void CSimple2DRenderingSystem::setDefaultRenderOrder( EDefaultRenderOrder order ) 
+    {
+        m_defaultRenderOrder = order;
+    }
+
+    EDefaultRenderOrder CSimple2DRenderingSystem::getDefaultRenderOrder() const
+    {
+        return m_defaultRenderOrder;
+    }
+
+
+
+
+    const CCamera2D& CSimple2DRenderingSystem::getCamera() const
+    {
+        return m_camera;
+    }
+
+    CCamera2D& CSimple2DRenderingSystem::getCamera() 
+    {
+        return m_camera;
     }
 
 } // namespace chestnut::engine

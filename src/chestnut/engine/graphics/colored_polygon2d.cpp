@@ -1,67 +1,122 @@
 #include "colored_polygon2d.hpp"
 
-#include "../misc/exception.hpp"
+#include "../constants.hpp"
+#include "../maths/vector_transform.hpp"
 
 namespace chestnut::engine
 {    
-    SColoredVertex::SColoredVertex( vec2f position, vec4f color ) 
+    SVertex2D::SVertex2D( vec2f _pos ) 
     {
-        this->position = position;
-        this->color = color;
+        pos = _pos;
+    }
+
+    SColoredVertex2D::SColoredVertex2D( vec2f _pos, vec4f _color ) 
+    {
+        pos = _pos;
+        color = _color;
+    }
+
+    SColoredPolygon2D::SColoredPolygon2D() 
+    {
+        color = vec4f(1.f);
+        drawMode = GL_TRIANGLES;
+    }
+
+    SMulticoloredPolygon2D::SMulticoloredPolygon2D() 
+    {
+        drawMode = GL_TRIANGLES;
     }
 
 
 
-    void CColoredPolygon2D::addVertex( vec2f position, vec4f color ) 
+    namespace colored_polygon_templates
     {
-        m_vecVertices.emplace_back( position, color );
-    }
-
-    void CColoredPolygon2D::addVertex( vec2f position, float r, float g, float b, float a ) 
-    {
-        vec4f color = { r, g, b, a };
-        m_vecVertices.emplace_back( position, color );
-    }
-
-    void CColoredPolygon2D::addVertex( vec2f position, char r, char g, char b, char a ) 
-    {
-        vec4f color = { (float)r / 255, (float)g / 255, (float)b / 255, (float)a / 255 };
-        m_vecVertices.emplace_back( position, color );
-    }
-
-    void CColoredPolygon2D::addIndices( GLuint i1, GLuint i2, GLuint i3 ) 
-    {
-        size_t size = m_vecVertices.size();
-        if( i1 >= size || i2 >= size || i3 >= size )
+        SColoredPolygon2D coloredPolygonTriangle( float a )
         {
-            throw ChestnutException( "Vertex index invalid!" );
+            SColoredPolygon2D poly;
+ 
+            vec2f v{ 0.f, -2.f * a / 3.f };
+            poly.vecVertices.push_back(v);
+            vecRotate( v, 2 * CHESTNUT_PI / 3.f );
+            poly.vecVertices.push_back(v);
+            vecRotate( v, 2 * CHESTNUT_PI / 3.f );
+            poly.vecVertices.push_back(v);
+            
+            poly.vecIndices.insert( poly.vecIndices.end(), {0, 1, 2} );
+
+            return poly;
         }
 
-        m_vecIndices.push_back(i1);
-        m_vecIndices.push_back(i2);
-        m_vecIndices.push_back(i3);
-    }
-
-    bool CColoredPolygon2D::isRenderable() const
-    {
-        if( m_vecIndices.size() >= 3 )
+        SColoredPolygon2D coloredPolygonTriangle( float a, float h )
         {
-            return true;
+            SColoredPolygon2D poly;
+
+            poly.vecVertices.push_back( vec2f{ 0.f, -2.f * h / 3.f } );
+            poly.vecVertices.push_back( vec2f{ -a / 2.f, h / 3.f } );
+            poly.vecVertices.push_back( vec2f{ a / 2.f, h / 3.f } );
+
+            poly.vecIndices.insert( poly.vecIndices.end(), { 0, 1, 2 } );
+
+            return poly;
         }
-        else
+
+        SColoredPolygon2D coloredPolygonSquare( float a )
         {
-            return false;
+            SColoredPolygon2D poly;
+
+            poly.vecVertices.push_back( vec2f{ -a / 2.f, -a / 2.f } );
+            poly.vecVertices.push_back( vec2f{ a / 2.f, -a / 2.f } );
+            poly.vecVertices.push_back( vec2f{ a / 2.f, a / 2.f } );
+            poly.vecVertices.push_back( vec2f{ -a / 2.f, a / 2.f } );
+            
+            poly.vecIndices.insert( poly.vecIndices.end(), { 0, 1, 2, 2, 3, 0 } );
+
+            return poly;
         }
-    }
 
-    const std::vector< SColoredVertex >& CColoredPolygon2D::getVertices() const
-    {
-        return m_vecVertices;
-    }
+        SColoredPolygon2D coloredPolygonRectangle( float a, float b )
+        {
+            SColoredPolygon2D poly;
 
-    const std::vector< GLuint >& CColoredPolygon2D::getIndices() const
-    {
-        return m_vecIndices;
-    }
+            poly.vecVertices.push_back( vec2f{ -a / 2.f, -b / 2.f } );
+            poly.vecVertices.push_back( vec2f{ a / 2.f, -b / 2.f } );
+            poly.vecVertices.push_back( vec2f{ a / 2.f, b / 2.f } );
+            poly.vecVertices.push_back( vec2f{ -a / 2.f, b / 2.f } );
+            
+            poly.vecIndices.insert( poly.vecIndices.end(), { 0, 1, 2, 2, 3, 0 } );
 
+            return poly;
+        }
+
+        SColoredPolygon2D coloredPolygonCircle( float r, unsigned int segments )
+        {
+            if( segments < 3 )
+            {
+                segments = 3;
+            }
+
+            float rot = 2 * CHESTNUT_PI / (float)segments;
+
+            SColoredPolygon2D poly;
+            poly.vecVertices.push_back( vec2f{ 0.f, 0.f } );
+
+            vec2f v { r, 0.f };
+            poly.vecVertices.push_back(v);
+
+            unsigned int i;
+            for (i = 2; i < segments + 1; i++)
+            {
+                vecRotate( v, rot );
+                poly.vecVertices.push_back(v);
+                poly.vecIndices.insert( poly.vecIndices.end(), { 0, i - 1, i } );
+            }
+            
+            poly.vecIndices.insert( poly.vecIndices.end(), { 0, i - 1, 1 } );
+
+
+            return poly;
+        }
+
+    } // namespace colored_polygon_templates
+    
 } // namespace chestnut::engine

@@ -29,9 +29,13 @@ namespace chestnut::engine
         const T* data() const;
         T *data();
 
+        // Will throw std::out_of_range if eighter row or column are of of range
         T get( size_t row, size_t column ) const;
+        // Will throw std::out_of_range if eighter row or column are of of range
         void set( size_t row, size_t column, T val );
+        // Will throw std::out_of_range if eighter row or column are of of range
         T& operator()( size_t row, size_t column );
+        // Will throw std::out_of_range if eighter row or column are of of range
         T operator()( size_t row, size_t column ) const;
     };
 

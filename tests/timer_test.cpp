@@ -11,7 +11,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Auto timer test" )
+TEST_CASE( "Timers - Auto timer test" )
 {
     SECTION( "Default state" )
     {
@@ -94,7 +94,7 @@ TEST_CASE( "Auto timer test" )
 }
 
 
-TEST_CASE( "Locked auto timer test" )
+TEST_CASE( "Timers - Locked auto timer test" )
 {
     SECTION( "Default state" )
     {
@@ -253,7 +253,7 @@ TEST_CASE( "Locked auto timer test" )
 }
 
 
-TEST_CASE( "Manual timer test" )
+TEST_CASE( "Timers - Manual timer test" )
 {
     SECTION( "Default state" )
     {
@@ -329,7 +329,7 @@ TEST_CASE( "Manual timer test" )
 }
 
 
-TEST_CASE( "Locked manual timer test" )
+TEST_CASE( "Timers - Locked manual timer test" )
 {
     SECTION( "Default state" )
     {

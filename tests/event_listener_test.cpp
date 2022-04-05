@@ -37,7 +37,7 @@ auto filter = []( const SNumSwitchEvent& e ) -> bool
 };
 
 
-TEST_CASE( "Event listener test" )
+TEST_CASE( "Events - Event listener test" )
 {
     SECTION( "Is enabled by default and has appropriate event type stored" )
     {

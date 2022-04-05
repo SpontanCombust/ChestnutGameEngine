@@ -25,24 +25,12 @@ namespace chestnut::engine
     template<>
     Vector<int,2> vecNegated( const Vector<int,2>& v );
 
-    template<>
-    Vector<float,2> operator-( const Vector<float,2>& v );
-
-    template<>
-    Vector<int,2> operator-( const Vector<int,2>& v );
-
 
     template<>
     Vector<float,2> vecSum( const Vector<float,2>& v1, const Vector<float,2>& v2 );
 
     template<>
     Vector<int,2> vecSum( const Vector<int,2>& v1, const Vector<int,2>& v2 );
-
-    template<>
-    Vector<float,2> operator+( const Vector<float,2>& v1, const Vector<float,2>& v2 );
-
-    template<>
-    Vector<int,2> operator+( const Vector<int,2>& v1, const Vector<int,2>& v2 );
 
 
     template<>
@@ -51,12 +39,6 @@ namespace chestnut::engine
     template<>
     Vector<int,2> vecDifference( const Vector<int,2>& v1, const Vector<int,2>& v2 );
 
-    template<>
-    Vector<float,2> operator-( const Vector<float,2>& v1, const Vector<float,2>& v2 );
-
-    template<>
-    Vector<int,2> operator-( const Vector<int,2>& v1, const Vector<int,2>& v2 );
-
 
     template<>
     Vector<float,2> vecScalarProduct( const Vector<float,2>& v, float s );
@@ -64,17 +46,12 @@ namespace chestnut::engine
     template<>
     Vector<int,2> vecScalarProduct( const Vector<int,2>& v, int s );
 
-    template<>
-    Vector<float,2> operator*( float s, const Vector<float,2>& v );
+
+    template< typename T, size_t n >
+    Vector<float,2> vecScalarQuotient( const Vector<float,2>& v, float s );
 
     template<>
-    Vector<int,2> operator*( int s, const Vector<int,2>& v );
-
-    template<>
-    Vector<float,2> operator*( const Vector<float,2>& v, float s );
-
-    template<>
-    Vector<int,2> operator*( const Vector<int,2>& v, int s );
+    Vector<int,2> vecScalarQuotient( const Vector<int,2>& v, int s );
 
 
     template<>

@@ -67,6 +67,13 @@ namespace chestnut::engine
         return *this;
     }
 
+    template<typename T>
+    Vector<T,3>& Vector<T,3>::operator/=( T s ) 
+    {
+        *this = vecScalarQuotient<T,3>( *this, s );
+        return *this;
+    }
+
 
 
     template< typename T >

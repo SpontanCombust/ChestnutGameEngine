@@ -1,5 +1,4 @@
-#include "../misc/exception.hpp"
-
+#include <exception>
 #include <sstream>
 
 namespace chestnut::engine
@@ -41,7 +40,7 @@ namespace chestnut::engine
     {
         if( row >= n || column >= n )
         {
-            throw ChestnutException( "Matrix index out of bounds!" );
+            throw std::out_of_range( "Matrix index out of bounds!" );
         }
 
         return elements[ column * n + row ];
@@ -52,7 +51,7 @@ namespace chestnut::engine
     {
         if( row >= n || column >= n )
         {
-            throw ChestnutException( "Matrix index out of bounds!" );
+            throw std::out_of_range( "Matrix index out of bounds!" );
         }
 
         elements[ column * n + row ] = val;
@@ -63,7 +62,7 @@ namespace chestnut::engine
     {
         if( row >= n || column >= n )
         {
-            throw ChestnutException( "Matrix index out of bounds!" );
+            throw std::out_of_range( "Matrix index out of bounds!" );
         }
 
         return elements[ column * n + row ];
@@ -74,7 +73,7 @@ namespace chestnut::engine
     {
         if( row >= n || column >= n )
         {
-            throw ChestnutException( "Matrix index out of bounds!" );
+            throw std::out_of_range( "Matrix index out of bounds!" );
         }
 
         return elements[ column * n + row ];

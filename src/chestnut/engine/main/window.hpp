@@ -1,7 +1,8 @@
 #ifndef __CHESTNUT_ENGINE_WINDOW_H__
 #define __CHESTNUT_ENGINE_WINDOW_H__
 
-#include <memory>
+#include "../graphics/opengl/framebuffer.hpp"
+
 #include <string>
 
 struct SDL_Window;
@@ -21,13 +22,29 @@ namespace chestnut::engine
     private:
         SDL_Window *m_sdlWindow;
         SDL_GLContext m_sdlGLContext;
+        CFramebuffer *m_framebuffer; // for now just a dummy with no texture bound
 
     public:
-        CWindow( SDL_Window *window, SDL_GLContext context );
+        // Make sure to call chestnutInit() before creating a window
+        // To configure more aspects of how OpenGL will behave use SDL_GL_SetAttribute() after chestnutInit()
+        // See https://wiki.libsdl.org/SDL_GL_SetAttribute
+        // -1 for x and/or y to position the window on the center of the screen
+        CWindow( const char *title, 
+                 int width = 800, 
+                 int height = 600, 
+                 EWindowDisplayMode displayMode = EWindowDisplayMode::WINDOWED, 
+                 int x = -1, 
+                 int y = -1, 
+                 bool showAfterCreating = true, 
+                 bool useVsync = false );
+
         ~CWindow();
 
+        bool isValid() const;
+
         void setTitle( const std::string& title );
-        std::string getTitle() const;
+        void setTitle( const char *title );
+        const char *getTitle() const;
 
         void setDisplayMode( EWindowDisplayMode displayMode );
         EWindowDisplayMode getDisplayMode() const;
@@ -56,23 +73,11 @@ namespace chestnut::engine
         void hide();
         bool isHidden() const;
 
+        const CFramebuffer& getFramebuffer() const;
+
         void clear();
         void flipBuffer();
     };
-
-    // Make sure to call chestnutInit() before creating a window
-    // To configure more aspects of how OpenGL will behave use SDL_GL_SetAttribute() after chestnutInit() and before createWindow()
-    // See https://wiki.libsdl.org/SDL_GL_SetAttribute
-    // -1 for x and/or y to position the window on the center of the screen
-    std::shared_ptr<CWindow> createWindow( const std::string& title, 
-                                           int width = 800, 
-                                           int height = 600, 
-                                           EWindowDisplayMode displayMode = EWindowDisplayMode::WINDOWED, 
-                                           int x = -1, 
-                                           int y = -1, 
-                                           bool showAfterCreating = true, 
-                                           bool useVsync = false );
-
 
 } // namespace chestnut::engine
 

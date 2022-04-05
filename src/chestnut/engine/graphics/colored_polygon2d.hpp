@@ -6,35 +6,60 @@
 
 #include <GL/glew.h>
 
+#include <vector>
+
 namespace chestnut::engine
 {
-    struct SColoredVertex
+    struct SVertex2D
     {
-        vec2f position;
+        vec2f pos;
+
+        SVertex2D( vec2f _pos );
+    };
+
+    struct SColoredVertex2D
+    {
+        vec2f pos;
         vec4f color;
 
-        SColoredVertex() = default;
-        SColoredVertex( vec2f position, vec4f color );
+        SColoredVertex2D( vec2f _pos, vec4f _color );
     };
 
-    class CColoredPolygon2D
+
+    struct SColoredPolygon2D
     {
-    private:
-        std::vector< SColoredVertex > m_vecVertices;
-        std::vector< GLuint > m_vecIndices;
+        std::vector< SVertex2D > vecVertices;
+        std::vector< GLuint > vecIndices;
+        vec4f color;
+        GLenum drawMode;
 
-    public:
-        void addVertex( vec2f position, vec4f color );
-        void addVertex( vec2f position, float r, float g, float b, float a );
-        void addVertex( vec2f position, char r, char g, char b, char a );
-        // Throws an exception if any of indices doesn't correspond to a vertex
-        void addIndices( GLuint i1, GLuint i2, GLuint i3 );
-
-        bool isRenderable() const;
-
-        const std::vector< SColoredVertex >& getVertices() const;
-        const std::vector< GLuint >& getIndices() const;
+        SColoredPolygon2D();
     };
+
+    struct SMulticoloredPolygon2D
+    {
+        std::vector< SColoredVertex2D > vecVertices;
+        std::vector< GLuint > vecIndices;
+        GLenum drawMode;
+
+        SMulticoloredPolygon2D();
+    };
+
+
+    namespace colored_polygon_templates
+    {
+        SColoredPolygon2D coloredPolygonTriangle( float a );
+
+        SColoredPolygon2D coloredPolygonTriangle( float a, float h );
+
+        SColoredPolygon2D coloredPolygonSquare( float a );
+
+        SColoredPolygon2D coloredPolygonRectangle( float a, float b );
+
+        SColoredPolygon2D coloredPolygonCircle( float r, unsigned int segments );
+
+    } // namespace coloredPolygonTemplates
+    
 
 } // namespace chestnut::engine
 

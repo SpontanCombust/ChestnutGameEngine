@@ -7,7 +7,7 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Vector casting test" )
+TEST_CASE( "Math - Vector casting test" )
 {
     SECTION( "Casting to greater size specifically" )
     {

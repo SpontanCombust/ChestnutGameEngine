@@ -6,7 +6,6 @@
 #include "event_listener.hpp"
 
 #include <list>
-#include <memory> // weak_ptr
 #include <typeindex>
 #include <unordered_map>
 
@@ -17,7 +16,7 @@ namespace chestnut::engine
     private:
         struct SEventListenerNode
         {
-            std::weak_ptr<IEventListener> weakPtr;
+            IEventListener *listener;
             listenerpriority_t priority;
         };
 
@@ -27,9 +26,9 @@ namespace chestnut::engine
         ~CEventManager() = default;
 
 
-        void registerListener( std::weak_ptr<IEventListener> listener, listenerpriority_t priority = LISTENER_PRIORITY_ANY );
+        void registerListener( IEventListener *listener, listenerpriority_t priority = LISTENER_PRIORITY_ANY );
 
-        void unregisterListener( std::weak_ptr<IEventListener> listener );
+        void unregisterListener( IEventListener *listener );
 
         template< typename EventType >
         void raiseEvent( const EventType& event );

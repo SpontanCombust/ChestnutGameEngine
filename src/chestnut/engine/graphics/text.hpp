@@ -91,6 +91,7 @@ namespace chestnut::engine
         void clear();
         void newline();
         void append( std::wstring str, EFontStyle styleMask = EFontStyle::NORMAL, vec3f color = { 1.f, 1.f, 1.f } );
+        void append( std::string str, EFontStyle styleMask = EFontStyle::NORMAL, vec3f color = { 1.f, 1.f, 1.f } );
 
 
         std::wstring getString() const;

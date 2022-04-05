@@ -11,7 +11,7 @@ namespace chestnut::engine
         T x, y;
 
         Vector();
-        Vector( T init );
+        explicit Vector( T init );
         Vector( T _x, T _y );
 
         T *data();
@@ -22,6 +22,7 @@ namespace chestnut::engine
         Vector& operator*=( const Vector& v );
         Vector& operator/=( const Vector& v );
         Vector& operator*=( T s );
+        Vector& operator/=( T s );
     };
 
 

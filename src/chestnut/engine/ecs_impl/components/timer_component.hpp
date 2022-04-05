@@ -3,13 +3,11 @@
 
 #include "../../misc/locked_manual_timer.hpp"
 
-#include <chestnut/ecs/component.hpp>
-
 #include <vector>
 
 namespace chestnut::engine
 {
-    struct CTimerComponent : public ecs::CComponent
+    struct CTimerComponent
     {
         std::vector< CLockedManualTimer > vTimers;
 

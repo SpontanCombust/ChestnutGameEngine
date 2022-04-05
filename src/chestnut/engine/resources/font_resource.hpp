@@ -59,8 +59,7 @@ namespace chestnut::engine
     public:
         CFontResource();
         
-        
-        bool isValid() const override;
+        ~CFontResource();
 
 
         // Throws an exception if resource is not valid
@@ -73,11 +72,12 @@ namespace chestnut::engine
         const SFontConfig& getConfig( int pointSize, EFontStyle styleMask );
 
         size_t getConfigHash( int pointSize, EFontStyle styleMask );
+
+
+        // fontPath - path to .ttf file
+        // Throws ChestnutResourceLoadException if fails to load the font
+        static std::shared_ptr<CFontResource> loadFromFile( const char *fontPath );
     };
-
-
-    // Throws an exception if fails to load the font
-    std::shared_ptr<CFontResource> loadFontResourceFromFile( const std::string& fontPath );
 
 } // namespace chestnut::engine
 
