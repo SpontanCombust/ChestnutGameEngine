@@ -177,8 +177,7 @@ namespace chestnut::engine
     CTexture2DResource::CTexture2DResource() 
     {
         m_texID = 0;
-        m_texturePath = "";
-        m_wasLoadedFromFile = false;
+        m_texturePath.reset();
         m_pixelFormat = 0;
         m_width = 0;
         m_height = 0;
@@ -199,8 +198,6 @@ namespace chestnut::engine
 
         CTexture2DResource *resource = new CTexture2DResource();
         resource->m_texID = texID;
-        resource->m_texturePath = "";
-        resource->m_wasLoadedFromFile = false;
         resource->m_pixelFormat = pixelFormat;
         resource->m_width = width;
         resource->m_height = height;
@@ -219,7 +216,6 @@ namespace chestnut::engine
         CTexture2DResource *resource = new CTexture2DResource();
         resource->m_texID = texID;
         resource->m_texturePath = texturePath;
-        resource->m_wasLoadedFromFile = true;
         resource->m_pixelFormat = pixelFormat;
         resource->m_width = width;
         resource->m_height = height;

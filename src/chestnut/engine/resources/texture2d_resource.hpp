@@ -4,6 +4,7 @@
 #include "resource.hpp"
 
 #include <GL/glew.h>
+#include <tl/optional.hpp>
 
 #include <memory>
 #include <string>
@@ -14,8 +15,7 @@ namespace chestnut::engine
     class CTexture2DResource : public IResource
     {
     public:
-        std::string m_texturePath;
-        bool m_wasLoadedFromFile;
+        std::optional<std::string> m_texturePath;
 
         GLuint m_texID;
         GLenum m_pixelFormat;
