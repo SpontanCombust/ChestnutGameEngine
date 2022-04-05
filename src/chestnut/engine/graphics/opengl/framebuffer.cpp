@@ -38,6 +38,8 @@ namespace chestnut::engine
 
     CFramebuffer& CFramebuffer::operator=( CFramebuffer&& other ) 
     {
+        destroyBufferIfSetToTexture();
+
         m_fbo = other.m_fbo;
         m_rbo = other.m_rbo;
         m_width = other.m_width;

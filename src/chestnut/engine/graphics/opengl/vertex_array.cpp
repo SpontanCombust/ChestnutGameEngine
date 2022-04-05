@@ -15,12 +15,15 @@ namespace chestnut::engine
 
     CVertexArray::CVertexArray(const CVertexArray& other)
     {
+        glGenVertexArrays(1, &m_id);
         m_vecBufferBindings = other.m_vecBufferBindings;
+        compose();
     }
 
     CVertexArray& CVertexArray::operator=(const CVertexArray& other)
     {
         m_vecBufferBindings = other.m_vecBufferBindings;
+        compose();
 
         return *this;
     }

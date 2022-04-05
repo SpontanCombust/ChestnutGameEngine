@@ -4,7 +4,7 @@ namespace chestnut::engine
 {
     CBuffer::CBuffer()
     {
-        glGenBuffers(1, &m_id);
+        m_id = 0;
         m_type = EType::VERTEX;
         m_usage = EUsage::STATIC_DRAW;
         m_layout = ELayout::SINGLE_ARRAY;
@@ -20,7 +20,10 @@ namespace chestnut::engine
 
     CBuffer::~CBuffer()
     {
-        glDeleteBuffers(1, &m_id);
+        if(m_id != 0)
+        {
+            glDeleteBuffers(1, &m_id);
+        }
     }
 
     CBuffer::CBuffer(const CBuffer& other)
@@ -34,6 +37,11 @@ namespace chestnut::engine
 
     CBuffer& CBuffer::operator=(const CBuffer& other)
     {
+        if(m_id == 0)
+        {
+            glGenBuffers(1, &m_id);
+        }
+
         m_type = other.m_type;
         m_usage = other.m_usage;
         m_layout = other.m_layout;
@@ -44,6 +52,7 @@ namespace chestnut::engine
 
     CBuffer::CBuffer(CBuffer&& other)
     {
+        m_id = other.m_id;
         m_type = other.m_type;
         m_usage = other.m_usage;
         m_layout = other.m_layout;
@@ -55,8 +64,12 @@ namespace chestnut::engine
 
     CBuffer& CBuffer::operator=(CBuffer&& other)
     {
-        glDeleteBuffers(1, &m_id);
+        if(m_id != 0)
+        {
+            glDeleteBuffers(1, &m_id);
+        }
         
+        m_id = other.m_id;
         m_type = other.m_type;
         m_usage = other.m_usage;
         m_layout = other.m_layout;
