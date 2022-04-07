@@ -146,21 +146,21 @@ namespace chestnut::engine
         aiMaterial *assimpMaterial = scene->mMaterials[mesh->mMaterialIndex];
         
         if(auto diffuse = extractTextureFromMaterial(assimpMaterial, ETextureMapType::DIFFUSE, directory)) {
-            material.diffuse = *diffuse;
+            material.diffuse = CTexture2D(*diffuse);
         } else {
             LOG_WARNING("Diffuse couldn't be loaded for the material");
             LOG_WARNING(diffuse.error());
         }
 
         if(auto specular = extractTextureFromMaterial(assimpMaterial, ETextureMapType::SPECULAR, directory)) {
-            material.specular = *specular;
+            material.specular = CTexture2D(*specular);
         } else {
             LOG_WARNING("Specular couldn't be loaded for the material");
             LOG_WARNING(specular.error());
         }
 
         if(auto normal = extractTextureFromMaterial(assimpMaterial, ETextureMapType::NORMAL, directory)) {
-            material.normal = *normal;
+            material.normal = CTexture2D(*normal);
         } else {
             LOG_WARNING("Normal couldn't be loaded for the material");
             LOG_WARNING(normal.error());

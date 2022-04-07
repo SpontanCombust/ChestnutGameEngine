@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_MATERIAL_H__
 #define __CHESTNUT_ENGINE_MATERIAL_H__
 
-#include "../resources/texture2d_resource.hpp"
+#include "opengl/texture2d.hpp"
 
 namespace chestnut::engine
 {
@@ -14,9 +14,9 @@ namespace chestnut::engine
 
     struct SMaterial
     {
-        std::shared_ptr<CTexture2DResource> diffuse;
-        std::shared_ptr<CTexture2DResource> specular;
-        std::shared_ptr<CTexture2DResource> normal;
+        CTexture2D diffuse;
+        CTexture2D specular;
+        CTexture2D normal;
     };
 
 } // namespace chestnut::engine
