@@ -67,6 +67,8 @@ namespace chestnut::engine
 
 
         auto resource = std::make_shared<CMeshResource>();
+        resource->m_numVertices = vertexCount;
+        resource->m_numIndices = indexCount;
         resource->m_vboVertices = vboVertices;
         resource->m_vboNormals = vboNormals;
         resource->m_vboUVs = vboUVs;
@@ -83,7 +85,7 @@ namespace chestnut::engine
     void extractGeometryFromMesh(aiMesh *mesh,
                                  std::vector<vec3f>& out_vertices, 
                                  std::vector<vec3f>& out_normals, 
-                                 std::vector<vec2f> out_uvs, 
+                                 std::vector<vec2f>& out_uvs, 
                                  std::vector<unsigned int>& out_indices)
     {
         out_vertices.resize(mesh->mNumVertices);
@@ -92,16 +94,19 @@ namespace chestnut::engine
 
         std::memcpy(&out_vertices[0], (void *)mesh->mVertices, mesh->mNumVertices * sizeof(vec3f));
         std::memcpy(&out_normals[0], (void *)mesh->mNormals, mesh->mNumVertices * sizeof(vec3f));
-        std::memcpy(&out_uvs[0], (void *)mesh->mTextureCoords[0], mesh->mNumVertices * sizeof(vec2f));
-
+        
+        for (size_t i = 0; i < mesh->mNumVertices; i++)
+        {
+            out_uvs[i] = vec2f(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+        }
+    
         out_indices.resize(mesh->mNumFaces * 3);
         for (size_t i = 0; i < mesh->mNumFaces; i++)
         {   
-            aiFace face = mesh->mFaces[i];
-            for(size_t j = 0; j < face.mNumIndices; j++)
-            {
-                out_indices.push_back(face.mIndices[j]);
-            }
+            // aiProcess_Triangulate ensurs that all faces are triangles
+            out_indices[i * 3 + 0] = mesh->mFaces[i].mIndices[0];
+            out_indices[i * 3 + 1] = mesh->mFaces[i].mIndices[1];
+            out_indices[i * 3 + 2] = mesh->mFaces[i].mIndices[2];
         }
     }
 
