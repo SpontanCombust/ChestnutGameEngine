@@ -55,19 +55,17 @@ namespace chestnut::engine
     template< typename T >
     Matrix<T,4> matMakeLookAt( const Vector<T,3>& camera, const Vector<T,3>& target, const Vector<T,3>& up )
     {
-        Vector<T,3> cameraDirection = vecNormalized( camera - target );
-        Vector<T,3> cameraRight = vecNormalized( -vecCrossProduct( up, cameraDirection ) );
-        Vector<T,3> cameraUp = vecCrossProduct( cameraDirection, cameraRight );
+        Vector<T,3> cameraDirection = vecNormalized(target - camera);
+        Vector<T,3> cameraRight = vecNormalized( vecCrossProduct(cameraDirection, up) );
+        Vector<T,3> cameraUp = vecCrossProduct(cameraRight, cameraDirection);
 
         Matrix<T,4> m;
 
-        m(0,0) = cameraRight.x;     m(0,1) = cameraRight.y;     m(0,2) = cameraRight.z;
-        m(1,0) = cameraUp.x;        m(1,1) = cameraUp.y;        m(1,2) = cameraUp.z;
-        m(2,0) = cameraDirection.x; m(2,1) = cameraDirection.y; m(2,2) = cameraDirection.z;
+        m(0,0) = cameraRight.x;         m(0,1) = cameraRight.y;         m(0,2) = cameraRight.z;         m(0,3) = -vecDotProduct(cameraRight, camera);
+        m(1,0) = cameraUp.x;            m(1,1) = cameraUp.y;            m(1,2) = cameraUp.z;            m(1,3) = -vecDotProduct(cameraUp, camera);
+        m(2,0) = -cameraDirection.x;    m(2,1) = -cameraDirection.y;    m(2,2) = -cameraDirection.z;    m(2,3) =  vecDotProduct(cameraDirection, camera);
 
-        Matrix<T,4> t = matMakeTranslation( -camera.x, -camera.y, -camera.z );
-
-        return m * t;
+        return m;
     }
 
 

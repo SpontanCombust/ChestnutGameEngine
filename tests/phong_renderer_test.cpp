@@ -7,6 +7,7 @@
 #include "../src/chestnut/engine/graphics/renderers/phong_renderer.hpp"
 #include "../src/chestnut/engine/constants.hpp"
 #include "../src/chestnut/engine/macros.hpp"
+#include "../src/chestnut/engine/maths/angles.hpp"
 
 
 using namespace chestnut::engine;
@@ -39,8 +40,8 @@ TEST_CASE( "Renderers - Phong renderer test", "[manual]" )
     {
         showInfoMessageBox( testName, "Click to render a mesh with default values" );
 
-        renderer.setProjectionMatrix(matMakePerspective(80.f, (float)window.getSizeWidth() / (float)window.getSizeHeight(), 0.1f, 100.f));
-        renderer.setViewMatrix(matMakeLookAt(vec3f(0.f, 0.f, 2.f), vec3f(0.f, 0.f, 0.f)));
+        renderer.setProjectionMatrix(matMakePerspective(degreesToRadians(60.f), (float)window.getSizeWidth() / (float)window.getSizeHeight(), 0.1f, 100.f));
+        renderer.setViewMatrix(matMakeLookAt(vec3f(0.f, -1.f, 3.f), vec3f(0.f, 0.f, 0.f)));
 
         window.clear();
             renderer.clear();
