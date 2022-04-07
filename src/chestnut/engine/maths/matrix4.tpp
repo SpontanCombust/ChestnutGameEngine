@@ -45,8 +45,8 @@ namespace chestnut::engine
 
         m(0,0) = cotangent / aspect;
         m(1,1) = cotangent;
-        m(2,2) = ( far + near ) / ( near - far );
-        m(2,3) = ( 2 * far * near ) / ( near - far );
+        m(2,2) = - ( far + near ) / ( far - near );
+        m(2,3) = - ( 2 * far * near ) / ( far - near );
         m(3,2) = -1.0;
 
         return m;
@@ -56,7 +56,7 @@ namespace chestnut::engine
     Matrix<T,4> matMakeLookAt( const Vector<T,3>& camera, const Vector<T,3>& target, const Vector<T,3>& up )
     {
         Vector<T,3> cameraDirection = vecNormalized( camera - target );
-        Vector<T,3> cameraRight = vecNormalized( vecCrossProduct( up, cameraDirection ) );
+        Vector<T,3> cameraRight = vecNormalized( -vecCrossProduct( up, cameraDirection ) );
         Vector<T,3> cameraUp = vecCrossProduct( cameraDirection, cameraRight );
 
         Matrix<T,4> m;
