@@ -3,6 +3,8 @@ add_subdirectory(opengl)
 target_sources(${PROJECT_NAME} PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/colored_polygon2d_renderer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/colored_polygon2d_renderer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderers/phong_renderer.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/renderers/phong_renderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/renderer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/renderer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/renderers/sprite_renderer.hpp
@@ -17,6 +19,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/material.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mesh.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/mesh.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sprite.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sprite.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text.hpp

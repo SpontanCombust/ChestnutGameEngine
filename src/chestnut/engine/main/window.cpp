@@ -78,6 +78,8 @@ namespace chestnut::engine
         glEnable( GL_TEXTURE_2D );
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+        //TODO GL config on init with features to be enabled
+        glEnable( GL_DEPTH_TEST );
 
         int interval = useVsync ? 1 : 0;
         SDL_GL_SetSwapInterval( interval );        

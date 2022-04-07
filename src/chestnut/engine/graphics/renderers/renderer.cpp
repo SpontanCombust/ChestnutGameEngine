@@ -6,6 +6,7 @@ namespace chestnut::engine
 {    
     void IRenderer::init() 
     {
+        //TODO this can be simply made as a function that returns the tl::expected of shader resource
         if( !setShaderProgram() )
         {
             throw ChestnutException( "Failed to set renderer shader!" );
