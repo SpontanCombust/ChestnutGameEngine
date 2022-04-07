@@ -19,22 +19,9 @@ namespace chestnut::engine
         
         GLuint m_programID;
 
-        std::unordered_map< std::string, GLint > m_mapUniformNameToLocation;
-        std::unordered_map< std::string, GLint > m_mapAttributeNameToLocation;
-
     public:
         CShaderProgramResource() noexcept;
-
         ~CShaderProgramResource() noexcept;
-
-
-        // Requires shader to be bound
-        // Returns -1 if doesn't find the location
-        GLint getAttributeLocation( const char *attrName ) noexcept;
-        // Requires shader to be bound
-        // Returns -1 if doesn't find the location
-        GLint getUniformLocation( const char *uniformName ) noexcept;
-
 
         // vertPath - path to file with vertex shader
         // fragPath - path to file with fragment shader

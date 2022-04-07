@@ -35,10 +35,10 @@ namespace chestnut::engine
         void unbind();
 
         template<typename T>
-        tl::optional<CVertexAttribute> getAttribute(const char *name, bool isInstanced = false);
+        tl::optional<CVertexAttribute> getAttribute(const char *name, bool isInstanced = false) const noexcept;
 
         template<typename T>
-        tl::optional<CUniform<T>> getUniform(const char *name);
+        tl::optional<CUniform<T>> getUniform(const char *name) const noexcept;
     };
     
 } // namespace chestnut::engine

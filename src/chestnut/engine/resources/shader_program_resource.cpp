@@ -168,55 +168,6 @@ namespace chestnut::engine
         glDeleteProgram( m_programID );
     }
 
-    GLint CShaderProgramResource::getAttributeLocation( const char *attrName ) noexcept
-    {
-        GLint loc;
-
-        if( m_mapAttributeNameToLocation.find( attrName ) != m_mapAttributeNameToLocation.end() )
-        {
-            loc = m_mapAttributeNameToLocation[ attrName ];
-        }
-        else
-        {
-            loc = glGetAttribLocation( m_programID, attrName );
-
-            if( loc == -1 )
-            {
-                LOG_WARNING( "Couldn't find attribute with name " << attrName << " in program " << m_programID );
-            }
-            else
-            {
-                m_mapAttributeNameToLocation[ attrName ] = loc;   
-            }
-        }
-
-        return loc;
-    }
-
-    GLint CShaderProgramResource::getUniformLocation( const char *uniformName ) noexcept
-    {
-        GLint loc;
-
-        if( m_mapUniformNameToLocation.find( uniformName ) != m_mapUniformNameToLocation.end() )
-        {
-            loc = m_mapUniformNameToLocation[ uniformName ];
-        }
-        else
-        {
-            loc = glGetUniformLocation( m_programID, uniformName );
-
-            if( loc == -1 )
-            {
-                LOG_WARNING( "Couldn't find uniform with name " << uniformName << " in program " << m_programID );
-            }
-            else
-            {
-                m_mapUniformNameToLocation[ uniformName ] = loc;   
-            }
-        }
-        
-        return loc;
-    }
 
 
 
