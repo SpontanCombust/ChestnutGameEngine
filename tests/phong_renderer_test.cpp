@@ -28,14 +28,14 @@ TEST_CASE( "Renderers - Phong renderer test", "[manual]" )
     CMesh mesh;
     REQUIRE_NOTHROW( mesh = CMesh( *CMeshResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/models/suzanne.obj" ) ) );
 
-    std::shared_ptr<CTexture2DResource> textureDiffuse;
-    REQUIRE_NOTHROW( textureDiffuse = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) );
-    mesh.getResource()->m_material.diffuse = textureDiffuse;
+    CTexture2D textureDiffuse;
+    REQUIRE_NOTHROW( textureDiffuse = CTexture2D( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) ) );
+    // mesh.getResource()->m_material.diffuse = textureDiffuse;
 
 
 
 
-    SECTION("Basic example")
+    SECTION("Default texture maps")
     {
         showInfoMessageBox( testName, "Click to render a mesh with default values" );
 
@@ -52,5 +52,7 @@ TEST_CASE( "Renderers - Phong renderer test", "[manual]" )
     }
 
 
+
     chestnutQuit();
+    sleepFor(1000);
 }

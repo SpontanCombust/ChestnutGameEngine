@@ -33,7 +33,12 @@ namespace chestnut::engine
         };
 
         CUniform<int> m_unifMaterialDiffuse;
+        CUniform<int> m_unifMaterialSpecular;
+        CUniform<int> m_unifMaterialNormal;
 
+        CTexture2D m_defaultDiffuseTexture;
+        CTexture2D m_defaultSpecularTexture;
+        CTexture2D m_defaultNormalTexture;
 
         std::unordered_map<GLuint, SPhongRender_Instances> m_mapMeshIDToInstances;
 
@@ -49,6 +54,7 @@ namespace chestnut::engine
     private:
         bool setShaderProgram() override;
         bool initBuffers() override;
+        void onInit() override;
 
         void initInstancesForMesh(const CMesh& mesh);
         void prepareBuffers();
