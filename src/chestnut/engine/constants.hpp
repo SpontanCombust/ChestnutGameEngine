@@ -7,7 +7,7 @@
 
 namespace chestnut::engine
 {
-    const double CHESTNUT_PI = 3.14159265359;
+    constexpr double CHESTNUT_PI = 3.14159265359;
 
 
     const listenerpriority_t LISTENER_PRIORITY_HIGHEST = std::numeric_limits<listenerpriority_t>::min();

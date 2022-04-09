@@ -8,12 +8,23 @@
 
 namespace chestnut::engine
 {
-    inline float radiansToDegrees( float rad )
+    struct SEulerAngles
+    {
+        float yaw;
+        float pitch;
+        float roll;
+
+        SEulerAngles() : yaw(0.0f), pitch(0.0f), roll(0.0f) {}
+    };
+
+
+
+    inline constexpr float radiansToDegrees( float rad )
     {
         return rad * 180.f / CHESTNUT_PI;
     }
 
-    inline float degreesToRadians( float deg )
+    inline constexpr float degreesToRadians( float deg )
     {
         return deg * CHESTNUT_PI / 180.f;
     }
@@ -36,7 +47,12 @@ namespace chestnut::engine
         return acos( vecDotProduct( v1, v2 ) );
     }
 
-    void rotateUnitVec2f( vec2f& v, float angleRad );
+    inline void rotateUnitVec2f( vec2f& v, float angleRad )
+    {
+        float sine = sin(angleRad), cosine = cos(angleRad);
+        v.x = v.x * cosine - v.y * sine;
+        v.y = v.x * sine + v.y * cosine;
+    }
 
 } // namespace chestnut::engine
 
