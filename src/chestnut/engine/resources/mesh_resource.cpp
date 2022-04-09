@@ -176,7 +176,12 @@ namespace chestnut::engine
         Assimp::Importer importer;
         const aiScene *scene = importer.ReadFile( 
             meshPath, 
-            aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals | aiProcess_GenUVCoords | aiProcess_OptimizeMeshes
+            aiProcess_Triangulate 
+            | aiProcess_FlipUVs 
+            | aiProcess_GenNormals 
+            | aiProcess_GenUVCoords 
+            | aiProcess_OptimizeMeshes 
+            | aiProcess_JoinIdenticalVertices
         );
 
         if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
