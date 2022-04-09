@@ -16,6 +16,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/animation2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/camera2d.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/camera2d.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera3d.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/camera3d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/material.hpp
