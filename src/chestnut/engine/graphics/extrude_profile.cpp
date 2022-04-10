@@ -2,7 +2,8 @@
 
 #include "../maths/vector_transform.hpp"
 
-#include <cmath>
+#include <algorithm> // std::for_each
+#include <cmath> // std::acos
 
 
 namespace chestnut::engine
@@ -101,6 +102,30 @@ namespace chestnut::engine
             indices.data(),
             SMaterial{}
         );
+    }
+
+
+
+
+    tl::expected<std::shared_ptr<CMeshResource>, const char *> extrudeProfileWithCurve(std::vector<vec2f> profile, const std::vector<SBezierCurvePoint>& curvePoints, unsigned int segmentCount)
+    {
+        auto curve = plotBezierCurve(curvePoints, segmentCount);
+
+        if(curve.size() < 2)
+        {
+            return tl::make_unexpected("curvePoints must have at least 2 points");
+        }
+
+        std::vector<SExtrusionPoint> extrusionPoints(curve.size());
+
+        extrusionPoints.push_back({curve[0], curve[1] - curve[0], 0.f});
+        for (size_t i = 1; i < curve.size() - 1; i++)
+        {
+            extrusionPoints.push_back({curve[i], curve[i + 1] - curve[i - 1], 0.f});
+        }
+        extrusionPoints.push_back({curve[curve.size() - 1], curve[curve.size() - 1] - curve[curve.size() - 2], 0.f});
+
+        return extrudeProfile(profile, extrusionPoints);
     }
 
 } // namespace chestnut::engine
