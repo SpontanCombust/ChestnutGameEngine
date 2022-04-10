@@ -13,7 +13,7 @@ namespace chestnut::engine
         T x, y, z, w;
         
         Vector();
-        Vector( T init );
+        explicit Vector( T init );
         Vector( T _x, T _y, T _z, T _w );
 
         T *data();

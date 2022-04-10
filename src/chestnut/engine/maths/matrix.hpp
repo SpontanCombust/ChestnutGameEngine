@@ -24,7 +24,7 @@ namespace chestnut::engine
         T elements[ n * n ];
 
         Matrix();
-        Matrix( T init );
+        explicit Matrix( T init );
 
         const T* data() const;
         T *data();
