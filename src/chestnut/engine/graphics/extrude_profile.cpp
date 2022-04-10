@@ -23,12 +23,10 @@ namespace chestnut::engine
             vec3f direction = vecNormalized(ep.direction);
             // the angle of rotation of the direction vector
             float directionAngleDelta = std::acos(vecDotProduct(INIT_PROFILE_FORWARD_VECTOR, direction));
-            //TODO vector comparison operators
             // the vector around which said direction vector is rotated
             vec3f directionRotationVec;
             // avoid calculating with NaN value
-            if((direction.x == INIT_PROFILE_FORWARD_VECTOR.x && direction.y == INIT_PROFILE_FORWARD_VECTOR.y && direction.z == INIT_PROFILE_FORWARD_VECTOR.z)
-            || (direction.x == -INIT_PROFILE_FORWARD_VECTOR.x && direction.y == -INIT_PROFILE_FORWARD_VECTOR.y && direction.z == -INIT_PROFILE_FORWARD_VECTOR.z))
+            if(direction == INIT_PROFILE_FORWARD_VECTOR || direction == -INIT_PROFILE_FORWARD_VECTOR)
             {
                 directionRotationVec = {0.f, 0.f, 1.f};
             }

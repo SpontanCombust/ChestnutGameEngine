@@ -233,6 +233,40 @@ namespace chestnut::engine
     }
 
     template< typename T, size_t n >
+    bool vecEquality( const Vector<T,n>& v1, const Vector<T,n>& v2 )
+    {
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            if (dat1[i] != dat2[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    template< typename T, size_t n >
+    bool vecInequality( const Vector<T,n>& v1, const Vector<T,n>& v2 )
+    {
+        const T *dat1 = v1.data();
+        const T *dat2 = v2.data();
+
+        for (size_t i = 0; i < n; i++)
+        {
+            if (dat1[i] != dat2[i])
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    template< typename T, size_t n >
     std::string vecToString( const Vector<T,n>& v )
     {
         std::stringstream ss;
