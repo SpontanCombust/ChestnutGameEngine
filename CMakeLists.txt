@@ -8,7 +8,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # =================================== Library dependencies ===================================
 
 include(FetchContent)
-# set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+
+FetchContent_Declare(
+    FetchContentOffline
+    GIT_REPOSITORY https://github.com/SpontanCombust/cmake-fetchcontent-offline
+)
+set(FETCHCONTENT_UPDATES_DISCONNECTED_FETCHCONTENTOFFLINE ON)
+FetchContent_MakeAvailable(FetchContentOffline)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${fetchcontentoffline_SOURCE_DIR}")
+include(fetchcontent-offline)
+
+FetchContent_DisconnectedIfOffline()
+
 
 FetchContent_Declare(
     ChestnutECSCore
