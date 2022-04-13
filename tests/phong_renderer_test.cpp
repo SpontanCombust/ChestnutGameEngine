@@ -21,8 +21,6 @@ TEST_CASE( "Renderers - Phong renderer test", "[manual]" )
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    REQUIRE(GLEW_VERSION_3_3);
-
     CPhongRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );
 
@@ -31,7 +29,7 @@ TEST_CASE( "Renderers - Phong renderer test", "[manual]" )
 
     CTexture2D textureDiffuse;
     REQUIRE_NOTHROW( textureDiffuse = CTexture2D( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) ) );
-    // mesh.getResource()->m_material.diffuse = textureDiffuse;
+    mesh.getResource()->m_material.diffuse = textureDiffuse;
 
 
 
@@ -41,11 +39,18 @@ TEST_CASE( "Renderers - Phong renderer test", "[manual]" )
         showInfoMessageBox( testName, "Click to render a mesh with default values" );
 
         renderer.setProjectionMatrix(matMakePerspective(degreesToRadians(60.f), (float)window.getSizeWidth() / (float)window.getSizeHeight(), 0.1f, 100.f));
-        renderer.setViewMatrix(matMakeLookAt(vec3f(0.f, -1.f, 3.f), vec3f(0.f, 0.f, 0.f)));
+        renderer.setViewMatrix(matMakeLookAt(vec3f(0.f, 0.f, 3.f), vec3f(0.f, 0.f, 0.f)));
+
+        CDirectionalLight light;
+        light.m_direction = {1.f, -1.f, 0.f};
+        light.m_ambient = {0.1f, 0.1f, 0.1f};
+        light.m_diffuse = {0.8f, 0.8f, 0.8f};
+        light.m_specular = {0.5f, 0.5f, 0.5f};
 
         window.clear();
             renderer.clear();
             renderer.submitMesh(mesh, {0.f, 0.f, 0.f});
+            renderer.submitLight(light);
             renderer.render( window.getFramebuffer() );
         window.flipBuffer();
 
