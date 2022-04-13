@@ -69,4 +69,11 @@ namespace chestnut::engine
         }
     }
 
+    template<typename T>
+    CUniform<T>& CUniform<T>::operator=(const T& value)
+    {
+        set(value);
+        return *this;
+    }
+
 } // namespace chestnut::engine

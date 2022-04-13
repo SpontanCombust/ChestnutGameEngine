@@ -27,6 +27,7 @@ namespace chestnut::engine
         CUniform(const std::string& name, GLint location, std::shared_ptr<CShaderProgramResource> m_shaderResource);
 
         void set(const T& value);
+        CUniform& operator=(const T& value);
     };
 
 } // namespace chestnut::engine
