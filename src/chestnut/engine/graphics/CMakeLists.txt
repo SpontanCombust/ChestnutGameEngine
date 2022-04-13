@@ -22,6 +22,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/colored_polygon2d.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extrude_profile.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/extrude_profile.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/light.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/light.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/material.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mesh.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/mesh.cpp
