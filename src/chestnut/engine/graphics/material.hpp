@@ -9,7 +9,8 @@ namespace chestnut::engine
     {
         DIFFUSE,
         SPECULAR,
-        NORMAL
+        NORMAL,
+        SHININESS
     };
 
     struct SMaterial
@@ -17,6 +18,7 @@ namespace chestnut::engine
         CTexture2D diffuse;
         CTexture2D specular;
         CTexture2D normal;
+        CTexture2D shininess;
     };
 
 } // namespace chestnut::engine

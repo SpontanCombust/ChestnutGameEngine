@@ -124,6 +124,9 @@ namespace chestnut::engine
         case ETextureMapType::NORMAL:
             assimpTexType = aiTextureType_NORMALS;
             break;
+        case ETextureMapType::SHININESS:
+            assimpTexType = aiTextureType_SHININESS;
+            break;
         default:
             return tl::make_unexpected<const char *>("Invalid texture map type");
         }
@@ -157,6 +160,13 @@ namespace chestnut::engine
         } else {
             LOG_WARNING("Specular couldn't be loaded for the material");
             LOG_WARNING(specular.error());
+        }
+
+        if(auto shininess = extractTextureFromMaterial(assimpMaterial, ETextureMapType::SHININESS, directory)) {
+            material.shininess = CTexture2D(*shininess);
+        } else {
+            LOG_WARNING("Shininess couldn't be loaded for the material");
+            LOG_WARNING(shininess.error());
         }
 
         if(auto normal = extractTextureFromMaterial(assimpMaterial, ETextureMapType::NORMAL, directory)) {
