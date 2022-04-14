@@ -6,17 +6,6 @@
 
 namespace chestnut::engine
 {    
-    static const uint8_t defaultDiffuseTextureBytes[] = 
-    {
-        0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,
-        0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,
-        0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,
-        0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,
-        0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,   0x00, 0x00, 0x00,   0xff, 0x00, 0xff,
-    };
     static const uint8_t defaultSpecularTextureBytes[] = 
     {
         0x00, 0x00, 0x00,   0x00, 0x00, 0x00,   0x00, 0x00, 0x00,   0x00, 0x00, 0x00,   0x00, 0x00, 0x00,   0x00, 0x00, 0x00,   0x00, 0x00, 0x00,   0x00, 0x00, 0x00,
@@ -50,6 +39,7 @@ namespace chestnut::engine
         0x01,   0x01,   0x01,   0x01,   0x01,   0x01,   0x01,   0x01,
         0x01,   0x01,   0x01,   0x01,   0x01,   0x01,   0x01,   0x01,
     };
+
 
 
 
@@ -95,8 +85,9 @@ namespace chestnut::engine
 
     bool CPhongRenderer::initBuffers()
     {
-        // buffers will be crated when new meshes will be submitted
         //TODO redo renderer initialization using tl::expected
+        CPlainMeshRenderer::initBuffers();
+
 
         if(auto uniform = m_shader.getUniform<vec3f>("uCameraPosition")) {
             m_unifCameraPosition = *uniform;
@@ -106,27 +97,19 @@ namespace chestnut::engine
         }
 
 
-        if(auto uniform = m_shader.getUniform<int>("uMaterial.diffuse")) {
-            m_unifMaterial.diffuse = *uniform;
-            m_unifMaterial.diffuse.set(0);
-        } else {
-            LOG_WARNING("Diffuse texture uniform not found");
-        }
-
         if(auto uniform = m_shader.getUniform<int>("uMaterial.specular")) {
-            m_unifMaterial.specular = *uniform;
-            m_unifMaterial.specular.set(1);
+            m_unifMaterialSpecular = *uniform;
+            m_unifMaterialSpecular.set(1);
         } else {
             LOG_WARNING("Specular texture uniform not found");
         }
 
         if(auto uniform = m_shader.getUniform<int>("uMaterial.shininess")) {
-            m_unifMaterial.shininess = *uniform;
-            m_unifMaterial.shininess.set(2);
+            m_unifMaterialShininess = *uniform;
+            m_unifMaterialShininess.set(2);
         } else {
             LOG_WARNING("Normal texture uniform not found");
         }
-
 
 
         if(auto uniform = m_shader.getUniform<unsigned int>("uLightCount")) {
@@ -252,12 +235,12 @@ namespace chestnut::engine
 
     void CPhongRenderer::onInit()
     {
-        m_defaultDiffuseTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultDiffuseTextureBytes, 8, 8, GL_RGB, false));
+        CPlainMeshRenderer::onInit();
+
         m_defaultSpecularTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultSpecularTextureBytes, 8, 8, GL_RGB, false));
         // m_defaultNormalTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultNormalTextureBytes, 8, 8, GL_RGB, false));
         m_defaultShininessTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultShininessTextureBytes, 8, 8, GL_RED, false));
 
-        m_defaultDiffuseTexture.setFiltering(GL_NEAREST, GL_NEAREST);
         m_defaultSpecularTexture.setFiltering(GL_NEAREST, GL_NEAREST);
         // m_defaultNormalTexture.setFiltering(GL_NEAREST, GL_NEAREST);
         m_defaultShininessTexture.setFiltering(GL_NEAREST, GL_NEAREST);
@@ -268,22 +251,8 @@ namespace chestnut::engine
 
     void CPhongRenderer::clear()
     {
-        for(auto& [id, instances] : m_mapMeshIDToInstances)
-        {
-            instances.vecTransforms.clear();
-        }
-
+        CPlainMeshRenderer::clear();
         m_lightCount = 0;
-    }
-
-    void CPhongRenderer::submitMesh(const CMesh& mesh, const vec3f& translation, const vec3f& scale)
-    {
-        if(m_mapMeshIDToInstances.find(mesh.getResource()->m_vboVertices->getID()) == m_mapMeshIDToInstances.end())
-        {
-            initInstancesForMesh(mesh);
-        }
-
-        m_mapMeshIDToInstances[mesh.getResource()->m_vboVertices->getID()].vecTransforms.push_back({translation, scale});
     }
 
     bool CPhongRenderer::submitLight(const CDirectionalLight& light)
@@ -363,40 +332,6 @@ namespace chestnut::engine
 
     
 
-
-    void CPhongRenderer::initInstancesForMesh(const CMesh& mesh)
-    {
-        auto& instances = m_mapMeshIDToInstances[mesh.getResource()->m_vboVertices->getID()];
-
-        instances.mesh = mesh;
-        instances.vboInstance = std::make_shared<CBuffer>(
-            CBuffer::EType::VERTEX,
-            CBuffer::EUsage::DYNAMIC_DRAW,
-            CBuffer::ELayout::ARRAY_OF_STRUCTS
-        );
-
-        if( auto err = mesh.addBuffersToVAO(instances.vao, m_shader, "avPos", "avNormal", "avUV")) {
-            LOG_ERROR(err.value());
-            // return;
-        }
-        instances.vao.addBuffer(instances.vboInstance, {
-            m_shader.getAttribute<vec3f>("aiTranslation", true).value(),
-            m_shader.getAttribute<vec3f>("aiScale", true).value()
-        });
-
-        instances.vao.compose();
-    }
-
-    void CPhongRenderer::prepareBuffers()
-    {
-        for(auto& [id, instances] : m_mapMeshIDToInstances)
-        {
-            instances.vboInstance->update(
-                instances.vecTransforms.data(),
-                instances.vecTransforms.size() * sizeof(instances.vecTransforms[0])
-            );
-        }
-    }
 
     void CPhongRenderer::render()
     {
