@@ -8,7 +8,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # =================================== Library dependencies ===================================
 
 include(FetchContent)
-# set(FETCHCONTENT_UPDATES_DISCONNECTED ON)
+
+FetchContent_Declare(
+    FetchContentOffline
+    GIT_REPOSITORY https://github.com/SpontanCombust/cmake-fetchcontent-offline
+)
+set(FETCHCONTENT_UPDATES_DISCONNECTED_FETCHCONTENTOFFLINE ON)
+FetchContent_MakeAvailable(FetchContentOffline)
+
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${fetchcontentoffline_SOURCE_DIR}")
+include(fetchcontent-offline)
+
+FetchContent_DisconnectedIfOffline()
+
 
 FetchContent_Declare(
     ChestnutECSCore
@@ -45,6 +57,11 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/TartanLlama/expected
     GIT_TAG master
 )
+FetchContent_Declare(
+    Assimp
+    GIT_REPOSITORY https://github.com/assimp/assimp
+    GIT_TAG v5.2.3
+)
 
 FetchContent_MakeAvailable(
     ChestnutECSCore 
@@ -54,6 +71,7 @@ FetchContent_MakeAvailable(
     SDL2_mixer
     tl_optional
     tl_expected
+    Assimp
 )
 
 
@@ -70,6 +88,7 @@ find_package(GLEW REQUIRED)
 # configure libs
 set(OPTIONAL_BUILD_TESTS OFF)
 set(EXPECTED_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_TESTS OFF)
 
 # ====================================== CGE library ======================================
 
@@ -88,6 +107,7 @@ target_link_libraries(${PROJECT_NAME}
     SDL2_mixer
     optional
     expected
+    assimp
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})

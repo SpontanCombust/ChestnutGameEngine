@@ -91,6 +91,19 @@ namespace chestnut::engine
 
 
     template< typename T, size_t n >
+    bool vecEquality( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+    template< typename T, size_t n >
+    inline bool operator==( const Vector<T,n>& v1, const Vector<T,n>& v2 ) { return vecEquality( v1, v2 ); }
+
+    template< typename T, size_t n >
+    bool vecInequality( const Vector<T,n>& v1, const Vector<T,n>& v2 );
+
+    template< typename T, size_t n >
+    inline bool operator!=( const Vector<T,n>& v1, const Vector<T,n>& v2 ) { return vecInequality( v1, v2 ); }
+
+
+    template< typename T, size_t n >
     std::string vecToString( const Vector<T,n>& v );
 
 } // namespace chestnut::engine

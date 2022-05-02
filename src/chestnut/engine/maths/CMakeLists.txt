@@ -1,6 +1,8 @@
 target_sources(${PROJECT_NAME} PRIVATE 
     ${CMAKE_CURRENT_SOURCE_DIR}/angles.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/angles.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/curves.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/curves.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/matrix.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/matrix.tpp
     ${CMAKE_CURRENT_SOURCE_DIR}/matrix3.hpp

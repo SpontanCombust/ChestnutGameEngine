@@ -5,5 +5,24 @@
         "*.tpp" : "cpp"
     },
     "CppHelper.HeaderGuardPattern": "__CHESTNUT_ENGINE_{FILE}_H__",
-    "discord.enabled": false
+    "discord.enabled": true,
+    "testMate.cpp.debug.configTemplate": {
+        "type": "cppvsdbg",
+        "linux": { "type": "cppdbg", "MIMode": "gdb" },
+        "darwin": { "type": "cppdbg", "MIMode": "lldb" },
+        "win32": { "type": "cppvsdbg" },
+        "program": "${exec}",
+        "args": "${argsArray}",
+        "cwd": "${cwd}",
+        "env": "${envObj}",
+        "environment": "${envObjArray}",
+        "sourceFileMap": "${sourceFileMapObj}",
+        "setupCommands": [
+            {
+                "description": "Enable pretty-printing for gdb",
+                "text": "-enable-pretty-printing",
+                "ignoreFailures": true
+            }
+        ],
+    }
 }

@@ -3,14 +3,14 @@
 namespace chestnut::engine
 {    
     template<typename T>
-    tl::optional<CVertexAttribute> CShaderProgram::getAttribute(const char *name, bool isInstanced)
+    tl::optional<CVertexAttribute> CShaderProgram::getAttribute(const char *name, bool isInstanced) const noexcept
     {
         if(!m_shaderResource) 
         {
             return tl::nullopt;
         }
 
-        GLint location = m_shaderResource->getAttributeLocation(name);
+        GLint location = glGetAttribLocation(m_shaderResource->m_programID, name);
         if(location == -1)
         {
             return tl::nullopt;
@@ -20,14 +20,14 @@ namespace chestnut::engine
     }
 
     template<typename T>
-    tl::optional<CUniform<T>> CShaderProgram::getUniform(const char *name)
+    tl::optional<CUniform<T>> CShaderProgram::getUniform(const char *name) const noexcept
     {
         if(!m_shaderResource) 
         {
             return tl::nullopt;
         }
 
-        GLint location = m_shaderResource->getUniformLocation(name);
+        GLint location = glGetUniformLocation(m_shaderResource->m_programID, name);
         if(location == -1)
         {
             return tl::nullopt;
