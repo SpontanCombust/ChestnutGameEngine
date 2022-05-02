@@ -11,6 +11,7 @@ namespace chestnut::engine
         m_width = width;
         m_height = height;
         m_clearColor = { 0.f, 0.f, 0.f, 1.f };
+        m_target = CTexture2D();
     }
 
     CFramebuffer::CFramebuffer( const CTexture2D& target ) 
@@ -31,6 +32,7 @@ namespace chestnut::engine
         m_width = other.m_width;
         m_height = other.m_height;
         m_clearColor = other.m_clearColor;
+        m_target = std::move( other.m_target );
 
         other.m_fbo = 0;
         other.m_rbo = 0;
@@ -45,6 +47,7 @@ namespace chestnut::engine
         m_width = other.m_width;
         m_height = other.m_height;
         m_clearColor = other.m_clearColor;
+        m_target = std::move( other.m_target );
 
         other.m_fbo = 0;
         other.m_rbo = 0;
@@ -144,6 +147,7 @@ namespace chestnut::engine
             m_rbo = rbo;
             m_width = target.getWidth();        
             m_height = target.getHeight();
+            m_target = target; // share texture
         }
     }
 
@@ -155,6 +159,18 @@ namespace chestnut::engine
     bool CFramebuffer::hasTarget() const
     {
         return m_fbo != 0;
+    }
+
+    tl::optional<CTexture2D> CFramebuffer::getTarget() const
+    {
+        if( m_fbo != 0 )
+        {
+            return m_target;
+        }
+        else
+        {
+            return tl::nullopt;
+        }
     }
 
     void CFramebuffer::destroyBufferIfSetToTexture() 

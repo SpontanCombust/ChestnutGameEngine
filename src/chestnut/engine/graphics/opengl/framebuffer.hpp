@@ -4,6 +4,9 @@
 #include "texture2d.hpp"
 #include "../../maths/vector4.hpp"
 
+#include <tl/optional.hpp>
+
+
 namespace chestnut::engine
 {
     class CFramebuffer
@@ -13,6 +16,9 @@ namespace chestnut::engine
         GLuint m_rbo;
         int m_width, m_height;
         vec4f m_clearColor;
+
+        CTexture2D m_target;
+
 
     public:
         CFramebuffer( int width, int height );
@@ -44,9 +50,11 @@ namespace chestnut::engine
         void setTarget( const CTexture2D& target );
         // The target will be the default OpenGL window buffer
         void resetTarget();
-
         // If not then the target is directly OpenGL window buffer
         bool hasTarget() const;
+        // If returns None then the target is directly OpenGL window buffer
+        tl::optional<CTexture2D> getTarget() const;
+
 
     private:
         void destroyBufferIfSetToTexture();  
