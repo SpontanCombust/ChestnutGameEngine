@@ -52,6 +52,7 @@ out vec4 fs_out_color;
 vec3 calcDirectionalLight(Light light, vec3 viewDir) 
 {
     vec3 lightDir = normalize(-light.direction);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
 
     // diffuse
     float diffuseImpact = max(dot(fs_in.normal, lightDir), 0.0);
@@ -59,7 +60,7 @@ vec3 calcDirectionalLight(Light light, vec3 viewDir)
     // specular and shininess
     vec3 reflectDir = reflect(-lightDir, fs_in.normal);
     float shininess = texture(uMaterial.shininess, fs_in.uv).r;
-    float specularImpact = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    float specularImpact = pow(max(dot(fs_in.normal, halfwayDir), 0.0), shininess);
 
 
     // combine everything
@@ -73,6 +74,7 @@ vec3 calcDirectionalLight(Light light, vec3 viewDir)
 vec3 calcPointLight(Light light, vec3 viewDir)
 {
     vec3 lightDir = normalize(light.position - fs_in.pos);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
 
     // diffuse
     float diffuseImpact = max(dot(fs_in.normal, lightDir), 0.0);
@@ -80,7 +82,7 @@ vec3 calcPointLight(Light light, vec3 viewDir)
     // specular and shininess
     vec3 reflectDir = reflect(-lightDir, fs_in.normal);
     float shininess = texture(uMaterial.shininess, fs_in.uv).r;
-    float specularImpact = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    float specularImpact = pow(max(dot(fs_in.normal, halfwayDir), 0.0), shininess);
 
     // attenuation
     float dist = length(fs_in.pos - light.position);
@@ -98,6 +100,7 @@ vec3 calcPointLight(Light light, vec3 viewDir)
 vec3 calcSpotLight(Light light, vec3 viewDir)
 {
     vec3 lightDir = normalize(light.position - fs_in.pos);
+    vec3 halfwayDir = normalize(lightDir + viewDir);
 
     // diffuse
     float diffuseImpact = max(dot(fs_in.normal, lightDir), 0.0);
@@ -105,7 +108,7 @@ vec3 calcSpotLight(Light light, vec3 viewDir)
     // specular and shininess
     vec3 reflectDir = reflect(-lightDir, fs_in.normal);
     float shininess = texture(uMaterial.shininess, fs_in.uv).r;
-    float specularImpact = pow(max(dot(viewDir, reflectDir), 0.0), shininess);
+    float specularImpact = pow(max(dot(fs_in.normal, halfwayDir), 0.0), shininess);
 
     // attenuation
     float dist = length(fs_in.pos - light.position);
