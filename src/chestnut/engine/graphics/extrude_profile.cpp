@@ -2,47 +2,54 @@
 
 #include "../maths/vector_transform.hpp"
 
-#include <algorithm> // std::for_each
 #include <cmath> // std::acos
 
 
 namespace chestnut::engine
 {
-    const vec3f INIT_PROFILE_FORWARD_VECTOR = vec3f(0.f, 1.f, 0.f);
+    const vec3f PROFILE_NORMAL = vec3f(0.f, 0.f, 1.f);
 
     tl::expected<std::shared_ptr<CMeshResource>, const char *> extrudeProfile(std::vector<vec2f> profile, const std::vector<SExtrusionPoint>& extrusionPoints)
     {
         if(extrusionPoints.size() < 2)
         {
-            return tl::make_unexpected("extrusionPoints must have at least 2 points");
+            return tl::make_unexpected("ExtrusionPoints must have at least 2 points");
         }
 
-        // generate vertices
+        // so that indexing is easier and texture wrapping across a segment is possible
+        profile.push_back(profile[0]);
+        const int profileSize = profile.size();
+        
+
+        // ============= VERTICES ============= //
+        // each vertex of the profile is being transformed for every extrusion point
+        // and added to the `vertices` vector
         std::vector<vec3f> vertices;
+        vertices.reserve(profileSize * extrusionPoints.size());
         for(const auto& ep : extrusionPoints)
         {
             vec3f direction = vecNormalized(ep.direction);
             // the angle of rotation of the direction vector
-            float directionAngleDelta = std::acos(vecDotProduct(INIT_PROFILE_FORWARD_VECTOR, direction));
+            float rotationAngle = std::acos(vecDotProduct(PROFILE_NORMAL, direction));
             // the vector around which said direction vector is rotated
-            vec3f directionRotationVec;
+            vec3f rotationNormal;
             // avoid calculating with NaN value
-            if(direction == INIT_PROFILE_FORWARD_VECTOR || direction == -INIT_PROFILE_FORWARD_VECTOR)
+            if(direction == PROFILE_NORMAL || direction == -PROFILE_NORMAL)
             {
-                directionRotationVec = {0.f, 0.f, 1.f};
+                rotationNormal = {1.f, 0.f, 0.f};
             }
             else
             {
-                directionRotationVec = vecCrossProduct(INIT_PROFILE_FORWARD_VECTOR, direction);
+                rotationNormal = vecCrossProduct(PROFILE_NORMAL, direction);
             }
             
-            for(const auto& p : profile)
+            for (int j = 0; j < profileSize - 1; j++)
             {
                 // initialize the vertex with profile coords
-                vec3f vert = {p.x, 0.f, p.y};
+                vec3f vert = {profile[j].x, profile[j].y, 0.f};
                 
                 // rotate the vertex by the angle the direction vector makes with base vector of the profile
-                vecRotate(vert, directionRotationVec, directionAngleDelta);
+                vecRotate(vert, rotationNormal, rotationAngle);
                 // now rotate the vertex by the roll angle
                 vecRotate(vert, direction, ep.roll);
                 // move vertex to the position
@@ -50,53 +57,118 @@ namespace chestnut::engine
                 
                 vertices.push_back(vert);
             }
+            vertices.push_back( *(vertices.end() - (profileSize - 1)) ); // for that one repeated vertex
         }
 
-        // generate indices
-        std::vector<unsigned int> indices;
-        for (size_t i = 0; i < extrusionPoints.size() - 1; i++)
+        
+        // ============= UVS ============= //
+        std::vector<vec2f> uvs;
+        uvs.reserve(profileSize * extrusionPoints.size());
+        for (size_t i = 0; i < extrusionPoints.size(); i++)
+        {
+            // a texture will be wrapped around a single segment and will repeat with every segment
+            for (int j = 0; j < profileSize; j++)
+            {
+                uvs.push_back(vec2f(
+                    float(j) / float(profileSize - 1),
+                    float(i)
+                ));
+            }
+        }
+
+
+        // ============= NORMALS ============= //
+        // calculate normal based on the faces of the next curve mesh segment
+        std::vector<vec3f> normals;
+        normals.reserve(profileSize * extrusionPoints.size());
+        auto calcNormalAfter = [&](int i, int j) -> vec3f {
+            vec3f vThis = vertices[i * profileSize + j];
+
+            vec3f vRight = vertices[i * profileSize + j + 1];
+            
+            vec3f vUp = vertices[(i + 1) * profileSize + j];
+            
+            vec3f vLeft;
+            if(j > 0) {
+                vLeft = vertices[i * profileSize + j - 1];
+            } else {
+                vLeft = vertices[(i + 1) * profileSize - 2];
+            }
+
+            vec3f n1 = vecCrossProduct(vRight - vThis, vUp - vThis);
+            vec3f n2 = vecCrossProduct(vUp - vThis, vLeft - vThis);
+
+            return vecNormalized(n1 + n2);
+        };
+
+        // calculate normal based on the faces of the previous curve mesh segment
+        auto calcNormalBefore = [&](int i, int j) -> vec3f {
+            vec3f vThis = vertices[i * profileSize + j];
+
+            vec3f vLeft;
+            if(j > 0) {
+                vLeft = vertices[i * profileSize + j - 1];
+            } else {
+                vLeft = vertices[(i + 1) * profileSize - 2];
+            }
+
+            vec3f vDown = vertices[(i - 1) * profileSize + j];
+
+            vec3f vRight = vertices[i * profileSize + j + 1];
+
+            vec3f n1 = vecCrossProduct(vLeft - vThis, vDown - vThis);
+            vec3f n2 = vecCrossProduct(vDown - vThis, vRight - vThis);
+
+            return vecNormalized(n1 + n2);
+        };
+
+
+        for (size_t j = 0; j < profile.size(); j++)
+        {
+            normals.push_back(calcNormalAfter(0, j));
+        }
+        normals.push_back( *(normals.end() - (profileSize - 1)) ); // for that one repeated vertex
+
+        for (size_t i = 1; i < extrusionPoints.size() - 1; i++)
         {
             for (size_t j = 0; j < profile.size() - 1; j++)
             {
-                indices.push_back(i * profile.size() + j);
-                indices.push_back(i * profile.size() + (j + 1));
-                indices.push_back((i + 1) * profile.size() + (j + 1));
-
-                indices.push_back(i * profile.size() + j);
-                indices.push_back((i + 1) * profile.size() + (j + 1));
-                indices.push_back((i + 1) * profile.size() + j);
+                vec3f nBefore = calcNormalBefore(i, j);
+                vec3f nAfter = calcNormalAfter(i, j);
+                normals.push_back(vecNormalized(nBefore + nAfter));
             }
-
-            indices.push_back(i * profile.size() + profile.size() - 1);
-            indices.push_back(i * profile.size() + 0);
-            indices.push_back((i + 1) * profile.size() + 0);
-
-            indices.push_back(i * profile.size() + profile.size() - 1);
-            indices.push_back((i + 1) * profile.size() + 0);
-            indices.push_back((i + 1) * profile.size() + profile.size() - 1);
+            normals.push_back( *(normals.end() - (profileSize - 1)) );
         }
 
-        // generate uvs
-        std::vector<vec2f> uvs;
-        for (size_t i = 0; i < extrusionPoints.size(); i++)
+        for (size_t j = 0; j < profile.size(); j++)
         {
-            for (size_t j = 0; j < profile.size(); j++)
+            normals.push_back(calcNormalBefore(extrusionPoints.size() - 1, j));
+        }
+        normals.push_back( *(normals.end() - (profileSize - 1)) );
+
+
+        // ============= INDICES ============= //
+        std::vector<unsigned int> indices;
+        indices.reserve((extrusionPoints.size() - 1) * (profileSize - 1) * 6);
+        for (size_t i = 0; i < extrusionPoints.size() - 1; i++)
+        {
+            for (int j = 0; j < profileSize - 1; j++)
             {
-                uvs.push_back(vec2f(0.f, 0.f));
-                uvs.push_back(vec2f(1.f, 0.f));
-                uvs.push_back(vec2f(1.f, 1.f));
-                
-                uvs.push_back(vec2f(0.f, 0.f));
-                uvs.push_back(vec2f(1.f, 1.f));
-                uvs.push_back(vec2f(0.f, 1.f));
+                indices.push_back(i * profileSize + j);
+                indices.push_back(i * profileSize + (j + 1));
+                indices.push_back((i + 1) * profileSize + (j + 1));
+
+                indices.push_back(i * profileSize + j);
+                indices.push_back((i + 1) * profileSize + (j + 1));
+                indices.push_back((i + 1) * profileSize + j);
             }
         }
 
-        // for now use only dummy normals
+        
         return CMeshResource::loadFromGeometry(
             vertices.size(),
             vertices.data(),
-            vertices.data(),
+            normals.data(),
             uvs.data(),
             indices.size(),
             indices.data(),
