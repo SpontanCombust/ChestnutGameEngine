@@ -237,9 +237,9 @@ namespace chestnut::engine
     {
         CPlainMeshRenderer::onInit();
 
-        m_defaultSpecularTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultSpecularTextureBytes, 8, 8, GL_RGB, false));
-        // m_defaultNormalTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultNormalTextureBytes, 8, 8, GL_RGB, false));
-        m_defaultShininessTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultShininessTextureBytes, 8, 8, GL_RED, false));
+        m_defaultSpecularTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultSpecularTextureBytes, 8, 8, 3));
+        // m_defaultNormalTexture = CTexture2D(*CTexture2DResource::loadFromImageData(defaultNormalTextureBytes, 8, 8, 3));
+        m_defaultShininessTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultShininessTextureBytes, 8, 8, 1));
 
         m_defaultSpecularTexture.setFiltering(GL_NEAREST, GL_NEAREST);
         // m_defaultNormalTexture.setFiltering(GL_NEAREST, GL_NEAREST);

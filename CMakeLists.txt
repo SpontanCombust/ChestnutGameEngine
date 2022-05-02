@@ -4,10 +4,11 @@ project(ChestnutGameEngine VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-# =================================== Library dependencies ===================================
-
 include(FetchContent)
+
+
+
+# =================================== Allow offline mode ===================================
 
 FetchContent_Declare(
     FetchContentOffline
@@ -22,6 +23,9 @@ include(fetchcontent-offline)
 FetchContent_DisconnectedIfOffline()
 
 
+
+# =================================== Library dependencies ===================================
+
 FetchContent_Declare(
     ChestnutECSCore
     GIT_REPOSITORY https://github.com/SpontanCombust/ChestnutECSCore
@@ -31,11 +35,6 @@ FetchContent_Declare(
     SDL2
     GIT_REPOSITORY https://github.com/libsdl-org/SDL
     GIT_TAG release-2.0.16
-)
-FetchContent_Declare(
-    SDL2_image
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL_image
-    GIT_TAG release-2.0.5
 )
 FetchContent_Declare(
     SDL2_ttf
@@ -62,16 +61,21 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/assimp/assimp
     GIT_TAG v5.2.3
 )
+FetchContent_Declare(
+    stb
+    GIT_REPOSITORY https://github.com/nothings/stb
+    GIT_TAG master
+)
 
 FetchContent_MakeAvailable(
     ChestnutECSCore 
     SDL2 
-    SDL2_image 
     SDL2_ttf 
     SDL2_mixer
     tl_optional
     tl_expected
     Assimp
+    stb
 )
 
 
@@ -90,6 +94,14 @@ set(OPTIONAL_BUILD_TESTS OFF)
 set(EXPECTED_BUILD_TESTS OFF)
 set(ASSIMP_BUILD_TESTS OFF)
 
+add_library(stb_image INTERFACE)
+target_sources(stb_image INTERFACE ${stb_SOURCE_DIR}/stb_image.h)
+target_include_directories(stb_image INTERFACE ${stb_SOURCE_DIR})
+
+
+
+
+
 # ====================================== CGE library ======================================
 
 add_library(${PROJECT_NAME} SHARED)
@@ -102,12 +114,12 @@ target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic
 target_link_libraries(${PROJECT_NAME} 
     ChestnutECSCore
     SDL2
-    SDL2_image
     SDL2_ttf
     SDL2_mixer
     optional
     expected
     assimp
+    stb_image
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})

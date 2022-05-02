@@ -53,7 +53,7 @@ namespace chestnut::engine
 
     void CPlainMeshRenderer::onInit()
     {
-        m_defaultDiffuseTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultDiffuseTextureBytes, 8, 8, GL_RGB, false));
+        m_defaultDiffuseTexture = CTexture2D(*CTexture2DResource::loadFromPixels(defaultDiffuseTextureBytes, 8, 8, 3));
         m_defaultDiffuseTexture.setFiltering(GL_NEAREST, GL_NEAREST);
     }
 

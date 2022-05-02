@@ -6,7 +6,6 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
@@ -28,19 +27,9 @@ namespace chestnut::engine
         }
 
 
-        flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
-        if( !( IMG_Init( flags ) & flags ) )
-        {
-            LOG_ERROR( "SDL_image failed to initialize!" << IMG_GetError() );
-            SDL_Quit();
-            return false;
-        }
-
-
         if( TTF_Init() < 0 )
         {
             LOG_ERROR( "SDL_ttf failed to initialize!" << TTF_GetError() );
-            IMG_Quit();
             SDL_Quit();
             return false;
         }
@@ -50,7 +39,6 @@ namespace chestnut::engine
         {
             LOG_ERROR( "SDL_mixer failed to initialize!" << Mix_GetError() );
             TTF_Quit();
-            IMG_Quit();
             SDL_Quit();
             return false;
         }
@@ -60,7 +48,8 @@ namespace chestnut::engine
         {
             LOG_WARNING( "Failed to set OpenGL major version!" );
             LOG_WARNING( TTF_GetError() );
-            IMG_Quit();
+            Mix_CloseAudio();
+            TTF_Quit();
             SDL_Quit();
             return false;
         }
@@ -68,7 +57,8 @@ namespace chestnut::engine
         {
             LOG_WARNING( "Failed to set OpenGL minor version!" );
             LOG_WARNING( TTF_GetError() );
-            IMG_Quit();
+            Mix_CloseAudio();
+            TTF_Quit();
             SDL_Quit();
             return false;
         }
@@ -107,7 +97,6 @@ namespace chestnut::engine
         {
             Mix_CloseAudio();
             TTF_Quit();
-            IMG_Quit();
             SDL_Quit();
 
             wasInit = false;

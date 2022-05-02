@@ -50,7 +50,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 
 
     CTexture2D blank;
-    REQUIRE_NOTHROW( blank = CTexture2D( *CTexture2DResource::loadFromPixels( nullptr, window.getSizeWidth(), window.getSizeHeight(), GL_RGBA, false ) ) );
+    REQUIRE_NOTHROW( blank = CTexture2D( *CTexture2DResource::loadFromPixels( nullptr, window.getSizeWidth(), window.getSizeHeight(), 4) ) );
     CFramebuffer blankFramebuffer( blank );
     blankFramebuffer.setClearColor( vec4f( 0.f ) ); 
     blankFramebuffer.bind();

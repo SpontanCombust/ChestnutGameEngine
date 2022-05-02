@@ -153,8 +153,7 @@ namespace chestnut::engine
 
 
         // ========== create the OpenGL texture resource ==========
-
-        if(auto spritesheetTexture = CTexture2DResource::loadFromPixels( alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, GL_RED, false ) )
+        if(auto spritesheetTexture = CTexture2DResource::loadFromPixels(alphaPixels8, spriteSheetSideLength, spriteSheetSideLength, 1) )
         {
             config.textureResource = *spritesheetTexture;
         }
