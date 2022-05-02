@@ -4,7 +4,7 @@
 
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/window.hpp"
-#include "../src/chestnut/engine/graphics/renderers/phong_renderer.hpp"
+#include "../src/chestnut/engine/graphics/renderers/plain_mesh_renderer.hpp"
 #include "../src/chestnut/engine/constants.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/maths/angles.hpp"
@@ -26,7 +26,7 @@ TEST_CASE( "3D camera test", "[manual][demo]" )
     REQUIRE( window.isValid() );
     window.toggleVsync(true);
 
-    CPhongRenderer renderer;
+    CPlainMeshRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );
 
     CMesh mesh;

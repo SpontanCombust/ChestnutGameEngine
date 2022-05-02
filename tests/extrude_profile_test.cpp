@@ -4,7 +4,7 @@
 
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/window.hpp"
-#include "../src/chestnut/engine/graphics/renderers/phong_renderer.hpp"
+#include "../src/chestnut/engine/graphics/renderers/plain_mesh_renderer.hpp"
 #include "../src/chestnut/engine/constants.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/maths/angles.hpp"
@@ -22,7 +22,7 @@ TEST_CASE( "Extrude profile", "[manual]" )
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CPhongRenderer renderer;
+    CPlainMeshRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );
 
 
@@ -46,6 +46,7 @@ TEST_CASE( "Extrude profile", "[manual]" )
     CTexture2D textureDiffuse;
     REQUIRE_NOTHROW( textureDiffuse = CTexture2D( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) ) );
     mesh.getResource()->m_material.diffuse = textureDiffuse;
+
 
     showInfoMessageBox( testName, "Click to render a N-shaped curve extruded along a profile." );
 
