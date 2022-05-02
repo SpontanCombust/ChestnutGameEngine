@@ -1,6 +1,6 @@
 #include "extrude_profile.hpp"
 
-#include "../maths/vector_transform.hpp"
+#include "../../maths/vector_transform.hpp"
 
 #include <cmath> // std::acos
 

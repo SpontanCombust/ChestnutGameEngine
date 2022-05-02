@@ -8,7 +8,7 @@
 #include "../src/chestnut/engine/constants.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/maths/angles.hpp"
-#include "../src/chestnut/engine/graphics/extrude_profile.hpp"
+#include "../src/chestnut/engine/graphics/algorithms/extrude_profile.hpp"
 
 
 using namespace chestnut::engine;

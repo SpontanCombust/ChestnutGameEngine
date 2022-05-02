@@ -1,9 +1,9 @@
 #ifndef __CHESTNUT_ENGINE_EXTRUDE_PROFILE_H__
 #define __CHESTNUT_ENGINE_EXTRUDE_PROFILE_H__
 
-#include "../resources/mesh_resource.hpp"
-#include "../maths/vector3.hpp"
-#include "../maths/curves.hpp"
+#include "../../resources/mesh_resource.hpp"
+#include "../../maths/vector3.hpp"
+#include "../../maths/curves.hpp"
 
 
 namespace chestnut::engine
