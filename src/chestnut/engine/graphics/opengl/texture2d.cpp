@@ -1,11 +1,25 @@
 #include "texture2d.hpp"
 
+#include "../../debug/log.hpp"
+
+
 namespace chestnut::engine 
 {
     CTexture2D::CTexture2D( std::shared_ptr<CTexture2DResource> resource )
     : m_texResource(resource) 
     {
         
+    }
+
+    CTexture2D::CTexture2D(const std::shared_ptr<CImageDataResource>& resource) 
+    {
+        auto texResource = CTexture2DResource::loadFromImageData(resource);
+        if(texResource) {
+            m_texResource = *texResource;
+        } else {
+            LOG_ERROR("Failed to load texture resource from image data");
+            m_texResource = nullptr;
+        }
     }
 
     const std::shared_ptr<CTexture2DResource>& CTexture2D::getResource() const

@@ -78,9 +78,10 @@ namespace chestnut::engine
         CImageDataResource *resource = new CImageDataResource();
         resource->m_sourcePath = std::move(tl::nullopt);
         resource->m_data = new unsigned char[width * height * numChannels];
-        if(data)
-        {
+        if(data) {
             std::memcpy(resource->m_data, data, width * height * numChannels);
+        } else {
+            std::memset(resource->m_data, 0, width * height * numChannels);
         }
         resource->m_width = width;
         resource->m_height = height;

@@ -17,6 +17,12 @@ namespace chestnut::engine
         m_tintFactor = 0.f;
     }
 
+    CSprite::CSprite(std::shared_ptr<CImageDataResource> resource)
+    : CTexture2D(resource)
+    {
+
+    }
+
     SRectangle CSprite::getClippingRect() const
     {
         return m_clipRect;
