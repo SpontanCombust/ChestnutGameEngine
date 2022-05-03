@@ -1,5 +1,7 @@
 #include "mesh.hpp"
 
+#include "../debug/log.hpp"
+
 namespace chestnut::engine
 {
     CMesh::CMesh()
@@ -9,6 +11,18 @@ namespace chestnut::engine
     CMesh::CMesh(std::shared_ptr<CMeshResource> resource)
         : m_resource(resource)
     {
+    }
+
+    CMesh::CMesh(std::shared_ptr<CMeshDataResource> resource, const SMaterial& material) 
+    {
+        auto meshResource = CMeshResource::loadFromMeshData(resource, material);
+        if(meshResource) {
+            m_resource = *meshResource;
+        } else {
+            LOG_ERROR("Failed to load mesh resource from mesh data resource");
+            m_resource = nullptr;
+        }
+
     }
 
     bool CMesh::isValid() const

@@ -2,6 +2,7 @@
 #define __CHESTNUT_ENGINE_MESH_H__
 
 #include "../resources/mesh_resource.hpp"
+#include "../resources/mesh_data_resource.hpp"
 #include "opengl/vertex_array.hpp"
 #include "opengl/shader_program.hpp"
 
@@ -18,6 +19,7 @@ namespace chestnut::engine
     public:
         CMesh();
         explicit CMesh(std::shared_ptr<CMeshResource> resource);
+        explicit CMesh(std::shared_ptr<CMeshDataResource> resource, const SMaterial& material);
 
         bool isValid() const;
         const std::shared_ptr<CMeshResource>& getResource() const;
