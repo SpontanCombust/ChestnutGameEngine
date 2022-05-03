@@ -9,7 +9,7 @@ namespace chestnut::engine
 {
     const vec3f PROFILE_NORMAL = vec3f(0.f, 0.f, 1.f);
 
-    tl::expected<std::shared_ptr<CMeshResource>, const char *> extrudeProfile(std::vector<vec2f> profile, const std::vector<SExtrusionPoint>& extrusionPoints)
+    tl::expected<std::shared_ptr<CMeshDataResource>, const char *> extrudeProfile(std::vector<vec2f> profile, const std::vector<SExtrusionPoint>& extrusionPoints)
     {
         if(extrusionPoints.size() < 2)
         {
@@ -165,21 +165,20 @@ namespace chestnut::engine
         }
 
         
-        return CMeshResource::loadFromGeometry(
+        return CMeshDataResource::loadFromGeometry(
             vertices.size(),
             vertices.data(),
             normals.data(),
             uvs.data(),
             indices.size(),
-            indices.data(),
-            SMaterial{}
+            indices.data()
         );
     }
 
 
 
 
-    tl::expected<std::shared_ptr<CMeshResource>, const char *> extrudeProfileWithCurve(std::vector<vec2f> profile, const std::vector<SBezierCurvePoint>& curvePoints, unsigned int segmentCount)
+    tl::expected<std::shared_ptr<CMeshDataResource>, const char *> extrudeProfileWithCurve(std::vector<vec2f> profile, const std::vector<SBezierCurvePoint>& curvePoints, unsigned int segmentCount)
     {
         auto curve = plotBezierCurve(curvePoints, segmentCount);
 

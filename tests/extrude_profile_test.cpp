@@ -40,8 +40,10 @@ TEST_CASE( "Extrude profile", "[manual]" )
         {{2.f, 7.f, -3.f}, 0.1f},
     };
     
+    std::shared_ptr<CMeshDataResource> meshData;
+    REQUIRE_NOTHROW( meshData = *extrudeProfileWithCurve(profile, curvePoints, 100) );
     CMesh mesh;
-    REQUIRE_NOTHROW(mesh = CMesh(*extrudeProfileWithCurve(profile, curvePoints, 100)));
+    REQUIRE_NOTHROW(mesh = CMesh( *CMeshResource::loadFromMeshData(meshData, SMaterial{}) ));
 
     CTexture2D textureDiffuse;
     REQUIRE_NOTHROW( textureDiffuse = CTexture2D( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) ) );

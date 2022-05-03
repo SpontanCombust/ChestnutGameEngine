@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_EXTRUDE_PROFILE_H__
 #define __CHESTNUT_ENGINE_EXTRUDE_PROFILE_H__
 
-#include "../../resources/mesh_resource.hpp"
+#include "../../resources/mesh_data_resource.hpp"
 #include "../../maths/vector3.hpp"
 #include "../../maths/curves.hpp"
 
@@ -15,10 +15,10 @@ namespace chestnut::engine
         float roll;
     };
 
-    tl::expected<std::shared_ptr<CMeshResource>, const char *> extrudeProfile(std::vector<vec2f> profile, const std::vector<SExtrusionPoint>& extrusionPoints);
+    tl::expected<std::shared_ptr<CMeshDataResource>, const char *> extrudeProfile(std::vector<vec2f> profile, const std::vector<SExtrusionPoint>& extrusionPoints);
 
     // All elements besides the first and last in curvePoints are treated as control points
-    tl::expected<std::shared_ptr<CMeshResource>, const char *> extrudeProfileWithCurve(std::vector<vec2f> profile, const std::vector<SBezierCurvePoint>& curvePoints, unsigned int segmentCount);
+    tl::expected<std::shared_ptr<CMeshDataResource>, const char *> extrudeProfileWithCurve(std::vector<vec2f> profile, const std::vector<SBezierCurvePoint>& curvePoints, unsigned int segmentCount);
 
 } // namespace chestnut::engine
 
