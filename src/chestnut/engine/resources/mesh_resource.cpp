@@ -24,18 +24,29 @@ namespace chestnut::engine
     }
 
 
-
-    std::shared_ptr<CMeshResource> CMeshResource::loadFromGeometry(
-            unsigned int vertexCount,
+    tl::expected<std::shared_ptr<CMeshResource>, const char *> CMeshResource::loadFromGeometry(
+            size_t vertexCount,
             const vec3f *vertices,
             const vec3f *normals,
             const vec2f *uvs,
-            unsigned int indexCount,
+            size_t indexCount,
             const unsigned int *indices,
-            const SMaterial& material
-    )
+            const SMaterial& material)
     {
-        LOG_INFO("Loading mesh from geometry...");
+        if(vertexCount == 0) {
+            return tl::make_unexpected("vertex count must be greater than 0");
+        } else if(!vertices) {
+            return tl::make_unexpected("vertices must not be null");
+        } else if(!normals) {
+            return tl::make_unexpected("normals must not be null");
+        } else if(!uvs) {
+            return tl::make_unexpected("uvs must not be null");
+        } else if(indexCount == 0) {
+            return tl::make_unexpected("index count must be greater than 0");
+        } else if(!indices) {
+            return tl::make_unexpected("indices must not be null");
+        }
+
 
         auto vboVertices = std::make_shared<CBuffer>(
             CBuffer::EType::VERTEX,
@@ -76,6 +87,21 @@ namespace chestnut::engine
         resource->m_material = material;
 
         return resource;
+    }
+
+    tl::expected<std::shared_ptr<CMeshResource>, const char *> CMeshResource::loadFromMeshData(
+        const std::shared_ptr<CMeshDataResource>& meshData, 
+        const SMaterial& material)
+    {
+        return loadFromGeometry(
+            meshData->m_numVertices,
+            meshData->m_vertices,
+            meshData->m_normals,
+            meshData->m_uvs,
+            meshData->m_numIndices,
+            meshData->m_indices,
+            material
+        );
     }
 
 

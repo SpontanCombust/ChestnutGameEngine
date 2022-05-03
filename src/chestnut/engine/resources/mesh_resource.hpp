@@ -2,12 +2,11 @@
 #define __CHESTNUT_ENGINE_MESH_RESOURCE_H__
 
 #include "resource.hpp"
+#include "mesh_data_resource.hpp"
 #include "../graphics/opengl/buffer.hpp"
 #include "../graphics/material.hpp"
 #include "../maths/vector2.hpp"
 #include "../maths/vector3.hpp"
-
-#include <tl/optional.hpp>
 
 
 namespace chestnut::engine
@@ -23,15 +22,18 @@ namespace chestnut::engine
     public:
         CMeshResource();
 
-        static std::shared_ptr<CMeshResource> loadFromGeometry(
-            unsigned int vertexCount,
+        static tl::expected<std::shared_ptr<CMeshResource>, const char *> loadFromGeometry(
+            size_t vertexCount,
             const vec3f *vertices,
             const vec3f *normals,
             const vec2f *uvs,
-            unsigned int indexCount,
+            size_t indexCount,
             const unsigned int *indices,
-            const SMaterial& material
-        );
+            const SMaterial& material);
+
+        static tl::expected<std::shared_ptr<CMeshResource>, const char *> loadFromMeshData(
+            const std::shared_ptr<CMeshDataResource>& meshData, 
+            const SMaterial& material);
 
         // For now it always assumes file contains only one mesh with one material
         static tl::expected<std::shared_ptr<CMeshResource>, const char *> loadFromFile(const char *meshPath);
