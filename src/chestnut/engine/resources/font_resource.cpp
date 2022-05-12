@@ -4,7 +4,7 @@
 #include "../resources/texture2d_resource.hpp"
 #include "../macros.hpp"
 
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 
 #include <array>
 #include <cmath> // ceil, sqrt
@@ -162,7 +162,7 @@ namespace chestnut::engine
             LOG_WARNING("Failed to create texture resource from font spritesheet");
         }
         
-        delete alphaPixels8; // we won't need it no more, data is copied to the GPU
+        delete[] alphaPixels8; // we won't need it no more, data is copied to the GPU
 
         return config;
     }

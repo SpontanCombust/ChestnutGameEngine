@@ -3,11 +3,11 @@
 #include "debug/log.hpp"
 #include "resources/resource_manager.hpp"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
-#include <SDL2/SDL_ttf.h>
-#include <SDL2/SDL_mixer.h>
+#include <SDL_opengl.h>
+#include <SDL_ttf.h>
+#include <SDL_mixer.h>
 
 
 namespace chestnut::engine

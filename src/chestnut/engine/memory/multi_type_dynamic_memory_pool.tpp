@@ -1,3 +1,5 @@
+#include <cstdlib>
+
 namespace chestnut::engine
 {  
     template< typename T >
@@ -9,7 +11,7 @@ namespace chestnut::engine
 
         if( ptrStack.empty() )
         {
-            uncastedPtr = malloc( sizeof(T) );
+            uncastedPtr = std::malloc( sizeof(T) );
         }
         else
         {

@@ -1,7 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_TEST_UTILS_H__
 #define __CHESTNUT_ENGINE_TEST_UTILS_H__
 
-#include <SDL2/SDL_messagebox.h>
+#include <SDL_messagebox.h>
 
 #include <thread>
 

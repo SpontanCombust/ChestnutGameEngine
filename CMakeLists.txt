@@ -26,6 +26,8 @@ FetchContent_DisconnectedIfOffline()
 
 # =================================== Library dependencies ===================================
 
+# establish FetchContent dependencies
+
 FetchContent_Declare(
     ChestnutECSCore
     GIT_REPOSITORY https://github.com/SpontanCombust/ChestnutECSCore
@@ -38,13 +40,13 @@ FetchContent_Declare(
 )
 FetchContent_Declare(
     SDL2_ttf
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-    GIT_TAG release-2.0.15
+    GIT_REPOSITORY https://github.com/SpontanCombust/SDL_ttf
+    GIT_TAG 3d0165360d99ddc3a72a5472e408b7d962973fbb
 )
 FetchContent_Declare(
     SDL2_mixer
     GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
-    GIT_TAG release-2.0.4
+    GIT_TAG c40dc4397a8cfd66ce82fbb1ba4cfcdb89723a53
 )
 FetchContent_Declare(
     tl_optional
@@ -67,6 +69,19 @@ FetchContent_Declare(
     GIT_TAG master
 )
 
+
+# configure lib options
+set(TTF_DISABLE_INSTALL ON)
+set(OPTIONAL_BUILD_TESTS OFF)
+set(EXPECTED_BUILD_TESTS OFF)
+set(ASSIMP_BUILD_TESTS OFF)
+
+if(UNIX)
+    set(OpenGL_GL_PREFERENCE GLVND)
+endif()
+
+
+# finally fetch and configure the dependencies
 FetchContent_MakeAvailable(
     ChestnutECSCore 
     SDL2 
@@ -78,21 +93,9 @@ FetchContent_MakeAvailable(
     stb
 )
 
-
-# findOpenGL and findGLEW should come with CMake installation
-if(UNIX)
-    set(OpenGL_GL_PREFERENCE GLVND)
-endif()
-
 find_package(OpenGL REQUIRED)
 
 find_package(GLEW REQUIRED)
-
-
-# configure libs
-set(OPTIONAL_BUILD_TESTS OFF)
-set(EXPECTED_BUILD_TESTS OFF)
-set(ASSIMP_BUILD_TESTS OFF)
 
 add_library(stb_image INTERFACE)
 target_sources(stb_image INTERFACE ${stb_SOURCE_DIR}/stb_image.h)
@@ -111,7 +114,7 @@ add_subdirectory(src/chestnut/engine)
 target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
 
 
-target_link_libraries(${PROJECT_NAME} 
+target_link_libraries(${PROJECT_NAME} PUBLIC
     ChestnutECSCore
     SDL2
     SDL2_ttf
@@ -123,10 +126,10 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_LIBRARIES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES})
 
 
 

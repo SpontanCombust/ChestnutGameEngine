@@ -16,7 +16,7 @@
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/init.hpp"
 
-#include <SDL2/SDL_events.h>
+#include <SDL_events.h>
 
 
 using namespace chestnut::ecs;

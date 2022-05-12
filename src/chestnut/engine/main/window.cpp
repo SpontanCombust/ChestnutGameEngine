@@ -3,9 +3,9 @@
 #include "../debug/log.hpp"
 #include "../init.hpp"
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <SDL_opengl.h>
 
 namespace chestnut::engine
 {

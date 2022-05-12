@@ -3,7 +3,7 @@
 
 #include "resource.hpp"
 
-#include <SDL2/SDL_mixer.h> //FIXME It'd better if this wasn't here, but whatever for now...
+#include <SDL_mixer.h> //FIXME It'd better if this wasn't here, but whatever for now...
 
 #include <string>
 

@@ -1,6 +1,6 @@
 #include "audio_manager.hpp"
 
-#include <SDL2/SDL_mixer.h>
+#include <SDL_mixer.h>
 
 #include <algorithm> // clamp
 

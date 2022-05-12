@@ -1,5 +1,7 @@
 #include "multi_type_dynamic_memory_pool.hpp"
 
+#include <cstdlib>
+
 namespace chestnut::engine
 {
     CMultiTypeDynamicMemoryPool::CMultiTypeDynamicMemoryPool( CMultiTypeDynamicMemoryPool&& other ) 
@@ -15,7 +17,7 @@ namespace chestnut::engine
             while( !ptrStack.empty() )
             {
                 ptr = ptrStack.top();
-                free( ptr );
+                std::free( ptr );
                 ptrStack.pop();
             }
         }

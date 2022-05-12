@@ -5,7 +5,7 @@
 #include "../src/chestnut/engine/ecs_impl/event_listener.hpp"
 #include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 
-#include <SDL2/SDL_events.h>
+#include <SDL_events.h>
 
 class CCloseWindowListeningSystem : public chestnut::engine::ISystem
 {

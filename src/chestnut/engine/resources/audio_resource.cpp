@@ -2,7 +2,7 @@
 
 #include "../debug/log.hpp"
 
-#include <SDL2/SDL_mixer.h>
+#include <SDL_mixer.h>
 
 namespace chestnut::engine
 {
