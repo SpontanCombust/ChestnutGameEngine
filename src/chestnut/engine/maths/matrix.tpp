@@ -91,7 +91,6 @@ namespace chestnut::engine
     }
 
 
-
     template< typename T, size_t n >
     Matrix<T,n> matTransposed( const Matrix<T,n>& m )
     {
@@ -109,7 +108,6 @@ namespace chestnut::engine
     }
 
 
-
     template< typename T, size_t n >
     Matrix<T,n> matNegated( const Matrix<T,n>& m )
     {
@@ -122,13 +120,6 @@ namespace chestnut::engine
         
         return nm;
     }
-
-    template< typename T, size_t n >
-    Matrix<T,n> operator-( const Matrix<T,n>& m )
-    {
-        return matNegated<T,n>(m);
-    }
-
 
 
     template< typename T, size_t n >
@@ -144,13 +135,6 @@ namespace chestnut::engine
         return sm;        
     }
 
-    template< typename T, size_t n >
-    Matrix<T,n> operator+( const Matrix<T,n>& m1, const Matrix<T,n>& m2 )
-    {
-        return matSum<T,n>(m1,m2);
-    }
-
-
 
     template< typename T, size_t n >
     Matrix<T,n> matDifference( const Matrix<T,n>& m1, const Matrix<T,n>& m2 )
@@ -164,13 +148,6 @@ namespace chestnut::engine
 
         return dm;
     }
-
-    template< typename T, size_t n >
-    Matrix<T,n> operator-( const Matrix<T,n>& m1, const Matrix<T,n>& m2 )
-    {
-        return matDifference(m1,m2);
-    }
-
 
 
     template< typename T, size_t n >
@@ -192,13 +169,6 @@ namespace chestnut::engine
         return pm;
     }
 
-    template< typename T, size_t n >
-    Matrix<T,n> operator*( const Matrix<T,n>& m1, const Matrix<T,n>& m2 )
-    {
-        return matProduct<T,n>(m1,m2);
-    }
-
-    
 
     template< typename T, size_t n >
     Matrix<T,n> matScalarProduct( const Matrix<T,n>& m, T s )
@@ -212,19 +182,6 @@ namespace chestnut::engine
 
         return pm;        
     }
-
-    template< typename T, size_t n >
-    Matrix<T,n> operator*( const Matrix<T,n>& m, T s )
-    {
-        return matScalarProduct(m,s);
-    }
-
-    template< typename T, size_t n >
-    Matrix<T,n> operator*( T s, const Matrix<T,n>& m )
-    {
-        return matScalarProduct(m,s);
-    }
-
 
 
     template< typename T, size_t n >

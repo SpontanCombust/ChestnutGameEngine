@@ -21,8 +21,8 @@ namespace chestnut::engine
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
     Vector<T,vn> vecLeftMultiplyByMatrix( const Matrix<T,mn>& m, const Vector<T,vn>& v );
 
-    template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
-    Vector<T,vn> operator*( const Matrix<T,mn>& m, const Vector<T,vn>& v );
+    template< typename T, size_t mn, size_t vn >
+    inline Vector<T,vn> operator*( const Matrix<T,mn>& m, const Vector<T,vn>& v ) { return vecLeftMultiplyByMatrix( m, v ); }
 
 
     template< typename T >
