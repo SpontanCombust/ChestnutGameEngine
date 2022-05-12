@@ -2,7 +2,7 @@
 
 namespace chestnut::engine
 {
-    template< size_t targetN, typename T, size_t sourceN, typename = typename std::enable_if< ( targetN > sourceN ) >::type >
+    template< size_t targetN, typename T, size_t sourceN, typename >
     Vector<T,targetN> vecCastSizeGreater( const Vector<T,sourceN>& v, T initRemainVals )
     {
         Vector<T,targetN> res( initRemainVals ); // initialize with all ones
@@ -12,7 +12,7 @@ namespace chestnut::engine
         return res;
     }
 
-    template< size_t targetN, typename T, size_t sourceN, typename = typename std::enable_if< ( targetN < sourceN ) >::type >
+    template< size_t targetN, typename T, size_t sourceN, typename >
     Vector<T,targetN> vecCastSizeSmaller( const Vector<T,sourceN>& v )
     {
         Vector<T,targetN> res;
