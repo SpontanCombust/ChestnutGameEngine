@@ -10,7 +10,7 @@ namespace chestnut::engine
     class CSimple2DAnimationSystem : public ISystem
     {
     private:
-        ecs::queryid_t m_animatedTextureQueryID;
+        ecs::CEntityQuery *m_animatedTextureQuery;
 
     public:
         CSimple2DAnimationSystem( CEngine& engine );

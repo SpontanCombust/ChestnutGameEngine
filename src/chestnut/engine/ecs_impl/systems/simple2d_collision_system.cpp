@@ -9,15 +9,14 @@ namespace chestnut::engine
 {    
     CSimple2DCollisionSystem::CSimple2DCollisionSystem( CEngine& engine ) : ISystem( engine )
     {
-        m_collisionQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature< CTransform2DComponent, CCollision2DComponent >(),
-            ecs::makeEntitySignature()
+        m_collisionQuery = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CTransform2DComponent, CCollision2DComponent >()
         );
     }
 
     CSimple2DCollisionSystem::~CSimple2DCollisionSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_collisionQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_collisionQuery );
     }
 
     inline bool canCollidersTrigger( ECollisionPolicyFlags policy1, ECollisionPolicyFlags policy2 )
@@ -27,10 +26,10 @@ namespace chestnut::engine
 
     void CSimple2DCollisionSystem::update( float dt )
     {
-        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_collisionQueryID );
+        getEngine().getEntityWorld().queryEntities( m_collisionQuery );
 
-        query->forEachEntityWith<CTransform2DComponent, CCollision2DComponent>(
-            [this](CTransform2DComponent& transform, CCollision2DComponent& collision)
+        m_collisionQuery->forEach(std::function(
+            [](CTransform2DComponent& transform, CCollision2DComponent& collision)
             {
                 if(collision.collider)
                 {
@@ -38,11 +37,20 @@ namespace chestnut::engine
                     collision.collider->setScale(transform.scale);
                 }
             }
-        );
+        ));
 
-        query->forEachEntityPairWith< CTransform2DComponent, CCollision2DComponent >(
-            [this]( ecs::entityid_t ent1, CTransform2DComponent& transform1, CCollision2DComponent& collision1, ecs::entityid_t ent2, CTransform2DComponent& transform2, CCollision2DComponent& collision2 )
+
+        auto it1 = m_collisionQuery->begin< CTransform2DComponent, CCollision2DComponent >();
+        auto end = m_collisionQuery->end< CTransform2DComponent, CCollision2DComponent >();
+
+        // do a check for each pair of the entities
+        for(; it1 != end - 1; it1++)
+        {
+            for(auto it2 = it1 + 1; it2 != end; it2++)
             {
+                auto [transform1, collision1] = *it1;
+                auto [transform2, collision2] = *it2;
+                
                 if(!collision1.collider || !collision2.collider)
                 {
                     return;
@@ -62,14 +70,14 @@ namespace chestnut::engine
                     if(canCollidersTrigger(collision1.collider->getPolicyFlags(), collision2.collider->getPolicyFlags()))
                     {
                         SCollisionEvent e;
-                        e.entity1 = ent1;
-                        e.entity2 = ent2;
+                        e.entity1 = it1.entityId();
+                        e.entity2 = it2.entityId();
                         e.resolutionData = crd;
                         getEngine().getEventManager().raiseEvent(e);
                     }
                 }
             }
-        );
+        }
     }
 
     

@@ -8,22 +8,21 @@ namespace chestnut::engine
 {
     CTimerSystem::CTimerSystem( CEngine& engine ) : ISystem( engine )
     {
-        m_timerQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature<CTimerComponent>(),
-            ecs::makeEntitySignature()
+        m_timerQuery = getEngine().getEntityWorld().createQuery(
+            ecs::makeEntitySignature<CTimerComponent>()
         );
     }
 
     CTimerSystem::~CTimerSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_timerQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_timerQuery );
     }
 
     void CTimerSystem::update( float deltaTime ) 
     {
-        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_timerQueryID );
+        getEngine().getEntityWorld().queryEntities( m_timerQuery );
 
-        query->forEachEntityWith< CTimerComponent >(
+        m_timerQuery->forEach(std::function(
             [deltaTime, this]( CTimerComponent& timerComp )
             {
                 for( CLockedManualTimer& timer : timerComp.vTimers )
@@ -45,7 +44,7 @@ namespace chestnut::engine
                     }
                 }
             }
-        );
+        ));
     }
 
 } // namespace chestnut::engine

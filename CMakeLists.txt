@@ -29,14 +29,14 @@ FetchContent_DisconnectedIfOffline()
 # establish FetchContent dependencies
 
 FetchContent_Declare(
-    ChestnutECSCore
+    chestnut-ecs
     GIT_REPOSITORY https://github.com/SpontanCombust/ChestnutECSCore
-    GIT_TAG master #TODO will need version tag for ECS library!
+    GIT_TAG rework #TODO change to tag when version is complete
 )
 FetchContent_Declare(
     SDL2
     GIT_REPOSITORY https://github.com/libsdl-org/SDL
-    GIT_TAG release-2.0.16
+    GIT_TAG release-2.24.2
 )
 FetchContent_Declare(
     SDL2_ttf
@@ -61,7 +61,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     Assimp
     GIT_REPOSITORY https://github.com/assimp/assimp
-    GIT_TAG v5.2.3
+    GIT_TAG v5.2.5
 )
 FetchContent_Declare(
     stb
@@ -83,7 +83,7 @@ endif()
 
 # finally fetch and configure the dependencies
 FetchContent_MakeAvailable(
-    ChestnutECSCore 
+    chestnut-ecs 
     SDL2 
     SDL2_ttf 
     SDL2_mixer
@@ -115,7 +115,7 @@ target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic
 
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
-    ChestnutECSCore
+    chestnut-ecs
     SDL2
     SDL2_ttf
     SDL2_mixer

@@ -24,10 +24,10 @@ namespace chestnut::engine
     class CSimple2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::queryid_t m_spriteQueryID;
-        ecs::queryid_t m_layerSpriteQueryID;
-        ecs::queryid_t m_spriteModelQueryID;
-        ecs::queryid_t m_layerSpriteModelQueryID;
+        ecs::CEntityQuery *m_spriteQuery;
+        ecs::CEntityQuery *m_layerSpriteQuery;
+        ecs::CEntityQuery *m_spriteModelQuery;
+        ecs::CEntityQuery *m_layerSpriteModelQuery;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;

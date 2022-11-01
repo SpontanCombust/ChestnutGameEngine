@@ -9,21 +9,21 @@ namespace chestnut::engine
     CKinematics2DSystem::CKinematics2DSystem( CEngine& engine ) 
     : ISystem( engine ) 
     {
-        m_kinematicQueryID = getEngine().getEntityWorld().createQuery( 
-            ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >(), 
-            ecs::CEntitySignature() );
+        m_kinematicQuery = getEngine().getEntityWorld().createQuery( 
+            ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >()
+        );
     }
 
     CKinematics2DSystem::~CKinematics2DSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_kinematicQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_kinematicQuery );
     }
 
     void CKinematics2DSystem::update( float deltaTime ) 
     {
-        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_kinematicQueryID );
+        getEngine().getEntityWorld().queryEntities( m_kinematicQuery );
 
-        query->forEachEntityWith< CTransform2DComponent, CKinematics2DComponent >(
+        m_kinematicQuery->forEach(std::function(
             [deltaTime]( CTransform2DComponent& transform, CKinematics2DComponent& kinematic )
             {
                 kinematic.linearVelocity  += deltaTime * kinematic.linearAcceleration;
@@ -32,7 +32,7 @@ namespace chestnut::engine
                 transform.position += deltaTime * kinematic.linearVelocity;
                 transform.rotation += deltaTime * kinematic.angularVelocity; 
             }
-        );
+        ));
     }
 
 } // namespace chestnut::engine

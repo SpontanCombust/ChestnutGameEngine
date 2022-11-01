@@ -260,9 +260,11 @@ public:
         const float w = (float)getEngine().getWindow().getSizeWidth();
         const float h = (float)getEngine().getWindow().getSizeHeight();
 
-        ents = getEngine().getEntityWorld().createEntities(9);
-        for( ecs::entityid_t ent : ents )
+        for(int i = 0; i < 9; i++)
         {
+            ecs::entityid_t ent = getEngine().getEntityWorld().createEntity();
+            this->ents.push_back(ent);
+
             getEngine().getEntityWorld().createComponent<CTransform2DComponent>( ent );
             model = getEngine().getEntityWorld().createComponent<CModel2DComponent>( ent );
             model->size = { 100.f, 100.f };
@@ -303,7 +305,10 @@ public:
 
     ~COrderingDemonstationSystem()
     {
-        getEngine().getEntityWorld().destroyEntities( ents );
+        for(ecs::entityid_t ent : this->ents)
+        {
+            getEngine().getEntityWorld().destroyEntity( ent );
+        }
     }
 
     void update( float dt ) override
@@ -392,9 +397,11 @@ public:
         const float w = (float)getEngine().getWindow().getSizeWidth();
         const float h = (float)getEngine().getWindow().getSizeHeight();
 
-        ents = getEngine().getEntityWorld().createEntities(3);
-        for( ecs::entityid_t ent : ents )
+        for(int i = 0; i < 3; i++)
         {
+            ecs::entityid_t ent = getEngine().getEntityWorld().createEntity();
+            this->ents.push_back(ent);
+
             getEngine().getEntityWorld().createComponent<CTransform2DComponent>( ent );
             model = getEngine().getEntityWorld().createComponent<CModel2DComponent>( ent );
             model->size = { 100.f, 100.f };
@@ -423,7 +430,10 @@ public:
 
     ~CLayeringDemonstrationSystem()
     {
-        getEngine().getEntityWorld().destroyEntities( ents );
+        for(ecs::entityid_t ent : this->ents)
+        {
+            getEngine().getEntityWorld().destroyEntity( ent );
+        }
     }
 
     void update( float dt ) override

@@ -43,22 +43,22 @@ namespace chestnut::engine
         }
 
 
-        m_spriteQueryID = getEngine().getEntityWorld().createQuery(
+        m_spriteQuery = getEngine().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent >(),
             ecs::makeEntitySignature< CModel2DComponent, CRenderLayerComponent >()
         );
 
-        m_spriteModelQueryID = getEngine().getEntityWorld().createQuery(
+        m_spriteModelQuery = getEngine().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent  >(),
             ecs::makeEntitySignature< CRenderLayerComponent >()
         );
 
-        m_layerSpriteQueryID = getEngine().getEntityWorld().createQuery(
+        m_layerSpriteQuery = getEngine().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature< CModel2DComponent >()
         );
 
-        m_layerSpriteModelQueryID = getEngine().getEntityWorld().createQuery(
+        m_layerSpriteModelQuery = getEngine().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature()
         );
@@ -70,7 +70,7 @@ namespace chestnut::engine
 
     CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_spriteModelQueryID );
+        getEngine().getEntityWorld().destroyQuery( m_spriteModelQuery );
     }
 
 
@@ -104,28 +104,48 @@ namespace chestnut::engine
     }
 
 
-    bool topToBottomCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    using TransformIterator = ecs::CEntityQuery::Iterator<CTransform2DComponent>;
+
+    bool topToBottomCompare(TransformIterator it1, TransformIterator it2)
     {
+        auto [t1] = *it1;
+        auto [t2] = *it2;
+        
         return t1.position.y < t2.position.y;
     }
 
-    bool bottomToTopCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    bool bottomToTopCompare(TransformIterator it1, TransformIterator it2)
     {
+        auto [t1] = *it1;
+        auto [t2] = *it2;
+
         return t1.position.y > t2.position.y;
     }
 
-    bool leftToRightCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    bool leftToRightCompare(TransformIterator it1, TransformIterator it2)
     {
+        auto [t1] = *it1;
+        auto [t2] = *it2;
+
         return t1.position.x < t2.position.x;
     }
 
-    bool rightToLeftCompare( const CTransform2DComponent& t1, const CTransform2DComponent& t2 )
+    bool rightToLeftCompare(TransformIterator it1, TransformIterator it2)
     {
+        auto [t1] = *it1;
+        auto [t2] = *it2;
+
         return t1.position.x > t2.position.x;
     }
 
-    bool topToBottomCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+
+    using TransformLayeredIterator = ecs::CEntityQuery::Iterator<CTransform2DComponent, CRenderLayerComponent>;
+
+    bool topToBottomCompareLayered(TransformLayeredIterator it1, TransformLayeredIterator it2)
     {
+        auto [t1, l1] = *it1;
+        auto [t2, l2] = *it2;
+
         if( l1.layer == l2.layer )
         {
             return t1.position.y < t2.position.y;
@@ -134,8 +154,11 @@ namespace chestnut::engine
         return l1.layer < l2.layer;
     }
 
-    bool bottomToTopCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    bool bottomToTopCompareLayered(TransformLayeredIterator it1, TransformLayeredIterator it2)
     {
+        auto [t1, l1] = *it1;
+        auto [t2, l2] = *it2;
+
         if( l1.layer == l2.layer )
         {
             return t1.position.y > t2.position.y;
@@ -144,8 +167,11 @@ namespace chestnut::engine
         return l1.layer < l2.layer;
     }
 
-    bool leftToRightCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    bool leftToRightCompareLayered(TransformLayeredIterator it1, TransformLayeredIterator it2)
     {
+        auto [t1, l1] = *it1;
+        auto [t2, l2] = *it2;
+
         if( l1.layer == l2.layer )
         {
             return t1.position.x < t2.position.x;
@@ -154,8 +180,11 @@ namespace chestnut::engine
         return l1.layer < l2.layer;
     }
 
-    bool rightToLeftCompareLayered( const CTransform2DComponent& t1, const CRenderLayerComponent& l1, const CTransform2DComponent& t2, const CRenderLayerComponent& l2 )
+    bool rightToLeftCompareLayered(TransformLayeredIterator it1, TransformLayeredIterator it2)
     {
+        auto [t1, l1] = *it1;
+        auto [t2, l2] = *it2;
+
         if( l1.layer == l2.layer )
         {
             return t1.position.x > t2.position.x;
@@ -166,8 +195,8 @@ namespace chestnut::engine
 
     void CSimple2DRenderingSystem::update( float deltaTime ) 
     {
-        bool (*comparator)( const CTransform2DComponent&, const CTransform2DComponent& );
-        bool (*comparatorLayered)( const CTransform2DComponent&, const CRenderLayerComponent&, const CTransform2DComponent&, const CRenderLayerComponent& );
+        bool (*comparator)(TransformIterator, TransformIterator);
+        bool (*comparatorLayered)(TransformLayeredIterator, TransformLayeredIterator);
         switch( m_defaultRenderOrder )
         {
         case EDefaultRenderOrder::BOTTOM_TO_TOP:
@@ -190,57 +219,51 @@ namespace chestnut::engine
 
         m_spriteRenderer.clear();
 
-        ecs::CEntityQuery* query;
 
+        getEngine().getEntityWorld().queryEntities( m_spriteQuery );
+        m_spriteQuery->sort(std::function(comparator));
 
-        query = getEngine().getEntityWorld().queryEntities( m_spriteQueryID );
-
-        query->sort<CTransform2DComponent>( comparator );
-
-        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent >(
+        m_spriteQuery->forEach(std::function(
             [this]( CTransform2DComponent& transform, CSpriteComponent& texture )
             {
                 m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
             }
-        );
+        ));
         
 
-        query = getEngine().getEntityWorld().queryEntities( m_spriteModelQueryID );
-        
-        query->sort<CTransform2DComponent>( comparator );
+        getEngine().getEntityWorld().queryEntities( m_spriteModelQuery );
+        m_spriteModelQuery->sort(std::function(comparator));
 
-        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CModel2DComponent >(
+        m_spriteModelQuery->forEach(std::function(
             [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CModel2DComponent& model )
             {
                 vec2f adjustScale = getAdjustScale( model, texture );
                 m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
-        );
+        ));
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_layerSpriteQueryID );
+        getEngine().getEntityWorld().queryEntities( m_layerSpriteQuery );
+        m_layerSpriteQuery->sort(std::function(comparatorLayered));
 
-        query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
-
-        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(
+        m_layerSpriteQuery->forEach(std::function(
             [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CRenderLayerComponent& layer )
             {
                 m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
             }
-        );
+        ));
 
 
-        query = getEngine().getEntityWorld().queryEntities( m_layerSpriteModelQueryID );
+        getEngine().getEntityWorld().queryEntities( m_layerSpriteModelQuery );
+        m_layerSpriteModelQuery->sort(std::function(comparatorLayered));
         
-        query->sort<CTransform2DComponent, CRenderLayerComponent>( comparatorLayered );
-        
-        query->forEachEntityWith< CTransform2DComponent, CSpriteComponent, CModel2DComponent, CRenderLayerComponent >(
+        m_layerSpriteModelQuery->forEach(std::function(
             [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CModel2DComponent& model, CRenderLayerComponent& layer )
             {
                 vec2f adjustScale = getAdjustScale( model, texture );
                 m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
-        );
+        ));
     }
 
     void CSimple2DRenderingSystem::render()

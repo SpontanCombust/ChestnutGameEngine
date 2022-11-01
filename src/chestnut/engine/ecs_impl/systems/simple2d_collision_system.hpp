@@ -10,7 +10,7 @@ namespace chestnut::engine
     class CSimple2DCollisionSystem : public ISystem
     {
     private:
-        ecs::queryid_t m_collisionQueryID;
+        ecs::CEntityQuery *m_collisionQuery;
 
     public:
         CSimple2DCollisionSystem( CEngine& engine );
