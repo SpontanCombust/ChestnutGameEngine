@@ -1,4 +1,6 @@
 bin
-.vscode/c_cpp_properties.json
+.vscode
+.vs
 build
+out
 TODO.md
