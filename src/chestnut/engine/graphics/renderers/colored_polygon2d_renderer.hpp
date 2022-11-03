@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
 #define __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "renderer.hpp"
 #include "../colored_polygon2d.hpp"
 #include "../opengl/buffer.hpp"
@@ -35,7 +36,7 @@ namespace chestnut::engine
      * in a single vertex and element buffer.
      * All is simply drawn at once using these indices.
      */
-    class CColoredPolygon2DRenderer : public IRenderer
+    class CHESTNUT_API CColoredPolygon2DRenderer : public IRenderer
     {
         struct SColoredPolygon2DRender_Vertex
         {

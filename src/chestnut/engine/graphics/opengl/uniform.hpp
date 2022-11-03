@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_UNIFORM_H__
 #define __CHESTNUT_ENGINE_UNIFORM_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../resources/shader_program_resource.hpp"
 
 #include <GL/glew.h>

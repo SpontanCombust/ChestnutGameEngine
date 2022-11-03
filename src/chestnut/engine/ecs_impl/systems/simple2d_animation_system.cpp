@@ -42,8 +42,8 @@ namespace chestnut::engine
 
                 // index in the vector of indices inside animation data, couldn't come up with a better name :)
                 unsigned int frameIndexIndex = (unsigned int)( animation.elapsedAnimTimeSec / frameDuration );
-                int loopsDone = frameIndexIndex / std::max( 1UL, animData.vecFrameIndices.size() );
-                frameIndexIndex = frameIndexIndex % std::max( 1UL, animData.vecFrameIndices.size() );
+                int loopsDone = frameIndexIndex / std::max( (size_t)1UL, animData.vecFrameIndices.size() );
+                frameIndexIndex = frameIndexIndex % std::max( (size_t)1UL, animData.vecFrameIndices.size() );
 
                 // update loops to be done only if they're not specified to be infinite
                 if( animation.remainingAnimLoops > 0 )

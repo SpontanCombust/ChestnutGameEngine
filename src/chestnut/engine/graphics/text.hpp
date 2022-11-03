@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_TEXT_H__
 #define __CHESTNUT_ENGINE_TEXT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../maths/vector2.hpp"
 #include "../maths/vector3.hpp"
 #include "../resources/font_resource.hpp"
@@ -53,7 +54,7 @@ namespace chestnut::engine
         RIGHT
     };
 
-    class CText
+    class CHESTNUT_API CText
     {
     protected:
         std::shared_ptr<CFontResource> m_resource;

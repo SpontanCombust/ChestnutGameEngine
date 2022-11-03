@@ -1,12 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_EXCEPTION_H__
 #define __CHESTNUT_ENGINE_EXCEPTION_H__
 
+#include "chestnut/engine/macros.hpp"
+
 #include <exception>
 #include <string>
 
 namespace chestnut::engine
 {
-    struct ChestnutException : std::exception
+    struct CHESTNUT_API ChestnutException : std::exception
     {
         const std::string msg;
 

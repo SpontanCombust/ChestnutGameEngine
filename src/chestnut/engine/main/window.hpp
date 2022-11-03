@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_WINDOW_H__
 #define __CHESTNUT_ENGINE_WINDOW_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../graphics/opengl/framebuffer.hpp"
 
 #include <string>
@@ -17,7 +18,7 @@ namespace chestnut::engine
         FULLSCREEN
     };
 
-    class CWindow
+    class CHESTNUT_API CWindow
     {
     private:
         SDL_Window *m_sdlWindow;

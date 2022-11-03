@@ -1,6 +1,15 @@
 #ifndef __CHESTNUT_ENGINE_MACROS_H__
 #define __CHESTNUT_ENGINE_MACROS_H__
 
+#ifdef _WIN32
+    #ifdef ChestnutGameEngine_EXPORTS
+        #define CHESTNUT_API __declspec(dllexport)
+    #else
+        #define CHESTNUT_API __declspec(dllimport)
+    #endif
+#else
+    #define CHESTNUT_API
+#endif
 
 // initial vertex capacity of the (colored) polygon renderer
 #define CHESTNUT_POLYGON_RENDERER_INIT_VERTEX_CAPACITY 100 

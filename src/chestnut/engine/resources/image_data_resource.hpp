@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_IMAGE_DATA_RESOUCE_H__
 #define __CHESTNUT_ENGINE_IMAGE_DATA_RESOUCE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 
 #include <tl/expected.hpp>
@@ -11,7 +12,7 @@
 
 namespace chestnut::engine
 {
-    class CImageDataResource : public IResource
+    class CHESTNUT_API CImageDataResource : public IResource
     {
     public:
         tl::optional<std::string> m_sourcePath;

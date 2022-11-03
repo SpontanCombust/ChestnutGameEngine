@@ -1,13 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_COLLISION_SYSTEM_H__
 #define __CHESTNUT_ENGINE_COLLISION_SYSTEM_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../system.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
 namespace chestnut::engine
 {
-    class CSimple2DCollisionSystem : public ISystem
+    class CHESTNUT_API CSimple2DCollisionSystem : public ISystem
     {
     private:
         ecs::CEntityQuery *m_collisionQuery;

@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_ANIMATION2D_H__
 #define __CHESTNUT_ENGINE_ANIMATION2D_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../maths/rectangle.hpp"
 
 #include <string>
@@ -9,7 +10,7 @@
 
 namespace chestnut::engine
 {
-    struct SAnimationData2D
+    struct CHESTNUT_API SAnimationData2D
     {
         std::string name;
         float framesPerSec;
@@ -22,7 +23,7 @@ namespace chestnut::engine
         SAnimationData2D();
     };
 
-    struct SAnimationSet2D
+    struct CHESTNUT_API SAnimationSet2D
     {
         // Clipping rectangles of animation keyframes in the spritesheet
         std::vector< SRectangle > vecKeyFrameClipRects;

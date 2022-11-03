@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_EVENT_LISTENER_H__
 #define __CHESTNUT_ENGINE_EVENT_LISTENER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../types.hpp"
 
 #include <typeindex>
@@ -8,7 +9,7 @@
 
 namespace chestnut::engine
 {
-	class IEventListener
+	class CHESTNUT_API IEventListener
 	{
 	public:
 		std::type_index m_eventType = typeid(void);

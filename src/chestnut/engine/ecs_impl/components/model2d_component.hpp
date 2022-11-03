@@ -1,12 +1,13 @@
 #ifndef __CHESTNUT_ENGINE_MODEL2D_COMPONENT_H__
 #define __CHESTNUT_ENGINE_MODEL2D_COMPONENT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../maths/vector2.hpp"
 
 namespace chestnut::engine
 {
     // Component acting as a base for other visual components (e.g. texture)
-    struct CModel2DComponent
+    struct CHESTNUT_API CModel2DComponent
     {
         // Model is always a simple rectangle
         vec2f size;

@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_RENDERER_H__
 #define __CHESTNUT_ENGINE_RENDERER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../maths/matrix4.hpp"
 #include "../opengl/shader_program.hpp"
 #include "../opengl/uniform.hpp"
@@ -11,7 +12,7 @@
 
 namespace chestnut::engine
 {
-    class IRenderer
+    class CHESTNUT_API IRenderer
     {
     protected:
         CShaderProgram m_shader;

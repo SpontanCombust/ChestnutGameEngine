@@ -1,12 +1,13 @@
 #ifndef __CHESTNUT_ENGINE_LIGHT_H__
 #define __CHESTNUT_ENGINE_LIGHT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../maths/vector3.hpp"
 
 
 namespace chestnut::engine
 {
-    class CLight
+    class CHESTNUT_API CLight
     {
     public:
         vec3f m_ambient;
@@ -19,7 +20,7 @@ namespace chestnut::engine
     };
 
 
-    class CDirectionalLight : public CLight
+    class CHESTNUT_API CDirectionalLight : public CLight
     {
     public:
         vec3f m_direction;
@@ -29,7 +30,7 @@ namespace chestnut::engine
     };
 
 
-    class CPointLight : public CLight
+    class CHESTNUT_API CPointLight : public CLight
     {
     public:
         vec3f m_position;
@@ -42,7 +43,7 @@ namespace chestnut::engine
     };
 
 
-    class CSpotLight : public CPointLight
+    class CHESTNUT_API CSpotLight : public CPointLight
     {
     public:
         vec3f m_direction;

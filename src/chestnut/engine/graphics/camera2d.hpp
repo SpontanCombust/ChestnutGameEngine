@@ -1,12 +1,13 @@
 #ifndef __CHESTNUT_ENGINE_CAMERA2D_H__
 #define __CHESTNUT_ENGINE_CAMERA2D_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../maths/vector2.hpp"
 #include "../maths/matrix4.hpp"
 
 namespace chestnut::engine
 {
-    class CCamera2D
+    class CHESTNUT_API CCamera2D
     {
     private:
         mat4f m_viewMatrix;

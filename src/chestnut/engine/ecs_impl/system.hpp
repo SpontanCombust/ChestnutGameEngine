@@ -1,11 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_SYSTEM_H__
 #define __CHESTNUT_ENGINE_SYSTEM_H__
 
+#include "chestnut/engine/macros.hpp"
+
+
 namespace chestnut::engine
 {
     class CEngine; // forward declaration
     
-    class ISystem
+    class CHESTNUT_API ISystem
     {
     private:
         CEngine& m_engine;

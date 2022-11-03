@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_COLLISION2D_COMPONENT_H__
 #define __CHESTNUT_ENGINE_COLLISION2D_COMPONENT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../physics/collider2d.hpp"
 
 #include <memory>
@@ -8,7 +9,7 @@
 
 namespace chestnut::engine
 {
-    struct CCollision2DComponent
+    struct CHESTNUT_API CCollision2DComponent
     {
         std::unique_ptr<CCollider2D> collider;
 

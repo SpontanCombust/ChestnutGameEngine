@@ -1,13 +1,16 @@
 #ifndef __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_H__
 #define __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_H__
 
+#include "chestnut/engine/macros.hpp"
+
 #include <GL/glew.h>
 
 #include <string>
 
+
 namespace chestnut::engine
 {
-    class CVertexAttribute
+    class CHESTNUT_API CVertexAttribute
     {
     public:
         enum EType

@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_TEXT_RENDERER_H__
 #define __CHESTNUT_ENGINE_TEXT_RENDERER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "renderer.hpp"
 #include "../text.hpp"
 #include "../opengl/buffer.hpp"
@@ -44,7 +45,7 @@ namespace chestnut::engine
      * element/index offset. During rendering for every batch first a texture is bound and then text is drawn using
      * element/index count and offset in the buffer. 
      */
-    class CTextRenderer : public IRenderer
+    class CHESTNUT_API CTextRenderer : public IRenderer
     {
         struct STextRender_Vertex
         {

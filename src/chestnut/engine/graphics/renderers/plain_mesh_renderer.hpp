@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_PLAIN_MESH_RENDERER_H__
 #define __CHESTNUT_ENGINE_PLAIN_MESH_RENDERER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "renderer.hpp"
 #include "../../maths/vector3.hpp"
 #include "../opengl/buffer.hpp"
@@ -13,7 +14,7 @@
 
 namespace chestnut::engine
 {
-    class CPlainMeshRenderer : public IRenderer
+    class CHESTNUT_API CPlainMeshRenderer : public IRenderer
     {
     protected:
         struct SInstances

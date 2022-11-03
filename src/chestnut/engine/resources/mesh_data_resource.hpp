@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_MESH_DATA_RESOURCE_H__
 #define __CHESTNUT_ENGINE_MESH_DATA_RESOURCE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 #include "../maths/vector2.hpp"
 #include "../maths/vector3.hpp"
@@ -10,7 +11,7 @@
 
 namespace chestnut::engine
 {
-    class CMeshDataResource : public IResource
+    class CHESTNUT_API CMeshDataResource : public IResource
     {
     public:
         size_t m_numVertices;

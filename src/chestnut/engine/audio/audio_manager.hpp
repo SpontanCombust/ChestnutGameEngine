@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_SOUND_MANAGER_H__
 #define __CHESTNUT_ENGINE_SOUND_MANAGER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../resources/audio_resource.hpp"
 #include "../types.hpp"
 
@@ -10,7 +11,7 @@
 namespace chestnut::engine
 {
     //TODO fade in, fade out
-    class CAudioManager
+    class CHESTNUT_API CAudioManager
     {
     private:
         std::unordered_map< std::string, std::shared_ptr< CAudioResource > > m_mapAudioAliasToResource;

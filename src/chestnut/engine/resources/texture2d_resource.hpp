@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_TEXTURE2D_RESOURCE_H__
 #define __CHESTNUT_ENGINE_TEXTURE2D_RESOURCE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 #include "image_data_resource.hpp"
 
@@ -14,7 +15,7 @@
 namespace chestnut::engine
 {
     // A texture resource class that provides automatic texture deallocation on object deletion
-    class CTexture2DResource : public IResource
+    class CHESTNUT_API CTexture2DResource : public IResource
     {
     public:
         tl::optional<std::string> m_texturePath;

@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
 #define __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "buffer.hpp"
 #include "vertex_attribute_array.hpp"
 
@@ -13,7 +14,7 @@
 
 namespace chestnut::engine
 {
-    class CVertexArray
+    class CHESTNUT_API CVertexArray
     {
     private:
         struct SBufferBinding

@@ -2,21 +2,21 @@
 #define __CHESTNUT_ENGINE_FLAGS_H__
 
 #define DECLARE_ENUM_FLAG_OPERATORS(T) \
-    T operator|( T lhs, T rhs ); \
-    T& operator|=( T& lhs, T rhs ); \
-    T operator&( T lhs, T rhs ); \
-    T& operator&=( T& lhs, T rhs ); \
-    T operator^( T lhs, T rhs ); \
-    T& operator^=( T& lhs, T rhs ); \
-    T operator~( T rhs ); \
-    bool operator==( T lhs, int rhs ); \
-    bool operator==( int lhs, T rhs ); \
-    bool operator!=( T lhs, int rhs ); \
-    bool operator!=( int lhs, T rhs ); \
-    bool operator>( T lhs, int rhs ); \
-    bool operator>( int lhs, T rhs ); \
-    bool operator<( T lhs, int rhs ); \
-    bool operator<( int lhs, T rhs ); \
+    CHESTNUT_API T operator|( T lhs, T rhs ); \
+    CHESTNUT_API T& operator|=( T& lhs, T rhs ); \
+    CHESTNUT_API T operator&( T lhs, T rhs ); \
+    CHESTNUT_API T& operator&=( T& lhs, T rhs ); \
+    CHESTNUT_API T operator^( T lhs, T rhs ); \
+    CHESTNUT_API T& operator^=( T& lhs, T rhs ); \
+    CHESTNUT_API T operator~( T rhs ); \
+    CHESTNUT_API bool operator==( T lhs, int rhs ); \
+    CHESTNUT_API bool operator==( int lhs, T rhs ); \
+    CHESTNUT_API bool operator!=( T lhs, int rhs ); \
+    CHESTNUT_API bool operator!=( int lhs, T rhs ); \
+    CHESTNUT_API bool operator>( T lhs, int rhs ); \
+    CHESTNUT_API bool operator>( int lhs, T rhs ); \
+    CHESTNUT_API bool operator<( T lhs, int rhs ); \
+    CHESTNUT_API bool operator<( int lhs, T rhs ); \
 
 #define DEFINE_ENUM_FLAG_OPERATORS(T) \
     T operator|( T lhs, T rhs ) \

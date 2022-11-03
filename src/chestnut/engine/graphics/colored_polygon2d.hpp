@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
 #define __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../maths/vector2.hpp"
 #include "../maths/vector4.hpp"
 
@@ -10,14 +11,14 @@
 
 namespace chestnut::engine
 {
-    struct SVertex2D
+    struct CHESTNUT_API SVertex2D
     {
         vec2f pos;
 
         SVertex2D( vec2f _pos );
     };
 
-    struct SColoredVertex2D
+    struct CHESTNUT_API SColoredVertex2D
     {
         vec2f pos;
         vec4f color;
@@ -26,7 +27,7 @@ namespace chestnut::engine
     };
 
 
-    struct SColoredPolygon2D
+    struct CHESTNUT_API SColoredPolygon2D
     {
         std::vector< SVertex2D > vecVertices;
         std::vector< GLuint > vecIndices;
@@ -36,7 +37,7 @@ namespace chestnut::engine
         SColoredPolygon2D();
     };
 
-    struct SMulticoloredPolygon2D
+    struct CHESTNUT_API SMulticoloredPolygon2D
     {
         std::vector< SColoredVertex2D > vecVertices;
         std::vector< GLuint > vecIndices;
@@ -48,15 +49,15 @@ namespace chestnut::engine
 
     namespace colored_polygon_templates
     {
-        SColoredPolygon2D coloredPolygonTriangle( float a );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a );
 
-        SColoredPolygon2D coloredPolygonTriangle( float a, float h );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a, float h );
 
-        SColoredPolygon2D coloredPolygonSquare( float a );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonSquare( float a );
 
-        SColoredPolygon2D coloredPolygonRectangle( float a, float b );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonRectangle( float a, float b );
 
-        SColoredPolygon2D coloredPolygonCircle( float r, unsigned int segments );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonCircle( float r, unsigned int segments );
 
     } // namespace coloredPolygonTemplates
     

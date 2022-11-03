@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_MESH_RESOURCE_H__
 #define __CHESTNUT_ENGINE_MESH_RESOURCE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 #include "mesh_data_resource.hpp"
 #include "../graphics/opengl/buffer.hpp"
@@ -11,7 +12,7 @@
 
 namespace chestnut::engine
 {
-    class CMeshResource : public IResource
+    class CHESTNUT_API CMeshResource : public IResource
     {
     public:
         unsigned int m_numVertices, m_numIndices;

@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
 #define __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../maths/vector2.hpp"
 #include "../../maths/vector3.hpp"
 #include "../../maths/vector4.hpp"
@@ -17,7 +18,7 @@
 
 namespace chestnut::engine
 {
-    class CShaderProgram
+    class CHESTNUT_API CShaderProgram
     {
     private:
         std::shared_ptr<CShaderProgramResource> m_shaderResource;

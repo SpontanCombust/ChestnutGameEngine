@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
 #define __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../rendering_system.hpp"
 #include "../../graphics/renderers/sprite_renderer.hpp"
 #include "../../graphics/renderers/colored_polygon2d_renderer.hpp"
@@ -21,7 +22,7 @@ namespace chestnut::engine
         RIGHT_TO_LEFT
     };
 
-    class CSimple2DRenderingSystem : public IRenderingSystem
+    class CHESTNUT_API CSimple2DRenderingSystem : public IRenderingSystem
     {
     private:
         ecs::CEntityQuery *m_spriteQuery;

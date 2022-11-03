@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_COLLIDER_H__
 #define __CHESTNUT_ENGINE_COLLIDER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "collider_attributes.hpp"
 #include "../maths/vector2.hpp"
 
@@ -14,7 +15,7 @@ namespace chestnut::engine
         vec2f obj2Displacement;
     };
 
-    class CCollider2D
+    class CHESTNUT_API CCollider2D
     {
     protected:
         EColliderActivity m_activity;
@@ -47,7 +48,7 @@ namespace chestnut::engine
 
 
 
-    class CPointCollider2D : public CCollider2D
+    class CHESTNUT_API CPointCollider2D : public CCollider2D
     {
     public:
         virtual ~CPointCollider2D() = default;
@@ -55,7 +56,7 @@ namespace chestnut::engine
         SCollisionResolutionData isColliding(const CCollider2D& other) const override;
     };
 
-    class CBoxCollider2D : public CCollider2D
+    class CHESTNUT_API CBoxCollider2D : public CCollider2D
     {
     private:
         vec2f m_size;
@@ -73,7 +74,7 @@ namespace chestnut::engine
         SCollisionResolutionData isColliding(const CCollider2D& other) const override;
     };
 
-    class CCircleCollider2D : public CCollider2D
+    class CHESTNUT_API CCircleCollider2D : public CCollider2D
     {
     private:
         float m_radius;

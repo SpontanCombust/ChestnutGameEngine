@@ -1,11 +1,12 @@
 #ifndef __CHESTNUT_ENGINE_ANIMATION2D_COMPONENT_H__
 #define __CHESTNUT_ENGINE_ANIMATION2D_COMPONENT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../graphics/animation2d.hpp"
 
 namespace chestnut::engine
 {
-    struct CAnimation2DComponent
+    struct CHESTNUT_API CAnimation2DComponent
     {
         SAnimationSet2D animSet;
 

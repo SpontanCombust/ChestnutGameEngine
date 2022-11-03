@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_SPRITE_COMPONENT_H__
 #define __CHESTNUT_ENGINE_SPRITE_COMPONENT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../maths/vector2.hpp"
 #include "../../graphics/sprite.hpp"
 
@@ -14,7 +15,7 @@ namespace chestnut::engine
         ZOOMED // scale up/down keeping the aspect ratio to fit the entire surface area of the model and possibly going beyond the shape
     };
 
-    struct CSpriteComponent
+    struct CHESTNUT_API CSpriteComponent
     {
         CSprite sprite;
         ESpriteToModel2DAdjust adjust;

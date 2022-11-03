@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include(FetchContent)
 
+if(MSVC)
+    include(GenerateExportHeader)
+endif()
 
 
 # =================================== Allow offline mode ===================================
@@ -75,6 +78,7 @@ set(TTF_DISABLE_INSTALL ON)
 set(OPTIONAL_BUILD_TESTS OFF)
 set(EXPECTED_BUILD_TESTS OFF)
 set(ASSIMP_BUILD_TESTS OFF)
+set(ASSIMP_WARNINGS_AS_ERRORS OFF)
 
 if(UNIX)
     set(OpenGL_GL_PREFERENCE GLVND)
@@ -111,8 +115,22 @@ add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
 add_subdirectory(src/chestnut/engine)
 
-target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
+if(MSVC)
+    GENERATE_EXPORT_HEADER(
+        ${PROJECT_NAME}
+        BASE_NAME ${PROJECT_NAME}
+        EXPORT_MACRO_NAME CHESTNUT_API
+        EXPORT_FILE_NAME ChestnutGameEngine_EXPORTS.h
+        STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC
+    )
+endif()
 
+# TODO configure these compile options better
+if(UNIX)
+    target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
+elseif(MSVC)
+    target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -DCHESTNUT_DEBUG>)
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     chestnut-ecs
@@ -131,8 +149,8 @@ target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
 target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES})
 
-
-
+include_directories(${GLEW_INCLUDE_DIRS})
+link_libraries(${GLEW_LIBRARIES})
 
 # ====================================== Tests executable ======================================
 

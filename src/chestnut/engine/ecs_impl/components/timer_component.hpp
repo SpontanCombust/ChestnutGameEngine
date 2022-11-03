@@ -1,13 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
 #define __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../misc/locked_manual_timer.hpp"
 
 #include <vector>
 
 namespace chestnut::engine
 {
-    struct CTimerComponent
+    struct CHESTNUT_API CTimerComponent
     {
         std::vector< CLockedManualTimer > vTimers;
 

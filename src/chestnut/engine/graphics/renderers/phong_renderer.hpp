@@ -1,13 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_PHONG_RENDERER_H__
 #define __CHESTNUT_ENGINE_PHONG_RENDERER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "plain_mesh_renderer.hpp"
 #include "../light.hpp"
 
 
 namespace chestnut::engine
 {
-    class CPhongRenderer : public CPlainMeshRenderer
+    class CHESTNUT_API CPhongRenderer : public CPlainMeshRenderer
     {
     private:
         struct SLightUniform

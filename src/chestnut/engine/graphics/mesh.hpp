@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_MESH_H__
 #define __CHESTNUT_ENGINE_MESH_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../resources/mesh_resource.hpp"
 #include "../resources/mesh_data_resource.hpp"
 #include "opengl/vertex_array.hpp"
@@ -11,7 +12,7 @@
 
 namespace chestnut::engine
 {
-    class CMesh
+    class CHESTNUT_API CMesh
     {
     private:
         std::shared_ptr<CMeshResource> m_resource;

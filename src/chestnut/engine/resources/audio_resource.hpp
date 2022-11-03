@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_AUDIO_RESOURCE_H__
 #define __CHESTNUT_ENGINE_AUDIO_RESOURCE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 
 #include <SDL_mixer.h> //FIXME It'd better if this wasn't here, but whatever for now...
@@ -15,7 +16,7 @@ namespace chestnut::engine
         MUSIC
     };
     
-    class CAudioResource : public IResource
+    class CHESTNUT_API CAudioResource : public IResource
     {
     public:
         std::string m_audioPath;

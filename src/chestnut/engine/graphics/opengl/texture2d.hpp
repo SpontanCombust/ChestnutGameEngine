@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_TEXTURE2D_H__
 #define __CHESTNUT_ENGINE_TEXTURE2D_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../resources/texture2d_resource.hpp"
 #include "../../maths/rectangle.hpp"
 #include "../../maths/vector2.hpp"
@@ -8,7 +9,7 @@
 
 namespace chestnut::engine
 {
-    class CTexture2D
+    class CHESTNUT_API CTexture2D
     {
     protected:
         std::shared_ptr<CTexture2DResource> m_texResource;

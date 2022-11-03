@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_FRAMEBUFFER_H__
 #define __CHESTNUT_ENGINE_FRAMEBUFFER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "texture2d.hpp"
 #include "../../maths/vector4.hpp"
 
@@ -9,7 +10,7 @@
 
 namespace chestnut::engine
 {
-    class CFramebuffer
+    class CHESTNUT_API CFramebuffer
     {
     private:
         GLuint m_fbo;

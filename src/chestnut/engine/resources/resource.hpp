@@ -1,6 +1,8 @@
 #ifndef __CHESTNUT_ENGINE_RESOURCE_H__
 #define __CHESTNUT_ENGINE_RESOURCE_H__
 
+#include "chestnut/engine/macros.hpp"
+
 // these headers are used by all deriving resource classes
 #include <tl/expected.hpp>
 
@@ -9,7 +11,7 @@
 
 namespace chestnut::engine
 {
-    class IResource
+    class CHESTNUT_API IResource
     {
     public:
         virtual ~IResource() = default;

@@ -127,7 +127,7 @@ namespace chestnut::engine
     void CBuffer::reserve(size_t size)
     {
         bind();
-        glBufferData(m_type, size, NULL, m_usage);
+        glBufferData(m_type, size, nullptr, m_usage);
         m_currentSize = size; 
     }
 

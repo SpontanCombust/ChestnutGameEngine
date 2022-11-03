@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
 #define __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../misc/flags.hpp"
 
 namespace chestnut::engine

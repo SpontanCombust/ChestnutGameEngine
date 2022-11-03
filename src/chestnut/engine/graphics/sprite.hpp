@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_SPRITE_H__
 #define __CHESTNUT_ENGINE_SPRITE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "opengl/texture2d.hpp"
 #include "../maths/rectangle.hpp"
 #include "../maths/vector2.hpp"
@@ -8,7 +9,7 @@
 
 namespace chestnut::engine
 {
-    class CSprite : public CTexture2D
+    class CHESTNUT_API CSprite : public CTexture2D
     {
     protected:
         SRectangle m_clipRect;

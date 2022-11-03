@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_FONT_RESOURCE_H__
 #define __CHESTNUT_ENGINE_FONT_RESOURCE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 #include "texture2d_resource.hpp"
 #include "../maths/rectangle.hpp"
@@ -48,7 +49,7 @@ namespace chestnut::engine
         std::unordered_map<wchar_t, SGlyphMetrics> mapGlyphMetrics;
     };
 
-    class CFontResource : public IResource
+    class CHESTNUT_API CFontResource : public IResource
     {
     public:
         std::string m_fontPath;

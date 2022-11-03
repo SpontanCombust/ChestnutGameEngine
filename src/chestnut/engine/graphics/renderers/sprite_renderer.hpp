@@ -3,6 +3,7 @@
 #ifndef __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 #define __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "renderer.hpp"
 #include "../opengl/buffer.hpp"
 #include "../opengl/uniform.hpp"
@@ -49,7 +50,7 @@ namespace chestnut::engine
      * is also texture ID and texture size, which are set before rendering a batch.
      * For each batch three operations are performed: binding the texture, setting texture size uniform and finally drawing instances using instance amount and offset.
      */
-    class CSpriteRenderer : public IRenderer
+    class CHESTNUT_API CSpriteRenderer : public IRenderer
     {
         struct SSpriteRender_Instance
         {

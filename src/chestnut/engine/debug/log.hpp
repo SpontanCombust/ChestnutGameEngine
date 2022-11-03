@@ -1,11 +1,14 @@
 #ifndef __CHESTNUT_ENGINE_LOG_H__
 #define __CHESTNUT_ENGINE_LOG_H__
 
+#include "chestnut/engine/macros.hpp"
+
 #include <ostream>
+
 
 namespace chestnut::engine
 {
-    class CLogger
+    class CHESTNUT_API CLogger
     {
     public:
         static std::ostream *streamPtr;

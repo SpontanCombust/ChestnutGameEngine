@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_MANUAL_TIMER_H__
 #define __CHESTNUT_ENGINE_MANUAL_TIMER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "timer.hpp"
 
 namespace chestnut::engine
@@ -13,7 +14,7 @@ namespace chestnut::engine
      * and pass it the elapsed time value. If it returns true, timer ticked.
      * Total timer time here is the sum of all delta times provided (until reset() is called).
      */
-    class CManualTimer : public ITimer
+    class CHESTNUT_API CManualTimer : public ITimer
     {
     public:
         CManualTimer( timerid_t id );

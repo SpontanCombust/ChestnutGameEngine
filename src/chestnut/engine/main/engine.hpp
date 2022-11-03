@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_ENGINE_H__
 #define __CHESTNUT_ENGINE_ENGINE_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "window.hpp"
 #include "../types.hpp"
 #include "../constants.hpp"
@@ -16,7 +17,7 @@
 
 namespace chestnut::engine
 {
-    class CEngine
+    class CHESTNUT_API CEngine
     {
     private:
         bool m_isRunning;

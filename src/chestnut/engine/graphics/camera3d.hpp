@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_CAMERA3D_H__
 #define __CHESTNUT_ENGINE_CAMERA3D_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../maths/matrix4.hpp"
 #include "../maths/vector3.hpp"
 #include "../maths/angles.hpp"
@@ -8,7 +9,7 @@
 
 namespace chestnut::engine
 {
-    class CCamera3D
+    class CHESTNUT_API CCamera3D
     {
     private:
         vec3f m_worldUp;

@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
 #define __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
 
 #include <tl/optional.hpp>
@@ -14,7 +15,7 @@
 
 namespace chestnut::engine
 {
-    class CResourceManager
+    class CHESTNUT_API CResourceManager
     {
     private:
         static std::unordered_map< size_t, std::shared_ptr<IResource> > m_mapHashToResource;

@@ -1,11 +1,12 @@
 #ifndef __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__
 #define __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "../../maths/vector2.hpp"
 
 namespace chestnut::engine
 {
-    struct CKinematics2DComponent
+    struct CHESTNUT_API CKinematics2DComponent
     {
         vec2f linearVelocity;
         vec2f linearAcceleration;

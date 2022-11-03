@@ -1,6 +1,7 @@
 #ifndef __CHESTNUT_ENGINE_AUTO_TIMER_H__
 #define __CHESTNUT_ENGINE_AUTO_TIMER_H__
 
+#include "chestnut/engine/macros.hpp"
 #include "timer.hpp"
 #include "../types.hpp"
 
@@ -14,7 +15,7 @@ namespace chestnut::engine
      * If it returns true, the timer ticked.
      * Total timer time here is the sum of all delta times provided (until reset() is called).
      */
-    class CAutoTimer : public ITimer
+    class CHESTNUT_API CAutoTimer : public ITimer
     {
     protected:
         // tick value when timer was started
