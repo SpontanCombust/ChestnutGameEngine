@@ -38,6 +38,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "event_manager.tpp"
+#include "event_manager.inl"
 
 

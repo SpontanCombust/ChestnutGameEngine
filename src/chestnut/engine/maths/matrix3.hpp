@@ -22,6 +22,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "matrix3.tpp"
+#include "matrix3.inl"
 
 

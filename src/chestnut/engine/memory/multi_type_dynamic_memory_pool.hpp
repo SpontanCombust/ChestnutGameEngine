@@ -34,6 +34,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "multi_type_dynamic_memory_pool.tpp"
+#include "multi_type_dynamic_memory_pool.inl"
 
 

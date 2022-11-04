@@ -33,6 +33,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector2.tpp"
+#include "vector2.inl"
 
 

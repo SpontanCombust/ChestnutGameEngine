@@ -109,6 +109,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector.tpp"
+#include "vector.inl"
 
 

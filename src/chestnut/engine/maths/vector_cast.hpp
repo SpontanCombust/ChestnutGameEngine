@@ -82,6 +82,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector_cast.tpp"
+#include "vector_cast.inl"
 
 

@@ -92,6 +92,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "matrix.tpp"
+#include "matrix.inl"
 
 

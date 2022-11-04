@@ -47,6 +47,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "matrix4.tpp"
+#include "matrix4.inl"
 
 
