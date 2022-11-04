@@ -1,6 +1,6 @@
-#include "framebuffer.hpp"
+#include "chestnut/engine/graphics/opengl/framebuffer.hpp"
 
-#include "../../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 namespace chestnut::engine
 {

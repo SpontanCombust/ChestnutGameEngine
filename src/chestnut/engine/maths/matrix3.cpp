@@ -1,4 +1,4 @@
-#include "matrix3.hpp"
+#include "chestnut/engine/maths/matrix3.hpp"
 
 namespace chestnut::engine
 {

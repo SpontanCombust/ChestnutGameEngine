@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "texture2d.hpp"
-#include "../../maths/vector4.hpp"
+#include "chestnut/engine/graphics/opengl/texture2d.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
 
 #include <tl/optional.hpp>
 

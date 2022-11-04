@@ -1,9 +1,9 @@
-#include "colored_polygon2d_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/colored_polygon2d_renderer.hpp"
 
-#include "../../debug/log.hpp"
-#include "../../macros.hpp"
-#include "../../resources/resource_manager.hpp"
-#include "../../resources/shader_program_resource.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
 
 namespace chestnut::engine
 {

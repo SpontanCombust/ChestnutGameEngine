@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "vertex_attribute.hpp"
-#include "buffer.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
 
 #include <initializer_list>
 #include <vector>

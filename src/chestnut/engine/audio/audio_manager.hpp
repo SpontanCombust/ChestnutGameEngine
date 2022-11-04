@@ -1,8 +1,8 @@
 #pragma once
 
 #include "chestnut/engine/macros.hpp"
-#include "../resources/audio_resource.hpp"
-#include "../types.hpp"
+#include "chestnut/engine/resources/audio_resource.hpp"
+#include "chestnut/engine/types.hpp"
 
 #include <string>
 #include <unordered_map>

@@ -1,6 +1,6 @@
-#include "input_event_dispatch_system.hpp"
+#include "chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 
-#include "../../main/engine.hpp"
+#include "chestnut/engine/main/engine.hpp"
 
 #include <SDL_events.h>
 

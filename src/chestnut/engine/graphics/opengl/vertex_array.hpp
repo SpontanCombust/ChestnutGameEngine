@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "buffer.hpp"
-#include "vertex_attribute_array.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
 #include <GL/glew.h>
 #include <tl/optional.hpp>

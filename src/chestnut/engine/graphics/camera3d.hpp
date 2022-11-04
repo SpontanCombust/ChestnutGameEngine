@@ -2,9 +2,9 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../maths/matrix4.hpp"
-#include "../maths/vector3.hpp"
-#include "../maths/angles.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/angles.hpp"
 
 
 namespace chestnut::engine

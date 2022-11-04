@@ -2,10 +2,10 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "renderer.hpp"
-#include "../text.hpp"
-#include "../opengl/buffer.hpp"
-#include "../opengl/vertex_array.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
+#include "chestnut/engine/graphics/text.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
 
 #include <vector>
 

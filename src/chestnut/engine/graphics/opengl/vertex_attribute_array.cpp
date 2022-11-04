@@ -1,4 +1,4 @@
-#include "vertex_attribute_array.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
 #include <numeric>
 

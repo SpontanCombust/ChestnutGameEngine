@@ -1,6 +1,6 @@
-#include "locked_auto_timer.hpp"
+#include "chestnut/engine/misc/locked_auto_timer.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #include <thread>
 

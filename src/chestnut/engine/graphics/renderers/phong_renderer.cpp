@@ -1,8 +1,8 @@
-#include "phong_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/phong_renderer.hpp"
 
-#include "../../resources/resource_manager.hpp"
-#include "../../macros.hpp"
-#include "../../debug/log.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 namespace chestnut::engine
 {    

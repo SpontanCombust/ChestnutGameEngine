@@ -2,10 +2,10 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../../resources/texture2d_resource.hpp"
-#include "../../maths/rectangle.hpp"
-#include "../../maths/vector2.hpp"
-#include "../../maths/vector3.hpp"
+#include "chestnut/engine/resources/texture2d_resource.hpp"
+#include "chestnut/engine/maths/rectangle.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 namespace chestnut::engine
 {

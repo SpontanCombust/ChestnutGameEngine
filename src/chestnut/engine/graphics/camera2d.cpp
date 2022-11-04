@@ -1,4 +1,4 @@
-#include "camera2d.hpp"
+#include "chestnut/engine/graphics/camera2d.hpp"
 
 namespace chestnut::engine
 {    

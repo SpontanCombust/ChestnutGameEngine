@@ -1,9 +1,9 @@
 #include "simple2d_collision_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/transform2d_component.hpp"
-#include "../components/collision2d_component.hpp"
-#include "../events/collision_event.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/collision2d_component.hpp"
+#include "chestnut/engine/ecs_impl/events/collision_event.hpp"
 
 namespace chestnut::engine
 {    

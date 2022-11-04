@@ -1,15 +1,15 @@
 #include "simple2d_rendering_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../../resources/resource_manager.hpp"
-#include "../../maths/matrix4.hpp"
-#include "../../maths/vector_cast.hpp"
-#include "../components/model2d_component.hpp"
-#include "../components/transform2d_component.hpp"
-#include "../components/sprite_component.hpp"
-#include "../components/render_layer_component.hpp"
-#include "../../debug/log.hpp"
-#include "../../macros.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
+#include "chestnut/engine/maths/vector_cast.hpp"
+#include "chestnut/engine/ecs_impl/components/model2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
+#include "chestnut/engine/ecs_impl/components/render_layer_component.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/macros.hpp"
 
 namespace chestnut::engine
 {

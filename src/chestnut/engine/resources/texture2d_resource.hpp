@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "resource.hpp"
-#include "image_data_resource.hpp"
+#include "chestnut/engine/resources/resource.hpp"
+#include "chestnut/engine/resources/image_data_resource.hpp"
 
 #include <GL/glew.h>
 #include <tl/expected.hpp>

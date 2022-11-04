@@ -2,10 +2,10 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "resource.hpp"
-#include "texture2d_resource.hpp"
-#include "../maths/rectangle.hpp"
-#include "../misc/flags.hpp"
+#include "chestnut/engine/resources/resource.hpp"
+#include "chestnut/engine/resources/texture2d_resource.hpp"
+#include "chestnut/engine/maths/rectangle.hpp"
+#include "chestnut/engine/misc/flags.hpp"
 
 #include <string>
 #include <map>

@@ -1,10 +1,10 @@
-#include "sprite_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/sprite_renderer.hpp"
 
-#include "../../debug/log.hpp"
-#include "../../macros.hpp"
-#include "../../resources/resource_manager.hpp"
-#include "../../resources/shader_program_resource.hpp"
-#include "../opengl/vertex_attribute_array.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
 namespace chestnut::engine
 {   

@@ -2,10 +2,10 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../../maths/matrix4.hpp"
-#include "../opengl/shader_program.hpp"
-#include "../opengl/uniform.hpp"
-#include "../opengl/framebuffer.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
+#include "chestnut/engine/graphics/opengl/shader_program.hpp"
+#include "chestnut/engine/graphics/opengl/uniform.hpp"
+#include "chestnut/engine/graphics/opengl/framebuffer.hpp"
 
 #include <GL/glew.h>
 

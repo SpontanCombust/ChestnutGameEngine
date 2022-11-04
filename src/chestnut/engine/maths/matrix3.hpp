@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "matrix.hpp"
+#include "chestnut/engine/maths/matrix.hpp"
 
 #include <string>
 

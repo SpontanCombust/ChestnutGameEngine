@@ -4,14 +4,14 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "renderer.hpp"
-#include "../opengl/buffer.hpp"
-#include "../opengl/uniform.hpp"
-#include "../opengl/vertex_array.hpp"
-#include "../../maths/vector2.hpp"
-#include "../../maths/vector3.hpp"
-#include "../../maths/vector4.hpp"
-#include "../sprite.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/uniform.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
+#include "chestnut/engine/graphics/sprite.hpp"
 
 #include <memory>
 #include <vector>

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../physics/collider2d.hpp"
+#include "chestnut/engine/physics/collider2d.hpp"
 
 #include <chestnut/ecs/types.hpp>
 

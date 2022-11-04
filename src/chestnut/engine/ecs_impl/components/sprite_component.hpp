@@ -1,8 +1,8 @@
 #pragma once
 
 #include "chestnut/engine/macros.hpp"
-#include "../../maths/vector2.hpp"
-#include "../../graphics/sprite.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/graphics/sprite.hpp"
 
 namespace chestnut::engine
 {

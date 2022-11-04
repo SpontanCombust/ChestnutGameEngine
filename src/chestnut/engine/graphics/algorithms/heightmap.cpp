@@ -1,6 +1,6 @@
-#include "heightmap.hpp"
+#include "chestnut/engine/graphics/algorithms/heightmap.hpp"
 
-#include "../../resources/image_data_resource.hpp"
+#include "chestnut/engine/resources/image_data_resource.hpp"
 
 namespace chestnut::engine
 {

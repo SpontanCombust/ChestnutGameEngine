@@ -2,12 +2,12 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "resource.hpp"
-#include "mesh_data_resource.hpp"
-#include "../graphics/opengl/buffer.hpp"
-#include "../graphics/material.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/vector3.hpp"
+#include "chestnut/engine/resources/resource.hpp"
+#include "chestnut/engine/resources/mesh_data_resource.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/material.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 
 namespace chestnut::engine

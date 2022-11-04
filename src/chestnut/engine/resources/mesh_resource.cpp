@@ -1,8 +1,8 @@
-#include "mesh_resource.hpp"
+#include "chestnut/engine/resources/mesh_resource.hpp"
 
-#include "../misc/exception.hpp"
-#include "../debug/log.hpp"
-#include "resource_manager.hpp"
+#include "chestnut/engine/misc/exception.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>

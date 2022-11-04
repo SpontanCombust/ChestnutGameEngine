@@ -1,8 +1,8 @@
-#include "../../maths/vector2.hpp"
-#include "../../maths/vector3.hpp"
-#include "../../maths/vector4.hpp"
-#include "../../maths/matrix3.hpp"
-#include "../../maths/matrix4.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
+#include "chestnut/engine/maths/matrix3.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
 
 #include <type_traits>
 

@@ -1,6 +1,6 @@
-#include "mesh.hpp"
+#include "chestnut/engine/graphics/mesh.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 namespace chestnut::engine
 {

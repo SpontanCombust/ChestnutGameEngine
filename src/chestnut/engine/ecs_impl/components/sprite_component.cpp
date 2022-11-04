@@ -1,4 +1,4 @@
-#include "sprite_component.hpp"
+#include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
 
 namespace chestnut::engine
 {    

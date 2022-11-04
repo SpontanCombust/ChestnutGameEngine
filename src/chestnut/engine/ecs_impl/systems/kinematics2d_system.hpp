@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../system.hpp"
+#include "chestnut/engine/ecs_impl/system.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 

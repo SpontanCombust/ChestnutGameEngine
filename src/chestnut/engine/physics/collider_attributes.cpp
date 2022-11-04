@@ -1,4 +1,4 @@
-#include "collider_attributes.hpp"
+#include "chestnut/engine/physics/collider_attributes.hpp"
 
 namespace chestnut::engine
 {

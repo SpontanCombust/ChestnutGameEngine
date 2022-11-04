@@ -1,7 +1,7 @@
-#include "colored_polygon2d.hpp"
+#include "chestnut/engine/graphics/colored_polygon2d.hpp"
 
-#include "../constants.hpp"
-#include "../maths/vector_transform.hpp"
+#include "chestnut/engine/constants.hpp"
+#include "chestnut/engine/maths/vector_transform.hpp"
 
 namespace chestnut::engine
 {    

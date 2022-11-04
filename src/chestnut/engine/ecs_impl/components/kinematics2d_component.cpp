@@ -1,4 +1,4 @@
-#include "kinematics2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/kinematics2d_component.hpp"
 
 namespace chestnut::engine
 {

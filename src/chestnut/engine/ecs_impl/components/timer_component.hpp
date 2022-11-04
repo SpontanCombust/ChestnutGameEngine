@@ -1,7 +1,7 @@
 #pragma once
 
 #include "chestnut/engine/macros.hpp"
-#include "../../misc/locked_manual_timer.hpp"
+#include "chestnut/engine/misc/locked_manual_timer.hpp"
 
 #include <vector>
 

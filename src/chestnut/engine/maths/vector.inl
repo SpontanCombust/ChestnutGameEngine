@@ -1,4 +1,4 @@
-#include "../misc/exception.hpp"
+#include "chestnut/engine/misc/exception.hpp"
 
 #include <algorithm> // fill_n
 #include <cmath> // sqrt

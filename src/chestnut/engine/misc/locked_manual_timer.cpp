@@ -1,6 +1,6 @@
-#include "locked_manual_timer.hpp"
+#include "chestnut/engine/misc/locked_manual_timer.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 namespace chestnut::engine
 {    

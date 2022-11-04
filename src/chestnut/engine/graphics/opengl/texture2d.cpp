@@ -1,6 +1,6 @@
-#include "texture2d.hpp"
+#include "chestnut/engine/graphics/opengl/texture2d.hpp"
 
-#include "../../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 
 namespace chestnut::engine 

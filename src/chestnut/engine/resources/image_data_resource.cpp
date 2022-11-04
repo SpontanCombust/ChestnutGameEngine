@@ -1,6 +1,6 @@
-#include "image_data_resource.hpp"
+#include "chestnut/engine/resources/image_data_resource.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG

@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../maths/rectangle.hpp"
+#include "chestnut/engine/maths/rectangle.hpp"
 
 #include <string>
 #include <unordered_map>

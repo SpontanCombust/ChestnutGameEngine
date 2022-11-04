@@ -1,4 +1,4 @@
-#include "curves.hpp"
+#include "chestnut/engine/maths/curves.hpp"
 
 #include <algorithm>
 

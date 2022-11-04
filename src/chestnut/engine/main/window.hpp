@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../graphics/opengl/framebuffer.hpp"
+#include "chestnut/engine/graphics/opengl/framebuffer.hpp"
 
 #include <string>
 

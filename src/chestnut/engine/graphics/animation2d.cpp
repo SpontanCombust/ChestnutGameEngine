@@ -1,4 +1,4 @@
-#include "animation2d.hpp"
+#include "chestnut/engine/graphics/animation2d.hpp"
 
 namespace chestnut::engine
 {    

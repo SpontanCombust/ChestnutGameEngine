@@ -1,8 +1,8 @@
-#include "engine.hpp"
+#include "chestnut/engine/main/engine.hpp"
 
-#include "../misc/locked_auto_timer.hpp"
-#include "../misc/exception.hpp"
-#include "../debug/log.hpp"
+#include "chestnut/engine/misc/locked_auto_timer.hpp"
+#include "chestnut/engine/misc/exception.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 namespace chestnut::engine
 {    

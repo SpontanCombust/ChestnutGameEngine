@@ -1,4 +1,4 @@
-#include "sprite.hpp"
+#include "chestnut/engine/graphics/sprite.hpp"
 
 namespace chestnut::engine
 {    

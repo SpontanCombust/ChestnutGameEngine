@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "collider_attributes.hpp"
-#include "../maths/vector2.hpp"
+#include "chestnut/engine/physics/collider_attributes.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine
 {

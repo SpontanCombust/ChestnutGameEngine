@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "vector3.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 #include <vector>
 

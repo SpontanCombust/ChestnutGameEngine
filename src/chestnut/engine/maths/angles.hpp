@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "vector2.hpp"
-#include "../constants.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/constants.hpp"
 
 #include <cmath>
 

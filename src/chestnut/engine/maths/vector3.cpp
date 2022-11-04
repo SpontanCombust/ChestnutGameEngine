@@ -1,4 +1,4 @@
-#include "vector3.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 namespace chestnut::engine
 {

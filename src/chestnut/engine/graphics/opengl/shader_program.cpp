@@ -1,4 +1,4 @@
-#include "shader_program.hpp"
+#include "chestnut/engine/graphics/opengl/shader_program.hpp"
 
 namespace chestnut::engine
 {

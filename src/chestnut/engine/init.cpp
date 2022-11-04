@@ -1,7 +1,7 @@
-#include "init.hpp"
+#include "chestnut/engine/init.hpp"
 
-#include "debug/log.hpp"
-#include "resources/resource_manager.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
 
 #include <SDL.h>
 #include <GL/glew.h>

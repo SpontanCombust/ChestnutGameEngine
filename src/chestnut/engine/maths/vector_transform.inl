@@ -1,7 +1,7 @@
-#include "matrix3.hpp"
-#include "vector4.hpp"
-#include "matrix4.hpp"
-#include "vector_cast.hpp"
+#include "chestnut/engine/maths/matrix3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
+#include "chestnut/engine/maths/vector_cast.hpp"
 
 namespace chestnut::engine
 {

@@ -1,6 +1,6 @@
-#include "audio_resource.hpp"
+#include "chestnut/engine/resources/audio_resource.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #include <SDL_mixer.h>
 

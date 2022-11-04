@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "plain_mesh_renderer.hpp"
-#include "../light.hpp"
+#include "chestnut/engine/graphics/renderers/plain_mesh_renderer.hpp"
+#include "chestnut/engine/graphics/light.hpp"
 
 
 namespace chestnut::engine

@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "collider2d.hpp"
+#include "chestnut/engine/physics/collider2d.hpp"
 
 namespace chestnut::engine
 {

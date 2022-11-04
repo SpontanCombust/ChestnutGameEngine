@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "timer.hpp"
-#include "../types.hpp"
+#include "chestnut/engine/misc/timer.hpp"
+#include "chestnut/engine/types.hpp"
 
 namespace chestnut::engine
 {

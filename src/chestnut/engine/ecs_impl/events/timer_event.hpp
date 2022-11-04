@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../types.hpp"
+#include "chestnut/engine/types.hpp"
 
 namespace chestnut::engine
 {

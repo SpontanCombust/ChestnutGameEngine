@@ -1,6 +1,6 @@
-#include "collider2d.hpp"
+#include "chestnut/engine/physics/collider2d.hpp"
 
-#include "collider2d_collision_detection.hpp"
+#include "chestnut/engine/physics/collider2d_collision_detection.hpp"
 
 namespace chestnut::engine
 {    

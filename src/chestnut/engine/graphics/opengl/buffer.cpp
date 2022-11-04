@@ -1,4 +1,4 @@
-#include "buffer.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
 
 namespace chestnut::engine
 {

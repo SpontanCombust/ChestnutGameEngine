@@ -1,9 +1,9 @@
 #include "simple2d_animation_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/sprite_component.hpp"
-#include "../components/animation2d_component.hpp"
-#include "../events/animation_finish_event.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
+#include "chestnut/engine/ecs_impl/components/animation2d_component.hpp"
+#include "chestnut/engine/ecs_impl/events/animation_finish_event.hpp"
 
 #include <cmath>
 

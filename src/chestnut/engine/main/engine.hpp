@@ -2,14 +2,14 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "window.hpp"
-#include "../types.hpp"
-#include "../constants.hpp"
-#include "../misc/auto_timer.hpp"
-#include "../ecs_impl/event_manager.hpp"
-#include "../audio/audio_manager.hpp"
-#include "../ecs_impl/system.hpp"
-#include "../ecs_impl/rendering_system.hpp"
+#include "chestnut/engine/main/window.hpp"
+#include "chestnut/engine/types.hpp"
+#include "chestnut/engine/constants.hpp"
+#include "chestnut/engine/misc/auto_timer.hpp"
+#include "chestnut/engine/ecs_impl/event_manager.hpp"
+#include "chestnut/engine/audio/audio_manager.hpp"
+#include "chestnut/engine/ecs_impl/system.hpp"
+#include "chestnut/engine/ecs_impl/rendering_system.hpp"
 
 #include <chestnut/ecs/entity_world.hpp>
 

@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../system.hpp"
+#include "chestnut/engine/ecs_impl/system.hpp"
 
 namespace chestnut::engine
 {

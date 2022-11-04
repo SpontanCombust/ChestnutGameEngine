@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "resource.hpp"
+#include "chestnut/engine/resources/resource.hpp"
 
 #include <tl/optional.hpp>
 #include <tl/expected.hpp>

@@ -1,8 +1,8 @@
-#include "kinematics2d_system.hpp"
+#include "chestnut/engine/ecs_impl/systems/kinematics2d_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/transform2d_component.hpp"
-#include "../components/kinematics2d_component.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/kinematics2d_component.hpp"
 
 namespace chestnut::engine
 {

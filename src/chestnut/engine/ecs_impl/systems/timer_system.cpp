@@ -1,8 +1,8 @@
 #include "timer_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/timer_component.hpp"
-#include "../events/timer_event.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/timer_component.hpp"
+#include "chestnut/engine/ecs_impl/events/timer_event.hpp"
 
 namespace chestnut::engine
 {

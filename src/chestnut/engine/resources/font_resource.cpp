@@ -1,8 +1,8 @@
-#include "font_resource.hpp"
+#include "chestnut/engine/resources/font_resource.hpp"
 
-#include "../debug/log.hpp"
-#include "../resources/texture2d_resource.hpp"
-#include "../macros.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/resources/texture2d_resource.hpp"
+#include "chestnut/engine/macros.hpp"
 
 #include <SDL_ttf.h>
 

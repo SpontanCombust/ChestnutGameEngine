@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "vector.hpp"
+#include "chestnut/engine/maths/vector.hpp"
 
 namespace chestnut::engine
 {

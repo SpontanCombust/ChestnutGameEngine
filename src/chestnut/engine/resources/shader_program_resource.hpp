@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "resource.hpp"
+#include "chestnut/engine/resources/resource.hpp"
 
 #include <GL/glew.h>
 

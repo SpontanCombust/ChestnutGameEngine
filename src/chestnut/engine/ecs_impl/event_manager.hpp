@@ -2,9 +2,9 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../types.hpp"
-#include "../constants.hpp"
-#include "event_listener.hpp"
+#include "chestnut/engine/types.hpp"
+#include "chestnut/engine/constants.hpp"
+#include "chestnut/engine/ecs_impl/event_listener.hpp"
 
 #include <list>
 #include <typeindex>

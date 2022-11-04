@@ -2,12 +2,12 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "renderer.hpp"
-#include "../../maths/vector3.hpp"
-#include "../opengl/buffer.hpp"
-#include "../opengl/vertex_array.hpp"
-#include "../opengl/uniform.hpp"
-#include "../mesh.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
+#include "chestnut/engine/graphics/opengl/uniform.hpp"
+#include "chestnut/engine/graphics/mesh.hpp"
 
 #include <unordered_map>
 #include <vector>

@@ -1,4 +1,4 @@
-#include "vector2.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine
 {

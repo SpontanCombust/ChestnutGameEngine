@@ -2,10 +2,10 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../resources/mesh_resource.hpp"
-#include "../resources/mesh_data_resource.hpp"
-#include "opengl/vertex_array.hpp"
-#include "opengl/shader_program.hpp"
+#include "chestnut/engine/resources/mesh_resource.hpp"
+#include "chestnut/engine/resources/mesh_data_resource.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
+#include "chestnut/engine/graphics/opengl/shader_program.hpp"
 
 #include <tl/optional.hpp>
 

@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "auto_timer.hpp"
+#include "chestnut/engine/misc/auto_timer.hpp"
 
 namespace chestnut::engine
 {

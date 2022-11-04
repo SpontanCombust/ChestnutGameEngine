@@ -1,4 +1,4 @@
-#include "camera3d.hpp"
+#include "chestnut/engine/graphics/camera3d.hpp"
 
 #include <algorithm>
 

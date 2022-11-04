@@ -1,7 +1,7 @@
 #pragma once
 
 #include "chestnut/engine/macros.hpp"
-#include "../../physics/collider2d.hpp"
+#include "chestnut/engine/physics/collider2d.hpp"
 
 #include <memory>
 

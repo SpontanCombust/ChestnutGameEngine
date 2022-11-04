@@ -1,4 +1,4 @@
-#include "vertex_array.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
 
 
 namespace chestnut::engine

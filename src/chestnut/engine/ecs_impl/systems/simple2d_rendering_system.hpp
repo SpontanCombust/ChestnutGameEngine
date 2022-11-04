@@ -2,11 +2,11 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../rendering_system.hpp"
-#include "../../graphics/renderers/sprite_renderer.hpp"
-#include "../../graphics/renderers/colored_polygon2d_renderer.hpp"
-#include "../../graphics/renderers/text_renderer.hpp"
-#include "../../graphics/camera2d.hpp"
+#include "chestnut/engine/ecs_impl/rendering_system.hpp"
+#include "chestnut/engine/graphics/renderers/sprite_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/colored_polygon2d_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/text_renderer.hpp"
+#include "chestnut/engine/graphics/camera2d.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 

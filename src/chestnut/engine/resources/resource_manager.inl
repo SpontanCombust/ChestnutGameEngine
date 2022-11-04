@@ -1,7 +1,7 @@
-#include "resource.hpp"
-#include "texture2d_resource.hpp"
-#include "shader_program_resource.hpp"
-#include "font_resource.hpp"
+#include "chestnut/engine/resources/resource.hpp"
+#include "chestnut/engine/resources/texture2d_resource.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/resources/font_resource.hpp"
 
 #include <type_traits>
 

@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "opengl/texture2d.hpp"
+#include "chestnut/engine/graphics/opengl/texture2d.hpp"
 
 namespace chestnut::engine
 {

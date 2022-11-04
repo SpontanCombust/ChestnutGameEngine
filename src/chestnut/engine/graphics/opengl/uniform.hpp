@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../../resources/shader_program_resource.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
 
 #include <GL/glew.h>
 

@@ -1,11 +1,11 @@
 #pragma once
 
 
-#include "vector.hpp"
-#include "matrix.hpp"
-#include "vector2.hpp"
-#include "vector3.hpp"
-#include "vector4.hpp"
+#include "chestnut/engine/maths/vector.hpp"
+#include "chestnut/engine/maths/matrix.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
 
 namespace chestnut::engine
 {

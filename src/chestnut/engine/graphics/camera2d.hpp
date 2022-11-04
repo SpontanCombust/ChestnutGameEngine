@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/matrix4.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
 
 namespace chestnut::engine
 {

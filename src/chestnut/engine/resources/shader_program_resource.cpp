@@ -1,6 +1,6 @@
-#include "shader_program_resource.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #include <fstream>
 #include <sstream>

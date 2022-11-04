@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "matrix.hpp"
-#include "vector3.hpp"
+#include "chestnut/engine/maths/matrix.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 #include <string>
 

@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "resource.hpp"
+#include "chestnut/engine/resources/resource.hpp"
 
 #include <SDL_mixer.h> //FIXME It'd better if this wasn't here, but whatever for now...
 

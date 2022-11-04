@@ -1,6 +1,6 @@
-#include "text.hpp"
+#include "chestnut/engine/graphics/text.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #include <locale>
 #include <codecvt>

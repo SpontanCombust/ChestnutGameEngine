@@ -1,4 +1,4 @@
-#include "model2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/model2d_component.hpp"
 
 namespace chestnut::engine
 {    

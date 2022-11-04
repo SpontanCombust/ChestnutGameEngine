@@ -2,7 +2,7 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "../../resources/mesh_data_resource.hpp"
+#include "chestnut/engine/resources/mesh_data_resource.hpp"
 
 #include <type_traits>
 

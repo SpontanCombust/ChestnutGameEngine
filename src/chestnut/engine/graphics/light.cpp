@@ -1,4 +1,4 @@
-#include "light.hpp"
+#include "chestnut/engine/graphics/light.hpp"
 
 namespace chestnut::engine
 {    

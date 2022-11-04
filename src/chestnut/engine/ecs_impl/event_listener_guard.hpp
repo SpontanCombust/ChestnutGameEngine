@@ -2,8 +2,8 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "event_listener.hpp"
-#include "event_manager.hpp"
+#include "chestnut/engine/ecs_impl/event_listener.hpp"
+#include "chestnut/engine/ecs_impl/event_manager.hpp"
 
 namespace chestnut::engine
 {

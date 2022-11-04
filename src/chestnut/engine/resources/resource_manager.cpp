@@ -1,4 +1,4 @@
-#include "resource_manager.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
 
 namespace chestnut::engine
 {
