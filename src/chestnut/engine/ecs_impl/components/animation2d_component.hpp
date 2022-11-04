@@ -5,27 +5,25 @@
 
 namespace chestnut::engine
 {
-    struct CHESTNUT_API CAnimation2DComponent
+    struct CAnimation2DComponent
     {
         SAnimationSet2D animSet;
 
-        bool isAnimPlaying;
-        bool isAnimPaused;
-        std::string currentAnimName;
-        float elapsedAnimTimeSec;
-        int remainingAnimLoops;
-        float animSpeedMultiplier;
+        bool isAnimPlaying = false;
+        bool isAnimPaused = false;
+        std::string currentAnimName = "";
+        float elapsedAnimTimeSec = 0.f;
+        int remainingAnimLoops = 0;
+        float animSpeedMultiplier = 1.f;
 
-
-        CAnimation2DComponent();
 
         // Checks if animation with that name exits, changes component state only if it exists
         // -1 for infinite loops
         // If any animation is currently played, cancels it
-        void playAnimation( const char *animationName, int loops = -1, float speedMult = 1.f );
-        void pauseAnimation();
-        void resumeAnimation();
-        void stopAnimation();
+        CHESTNUT_API void playAnimation( const char *animationName, int loops = -1, float speedMult = 1.f );
+        CHESTNUT_API void pauseAnimation();
+        CHESTNUT_API void resumeAnimation();
+        CHESTNUT_API void stopAnimation();
     };
 
 } // namespace chestnut::engine

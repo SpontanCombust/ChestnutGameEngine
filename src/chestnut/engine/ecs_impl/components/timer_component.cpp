@@ -2,20 +2,13 @@
 
 namespace chestnut::engine
 {   
-    timerid_t CTimerComponent::m_timerIDAccumulator = 0;
-    
-    CTimerComponent::~CTimerComponent() 
-    {
-        vTimers.clear();
-    }
-
     timerid_t CTimerComponent::addTimer( float updateIntervalSec, bool isRepeating ) 
     {
-        ++m_timerIDAccumulator;
-        CLockedManualTimer timer = CLockedManualTimer( m_timerIDAccumulator, updateIntervalSec, isRepeating );
+        static timerid_t timerIDAccumulator = 0;
+        CLockedManualTimer timer = CLockedManualTimer( timerIDAccumulator++, updateIntervalSec, isRepeating );
         timer.start();
         vTimers.push_back( timer );
-        return m_timerIDAccumulator;
+        return timerIDAccumulator;
     }
 
     bool CTimerComponent::removeTimer( timerid_t id ) 

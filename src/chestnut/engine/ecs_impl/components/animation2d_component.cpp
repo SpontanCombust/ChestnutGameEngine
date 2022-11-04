@@ -2,16 +2,6 @@
 
 namespace chestnut::engine
 {    
-    CAnimation2DComponent::CAnimation2DComponent() 
-    {
-        isAnimPlaying = false;
-        isAnimPaused = false;
-        currentAnimName = "";
-        elapsedAnimTimeSec = 0.f;
-        remainingAnimLoops = 0;
-        animSpeedMultiplier = 1.f;
-    }
-
     void CAnimation2DComponent::playAnimation( const char *animationName, int loops, float speedMult ) 
     {
         auto it = animSet.mapAnimNameToAnimData.find( animationName );

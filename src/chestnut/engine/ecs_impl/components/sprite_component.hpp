@@ -14,12 +14,10 @@ namespace chestnut::engine
         ZOOMED // scale up/down keeping the aspect ratio to fit the entire surface area of the model and possibly going beyond the shape
     };
 
-    struct CHESTNUT_API CSpriteComponent
+    struct CSpriteComponent
     {
         CSprite sprite;
-        ESpriteToModel2DAdjust adjust;
-
-        CSpriteComponent();
+        ESpriteToModel2DAdjust adjust = ESpriteToModel2DAdjust::SCALED;
     };
 
 } // namespace chestnut::engine 

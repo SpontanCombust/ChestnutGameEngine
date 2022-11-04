@@ -7,18 +7,13 @@
 
 namespace chestnut::engine
 {
-    struct CHESTNUT_API CTimerComponent
+    struct CTimerComponent
     {
         std::vector< CLockedManualTimer > vTimers;
 
-        ~CTimerComponent();
-
-        timerid_t addTimer( float updateIntervalSec, bool isRepeating = false );
-        bool removeTimer( timerid_t id );
-        void removeTimers();
-
-    private:
-        static timerid_t m_timerIDAccumulator;
+        CHESTNUT_API timerid_t addTimer( float updateIntervalSec, bool isRepeating = false );
+        CHESTNUT_API bool removeTimer( timerid_t id );
+        CHESTNUT_API void removeTimers();
     };
 
 } // namespace chestnut::engine

@@ -10,29 +10,25 @@
 
 namespace chestnut::engine
 {
-    struct CHESTNUT_API SAnimationData2D
+    struct SAnimationData2D
     {
         std::string name;
-        float framesPerSec;
+        float framesPerSec = 1.f;
    
         // Sequence of indices identifying specific clipping rectangles for each animation frame
         // Index corresponds to a clipping rectangle in animation set
         // Indices can repeat in an animation of course, which simplifies the process of setting up an animation
         std::vector< unsigned int > vecFrameIndices;
-
-        SAnimationData2D();
     };
 
-    struct CHESTNUT_API SAnimationSet2D
+    struct SAnimationSet2D
     {
         // Clipping rectangles of animation keyframes in the spritesheet
         std::vector< SRectangle > vecKeyFrameClipRects;
 
         std::unordered_map< std::string, SAnimationData2D > mapAnimNameToAnimData;
         // A default animation frame to be used when animation expires or isn't played at all (like T-pose in 3D graphics)
-        unsigned int defaultAnimFrameIndex;
-
-        SAnimationSet2D();
+        unsigned int defaultAnimFrameIndex = 0;
     };
 
 } // namespace chestnut::engine

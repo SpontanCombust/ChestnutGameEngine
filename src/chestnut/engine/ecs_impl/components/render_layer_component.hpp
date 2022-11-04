@@ -5,11 +5,9 @@
 
 namespace chestnut::engine
 {
-    struct CHESTNUT_API CRenderLayerComponent
+    struct CRenderLayerComponent
     {
-        renderlayer_t layer;
-
-        CRenderLayerComponent();
+        renderlayer_t layer = RENDER_LAYER_DEFAULT;
     };
 
 } // namespace chestnut::engine
