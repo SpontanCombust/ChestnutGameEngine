@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_SYSTEM_H__
-#define __CHESTNUT_ENGINE_SYSTEM_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 
@@ -25,4 +25,3 @@ namespace chestnut::engine
     
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_SYSTEM_H__

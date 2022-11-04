@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_FRAMEBUFFER_H__
-#define __CHESTNUT_ENGINE_FRAMEBUFFER_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "texture2d.hpp"
@@ -63,4 +63,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_FRAMEBUFFER_H__

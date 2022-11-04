@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_H__
-#define __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 
@@ -51,4 +51,3 @@ namespace chestnut::engine
 #include "vertex_attribute.inl"
 
 
-#endif // __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_H__

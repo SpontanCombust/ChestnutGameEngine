@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENGINE_SOUND_MANAGER_H__
-#define __CHESTNUT_ENGINE_SOUND_MANAGER_H__
+#pragma once
 
 #include "chestnut/engine/macros.hpp"
 #include "../resources/audio_resource.hpp"
@@ -82,5 +81,3 @@ namespace chestnut::engine
     };
     
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_SOUND_MANAGER_H__

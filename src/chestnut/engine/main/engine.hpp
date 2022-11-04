@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_ENGINE_H__
-#define __CHESTNUT_ENGINE_ENGINE_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "window.hpp"
@@ -111,4 +111,3 @@ namespace chestnut::engine
 #include "engine.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_ENGINE_H__

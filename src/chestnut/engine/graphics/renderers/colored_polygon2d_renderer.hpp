@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
-#define __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "renderer.hpp"
@@ -96,4 +96,3 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__

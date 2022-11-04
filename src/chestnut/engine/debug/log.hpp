@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENGINE_LOG_H__
-#define __CHESTNUT_ENGINE_LOG_H__
+#pragma once
 
 #include "chestnut/engine/macros.hpp"
 
@@ -39,5 +38,3 @@ namespace chestnut::engine
     #define LOG_WARNING(s)
     #define LOG_ERROR(s)
 #endif
-
-#endif // __CHESTNUT_ENGINE_LOG_H__

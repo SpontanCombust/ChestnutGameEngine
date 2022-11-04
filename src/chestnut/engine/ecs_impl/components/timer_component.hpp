@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
-#define __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
+#pragma once
 
 #include "chestnut/engine/macros.hpp"
 #include "../../misc/locked_manual_timer.hpp"
@@ -23,5 +22,3 @@ namespace chestnut::engine
     };
 
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_TIMER_COMPONENT_H__

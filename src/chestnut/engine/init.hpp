@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_INIT_H__
-#define __CHESTNUT_ENGINE_INIT_H__
+#pragma once
+
 
 namespace chestnut::engine
 {
@@ -15,4 +15,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_INIT_H__

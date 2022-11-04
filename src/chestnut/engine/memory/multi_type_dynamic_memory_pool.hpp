@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MULTI_TYPE_DYNAMIC_MEMORY_POOL_H__
-#define __CHESTNUT_ENGINE_MULTI_TYPE_DYNAMIC_MEMORY_POOL_H__
+#pragma once
+
 
 #include <stack>
 #include <typeindex>
@@ -37,4 +37,3 @@ namespace chestnut::engine
 #include "multi_type_dynamic_memory_pool.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_MULTI_TYPE_DYNAMIC_MEMORY_POOL_H__

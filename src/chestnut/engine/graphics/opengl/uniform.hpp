@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_UNIFORM_H__
-#define __CHESTNUT_ENGINE_UNIFORM_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../../resources/shader_program_resource.hpp"
@@ -37,4 +37,3 @@ namespace chestnut::engine
 #include "uniform.inl"
 
 
-#endif // __CHESTNUT_ENGINE_UNIFORM_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
-#define __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../rendering_system.hpp"
@@ -65,4 +65,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__

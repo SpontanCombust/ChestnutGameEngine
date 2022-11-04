@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENGINE_ANIMATION2D_COMPONENT_H__
-#define __CHESTNUT_ENGINE_ANIMATION2D_COMPONENT_H__
+#pragma once
 
 #include "chestnut/engine/macros.hpp"
 #include "../../graphics/animation2d.hpp"
@@ -30,5 +29,3 @@ namespace chestnut::engine
     };
 
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_ANIMATION2D_COMPONENT_H__

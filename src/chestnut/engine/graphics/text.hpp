@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_TEXT_H__
-#define __CHESTNUT_ENGINE_TEXT_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../maths/vector2.hpp"
@@ -124,4 +124,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_TEXT_H__

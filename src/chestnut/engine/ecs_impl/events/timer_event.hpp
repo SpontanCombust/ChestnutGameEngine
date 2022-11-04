@@ -1,5 +1,4 @@
-#ifndef __CHESTNUT_ENGINE_TIMER_EVENT_H__
-#define __CHESTNUT_ENGINE_TIMER_EVENT_H__
+#pragma once
 
 #include "../../types.hpp"
 
@@ -14,5 +13,3 @@ namespace chestnut::engine
     };
 
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_TIMER_EVENT_H__

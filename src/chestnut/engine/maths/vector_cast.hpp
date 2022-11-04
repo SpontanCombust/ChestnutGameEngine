@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR_CAST_H__
-#define __CHESTNUT_ENGINE_VECTOR_CAST_H__
+#pragma once
+
 
 #include "vector.hpp"
 
@@ -85,4 +85,3 @@ namespace chestnut::engine
 #include "vector_cast.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR_CAST_H__

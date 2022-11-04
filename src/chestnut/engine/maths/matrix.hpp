@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MATRIX_H__
-#define __CHESTNUT_ENGINE_MATRIX_H__
+#pragma once
+
 
 #include <string>
 
@@ -95,4 +95,3 @@ namespace chestnut::engine
 #include "matrix.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_MATRIX_H__

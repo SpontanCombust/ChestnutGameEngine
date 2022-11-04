@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MACROS_H__
-#define __CHESTNUT_ENGINE_MACROS_H__
+#pragma once
+
 
 #ifdef _WIN32
     #ifdef ChestnutGameEngine_EXPORTS
@@ -43,4 +43,3 @@
 #define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../assets"
 
 
-#endif // __CHESTNUT_ENGINE_MACROS_H__

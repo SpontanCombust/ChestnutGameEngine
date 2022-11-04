@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_SYSTEM_TEST_UTILS_H__
-#define __CHESTNUT_ENGINE_SYSTEM_TEST_UTILS_H__
+#pragma once
+
 
 #include "../src/chestnut/engine/ecs_impl/system.hpp"
 #include "../src/chestnut/engine/ecs_impl/event_listener.hpp"
@@ -21,4 +21,3 @@ private:
     chestnut::engine::event_function onQuitEvent( const SDL_QuitEvent& e );
 };
 
-#endif // __CHESTNUT_ENGINE_SYSTEM_TEST_UTILS_H__

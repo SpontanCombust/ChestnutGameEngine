@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
-#define __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
@@ -61,4 +61,3 @@ namespace chestnut::engine
 #include "resource_manager.inl"
 
 
-#endif // __CHESTNUT_ENGINE_RESOURCE_MANAGER_H__

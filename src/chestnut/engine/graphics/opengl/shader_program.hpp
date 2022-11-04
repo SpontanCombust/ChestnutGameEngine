@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
-#define __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../../maths/vector2.hpp"
@@ -48,4 +48,3 @@ namespace chestnut::engine
 #include "shader_program.inl"
 
 
-#endif // __CHESTNUT_ENGINE_SHADER_PROGRAM_H__

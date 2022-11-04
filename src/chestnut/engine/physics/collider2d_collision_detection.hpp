@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_COLLIDER2D_COLLISION_DETECTION_H__
-#define __CHESTNUT_ENGINE_COLLIDER2D_COLLISION_DETECTION_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "collider2d.hpp"
@@ -34,4 +34,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_COLLIDER2D_COLLISION_DETECTION_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_HEIGHTMAP_H__
-#define __CHESTNUT_ENGINE_HEIGHTMAP_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../../resources/mesh_data_resource.hpp"
@@ -30,4 +30,3 @@ namespace chestnut::engine
     
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_HEIGHTMAP_H__

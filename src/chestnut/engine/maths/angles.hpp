@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_ANGLES_H__
-#define __CHESTNUT_ENGINE_ANGLES_H__
+#pragma once
+
 
 #include "vector2.hpp"
 #include "../constants.hpp"
@@ -56,4 +56,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_ANGLES_H__

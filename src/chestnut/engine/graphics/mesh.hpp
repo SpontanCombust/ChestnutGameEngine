@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MESH_H__
-#define __CHESTNUT_ENGINE_MESH_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../resources/mesh_resource.hpp"
@@ -34,4 +34,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_MESH_H__

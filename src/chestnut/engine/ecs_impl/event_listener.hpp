@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_EVENT_LISTENER_H__
-#define __CHESTNUT_ENGINE_EVENT_LISTENER_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../types.hpp"
@@ -58,4 +58,3 @@ namespace chestnut::engine
 #include "event_listener.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_EVENT_LISTENER_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_EVENT_MANAGER_H__
-#define __CHESTNUT_ENGINE_EVENT_MANAGER_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "../types.hpp"
@@ -41,4 +41,3 @@ namespace chestnut::engine
 #include "event_manager.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_EVENT_MANAGER_H__

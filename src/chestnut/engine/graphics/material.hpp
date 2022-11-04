@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MATERIAL_H__
-#define __CHESTNUT_ENGINE_MATERIAL_H__
+#pragma once
+
 
 #include "opengl/texture2d.hpp"
 
@@ -23,4 +23,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_MATERIAL_H__

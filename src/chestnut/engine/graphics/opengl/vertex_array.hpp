@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
-#define __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "buffer.hpp"
@@ -53,4 +53,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_VERTEX_ARRAY_H__

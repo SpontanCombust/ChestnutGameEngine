@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR_TRANSFORM_H__
-#define __CHESTNUT_ENGINE_VECTOR_TRANSFORM_H__
+#pragma once
+
 
 #include "vector.hpp"
 #include "matrix.hpp"
@@ -60,4 +60,3 @@ namespace chestnut::engine
 #include "vector_transform.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR_TRANSFORM_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MATRIX4_H__
-#define __CHESTNUT_ENGINE_MATRIX4_H__
+#pragma once
+
 
 #include "matrix.hpp"
 #include "vector3.hpp"
@@ -50,4 +50,3 @@ namespace chestnut::engine
 #include "matrix4.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_MATRIX4_H__

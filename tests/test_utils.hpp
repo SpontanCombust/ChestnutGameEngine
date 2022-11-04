@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_TEST_UTILS_H__
-#define __CHESTNUT_ENGINE_TEST_UTILS_H__
+#pragma once
+
 
 #include <SDL_messagebox.h>
 
@@ -61,4 +61,3 @@ inline void sleepFor( unsigned int miliseconds )
     std::this_thread::sleep_for( std::chrono::milliseconds(miliseconds) );
 }
 
-#endif // __CHESTNUT_ENGINE_TEST_UTILS_H__

@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_ARRAY_H__
-#define __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_ARRAY_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "vertex_attribute.hpp"
@@ -34,4 +34,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_ARRAY_H__

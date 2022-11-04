@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_RECTANGLE_H__
-#define __CHESTNUT_ENGINE_RECTANGLE_H__
+#pragma once
+
 
 namespace chestnut::engine
 {
@@ -13,4 +13,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_RECTANGLE_H__

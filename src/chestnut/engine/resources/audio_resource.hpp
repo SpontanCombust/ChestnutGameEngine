@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_AUDIO_RESOURCE_H__
-#define __CHESTNUT_ENGINE_AUDIO_RESOURCE_H__
+#pragma once
+
 
 #include "chestnut/engine/macros.hpp"
 #include "resource.hpp"
@@ -37,4 +37,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_AUDIO_RESOURCE_H__

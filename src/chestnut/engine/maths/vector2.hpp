@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR2_H__
-#define __CHESTNUT_ENGINE_VECTOR2_H__
+#pragma once
+
 
 #include "vector.hpp"
 
@@ -36,4 +36,3 @@ namespace chestnut::engine
 #include "vector2.tpp"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR2_H__
