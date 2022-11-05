@@ -1,7 +1,7 @@
 #include "chestnut/engine/resources/texture2d_resource.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
-
+#include "chestnut/engine/misc/glu_error_string.hpp"
 
 namespace chestnut::engine
 {

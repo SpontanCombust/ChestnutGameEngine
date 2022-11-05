@@ -23,7 +23,8 @@ namespace chestnut::engine
     public:
         CMeshResource();
 
-        static tl::expected<std::shared_ptr<CMeshResource>, const char *> loadFromGeometry(
+        static tl::expected<std::shared_ptr<CMeshResource>, const char *> 
+        loadFromGeometry(
             size_t vertexCount,
             const vec3f *vertices,
             const vec3f *normals,
@@ -32,12 +33,14 @@ namespace chestnut::engine
             const unsigned int *indices,
             const SMaterial& material);
 
-        static tl::expected<std::shared_ptr<CMeshResource>, const char *> loadFromMeshData(
+        static tl::expected<std::shared_ptr<CMeshResource>, const char *> 
+        loadFromMeshData(
             const std::shared_ptr<CMeshDataResource>& meshData, 
             const SMaterial& material);
 
         // For now it always assumes file contains only one mesh with one material
-        static tl::expected<std::shared_ptr<CMeshResource>, const char *> loadFromFile(const char *meshPath);
+        static tl::expected<std::shared_ptr<CMeshResource>, const char *> 
+        loadFromFile(const char *meshPath);
     };
 
 } // namespace chestnut::engine

@@ -73,7 +73,8 @@ namespace chestnut::engine
 
 
         // fontPath - path to .ttf file
-        static tl::expected<std::shared_ptr<CFontResource>, const char *> loadFromFile( const char *fontPath ) noexcept;
+        static tl::expected<std::shared_ptr<CFontResource>, const char *> 
+        loadFromFile( const char *fontPath ) noexcept;
     };
 
 } // namespace chestnut::engine

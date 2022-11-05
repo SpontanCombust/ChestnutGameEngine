@@ -4,7 +4,7 @@
 #include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/resources/resource.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include <string>
 #include <unordered_map>
@@ -27,7 +27,8 @@ namespace chestnut::engine
 
         // vertPath - path to file with vertex shader
         // fragPath - path to file with fragment shader
-        static tl::expected<std::shared_ptr<CShaderProgramResource>, const char *> loadFromFiles( const char *vertPath, const char *fragPath ) noexcept;
+        static tl::expected<std::shared_ptr<CShaderProgramResource>, const char *> 
+        loadFromFiles( const char *vertPath, const char *fragPath ) noexcept;
     };
 
 

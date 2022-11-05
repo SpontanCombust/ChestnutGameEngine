@@ -26,9 +26,12 @@ namespace chestnut::engine
         CImageDataResource() noexcept;
         ~CImageDataResource() noexcept;
 
-        static tl::expected<std::shared_ptr<CImageDataResource>, const char *> loadFromFile(const char *imagePath, bool flipVertically) noexcept;
+        static tl::expected<std::shared_ptr<CImageDataResource>, const char *> 
+        loadFromFile(const char *imagePath, bool flipVertically) noexcept;
+
         // pixelData can be null if you want to only allocate the memory for the image data
-        static tl::expected<std::shared_ptr<CImageDataResource>, const char *> loadFromPixels(const unsigned char *pixelData, int width, int height, int numChannels) noexcept;
+        static tl::expected<std::shared_ptr<CImageDataResource>, const char *> 
+        loadFromPixels(const unsigned char *pixelData, int width, int height, int numChannels) noexcept;
     };
 
 } // namespace chestnut::engine
