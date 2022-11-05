@@ -21,12 +21,12 @@ namespace chestnut::engine
 
     inline constexpr float radiansToDegrees( float rad )
     {
-        return rad * 180.f / CHESTNUT_PI;
+        return rad * 180.f / (float)CHESTNUT_PI;
     }
 
     inline constexpr float degreesToRadians( float deg )
     {
-        return deg * CHESTNUT_PI / 180.f;
+        return deg * (float)CHESTNUT_PI / 180.f;
     }
 
     inline vec2f angleToUnitVec2f( float angleRad )
@@ -39,7 +39,7 @@ namespace chestnut::engine
         if( v.y >= 0.f )
             return atan2( v.y, v.x );
         else
-            return 2 * CHESTNUT_PI + atan2( v.y, v.x );
+            return 2 * (float)CHESTNUT_PI + atan2( v.y, v.x );
     }
 
     inline float angleBetweenUnitVecs2f( vec2f v1, vec2f v2 )

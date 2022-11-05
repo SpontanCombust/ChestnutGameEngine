@@ -13,9 +13,9 @@ namespace chestnut::engine
  
             vec2f v{ 0.f, -2.f * a / 3.f };
             poly.vecVertices.push_back(v);
-            vecRotate( v, 2 * CHESTNUT_PI / 3.f );
+            vecRotate( v, 2 * CHESTNUT_PI_F / 3.f );
             poly.vecVertices.push_back(v);
-            vecRotate( v, 2 * CHESTNUT_PI / 3.f );
+            vecRotate( v, 2 * CHESTNUT_PI_F / 3.f );
             poly.vecVertices.push_back(v);
             
             poly.vecIndices.insert( poly.vecIndices.end(), {0, 1, 2} );
@@ -71,7 +71,7 @@ namespace chestnut::engine
                 segments = 3;
             }
 
-            float rot = 2 * CHESTNUT_PI / (float)segments;
+            float rot = 2 * CHESTNUT_PI_F / (float)segments;
 
             SColoredPolygon2D poly;
             poly.vecVertices.push_back( vec2f{ 0.f, 0.f } );

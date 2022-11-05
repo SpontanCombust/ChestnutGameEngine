@@ -5,13 +5,13 @@ namespace chestnut::engine
     {
         Matrix<T,4> m;
 
-        m(0,0) = 2.0 / ( right - left );
+        m(0,0) = (T)2.0 / ( right - left );
         m(0,3) = -( right + left ) / ( right - left );
 
-        m(1,1) = 2.0 / ( top - bottom );
+        m(1,1) = (T)2.0 / ( top - bottom );
         m(1,3) = -( top + bottom ) / ( top - bottom );
 
-        m(2,2) = -2.0 / ( far - near );
+        m(2,2) = (T)-2.0 / ( far - near );
         m(2,3) = -( far + near ) / ( far - near );
 
         return m;
@@ -22,14 +22,14 @@ namespace chestnut::engine
     {
         Matrix<T,4> m(0);
 
-        m(0,0) = 2.0 * near / ( right - left );
+        m(0,0) = (T)2.0 * near / ( right - left );
         m(0,2) = ( right + left ) / ( right - left );
 
-        m(1,1) = 2.0 * near / ( top - bottom );
+        m(1,1) = (T)2.0 * near / ( top - bottom );
         m(1,2) = ( top + bottom ) / ( top - bottom );
         
         m(2,2) = -( far + near ) / ( far - near );
-        m(2,3) = -2.0 * far * near / ( far - near );
+        m(2,3) = (T)-2.0 * far * near / ( far - near );
 
         m(3,2) = -1.0;
 
@@ -41,7 +41,7 @@ namespace chestnut::engine
     {
         Matrix<T,4> m(0);
 
-        float cotangent = std::cos( fovy * 0.5 ) / std::sin( fovy * 0.5 );
+        T cotangent = (T)(std::cos( fovy * 0.5 ) / std::sin( fovy * 0.5 ));
 
         m(0,0) = cotangent / aspect;
         m(1,1) = cotangent;

@@ -44,7 +44,7 @@ TEST_CASE( "Math - 3-size matrix test" )
 
     SECTION( "Rotation matrix" )
     {
-        mat3f m = matMakeRotation<float>( 0.75f * CHESTNUT_PI );
+        mat3f m = matMakeRotation<float>( 0.75f * CHESTNUT_PI_F );
 
         REQUIRE( m(0,0) == Approx(-0.707f).margin(0.001) );
         REQUIRE( m(1,0) == Approx(0.707f).margin(0.001) );

@@ -41,15 +41,15 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
     vec2f vertex;
     vertex = {100.f, 0.f};
     hexagon.vecVertices.push_back( SColoredVertex2D( vertex, {1.f, 0.f, 0.f, 1.f} ) );
-    vecRotate( vertex, CHESTNUT_PI  / 3.f );
+    vecRotate( vertex, CHESTNUT_PI_F  / 3.f );
     hexagon.vecVertices.push_back( SColoredVertex2D( vertex, {0.f, 1.f, 0.f, 1.f} ) );
-    vecRotate( vertex, CHESTNUT_PI  / 3.f );
+    vecRotate( vertex, CHESTNUT_PI_F  / 3.f );
     hexagon.vecVertices.push_back( SColoredVertex2D( vertex, {0.f, 0.f, 1.f, 1.f} ) );
-    vecRotate( vertex, CHESTNUT_PI  / 3.f );
+    vecRotate( vertex, CHESTNUT_PI_F  / 3.f );
     hexagon.vecVertices.push_back( SColoredVertex2D( vertex, {1.f, 0.f, 0.f, 1.f} ) );
-    vecRotate( vertex, CHESTNUT_PI  / 3.f );
+    vecRotate( vertex, CHESTNUT_PI_F  / 3.f );
     hexagon.vecVertices.push_back( SColoredVertex2D( vertex, {0.f, 1.f, 0.f, 1.f} ) );
-    vecRotate( vertex, CHESTNUT_PI  / 3.f );
+    vecRotate( vertex, CHESTNUT_PI_F  / 3.f );
     hexagon.vecVertices.push_back( SColoredVertex2D( vertex, {0.f, 0.f, 1.f, 1.f} ) );
     hexagon.vecIndices.insert( hexagon.vecIndices.end(), { 0, 1, 2, 0, 2, 3, 0, 3, 4, 0, 4, 5, 0, 5, 6, 0, 6, 1 } );
 

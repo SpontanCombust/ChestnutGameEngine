@@ -140,7 +140,7 @@ TEST_CASE( "Math - 4-size matrix test" )
 
     SECTION( "X-rotation matrix" )
     {
-        mat4f m = matMakeRotationX<float>( 0.75 * CHESTNUT_PI );
+        mat4f m = matMakeRotationX<float>( 0.75 * CHESTNUT_PI_F );
 
         REQUIRE( m(0,0) == Approx(1.0f).margin(0.00001) );
         REQUIRE( m(1,0) == Approx(0.f).margin(0.00001) );
@@ -165,7 +165,7 @@ TEST_CASE( "Math - 4-size matrix test" )
 
     SECTION( "Y-rotation matrix" )
     {
-        mat4f m = matMakeRotationY<float>( CHESTNUT_PI );
+        mat4f m = matMakeRotationY<float>( CHESTNUT_PI_F );
 
         REQUIRE( m(0,0) == Approx(-1.0f).margin(0.00001) );
         REQUIRE( m(1,0) == Approx(0.f).margin(0.00001) );
@@ -190,7 +190,7 @@ TEST_CASE( "Math - 4-size matrix test" )
 
     SECTION( "Z-rotation matrix" )
     {
-        mat4f m = matMakeRotationZ<float>( 0.5 * CHESTNUT_PI );
+        mat4f m = matMakeRotationZ<float>( 0.5 * CHESTNUT_PI_F );
 
         REQUIRE( m(0,0) == Approx(0.0f).margin(0.00001) );
         REQUIRE( m(1,0) == Approx(1.f).margin(0.00001) );

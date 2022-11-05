@@ -131,8 +131,12 @@ endif()
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     # 4100, 4101 - unused variables
-    # 4834 - ignored [[nodiscard]]
-    $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4100 /wd4101 /wd4834>
+    # 4251 - x needs to have dll interface
+    #   This shows up even for private members which just happened to be STL objects
+    #   You can make the warning go away by exporting individual methods instead of the entire class,
+    #   but this lib is not intended to be C-compatible, so these warnings should be ignored.
+    # 4834 - ignored [[nodiscard]] - this comes from tl::typelist
+    $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4100 /wd4101 /wd4834 /wd4251>
 
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wpedantic -Wno-unused-variable>
 )
@@ -168,7 +172,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(catch2)
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
     
-    
+
+target_compile_options(${PROJECT_NAME}_Test PRIVATE
+    # 4100, 4101 - unused variables
+    # 4251 - x needs to have dll interface
+    # 4834 - ignored [[nodiscard]]
+    $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4100 /wd4101 /wd4251 /wd4834>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wpedantic -Wno-unused-variable>
+)
+
 target_link_libraries(${PROJECT_NAME}_Test 
     ${PROJECT_NAME} 
     Catch2::Catch2

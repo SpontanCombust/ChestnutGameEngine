@@ -50,7 +50,7 @@ TEST_CASE( "Math - Vector transformation test" )
 
         SECTION( "Rotation by matrix" )
         {
-            mat3f m = matMakeRotation<float>( CHESTNUT_PI );
+            mat3f m = matMakeRotation<float>( CHESTNUT_PI_F );
 
             v = m * v;
 
@@ -60,7 +60,7 @@ TEST_CASE( "Math - Vector transformation test" )
 
         SECTION( "Rotation by function" )
         {
-            vecRotate( v, CHESTNUT_PI );
+            vecRotate( v, CHESTNUT_PI_F );
 
             REQUIRE( v.x == Approx(-2.f).margin(0.001) );
             REQUIRE( v.y == Approx(-3.f).margin(0.001) );
@@ -113,7 +113,7 @@ TEST_CASE( "Math - Vector transformation test" )
 
         SECTION( "Rotation by matrix" )
         {
-            mat4f m = matMakeRotation<float>( { 0.f, 0.f, 1.f }, CHESTNUT_PI );
+            mat4f m = matMakeRotation<float>( { 0.f, 0.f, 1.f }, CHESTNUT_PI_F );
 
             v = m * v;
 
@@ -124,7 +124,7 @@ TEST_CASE( "Math - Vector transformation test" )
 
         SECTION( "Rotation by function" )
         {
-            vecRotate( v, { 0.f, 0.f, 1.f }, CHESTNUT_PI );
+            vecRotate( v, { 0.f, 0.f, 1.f }, CHESTNUT_PI_F );
 
             REQUIRE( v.x == Approx(-1.f).margin(0.001) );
             REQUIRE( v.y == Approx(-2.f).margin(0.001) );
@@ -182,7 +182,7 @@ TEST_CASE( "Math - Vector transformation test" )
 
         SECTION( "Rotation by matrix" )
         {
-            mat4f m = matMakeRotation<float>( { 0.f, 0.f, 1.f }, CHESTNUT_PI );
+            mat4f m = matMakeRotation<float>( { 0.f, 0.f, 1.f }, CHESTNUT_PI_F );
 
             v = m * v;
 
@@ -194,7 +194,7 @@ TEST_CASE( "Math - Vector transformation test" )
 
         SECTION( "Rotation by function" )
         {
-            vecRotate( v, { 0.f, 0.f, 1.f }, CHESTNUT_PI );
+            vecRotate( v, { 0.f, 0.f, 1.f }, CHESTNUT_PI_F );
 
             REQUIRE( v.x == Approx(-1.f).margin(0.001) );
             REQUIRE( v.y == Approx(-2.f).margin(0.001) );
