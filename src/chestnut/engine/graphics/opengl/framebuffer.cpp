@@ -1,6 +1,7 @@
 #include "chestnut/engine/graphics/opengl/framebuffer.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/misc/glu_error_string.hpp"
 
 namespace chestnut::engine
 {

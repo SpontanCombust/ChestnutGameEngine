@@ -5,7 +5,7 @@
 #include "chestnut/engine/maths/vector2.hpp"
 #include "chestnut/engine/maths/vector4.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include <vector>
 

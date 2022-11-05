@@ -4,7 +4,7 @@
 #include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/resources/shader_program_resource.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 #include <string>
 

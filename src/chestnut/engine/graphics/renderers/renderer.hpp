@@ -7,7 +7,7 @@
 #include "chestnut/engine/graphics/opengl/uniform.hpp"
 #include "chestnut/engine/graphics/opengl/framebuffer.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 
 namespace chestnut::engine

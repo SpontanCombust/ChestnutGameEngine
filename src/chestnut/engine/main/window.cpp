@@ -4,7 +4,7 @@
 #include "chestnut/engine/init.hpp"
 
 #include <SDL.h>
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <SDL_opengl.h>
 
 namespace chestnut::engine
@@ -64,10 +64,9 @@ namespace chestnut::engine
 
         // ========= Init OpenGL ========= //
 
-        GLenum err = glewInit();
-        if( err != GLEW_OK )
+        if(gladLoadGLLoader(SDL_GL_GetProcAddress) == 0)
         {
-            LOG_ERROR( "Failed to initialize GLEW! Error: " << (const char *)glewGetErrorString( err ) );
+            LOG_ERROR( "Failed to initialize GLAD!" );
             SDL_GL_DeleteContext( context );
             SDL_DestroyWindow( window );
             return;

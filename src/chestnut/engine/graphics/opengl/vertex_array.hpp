@@ -5,7 +5,7 @@
 #include "chestnut/engine/graphics/opengl/buffer.hpp"
 #include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include <tl/optional.hpp>
 
 #include <memory>

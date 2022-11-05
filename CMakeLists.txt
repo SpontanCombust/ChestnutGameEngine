@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.11.0)
 project(ChestnutGameEngine VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -99,7 +99,11 @@ FetchContent_MakeAvailable(
 
 find_package(OpenGL REQUIRED)
 
-find_package(GLEW REQUIRED)
+add_library(glad STATIC)
+target_sources(glad PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glad/src/glad.c)
+target_include_directories(glad PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glad/include)
 
 add_library(stb_image INTERFACE)
 target_sources(stb_image INTERFACE ${stb_SOURCE_DIR}/stb_image.h)
@@ -125,14 +129,17 @@ if(MSVC)
     )
 endif()
 
-# TODO configure these compile options better
-if(UNIX)
-    target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
-elseif(MSVC)
-    target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -DCHESTNUT_DEBUG>)
-endif()
+target_compile_options(${PROJECT_NAME} PRIVATE
+    # 4100, 4101 - unused variables
+    # 4834 - ignored [[nodiscard]]
+    $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4100 /wd4101 /wd4834>
+
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wpedantic -Wno-unused-variable>
+)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
+    ${OPENGL_LIBRARIES}
+    glad
     chestnut-ecs
     SDL2
     SDL2_ttf
@@ -144,13 +151,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${OPENGL_LIBRARIES})
-
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} PUBLIC ${GLEW_LIBRARIES})
-
-include_directories(${GLEW_INCLUDE_DIRS})
-link_libraries(${GLEW_LIBRARIES})
 
 # ====================================== Tests executable ======================================
 
@@ -169,8 +169,21 @@ FetchContent_MakeAvailable(catch2)
 list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
     
     
-target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME}_Test Catch2::Catch2)
+target_link_libraries(${PROJECT_NAME}_Test 
+    ${PROJECT_NAME} 
+    Catch2::Catch2
+)
+
+# copy DLLs
+if(WIN32)
+    add_custom_command(TARGET ${PROJECT_NAME}_Test POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2>       $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_ttf>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_mixer> $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:assimp>     $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:freetype>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+    )
+endif()
 
 include(CTest)
 include(Catch)
