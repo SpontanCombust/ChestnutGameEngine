@@ -40,6 +40,9 @@
 #define CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_FORCE_GPU_SYNCHRONIZATION 1
 
 
-#define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../assets"
-
+#ifdef _WIN32
+    #define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../../assets"
+#else
+    #define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../assets"
+#endif
 

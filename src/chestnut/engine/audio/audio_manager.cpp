@@ -57,10 +57,10 @@ namespace chestnut::engine
     {
         m_globalVolume = std::clamp( volume, 0.f, 1.f );
 
-        for( auto& [ channel, volume ] : m_mapChannelToSFXVolume )
+        for( auto& [ ch, v ] : m_mapChannelToSFXVolume )
         {
             // invoking with the same data, because inside it'll account for the new global volume
-            setSFXVolume( channel, volume );
+            setSFXVolume( ch, v );
         }
 
         setMusicVolume( m_musicVolume );

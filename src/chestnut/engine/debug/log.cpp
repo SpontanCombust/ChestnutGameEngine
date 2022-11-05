@@ -62,11 +62,12 @@ namespace chestnut::engine
 
     std::string CLogger::getCurrentDateString() 
     {
+        std::tm tm;
         std::time_t t = std::time( nullptr );
-        std::tm *tm = std::localtime(&t);
+        localtime_s(&tm, &t);
 
         std::ostringstream oss;
-        oss << std::put_time( tm, "%d-%m-%Y %H:%M:%S" );
+        oss << std::put_time( &tm, "%d-%m-%Y %H:%M:%S" );
 
         return oss.str();
     }

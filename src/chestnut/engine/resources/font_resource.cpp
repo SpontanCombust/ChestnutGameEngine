@@ -102,7 +102,7 @@ namespace chestnut::engine
         // it takes the total number of glyph surfaces and calulates the ceiling of its square root
         // this gives the normalized side length of the theoretical square which could fit all these surfaces if they were 1x1 squares
         // then it's multiplied by the maximal side length of all these surfaces, so it guarantess all of them could fit onto a single texture
-        int spriteSheetSideLength = std::ceil( std::sqrt( mapGlyphSurfaces.size() ) ) * maxGlyphSideLength;
+        int spriteSheetSideLength = (int)std::ceil( std::sqrt( mapGlyphSurfaces.size() ) ) * maxGlyphSideLength;
 
 
         SDL_Surface *spriteSheetSurface = SDL_CreateRGBSurface( 0, spriteSheetSideLength, spriteSheetSideLength, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000 );
@@ -118,7 +118,7 @@ namespace chestnut::engine
             SDL_Rect dstRect = { x, y, surf->w, surf->h };
 
             SDL_BlitSurface( surf, NULL, spriteSheetSurface, &dstRect );
-            config.mapGlyphClippingRects[g] = SRectangle( x, y, surf->w, surf->h );
+            config.mapGlyphClippingRects[g] = SRectangle( (float)x, (float)y, (float)surf->w, (float)surf->h );
             SDL_FreeSurface( surf );
 
             x += maxGlyphSideLength;

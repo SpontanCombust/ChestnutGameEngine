@@ -12,6 +12,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/system.cpp
 )
 
-include_directories(components)
-include_directories(events)
-include_directories(systems)
+add_subdirectory(components)
+add_subdirectory(events)
+add_subdirectory(systems)

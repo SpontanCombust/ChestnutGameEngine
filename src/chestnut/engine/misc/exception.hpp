@@ -8,7 +8,7 @@
 
 namespace chestnut::engine
 {
-    struct CHESTNUT_API ChestnutException : std::exception
+    struct ChestnutException : std::exception
     {
         const std::string msg;
 
