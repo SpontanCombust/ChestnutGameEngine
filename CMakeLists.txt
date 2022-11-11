@@ -10,6 +10,12 @@ if(MSVC)
     include(GenerateExportHeader)
 endif()
 
+# add debug define
+if(MSVC)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DCHESTNUT_DEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCHESTNUT_DEBUG")
+endif()
 
 # =================================== Allow offline mode ===================================
 
@@ -43,13 +49,13 @@ FetchContent_Declare(
 )
 FetchContent_Declare(
     SDL2_ttf
-    GIT_REPOSITORY https://github.com/SpontanCombust/SDL_ttf
-    GIT_TAG 3d0165360d99ddc3a72a5472e408b7d962973fbb
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
+    GIT_TAG release-2.20.1
 )
 FetchContent_Declare(
     SDL2_mixer
     GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
-    GIT_TAG c40dc4397a8cfd66ce82fbb1ba4cfcdb89723a53
+    GIT_TAG release-2.6.2
 )
 FetchContent_Declare(
     tl_optional
@@ -74,9 +80,16 @@ FetchContent_Declare(
 
 
 # configure lib options
-set(TTF_DISABLE_INSTALL ON)
+set(SDL2TTF_INSTALL OFF)
+set(SDL2TTF_SAMPLES OFF)
+
+set(SDL2MIXER_INSTALL OFF)
+set(SDL2MIXER_SAMPLES OFF)
+
 set(OPTIONAL_BUILD_TESTS OFF)
+
 set(EXPECTED_BUILD_TESTS OFF)
+
 set(ASSIMP_BUILD_TESTS OFF)
 set(ASSIMP_WARNINGS_AS_ERRORS OFF)
 
