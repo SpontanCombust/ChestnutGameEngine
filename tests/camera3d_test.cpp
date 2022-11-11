@@ -30,10 +30,10 @@ TEST_CASE( "3D camera test", "[manual][demo]" )
     REQUIRE_NOTHROW( renderer.init() );
 
     CMesh mesh;
-    REQUIRE_NOTHROW( mesh = CMesh( *CMeshResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/models/suzanne.obj" ) ) );
+    REQUIRE_NOTHROW( mesh = CMesh( CMeshResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/models/suzanne.obj" ).value() ) );
 
     CTexture2D textureDiffuse;
-    REQUIRE_NOTHROW( textureDiffuse = CTexture2D( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) ) );
+    REQUIRE_NOTHROW( textureDiffuse = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ).value() ) );
     mesh.getResource()->m_material.diffuse = textureDiffuse;
 
     CCamera3D camera;
@@ -130,7 +130,7 @@ TEST_CASE( "3D camera test", "[manual][demo]" )
 
 
 
-
+/*
 #include "../src/chestnut/engine/graphics/algorithms/heightmap.hpp"
 #include "../src/chestnut/engine/graphics/renderers/phong_renderer.hpp"
 
@@ -147,14 +147,16 @@ TEST_CASE( "3D camera test - heightmap", "[manual][demo]" )
     CPhongRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );
 
-    auto heightmap = *heightmapFromFile("/home/spontan/Pobrane/heightmap.png", 3.f);
-    auto heightmapMeshData = *meshDataFromHeightmap(*heightmap, {10.f, 10.f});
+    std::shared_ptr<SHeightmap> heightmap;
+    REQUIRE_NOTHROW(heightmap = heightmapFromFile("/home/spontan/Pobrane/heightmap.png", 3.f).value());
+    std::shared_ptr<CMeshDataResource> heightmapMeshData;
+    REQUIRE_NOTHROW(heightmapMeshData = meshDataFromHeightmap(*heightmap, {10.f, 10.f}).value());
 
     CMesh mesh;
     REQUIRE_NOTHROW( mesh = CMesh(heightmapMeshData, SMaterial{}) );
 
     CTexture2D textureDiffuse;
-    REQUIRE_NOTHROW( textureDiffuse = CTexture2D( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ) ) );
+    REQUIRE_NOTHROW( textureDiffuse = CTexture2D( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/marble.png" ).value() ) );
     mesh.getResource()->m_material.diffuse = textureDiffuse;
 
     CDirectionalLight light;
@@ -251,3 +253,4 @@ TEST_CASE( "3D camera test - heightmap", "[manual][demo]" )
     chestnutQuit();
     sleepFor(1000);
 }
+*/

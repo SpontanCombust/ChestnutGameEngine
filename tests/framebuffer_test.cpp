@@ -35,7 +35,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 
 
     CText text;
-    REQUIRE_NOTHROW( text = CText( *CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ), 32 ) );
+    REQUIRE_NOTHROW( text = CText( CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ).value(), 32 ) );
     text.append( L"This is an example text.\n" );
     text.append( L"Remember how it looks!", EFontStyle::BOLD, vec3f{ 1.f, 0.f, 0.f } );
     text.generateData();

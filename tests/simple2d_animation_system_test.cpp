@@ -71,7 +71,7 @@ public:
 
         auto textureHandle = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );
         CSprite sprite;
-        REQUIRE_NOTHROW( sprite = CSprite( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ) ) );
+        REQUIRE_NOTHROW( sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ).value() ) );
         sprite.setFiltering( GL_NEAREST, GL_NEAREST );
         textureHandle->sprite = sprite;
 

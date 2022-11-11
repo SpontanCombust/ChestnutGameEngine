@@ -40,8 +40,8 @@ private:
     vec2f sizeDelta;
     vec2f posDelta;
     vec2f scaleDelta;
-    float rotDelta;
-    ESpriteToModel2DAdjust texAdjust;
+    float rotDelta = 0.f;
+    ESpriteToModel2DAdjust texAdjust = ESpriteToModel2DAdjust::NONE;
 
 public:
     CSpriteSteeringSystem(systempriority_t prio) : ILogicSystem(prio)
@@ -59,7 +59,7 @@ public:
         modelHandle->size = { 100.f, 100.f };
 
         auto spriteHandle = CEngine::getInstance().getEntityWorld().createComponent<CSpriteComponent>( player );
-        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) ) );
+        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() ) );
     }
 
     ~CSpriteSteeringSystem()
@@ -252,7 +252,7 @@ public:
     COrderingDemonstationSystem(systempriority_t prio) : ILogicSystem(prio) 
     {
         std::shared_ptr<CTexture2DResource> tex;
-        REQUIRE_NOTHROW(tex = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
+        REQUIRE_NOTHROW(tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -389,7 +389,7 @@ public:
     CLayeringDemonstrationSystem(systempriority_t prio) : ILogicSystem(prio)
     {
         std::shared_ptr<CTexture2DResource> tex;
-        REQUIRE_NOTHROW( tex = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
+        REQUIRE_NOTHROW( tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -521,12 +521,12 @@ public:
 
     vec2f posDelta;
     vec2f dimDelta;
-    float zoomDelta;
+    float zoomDelta = 0.f;
 
     CCameraDemonstrationSystem(systempriority_t prio) : ILogicSystem(prio)
     {
         std::shared_ptr<CTexture2DResource> tex;
-        REQUIRE_NOTHROW( tex = *CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ) );
+        REQUIRE_NOTHROW( tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;

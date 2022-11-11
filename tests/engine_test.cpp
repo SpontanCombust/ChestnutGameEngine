@@ -154,11 +154,14 @@ TEST_CASE( "Engine - Handling systems" )
         }
 
 
+        gstr = "";
+        baz->strA = "";
+        baz->strB = "";
+
         engine.attachSystem(master);
         engine.attachSystem(foo);
         engine.attachSystem(bar);
         engine.attachSystem(baz);
-        gstr = "";
 
         SECTION( "foo -> bar -> baz" )
         {
