@@ -45,12 +45,18 @@ namespace chestnut::engine
         x = ( x < 0 ) ? SDL_WINDOWPOS_CENTERED : x;
         y = ( y < 0 ) ? SDL_WINDOWPOS_CENTERED : y;
 
+
+        LOG_INFO("Creating the window...");
+
         SDL_Window *window = SDL_CreateWindow( title, x, y, width, height, windowFlags );
         if( !window )
         {
             LOG_ERROR( "Failed to create window. Error: " << SDL_GetError() );
             return;
         }
+
+
+        LOG_INFO("Creating OpenGL context for the window...");
 
         SDL_GLContext context = SDL_GL_CreateContext( window );
         if( !context )
@@ -63,6 +69,8 @@ namespace chestnut::engine
 
 
         // ========= Init OpenGL ========= //
+
+        LOG_INFO("Initializing GLAD...");
 
         if(gladLoadGLLoader(SDL_GL_GetProcAddress) == 0)
         {

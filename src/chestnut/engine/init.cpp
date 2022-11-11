@@ -18,6 +18,8 @@ namespace chestnut::engine
         int flags;
 
 
+        LOG_INFO("Initializing SDL2...");
+
         flags = SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_EVENTS | SDL_INIT_AUDIO;
         if( SDL_Init( flags ) < 0 )
         {
@@ -25,6 +27,8 @@ namespace chestnut::engine
             return false;
         }
 
+
+        LOG_INFO("Initializing SDL_TTF...");
 
         if( TTF_Init() < 0 )
         {
@@ -34,7 +38,11 @@ namespace chestnut::engine
         }
 
 
-        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+
+        LOG_INFO("Initializing SDL_Mixer...");
+
+        flags = MIX_INIT_FLAC | MIX_INIT_MID | MIX_INIT_MOD | MIX_INIT_MP3 | MIX_INIT_OGG | MIX_INIT_OPUS;
+        if( Mix_Init(flags) == 0 )
         {
             LOG_ERROR( "SDL_mixer failed to initialize!" << Mix_GetError() );
             TTF_Quit();
@@ -42,6 +50,19 @@ namespace chestnut::engine
             return false;
         }
 
+        LOG_INFO("Supported audio formats:");
+        if((flags & MIX_INIT_FLAC) > 0) LOG_INFO("FLAC");
+        if((flags & MIX_INIT_MID) > 0) LOG_INFO("MID");
+        if((flags & MIX_INIT_MP3) > 0) LOG_INFO("MP3");
+        if((flags & MIX_INIT_OGG) > 0) LOG_INFO("OGG");
+
+        if( Mix_OpenAudio( 44100, MIX_DEFAULT_FORMAT, 2, 2048 ) < 0 )
+        {
+            LOG_ERROR( "SDL_mixer failed to opem audio device!" << Mix_GetError() );
+            TTF_Quit();
+            SDL_Quit();
+            return false;
+        }
 
         if( SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, glVerMajor ) < 0 )
         {
