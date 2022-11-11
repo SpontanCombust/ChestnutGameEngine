@@ -12,10 +12,10 @@ std::string gstr = "abc";
 
 // just gonna testing the attachSystem variadic template with these systems' various constructors 
 
-class FooSystem : public ISystem
+class FooSystem : public ILogicSystem
 {
 public:
-    FooSystem( CEngine& engine ) : ISystem( engine ) {}
+    FooSystem(systempriority_t priority) : ILogicSystem(priority) {}
 
     void update( float dt ) override
     {
@@ -23,12 +23,12 @@ public:
     }
 };
 
-class BarSystem : public ISystem
+class BarSystem : public ILogicSystem
 {
 public:
     std::string& strRef;
 
-    BarSystem( CEngine& engine, std::string& str ) : ISystem( engine ), strRef( str ) {}
+    BarSystem( systempriority_t priority, std::string& str ) : ILogicSystem(priority), strRef( str ) {}
 
     void update( float dt ) override
     {
@@ -36,13 +36,13 @@ public:
     }
 };
 
-class BazSystem : public ISystem
+class BazSystem : public ILogicSystem
 {
 public:
     std::string strA;
     std::string strB;
 
-    BazSystem( CEngine& engine, std::string a, std::string b ) : ISystem( engine )
+    BazSystem( systempriority_t priority, std::string a, std::string b ) : ILogicSystem( priority )
     {
         strA = a;
         strB = b;
@@ -56,12 +56,12 @@ public:
 };
 
 // this master system will make the engine run for 3 cycles
-class MasterSystem : public ISystem
+class MasterSystem : public ILogicSystem
 {
 public:
     int counter = 0;
 
-    MasterSystem( CEngine& engine ) : ISystem( engine )
+    MasterSystem(systempriority_t priority) : ILogicSystem(priority)
     {
 
     }
@@ -72,7 +72,7 @@ public:
 
         if( counter == 3 )
         {
-            getEngine().stop();
+            CEngine::getInstance().stop();
         }
     }
 };
@@ -81,58 +81,65 @@ public:
 TEST_CASE( "Engine - Handling systems" )
 {
     // in this case we won't be doing any rendering, so a working window is not necessary
-    CEngine engine( nullptr );
+    CEngine::createInstance(nullptr);
+
+    auto& engine = CEngine::getInstance(); 
+
+    auto foo = new FooSystem(1);
+    auto bar = new BarSystem(2, gstr);
+    auto baz = new BazSystem(3, gstr, gstr);
+    auto master = new MasterSystem(SYSTEM_PRIORITY_HIGHEST);
 
     SECTION( "Constructing, destroying and basic checking" )
     {
-        REQUIRE_FALSE( engine.hasSystem<FooSystem>() );
-        REQUIRE_FALSE( engine.hasSystem<BarSystem>() );
-        REQUIRE_FALSE( engine.hasSystem<BazSystem>() );
+        REQUIRE( engine.getLogicSystem<FooSystem>() == nullptr );
+        REQUIRE( engine.getLogicSystem<BarSystem>() == nullptr );
+        REQUIRE( engine.getLogicSystem<BazSystem>() == nullptr );
 
-        engine.attachLogicSystem<FooSystem>( 1 );
-        engine.attachLogicSystem<BarSystem>( 2, gstr );
-        engine.attachLogicSystem<BazSystem>( 3, gstr, gstr );
+        engine.attachSystem(foo);
+        engine.attachSystem(bar);
+        engine.attachSystem(baz);
         
         SECTION( "Having systems" )
         {
-            REQUIRE( engine.hasSystem<FooSystem>() );
-            REQUIRE( engine.hasSystem<BarSystem>() );
-            REQUIRE( engine.hasSystem<BazSystem>() );
+            REQUIRE( engine.getLogicSystem<FooSystem>() != nullptr );
+            REQUIRE( engine.getLogicSystem<BarSystem>() != nullptr );
+            REQUIRE( engine.getLogicSystem<BazSystem>() != nullptr );
         }
 
         SECTION( "Getting systems" )
         {
-            FooSystem *foo = engine.getSystem<FooSystem>();
-            REQUIRE( foo );
+            FooSystem *_foo = engine.getLogicSystem<FooSystem>();
+            REQUIRE( _foo == foo );
 
-            BarSystem *bar = engine.getSystem<BarSystem>();
-            REQUIRE( bar );
-            REQUIRE( bar->strRef == gstr );
+            BarSystem *_bar = engine.getLogicSystem<BarSystem>();
+            REQUIRE( _bar == bar );
+            REQUIRE( _bar->strRef == gstr );
 
-            BazSystem *baz = engine.getSystem<BazSystem>();
-            REQUIRE( baz );
-            REQUIRE( baz->strA == gstr );
-            REQUIRE( baz->strB == gstr );
+            BazSystem *_baz = engine.getLogicSystem<BazSystem>();
+            REQUIRE( _baz == baz );
+            REQUIRE( _baz->strA == gstr );
+            REQUIRE( _baz->strB == gstr );
         }
 
         SECTION( "Getting systems' priority numbers" )
         {
-            REQUIRE( engine.getSystemPriority<FooSystem>() == 1 );
-            REQUIRE( engine.getSystemPriority<BarSystem>() == 2 );
-            REQUIRE( engine.getSystemPriority<BazSystem>() == 3 );
+            REQUIRE( engine.getLogicSystem<FooSystem>()->getPriority() == 1 );
+            REQUIRE( engine.getLogicSystem<BarSystem>()->getPriority() == 2 );
+            REQUIRE( engine.getLogicSystem<BazSystem>()->getPriority() == 3 );
         }
 
         SECTION( "Detaching systems" )
         {
-            engine.detachSystem<FooSystem>();
-            REQUIRE_FALSE( engine.hasSystem<FooSystem>() );
-            REQUIRE( engine.hasSystem<BarSystem>() );
-            REQUIRE( engine.hasSystem<BazSystem>() );
+            engine.detachSystem(foo);
+            REQUIRE( engine.getLogicSystem<FooSystem>() == nullptr );
+            REQUIRE( engine.getLogicSystem<BarSystem>() != nullptr );
+            REQUIRE( engine.getLogicSystem<BazSystem>() != nullptr );
 
-            engine.detachSystem<BarSystem>();
-            engine.detachSystem<BazSystem>();
-            REQUIRE_FALSE( engine.hasSystem<BarSystem>() );
-            REQUIRE_FALSE( engine.hasSystem<BazSystem>() );
+            engine.detachSystem(bar);
+            engine.detachSystem(baz);
+            REQUIRE( engine.getLogicSystem<BarSystem>() == nullptr );
+            REQUIRE( engine.getLogicSystem<BazSystem>() == nullptr );
         }
     }
 
@@ -142,51 +149,45 @@ TEST_CASE( "Engine - Handling systems" )
         {
             REQUIRE_THROWS( engine.start() );
 
-            engine.attachLogicSystem<MasterSystem>( SYSTEM_PRIORITY_HIGHEST );
+            engine.attachSystem(master);
             REQUIRE_NOTHROW( engine.start() );
         }
 
 
-        engine.attachLogicSystem<MasterSystem>( SYSTEM_PRIORITY_HIGHEST );
+        engine.attachSystem(master);
+        engine.attachSystem(foo);
+        engine.attachSystem(bar);
+        engine.attachSystem(baz);
         gstr = "";
 
         SECTION( "foo -> bar -> baz" )
         {
-            engine.attachLogicSystem<FooSystem>( 1 );
-            engine.attachLogicSystem<BarSystem>( 2, gstr );
-            engine.attachLogicSystem<BazSystem>( 3, gstr, gstr );
+            foo->setPriority(1);
+            bar->setPriority(2);
+            baz->setPriority(3);
 
+            engine.reorderSystems();
             engine.start();
 
             REQUIRE( gstr == "ababab" );
-            REQUIRE( engine.getSystem<BazSystem>()->strA == "ccc" );
-            REQUIRE( engine.getSystem<BazSystem>()->strB == "ddd" );
+            REQUIRE( baz->strA == "ccc" );
+            REQUIRE( baz->strB == "ddd" );
         }
 
         SECTION( "baz -> bar -> foo" )
         {
-            engine.attachLogicSystem<FooSystem>( 3 );
-            engine.attachLogicSystem<BarSystem>( 2, gstr );
-            engine.attachLogicSystem<BazSystem>( 1, gstr, gstr );
+            foo->setPriority(3);
+            bar->setPriority(2);
+            baz->setPriority(1);
 
+            engine.reorderSystems();
             engine.start();
 
             REQUIRE( gstr == "bababa" );
-            REQUIRE( engine.getSystem<BazSystem>()->strA == "ccc" );
-            REQUIRE( engine.getSystem<BazSystem>()->strB == "ddd" );
-        }
-        
-        SECTION( "Checking for duplicates" )
-        {
-            engine.attachLogicSystem<FooSystem>( 3 );
-            engine.attachLogicSystem<FooSystem>( 2 );
-            engine.attachLogicSystem<BazSystem>( 1, gstr, gstr );
-
-            engine.start();
-
-            REQUIRE( gstr == "aaa" );
-            REQUIRE( engine.getSystem<BazSystem>()->strA == "ccc" );
-            REQUIRE( engine.getSystem<BazSystem>()->strB == "ddd" );
+            REQUIRE( baz->strA == "ccc" );
+            REQUIRE( baz->strB == "ddd" );
         }
     }
+
+    CEngine::deleteInstance();
 }

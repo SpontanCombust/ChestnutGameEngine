@@ -6,21 +6,22 @@
 
 namespace chestnut::engine
 {
-    CTimerSystem::CTimerSystem( CEngine& engine ) : ISystem( engine )
+    CTimerSystem::CTimerSystem(systempriority_t priority) 
+    : ILogicSystem(priority)
     {
-        m_timerQuery = getEngine().getEntityWorld().createQuery(
+        m_timerQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature<CTimerComponent>()
         );
     }
 
     CTimerSystem::~CTimerSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_timerQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_timerQuery );
     }
 
     void CTimerSystem::update( float deltaTime ) 
     {
-        getEngine().getEntityWorld().queryEntities( m_timerQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_timerQuery );
 
         m_timerQuery->forEach(std::function(
             [deltaTime, this]( CTimerComponent& timerComp )
@@ -34,7 +35,7 @@ namespace chestnut::engine
                         event.timerTimeInSeconds = timer.getElapsedTimeInSeconds();
                         event.timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
                         event.isTimerRepeating = timer.getIsRepeating();
-                        getEngine().getEventManager().raiseEvent( event );
+                        CEngine::getInstance().getEventManager().raiseEvent( event );
 
                         // if a timer is supposed to tick only once
                         if( !timer.getIsRepeating() )

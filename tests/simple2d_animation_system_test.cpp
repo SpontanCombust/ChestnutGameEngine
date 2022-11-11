@@ -48,7 +48,7 @@ const char *animTypeToAnimName( EAnimType type )
     }
 }
 
-class CAnimationDemoSystem : public ISystem
+class CAnimationDemoSystem : public ILogicSystem
 {
 public:
     entityid_t ent;
@@ -56,9 +56,11 @@ public:
 
     int animType = WALK_UP;
 
-    CAnimationDemoSystem( CEngine& engine )
-    : ISystem( engine )
+    CAnimationDemoSystem(systempriority_t prio)
+    : ILogicSystem(prio)
     {
+        auto& engine = CEngine::getInstance();
+
         ent = engine.getEntityWorld().createEntity();
 
         auto transformHandle = engine.getEntityWorld().createComponent<CTransform2DComponent>( ent );
@@ -123,13 +125,13 @@ public:
             }
         );
 
-        getEngine().getEventManager().registerListener(l);
-        listenerGuard.reset( l, &getEngine().getEventManager() );
+        CEngine::getInstance().getEventManager().registerListener(l);
+        listenerGuard.reset( l, &CEngine::getInstance().getEventManager() );
     }
 
     ~CAnimationDemoSystem()
     {
-        getEngine().getEntityWorld().destroyEntity( ent );
+        CEngine::getInstance().getEntityWorld().destroyEntity( ent );
     }
 
     void update( float dt ) override
@@ -139,7 +141,7 @@ public:
 
     event_function handleInput( const SDL_KeyboardEvent& e )
     {
-        auto animHandle = getEngine().getEntityWorld().getComponent<CAnimation2DComponent>( ent );
+        auto animHandle = CEngine::getInstance().getEntityWorld().getComponent<CAnimation2DComponent>( ent );
 
         switch( e.keysym.sym )
         {
@@ -177,13 +179,13 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CEngine engine( &window, 1.f / 60.f );
+    CEngine::createInstance( &window, 1.f / 60.f );
 
-    engine.attachLogicSystem<CInputEventDispatchSystem>( SYSTEM_PRIORITY_HIGHEST );
-    engine.attachLogicSystem<CCloseWindowListeningSystem>( SYSTEM_PRIORITY_HIGHEST + 1 );
-    engine.attachLogicSystem<CSimple2DAnimationSystem>( SYSTEM_PRIORITY_HIGHEST + 2 );
-    engine.attachLogicSystem<CAnimationDemoSystem>( SYSTEM_PRIORITY_HIGHEST + 3 );
-    engine.attachRenderingSystem<CSimple2DRenderingSystem>( SYSTEM_PRIORITY_HIGHEST );
+    CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
+    CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
+    CEngine::getInstance().attachSystem( new CSimple2DAnimationSystem(SYSTEM_PRIORITY_HIGHEST + 2) );
+    CEngine::getInstance().attachSystem( new CAnimationDemoSystem(SYSTEM_PRIORITY_HIGHEST + 3) );
+    CEngine::getInstance().attachSystem( new CSimple2DRenderingSystem(SYSTEM_PRIORITY_HIGHEST) );
 
     showInfoMessageBox( testName,
         "left/right - change animation\n"
@@ -192,8 +194,9 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
         "esc - stop\n"
     );
 
-    engine.start();
+    CEngine::getInstance().start();
 
+    CEngine::deleteInstance();
     chestnutQuit();
     
 

@@ -13,7 +13,8 @@
 
 namespace chestnut::engine
 {
-    CSimple2DRenderingSystem::CSimple2DRenderingSystem( CEngine& engine ) : IRenderingSystem( engine )
+    CSimple2DRenderingSystem::CSimple2DRenderingSystem(systempriority_t priority) 
+    : IRenderingSystem(priority)
     {
         try
         {
@@ -43,34 +44,34 @@ namespace chestnut::engine
         }
 
 
-        m_spriteQuery = getEngine().getEntityWorld().createQuery(
+        m_spriteQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent >(),
             ecs::makeEntitySignature< CModel2DComponent, CRenderLayerComponent >()
         );
 
-        m_spriteModelQuery = getEngine().getEntityWorld().createQuery(
+        m_spriteModelQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent  >(),
             ecs::makeEntitySignature< CRenderLayerComponent >()
         );
 
-        m_layerSpriteQuery = getEngine().getEntityWorld().createQuery(
+        m_layerSpriteQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature< CModel2DComponent >()
         );
 
-        m_layerSpriteModelQuery = getEngine().getEntityWorld().createQuery(
+        m_layerSpriteModelQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CModel2DComponent, CTransform2DComponent, CSpriteComponent, CRenderLayerComponent >(),
             ecs::makeEntitySignature()
         );
 
 
-        const CWindow& win = getEngine().getWindow();
+        const CWindow& win = CEngine::getInstance().getWindow();
         m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
     }
 
     CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_spriteModelQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_spriteModelQuery );
     }
 
 
@@ -193,7 +194,7 @@ namespace chestnut::engine
         return l1.layer < l2.layer;
     }
 
-    void CSimple2DRenderingSystem::update( float deltaTime ) 
+    void CSimple2DRenderingSystem::updateQueries() 
     {
         bool (*comparator)(TransformIterator, TransformIterator);
         bool (*comparatorLayered)(TransformLayeredIterator, TransformLayeredIterator);
@@ -220,7 +221,7 @@ namespace chestnut::engine
         m_spriteRenderer.clear();
 
 
-        getEngine().getEntityWorld().queryEntities( m_spriteQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_spriteQuery );
         m_spriteQuery->sort(std::function(comparator));
 
         m_spriteQuery->forEach(std::function(
@@ -231,7 +232,7 @@ namespace chestnut::engine
         ));
         
 
-        getEngine().getEntityWorld().queryEntities( m_spriteModelQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_spriteModelQuery );
         m_spriteModelQuery->sort(std::function(comparator));
 
         m_spriteModelQuery->forEach(std::function(
@@ -243,7 +244,7 @@ namespace chestnut::engine
         ));
 
 
-        getEngine().getEntityWorld().queryEntities( m_layerSpriteQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_layerSpriteQuery );
         m_layerSpriteQuery->sort(std::function(comparatorLayered));
 
         m_layerSpriteQuery->forEach(std::function(
@@ -254,7 +255,7 @@ namespace chestnut::engine
         ));
 
 
-        getEngine().getEntityWorld().queryEntities( m_layerSpriteModelQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_layerSpriteModelQuery );
         m_layerSpriteModelQuery->sort(std::function(comparatorLayered));
         
         m_layerSpriteModelQuery->forEach(std::function(
@@ -268,7 +269,9 @@ namespace chestnut::engine
 
     void CSimple2DRenderingSystem::render()
     {
-        getEngine().getWindow().clear();
+        updateQueries();
+
+        CEngine::getInstance().getWindow().clear();
         
         m_camera.calculateMatrices();
         m_spriteRenderer.setViewMatrix( m_camera.getViewMatrix() );
@@ -278,9 +281,9 @@ namespace chestnut::engine
         glFinish(); // prevent CPU getting too hasty with sending requests to GPU
 #endif
 
-        m_spriteRenderer.render( getEngine().getWindow().getFramebuffer() );
+        m_spriteRenderer.render( CEngine::getInstance().getWindow().getFramebuffer() );
 
-        getEngine().getWindow().flipBuffer();
+        CEngine::getInstance().getWindow().flipBuffer();
     }
 
 

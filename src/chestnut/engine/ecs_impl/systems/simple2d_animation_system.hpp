@@ -2,19 +2,20 @@
 
 
 #include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/ecs_impl/system.hpp"
+#include "chestnut/engine/ecs_impl/logic_system.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
 namespace chestnut::engine
 {
-    class CHESTNUT_API CSimple2DAnimationSystem : public ISystem
+    class CHESTNUT_API CSimple2DAnimationSystem : public ILogicSystem
     {
     private:
         ecs::CEntityQuery *m_animatedTextureQuery;
 
     public:
-        CSimple2DAnimationSystem( CEngine& engine );
+        CSimple2DAnimationSystem() = default;
+        CSimple2DAnimationSystem(systempriority_t priority);
 
         void update( float dt ) override;
     };

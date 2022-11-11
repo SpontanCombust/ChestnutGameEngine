@@ -1,15 +1,28 @@
 #include "chestnut/engine/ecs_impl/system.hpp"
+#include "chestnut/engine/constants.hpp"
 
 namespace chestnut::engine
 {
-    CEngine& ISystem::getEngine() const
+    ISystem::ISystem()
+    : m_priority(SYSTEM_PRIORITY_ANY)
     {
-        return m_engine;
+
     }
 
-    ISystem::ISystem( CEngine& engine ) : m_engine( engine ) 
+    ISystem::ISystem(systempriority_t priority)
+    : m_priority(priority)
     {
 
+    }
+
+    void ISystem::setPriority(systempriority_t priority)
+    {
+        m_priority = priority;
+    }
+
+    systempriority_t ISystem::getPriority() const
+    {
+        return m_priority;
     }
 
 } // namespace chestnut::engine

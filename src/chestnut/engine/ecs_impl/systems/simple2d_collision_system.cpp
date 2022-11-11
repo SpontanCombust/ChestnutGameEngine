@@ -7,16 +7,17 @@
 
 namespace chestnut::engine
 {    
-    CSimple2DCollisionSystem::CSimple2DCollisionSystem( CEngine& engine ) : ISystem( engine )
+    CSimple2DCollisionSystem::CSimple2DCollisionSystem(systempriority_t priority) 
+    : ILogicSystem(priority)
     {
-        m_collisionQuery = getEngine().getEntityWorld().createQuery(
+        m_collisionQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CCollision2DComponent >()
         );
     }
 
     CSimple2DCollisionSystem::~CSimple2DCollisionSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_collisionQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_collisionQuery );
     }
 
     inline bool canCollidersTrigger( ECollisionPolicyFlags policy1, ECollisionPolicyFlags policy2 )
@@ -26,7 +27,7 @@ namespace chestnut::engine
 
     void CSimple2DCollisionSystem::update( float dt )
     {
-        getEngine().getEntityWorld().queryEntities( m_collisionQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_collisionQuery );
 
         m_collisionQuery->forEach(std::function(
             [](CTransform2DComponent& transform, CCollision2DComponent& collision)
@@ -73,7 +74,7 @@ namespace chestnut::engine
                         e.entity1 = it1.entityId();
                         e.entity2 = it2.entityId();
                         e.resolutionData = crd;
-                        getEngine().getEventManager().raiseEvent(e);
+                        CEngine::getInstance().getEventManager().raiseEvent(e);
                     }
                 }
             }

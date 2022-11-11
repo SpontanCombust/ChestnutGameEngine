@@ -9,17 +9,17 @@
 
 namespace chestnut::engine
 {
-    CSimple2DAnimationSystem::CSimple2DAnimationSystem( CEngine& engine )
-    : ISystem( engine ) 
+    CSimple2DAnimationSystem::CSimple2DAnimationSystem(systempriority_t priority)
+    : ILogicSystem(priority) 
     {
-        m_animatedTextureQuery = engine.getEntityWorld().createQuery(
+        m_animatedTextureQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature<CSpriteComponent, CAnimation2DComponent>()
         );
     }
 
     void CSimple2DAnimationSystem::update( float dt ) 
     {
-        getEngine().getEntityWorld().queryEntities( m_animatedTextureQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_animatedTextureQuery );
 
         auto it = m_animatedTextureQuery->begin<CSpriteComponent, CAnimation2DComponent>();
         auto end = m_animatedTextureQuery->end<CSpriteComponent, CAnimation2DComponent>();
@@ -56,7 +56,7 @@ namespace chestnut::engine
                         SAnimationFinishEvent event;
                         event.animName = animation.currentAnimName;
                         event.entity = it.entityId();
-                        getEngine().getEventManager().raiseEvent( event );
+                        CEngine::getInstance().getEventManager().raiseEvent( event );
 
                         animation.stopAnimation();
                     }

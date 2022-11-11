@@ -9,8 +9,18 @@ namespace chestnut::engine
     class CHESTNUT_API IRenderingSystem : public ISystem
     {
     public:
-        IRenderingSystem( CEngine& engine );
+        IRenderingSystem() : ISystem() 
+        {
+
+        }
+
+        IRenderingSystem(systempriority_t priority) : ISystem(priority)
+        {
+
+        }
+
         virtual ~IRenderingSystem() = default;
+
 
         virtual void render() = 0;
     };

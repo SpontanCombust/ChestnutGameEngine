@@ -6,14 +6,15 @@
 
 namespace chestnut::engine
 {      
-    CInputEventDispatchSystem::CInputEventDispatchSystem( CEngine& engine ) : ISystem( engine )
+    CInputEventDispatchSystem::CInputEventDispatchSystem(systempriority_t priority)
+    : ILogicSystem(priority)
     {
 
     }
 
     void CInputEventDispatchSystem::update( float deltaTime ) 
     {
-        CEventManager& eventManager = getEngine().getEventManager();
+        CEventManager& eventManager = CEngine::getInstance().getEventManager();
 
         SDL_Event sdlEvent;
 

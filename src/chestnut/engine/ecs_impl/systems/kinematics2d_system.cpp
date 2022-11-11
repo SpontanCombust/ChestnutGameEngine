@@ -6,22 +6,22 @@
 
 namespace chestnut::engine
 {
-    CKinematics2DSystem::CKinematics2DSystem( CEngine& engine ) 
-    : ISystem( engine ) 
+    CKinematics2DSystem::CKinematics2DSystem(systempriority_t priority) 
+    : ILogicSystem(priority) 
     {
-        m_kinematicQuery = getEngine().getEntityWorld().createQuery( 
+        m_kinematicQuery = CEngine::getInstance().getEntityWorld().createQuery( 
             ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >()
         );
     }
 
     CKinematics2DSystem::~CKinematics2DSystem() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_kinematicQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_kinematicQuery );
     }
 
     void CKinematics2DSystem::update( float deltaTime ) 
     {
-        getEngine().getEntityWorld().queryEntities( m_kinematicQuery );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_kinematicQuery );
 
         m_kinematicQuery->forEach(std::function(
             [deltaTime]( CTransform2DComponent& transform, CKinematics2DComponent& kinematic )

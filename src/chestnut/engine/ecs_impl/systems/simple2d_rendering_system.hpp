@@ -40,10 +40,10 @@ namespace chestnut::engine
 
 
     public:
-        CSimple2DRenderingSystem( CEngine& engine );
+        CSimple2DRenderingSystem() = default;
+        CSimple2DRenderingSystem(systempriority_t priority);
         ~CSimple2DRenderingSystem();
 
-        void update( float deltaTime ) override;
 
         void render() override;
 
@@ -61,6 +61,9 @@ namespace chestnut::engine
 
         const CCamera2D& getCamera() const;
         CCamera2D& getCamera();
+
+    private:
+        void updateQueries();
     };
 
 } // namespace chestnut::engine
