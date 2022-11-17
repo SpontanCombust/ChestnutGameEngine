@@ -6,7 +6,7 @@
 #include <fstream>
 #include <sstream>
 
-namespace chestnut::engine
+namespace chestnut::engine::debug
 {   
     std::ostream *CLogger::streamPtr = &std::cout;
     bool CLogger::hasFileOpened = false;

@@ -5,7 +5,7 @@
 #include <ostream>
 
 
-namespace chestnut::engine
+namespace chestnut::engine::debug
 {
     class CHESTNUT_API CLogger
     {
@@ -27,13 +27,20 @@ namespace chestnut::engine
         static void closeFileIfIsOpened();
     };
 
-} // namespace chestnut::engine
+} // namespace chestnut::engine::debug
 
 #ifdef CHESTNUT_DEBUG
-    #define LOG_INFO(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [INFO] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }
-    #define LOG_WARNING(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [WARNING] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }
-    #define LOG_ERROR(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [ERROR] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }
+    #define LOG(s, lvl) {\
+        *chestnut::engine::debug::CLogger::streamPtr <<\
+        chestnut::engine::debug::CLogger::getCurrentDateString() <<\
+        " [" << lvl << "] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl;\
+    }
+
+    #define LOG_INFO(s)     LOG(s, "INFO")
+    #define LOG_WARNING(s)  LOG(s, "WARNING")
+    #define LOG_ERROR(s)    LOG(s, "ERROR")
 #else
+    #define LOG(s, lvl)
     #define LOG_INFO(s)
     #define LOG_WARNING(s)
     #define LOG_ERROR(s)
