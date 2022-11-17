@@ -270,9 +270,7 @@ namespace chestnut::engine
     void CSimple2DRenderingSystem::render()
     {
         updateQueries();
-
-        CEngine::getInstance().getWindow().clear();
-        
+       
         m_camera.calculateMatrices();
         m_spriteRenderer.setViewMatrix( m_camera.getViewMatrix() );
         m_spriteRenderer.setProjectionMatrix( m_camera.getProjectionMatrix() );
@@ -282,8 +280,6 @@ namespace chestnut::engine
 #endif
 
         m_spriteRenderer.render( CEngine::getInstance().getWindow().getFramebuffer() );
-
-        CEngine::getInstance().getWindow().flipBuffer();
     }
 
 

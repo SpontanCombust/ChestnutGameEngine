@@ -2,6 +2,9 @@
 
 #include "chestnut/engine/main/engine.hpp"
 
+#include <imgui.h>
+#include <imgui_impl_sdl.h>
+#include <imgui_impl_opengl3.h>
 #include <SDL_events.h>
 
 namespace chestnut::engine
@@ -52,7 +55,12 @@ namespace chestnut::engine
                 default:
                     break;
             }
+            
+        #ifdef CHESTNUT_DEBUG
+            ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+        #endif
         }
+
     }
 
 

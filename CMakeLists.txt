@@ -1,5 +1,8 @@
+# =================================== PREAMBULE ===================================
+
 cmake_minimum_required(VERSION 3.11.0)
 project(ChestnutGameEngine VERSION 0.1.0)
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -10,14 +13,10 @@ if(MSVC)
     include(GenerateExportHeader)
 endif()
 
-# add debug define
-if(MSVC)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DCHESTNUT_DEBUG")
-else()
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCHESTNUT_DEBUG")
-endif()
 
-# =================================== Allow offline mode ===================================
+
+
+# =============================== ALLOW OFFLINE MODE ===================================
 
 FetchContent_Declare(
     FetchContentOffline
@@ -33,7 +32,36 @@ FetchContent_DisconnectedIfOffline()
 
 
 
-# =================================== Library dependencies ===================================
+
+
+# ========================== PROJECT OPTIONS AND VARIABLES ============================
+
+# add debug define
+if(MSVC)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DCHESTNUT_DEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCHESTNUT_DEBUG")
+endif()
+
+
+set(CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU     -Wall -Wpedantic -Wno-unused-variable)
+
+# 4100, 4101 - unused variables
+# 4251 - x needs to have dll interface
+#   This shows up even for private members which just happened to be STL objects
+#   You can make the warning go away by exporting individual methods instead of the entire class,
+#   but this lib is not intended to be C-compatible, so these warnings should be ignored.
+# 4834 - ignored [[nodiscard]] - this comes from tl::typelist
+set(CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC    /W3 /wd4100 /wd4101 /wd4834 /wd4251)
+
+
+option(CHESTNUT_BUILD_TESTS "Build ChestnutGameEngine project tests" ON)
+
+
+
+
+
+# =================================== DEPENDENCIES ===================================
 
 # establish FetchContent dependencies
 
@@ -77,6 +105,11 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/nothings/stb
     GIT_TAG master
 )
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui
+    GIT_TAG v1.88
+)
 
 
 # configure lib options
@@ -108,25 +141,63 @@ FetchContent_MakeAvailable(
     tl_expected
     Assimp
     stb
+    imgui
 )
 
+# OpenGL
 find_package(OpenGL REQUIRED)
 
+# GLAD
 add_library(glad STATIC)
 target_sources(glad PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glad/src/glad.c)
 target_include_directories(glad PUBLIC 
     ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/glad/include)
 
+# stb
 add_library(stb_image INTERFACE)
 target_sources(stb_image INTERFACE ${stb_SOURCE_DIR}/stb_image.h)
 target_include_directories(stb_image INTERFACE ${stb_SOURCE_DIR})
 
+# imgui
+add_library(imgui STATIC)
+target_include_directories(imgui PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+target_sources(imgui PRIVATE
+    ${imgui_SOURCE_DIR}/imconfig.h
+    ${imgui_SOURCE_DIR}/imgui.h
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_internal.h
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl.h
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl.cpp
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.h
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+if(UNIX)
+    target_link_libraries(imgui PRIVATE 
+        SDL2
+        ${OPENGL_LIBRARIES}
+        ${CMAKE_DL_LIBS}
+    )
+else()
+    target_link_libraries(imgui PRIVATE 
+        SDL2
+        ${OPENGL_LIBRARIES}
+    )
+endif()
 
 
 
 
-# ====================================== CGE library ======================================
+
+
+# ====================================== CGE LIBRARIES ======================================
 
 add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
@@ -149,9 +220,9 @@ target_compile_options(${PROJECT_NAME} PRIVATE
     #   You can make the warning go away by exporting individual methods instead of the entire class,
     #   but this lib is not intended to be C-compatible, so these warnings should be ignored.
     # 4834 - ignored [[nodiscard]] - this comes from tl::typelist
-    $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4100 /wd4101 /wd4834 /wd4251>
+    $<$<CXX_COMPILER_ID:MSVC>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC}>
 
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wpedantic -Wno-unused-variable>
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
@@ -165,52 +236,59 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     expected
     assimp
     stb_image
+    imgui
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
 
-# ====================================== Tests executable ======================================
 
-add_executable(${PROJECT_NAME}_Test)
-add_subdirectory(tests)
 
-include(FetchContent)
 
-FetchContent_Declare(
-    catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2
-    GIT_TAG v2.13.7
-)
 
-FetchContent_MakeAvailable(catch2)
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
-    
 
-target_compile_options(${PROJECT_NAME}_Test PRIVATE
-    # 4100, 4101 - unused variables
-    # 4251 - x needs to have dll interface
-    # 4834 - ignored [[nodiscard]]
-    $<$<CXX_COMPILER_ID:MSVC>:/W3 /wd4100 /wd4101 /wd4251 /wd4834>
-    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wpedantic -Wno-unused-variable>
-)
 
-target_link_libraries(${PROJECT_NAME}_Test 
-    ${PROJECT_NAME} 
-    Catch2::Catch2
-)
 
-# copy DLLs
-if(WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME}_Test POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2>       $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_ttf>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_mixer> $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:assimp>     $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:freetype>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+# ========================================= TESTS ======================================
+
+if(CHESTNUT_BUILD_TESTS)
+    add_executable(${PROJECT_NAME}_Test)
+    add_subdirectory(tests)
+
+    FetchContent_Declare(
+        catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2
+        GIT_TAG v2.13.7
     )
+
+    FetchContent_MakeAvailable(catch2)
+    list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
+        
+
+    target_compile_options(${PROJECT_NAME}_Test PRIVATE
+        # 4100, 4101 - unused variables
+        # 4251 - x needs to have dll interface
+        # 4834 - ignored [[nodiscard]]
+        $<$<CXX_COMPILER_ID:MSVC>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC}>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
+    )
+
+    target_link_libraries(${PROJECT_NAME}_Test 
+        ${PROJECT_NAME} 
+        Catch2::Catch2
+    )
+
+    # copy DLLs
+    if(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME}_Test POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2>       $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_ttf>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_mixer> $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:assimp>     $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:freetype>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
+        )
+    endif()
+
+    include(CTest)
+    include(Catch)
+    catch_discover_tests(${PROJECT_NAME}_Test)
 endif()
-
-include(CTest)
-include(Catch)
-catch_discover_tests(${PROJECT_NAME}_Test)
-

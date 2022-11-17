@@ -4,6 +4,10 @@
 #include "chestnut/engine/misc/exception.hpp"
 #include "chestnut/engine/debug/log.hpp"
 
+#include <imgui.h>
+#include <imgui_impl_sdl.h>
+#include <imgui_impl_opengl3.h>
+
 #include <algorithm>
 
 
@@ -206,10 +210,26 @@ namespace chestnut::engine
                     sys->update( dt );
                 }
 
+
+                m_window->clear();
+
+            #ifdef CHESTNUT_DEBUG
+                ImGui_ImplOpenGL3_NewFrame();
+                ImGui_ImplSDL2_NewFrame();
+                ImGui::NewFrame();
+            #endif
+
                 for( IRenderingSystem  *sys : m_listRenderingSystems )
                 {
                     sys->render();
                 }
+
+            #ifdef CHESTNUT_DEBUG
+                ImGui::Render();
+                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+            #endif
+
+                m_window->flipBuffer();
             }
         }
     }

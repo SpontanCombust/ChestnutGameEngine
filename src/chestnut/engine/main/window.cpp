@@ -3,6 +3,9 @@
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/init.hpp"
 
+#include <imgui.h>
+#include <imgui_impl_sdl.h>
+#include <imgui_impl_opengl3.h>
 #include <SDL.h>
 #include <glad/glad.h>
 #include <SDL_opengl.h>
@@ -89,7 +92,24 @@ namespace chestnut::engine
         glEnable( GL_DEPTH_TEST );
 
         int interval = useVsync ? 1 : 0;
-        SDL_GL_SetSwapInterval( interval );        
+        SDL_GL_SetSwapInterval( interval );
+
+
+
+    #ifdef CHESTNUT_DEBUG
+        // ========= Init OpenGL ========= //
+
+        LOG_INFO("Initializing ImGui...");
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplSDL2_InitForOpenGL(window, context);
+        ImGui_ImplOpenGL3_Init("#version 330");
+    #endif      
 
 
 
@@ -102,6 +122,12 @@ namespace chestnut::engine
 
     CWindow::~CWindow() 
     {
+    #ifdef CHESTNUT_DEBUG
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
+    #endif
+
         SDL_GL_DeleteContext( m_sdlGLContext );
         SDL_DestroyWindow( m_sdlWindow );
         delete m_framebuffer;
