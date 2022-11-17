@@ -22,6 +22,11 @@ namespace chestnut::engine
         }
     }
 
+    void CTexture2D::setResource(const std::shared_ptr<CTexture2DResource>& resource) 
+    {
+        m_texResource = resource;
+    }
+
     const std::shared_ptr<CTexture2DResource>& CTexture2D::getResource() const
     {
         return m_texResource;

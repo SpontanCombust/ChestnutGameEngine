@@ -19,6 +19,7 @@ namespace chestnut::engine
         explicit CTexture2D( std::shared_ptr<CTexture2DResource> resource );
         explicit CTexture2D( const std::shared_ptr<CImageDataResource>& resource );
 
+        void setResource(const std::shared_ptr<CTexture2DResource>& resource);
         const std::shared_ptr<CTexture2DResource>& getResource() const;
         bool isValid() const;
 

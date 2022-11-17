@@ -110,6 +110,11 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/ocornut/imgui
     GIT_TAG v1.88
 )
+FetchContent_Declare(
+    nativefiledialog
+    GIT_REPOSITORY https://github.com/SpontanCombust/nativefiledialog
+    GIT_TAG CMakeLists
+)
 
 
 # configure lib options
@@ -142,6 +147,7 @@ FetchContent_MakeAvailable(
     Assimp
     stb
     imgui
+    nativefiledialog
 )
 
 # OpenGL
@@ -237,6 +243,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     assimp
     stb_image
     imgui
+    nativefiledialog
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
