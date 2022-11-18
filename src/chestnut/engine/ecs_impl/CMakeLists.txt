@@ -14,4 +14,5 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 add_subdirectory(components)
 add_subdirectory(events)
+add_subdirectory(factories)
 add_subdirectory(systems)
