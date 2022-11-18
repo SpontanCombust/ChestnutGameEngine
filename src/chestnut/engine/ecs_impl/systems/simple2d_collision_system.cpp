@@ -32,11 +32,10 @@ namespace chestnut::engine
         m_collisionQuery->forEach(std::function(
             [](CTransform2DComponent& transform, CCollision2DComponent& collision)
             {
-                if(collision.collider)
-                {
-                    collision.collider->setPosition(transform.position);
-                    collision.collider->setScale(transform.scale);
-                }
+                std::visit([&transform](auto& arg) {
+                    arg.setPosition(transform.position);
+                    arg.setScale(transform.scale);
+                }, collision.colliderVariant);
             }
         ));
 
@@ -51,24 +50,23 @@ namespace chestnut::engine
             {
                 auto [transform1, collision1] = *it1;
                 auto [transform2, collision2] = *it2;
+
+                CCollider2D& baseCollider1 = collision1.getBaseCollider();
+                CCollider2D& baseCollider2 = collision2.getBaseCollider();
                 
-                if(!collision1.collider || !collision2.collider)
-                {
-                    return;
-                }
-                else if(collision1.collider->getActivity() == EColliderActivity::STATIC && collision2.collider->getActivity() == EColliderActivity::STATIC)
+                if(baseCollider1.getActivity() == EColliderActivity::STATIC && baseCollider2.getActivity() == EColliderActivity::STATIC)
                 {
                     return;
                 }
 
 
-                auto crd = collision1.collider->resolveCollision( *collision2.collider );
+                auto crd = baseCollider1.resolveCollision(baseCollider2);
                 if(crd.isCollision)
                 {
                     transform1.position += crd.obj1Displacement;
                     transform2.position += crd.obj2Displacement;
 
-                    if(canCollidersTrigger(collision1.collider->getPolicyFlags(), collision2.collider->getPolicyFlags()))
+                    if(canCollidersTrigger(baseCollider1.getPolicyFlags(), baseCollider2.getPolicyFlags()))
                     {
                         SCollisionEvent e;
                         e.entity1 = it1.entityId();
