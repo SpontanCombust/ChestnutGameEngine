@@ -18,10 +18,11 @@ namespace chestnut::engine::debug
         SRectangle m_clippingRect;
         vec3f m_tint;
         float m_tintFactor;
+        int m_selectedAdjustToModel;
 
     public:
         void fetchComponent(ecs::entityid_t entity) override;
-        void drawGuiWindow() override;
+        void drawWidgets() override;
     };
 
 } // namespace chestnut::engine::debug

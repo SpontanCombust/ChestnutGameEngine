@@ -16,7 +16,7 @@ namespace chestnut::engine::debug
 
     public:
         void fetchComponent(ecs::entityid_t entity) override;
-        void drawGuiWindow() override;
+        void drawWidgets() override;
     };
 
 } // namespace chestnut::engine::debug

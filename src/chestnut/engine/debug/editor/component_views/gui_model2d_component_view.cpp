@@ -11,18 +11,13 @@ namespace chestnut::engine::debug
         .getComponent<CModel2DComponent>(entity);
     }
 
-    void CGuiModel2DComponentView::drawGuiWindow()
+    void CGuiModel2DComponentView::drawWidgets()
     {
-        if(ImGui::CollapsingHeader("CModel2DComponent", ImGuiTreeNodeFlags_DefaultOpen))
-        {
-            ImGui::Text("Size");
-            ImGui::DragFloat2("##Size", &m_handle->size.x);
+        ImGui::Text("Size");
+        ImGui::DragFloat2("##Size", &m_handle->size.x);
 
-            ImGui::Text("Origin");
-            ImGui::DragFloat2("##Origin", &m_handle->origin.x, 0.01f, 0.0f, 1.0f);
-
-            ImGui::NewLine();
-        }
+        ImGui::Text("Origin");
+        ImGui::DragFloat2("##Origin", &m_handle->origin.x, 0.01f, 0.0f, 1.0f);
     }
 
 } // namespace chestnut::engine::debug

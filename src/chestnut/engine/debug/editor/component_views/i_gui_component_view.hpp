@@ -11,7 +11,7 @@ namespace chestnut::engine::debug
         virtual ~IGuiComponentView() = default;
 
         virtual void fetchComponent(ecs::entityid_t entity) = 0;
-        virtual void drawGuiWindow() = 0;
+        virtual void drawWidgets() = 0;
     };
 
 } // namespace chestnut::engine::debug

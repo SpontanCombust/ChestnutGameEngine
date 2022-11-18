@@ -11,21 +11,16 @@ namespace chestnut::engine::debug
         .getComponent<CTransform2DComponent>(entity);
     }
 
-    void CGuiTransform2DComponentView::drawGuiWindow()
+    void CGuiTransform2DComponentView::drawWidgets()
     {
-        if(ImGui::CollapsingHeader("CTransform2DComponent", ImGuiTreeNodeFlags_DefaultOpen))
-        {
-            ImGui::Text("Position");
-            ImGui::DragFloat2("##Position", &m_handle->position.x);
+        ImGui::Text("Position");
+        ImGui::DragFloat2("##Position", &m_handle->position.x);
 
-            ImGui::Text("Scale");
-            ImGui::DragFloat2("##Scale", &m_handle->scale.x);
+        ImGui::Text("Scale");
+        ImGui::DragFloat2("##Scale", &m_handle->scale.x);
 
-            ImGui::Text("Rotation");
-            ImGui::DragFloat("##Rotation", &m_handle->rotation, 0.01f);
-            
-            ImGui::NewLine();
-        }
+        ImGui::Text("Rotation");
+        ImGui::DragFloat("##Rotation", &m_handle->rotation, 0.01f);
     }
 
 } // namespace chestnut::engine::debug
