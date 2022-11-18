@@ -1,6 +1,6 @@
 #pragma once
 
-#include "chestnut/engine/macros.hpp"
+
 #include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine

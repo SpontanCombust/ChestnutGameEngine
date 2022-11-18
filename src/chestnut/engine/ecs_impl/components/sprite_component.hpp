@@ -1,11 +1,13 @@
 #pragma once
 
-#include "chestnut/engine/macros.hpp"
+
 #include "chestnut/engine/maths/vector2.hpp"
 #include "chestnut/engine/graphics/sprite.hpp"
 
 namespace chestnut::engine
 {
+    //TODO maybe it'd be better to move it to Model2DComponent and make it more general 
+    // for all components that have to adjust to model size in some way
     enum class ESpriteToModel2DAdjust
     {
         NONE, // texture doesn't adjust to the model

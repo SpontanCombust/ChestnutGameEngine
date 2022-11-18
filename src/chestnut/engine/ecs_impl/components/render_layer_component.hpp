@@ -1,7 +1,8 @@
 #pragma once
 
-#include "chestnut/engine/macros.hpp"
+
 #include "chestnut/engine/types.hpp"
+#include "chestnut/engine/constants.hpp"
 
 namespace chestnut::engine
 {
