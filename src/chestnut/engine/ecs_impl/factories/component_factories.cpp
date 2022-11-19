@@ -3,6 +3,7 @@
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/ecs_impl/components/animation2d_component.hpp"
 #include "chestnut/engine/ecs_impl/components/collision2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/identity_component.hpp"
 #include "chestnut/engine/ecs_impl/components/kinematics2d_component.hpp"
 #include "chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "chestnut/engine/ecs_impl/components/render_layer_component.hpp"
@@ -13,56 +14,63 @@
 
 namespace chestnut::engine
 {
-    bool componentFactory_CAnimation2DComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CAnimation2DComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CAnimation2DComponent>(entity);
     }
     
-    bool componentFactory_CCollision2DComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CCollision2DComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CCollision2DComponent>(entity);
     }
 
-    bool componentFactory_CKinematics2DComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CIdentityComponent(ecs::entityid_t entity)
+    {
+        return (bool)CEngine::getInstance()
+        .getEntityWorld()
+        .createComponent<CIdentityComponent>(entity);
+    }
+
+    bool componentFactory_CKinematics2DComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CKinematics2DComponent>(entity);
     }
 
-    bool componentFactory_CModel2DComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CModel2DComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CModel2DComponent>(entity);
     }
 
-    bool componentFactory_CRenderLayerComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CRenderLayerComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CRenderLayerComponent>(entity);
     }
 
-    bool componentFactory_CSpriteComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CSpriteComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CSpriteComponent>(entity);
     }
 
-    bool componentFactory_CTimerComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CTimerComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()
         .createComponent<CTimerComponent>(entity);
     }
 
-    bool componentFactory_CTransform2DComponent(ecs::entityid_t entity) noexcept
+    bool componentFactory_CTransform2DComponent(ecs::entityid_t entity)
     {
         return (bool)CEngine::getInstance()
         .getEntityWorld()

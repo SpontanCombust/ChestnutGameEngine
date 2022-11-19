@@ -45,7 +45,7 @@ namespace chestnut::engine::debug
         ImGui::Text("Activity");
         ImGui::Combo("##Activity", &m_selectedActivity, activityItems, IM_ARRAYSIZE(activityItems));
 
-        ImGui::Text("Collsion policy");
+        ImGui::Text("Collision policy");
         ImGui::Checkbox("Affected", &m_selectedPolicyAffected);
         ImGui::SameLine();
         ImGui::Checkbox("Affecting", &m_selectedPolicyAffecting);

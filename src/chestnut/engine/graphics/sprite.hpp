@@ -21,6 +21,8 @@ namespace chestnut::engine
         explicit CSprite(std::shared_ptr<CTexture2DResource> resource);
         explicit CSprite(std::shared_ptr<CImageDataResource> resource);
 
+        void setResource(const std::shared_ptr<CTexture2DResource>& resource) override;
+
         // Coordinates and dimensions in pixels
         SRectangle getClippingRect() const;
         // Coordinates and dimensions in pixels

@@ -23,6 +23,11 @@ namespace chestnut::engine
 
     }
 
+    void CSprite::setResource(const std::shared_ptr<CTexture2DResource>& resource) 
+    {
+        m_clipRect = { 0.f, 0.f, (float)resource->m_width, (float)resource->m_height };
+    }
+
     SRectangle CSprite::getClippingRect() const
     {
         return m_clipRect;

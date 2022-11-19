@@ -3,6 +3,7 @@
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_animation2d_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_collision2d_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_identity_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_kinematics2d_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_model2d_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_render_layer_component_view.hpp"
@@ -22,7 +23,8 @@ namespace chestnut::engine::debug
 
     bool guiEntityListPanel(entityid_t& selectedEnt)
     {
-        static char entityNameInput[65] = "";
+        static const int ENTITY_NAME_LENGTH = IM_ARRAYSIZE(CIdentityComponent::name);
+        static char entityNameInput[ENTITY_NAME_LENGTH] = "";
 
         bool entityChanged = false;
         auto& world = CEngine::getInstance().getEntityWorld();
@@ -31,20 +33,33 @@ namespace chestnut::engine::debug
         ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
         ImGui::Begin("Entity list");
 
-        //TODO CNameComponent or something...
-        ImGui::InputText("##createEntity", entityNameInput, IM_ARRAYSIZE(entityNameInput));
+        bool confirmedAdd = ImGui::InputText("##createEntity", entityNameInput, ENTITY_NAME_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue);
         ImGui::SameLine();
-        if(ImGui::Button("Add"))
+        if(ImGui::Button("Add") || confirmedAdd)
         {
-            world.createEntity();
-            entityNameInput[0] = '\0';
+            entityid_t id = world.createEntity();
+            auto handle = world.createComponent<CIdentityComponent>(id);
+            strncpy_s(handle->name, entityNameInput, ENTITY_NAME_LENGTH);
+            memset(entityNameInput, 0, ENTITY_NAME_LENGTH);
         }
         
         for(auto it = world.entityIterator.cbegin(); it != world.entityIterator.cend(); it++)
         {
-            char entityLabelBuff[11];
-            snprintf(entityLabelBuff, IM_ARRAYSIZE(entityLabelBuff), "%d", it.id());
-            if(ImGui::Selectable(entityLabelBuff, selectedEnt == it.id()))
+            std::string entityLabel = "";
+
+            if(auto handle = world.getComponent<CIdentityComponent>(it.id()))
+            {
+                entityLabel = handle->name;
+            }
+            // happens either if CIdentityComponent was not found or the name field was empty
+            if(entityLabel[0] == '\0')
+            {
+                entityLabel = std::to_string(it.id());
+            }
+
+            entityLabel += "##" + std::to_string(it.id());
+
+            if(ImGui::Selectable(entityLabel.c_str(), selectedEnt == it.id()))
             {
                 if(it.id() != selectedEnt)
                 {
@@ -79,6 +94,15 @@ namespace chestnut::engine::debug
                 "CCollision2DComponent",
                 componentFactory_CCollision2DComponent,
                 new CGuiCollision2DComponentView(),
+                false,
+            },
+        },
+        {
+            typeid(CIdentityComponent),
+            { 
+                "CIdentityComponent",
+                componentFactory_CIdentityComponent,
+                new CGuiIdentityComponentView(),
                 false,
             },
         },

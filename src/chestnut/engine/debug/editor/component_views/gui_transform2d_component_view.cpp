@@ -17,7 +17,7 @@ namespace chestnut::engine::debug
         ImGui::DragFloat2("##Position", &m_handle->position.x);
 
         ImGui::Text("Scale");
-        ImGui::DragFloat2("##Scale", &m_handle->scale.x);
+        ImGui::DragFloat2("##Scale", &m_handle->scale.x, 0.01f);
 
         ImGui::Text("Rotation");
         ImGui::DragFloat("##Rotation", &m_handle->rotation, 0.01f);

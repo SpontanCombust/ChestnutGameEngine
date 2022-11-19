@@ -20,10 +20,10 @@ namespace chestnut::engine::debug
         ImGui::DragFloat2("##LinearAcceleration", &m_handle->linearAcceleration.x);
 
         ImGui::Text("Angular velocity");
-        ImGui::DragFloat("##AngularVelocity", &m_handle->angularVelocity);
+        ImGui::DragFloat("##AngularVelocity", &m_handle->angularVelocity, 0.01f);
 
         ImGui::Text("Angular acceleration");
-        ImGui::DragFloat2("##AngularAcceleration", &m_handle->angularAcceleration);
+        ImGui::DragFloat("##AngularAcceleration", &m_handle->angularAcceleration, 0.01f);
     }
 
 } // namespace chestnut::engine::debug
