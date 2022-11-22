@@ -40,39 +40,42 @@ namespace chestnut::engine
         ));
 
 
-        auto it1 = m_collisionQuery->begin< CTransform2DComponent, CCollision2DComponent >();
-        auto end = m_collisionQuery->end< CTransform2DComponent, CCollision2DComponent >();
-
-        // do a check for each pair of the entities
-        for(; it1 != end - 1; it1++)
+        if(m_collisionQuery->getEntityCount() >= 2)
         {
-            for(auto it2 = it1 + 1; it2 != end; it2++)
+            auto it1 = m_collisionQuery->begin< CTransform2DComponent, CCollision2DComponent >();
+            auto end = m_collisionQuery->end< CTransform2DComponent, CCollision2DComponent >();
+
+            // do a check for each pair of the entities
+            for(; it1 != end - 1; it1++)
             {
-                auto [transform1, collision1] = *it1;
-                auto [transform2, collision2] = *it2;
-
-                CCollider2D& baseCollider1 = collision1.getBaseCollider();
-                CCollider2D& baseCollider2 = collision2.getBaseCollider();
-                
-                if(baseCollider1.getActivity() == EColliderActivity::STATIC && baseCollider2.getActivity() == EColliderActivity::STATIC)
+                for(auto it2 = it1 + 1; it2 != end; it2++)
                 {
-                    return;
-                }
+                    auto [transform1, collision1] = *it1;
+                    auto [transform2, collision2] = *it2;
 
-
-                auto crd = baseCollider1.resolveCollision(baseCollider2);
-                if(crd.isCollision)
-                {
-                    transform1.position += crd.obj1Displacement;
-                    transform2.position += crd.obj2Displacement;
-
-                    if(canCollidersTrigger(baseCollider1.getPolicyFlags(), baseCollider2.getPolicyFlags()))
+                    CCollider2D& baseCollider1 = collision1.getBaseCollider();
+                    CCollider2D& baseCollider2 = collision2.getBaseCollider();
+                    
+                    if(baseCollider1.getActivity() == EColliderActivity::STATIC && baseCollider2.getActivity() == EColliderActivity::STATIC)
                     {
-                        SCollisionEvent e;
-                        e.entity1 = it1.entityId();
-                        e.entity2 = it2.entityId();
-                        e.resolutionData = crd;
-                        CEngine::getInstance().getEventManager().raiseEvent(e);
+                        return;
+                    }
+
+
+                    auto crd = baseCollider1.resolveCollision(baseCollider2);
+                    if(crd.isCollision)
+                    {
+                        transform1.position += crd.obj1Displacement;
+                        transform2.position += crd.obj2Displacement;
+
+                        if(canCollidersTrigger(baseCollider1.getPolicyFlags(), baseCollider2.getPolicyFlags()))
+                        {
+                            SCollisionEvent e;
+                            e.entity1 = it1.entityId();
+                            e.entity2 = it2.entityId();
+                            e.resolutionData = crd;
+                            CEngine::getInstance().getEventManager().raiseEvent(e);
+                        }
                     }
                 }
             }
