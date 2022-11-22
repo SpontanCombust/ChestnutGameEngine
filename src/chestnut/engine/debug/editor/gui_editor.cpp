@@ -9,7 +9,7 @@
 #include "chestnut/engine/debug/editor/component_views/gui_render_layer_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_sprite_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_transform2d_component_view.hpp"
-#include "chestnut/engine/ecs_impl/factories/component_factories.hpp"
+#include "chestnut/engine/ecs_impl/factories/component_factory.hpp"
 
 #include <chestnut/ecs/constants.hpp>
 #include <imgui.h>
@@ -31,7 +31,7 @@ namespace chestnut::engine::debug
 
         ImGui::SetNextWindowPos({0, 0}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
-        ImGui::Begin("Entity list");
+        ImGui::Begin("Entities");
 
         bool confirmedAdd = ImGui::InputText("##createEntity", entityNameInput, ENTITY_NAME_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue);
         ImGui::SameLine();
@@ -80,7 +80,8 @@ namespace chestnut::engine::debug
     struct SComponentData
     {
         const char *name;
-        bool (*factory)(ecs::entityid_t);
+        ComponentFactoryCreateCallback factoryCreate;
+        ComponentFactoryDisposeCallback factoryDispose;
         IGuiComponentView *guiView;
         bool isPresent;
     };
@@ -92,7 +93,8 @@ namespace chestnut::engine::debug
             typeid(CCollision2DComponent),
             { 
                 "CCollision2DComponent",
-                componentFactory_CCollision2DComponent,
+                CComponentFactory<CCollision2DComponent>::create,
+                CComponentFactory<CCollision2DComponent>::dispose,
                 new CGuiCollision2DComponentView(),
                 false,
             },
@@ -101,7 +103,8 @@ namespace chestnut::engine::debug
             typeid(CIdentityComponent),
             { 
                 "CIdentityComponent",
-                componentFactory_CIdentityComponent,
+                CComponentFactory<CIdentityComponent>::create,
+                CComponentFactory<CIdentityComponent>::dispose,
                 new CGuiIdentityComponentView(),
                 false,
             },
@@ -110,7 +113,8 @@ namespace chestnut::engine::debug
             typeid(CKinematics2DComponent),
             { 
                 "CKinematics2DComponent",
-                componentFactory_CKinematics2DComponent,
+                CComponentFactory<CKinematics2DComponent>::create,
+                CComponentFactory<CKinematics2DComponent>::dispose,
                 new CGuiKinematics2DComponentView(),
                 false,
             },
@@ -119,7 +123,8 @@ namespace chestnut::engine::debug
             typeid(CModel2DComponent),
             { 
                 "CModel2DComponent",
-                componentFactory_CModel2DComponent,
+                CComponentFactory<CModel2DComponent>::create,
+                CComponentFactory<CModel2DComponent>::dispose,
                 new CGuiModel2DComponentView(),
                 false,
             },
@@ -128,7 +133,8 @@ namespace chestnut::engine::debug
             typeid(CRenderLayerComponent),
             { 
                 "CRenderLayerComponent",
-                componentFactory_CRenderLayerComponent,
+                CComponentFactory<CRenderLayerComponent>::create,
+                CComponentFactory<CRenderLayerComponent>::dispose,
                 new CGuiRenderLayerComponentView(),
                 false,
             },
@@ -137,7 +143,8 @@ namespace chestnut::engine::debug
             typeid(CSpriteComponent),
             { 
                 "CSpriteComponent",
-                componentFactory_CSpriteComponent,
+                CComponentFactory<CSpriteComponent>::create,
+                CComponentFactory<CSpriteComponent>::dispose,
                 new CGuiSpriteComponentView(),
                 false,
             },
@@ -146,7 +153,8 @@ namespace chestnut::engine::debug
             typeid(CTransform2DComponent),
             { 
                 "CTransform2DComponent",
-                componentFactory_CTransform2DComponent,
+                CComponentFactory<CTransform2DComponent>::create,
+                CComponentFactory<CTransform2DComponent>::dispose,
                 new CGuiTransform2DComponentView(),
                 false,
             },
@@ -157,7 +165,7 @@ namespace chestnut::engine::debug
     {
         ImGui::SetNextWindowPos({600, 0}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
-        ImGui::Begin("Component list");
+        ImGui::Begin("Inspector");
             const auto& world = CEngine::getInstance().getEntityWorld();
             auto sign = world.getEntitySignature(entity);
 
@@ -169,11 +177,25 @@ namespace chestnut::engine::debug
                     if(ImGui::CollapsingHeader(dataIt->second.name, ImGuiTreeNodeFlags_DefaultOpen))
                     {
                         ImGui::PushID(dataIt->second.name);
+
+                        // HEADER //
+                        ImGui::NewLine();
+                        ImGui::SameLine(ImGui::GetWindowWidth() - 20);
+                        bool didDelete = ImGui::Button("X##DeleteComponent");
+                        
+                        // ACTUAL COMPONENT CONTENT//
                         dataIt->second.guiView->fetchComponent(entity);
                         dataIt->second.guiView->drawWidgets();
                         ImGui::NewLine();
+
+                        if(didDelete)
+                        {
+                            dataIt->second.factoryDispose(entity);
+                        }
+                        
                         ImGui::PopID();
                     }
+
                     ImGui::Separator();
 
                     dataIt->second.isPresent = true;
@@ -191,7 +213,7 @@ namespace chestnut::engine::debug
                 {
                     if(!data.isPresent && ImGui::Selectable(data.name))
                     {
-                        data.factory(entity);
+                        data.factoryCreate(entity);
                     }
 
                     data.isPresent = false;

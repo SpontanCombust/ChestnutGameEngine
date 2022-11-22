@@ -21,6 +21,8 @@ namespace chestnut::engine::debug
         int m_selectedAdjustToModel;
 
     public:
+        CGuiSpriteComponentView() noexcept;
+        
         void fetchComponent(ecs::entityid_t entity) override;
         void drawWidgets() override;
     };

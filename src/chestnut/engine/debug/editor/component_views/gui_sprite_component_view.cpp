@@ -10,6 +10,11 @@ namespace chestnut::engine::debug
 {
     static const char * adjustToModelItems[] = {"None", "Scaled", "Spanned", "Zoomed"};
 
+    CGuiSpriteComponentView::CGuiSpriteComponentView() noexcept
+    {
+        m_texturePath.reserve(128);
+    }
+
     void CGuiSpriteComponentView::fetchComponent(ecs::entityid_t entity) 
     {
         m_handle = CEngine::getInstance()
@@ -43,10 +48,12 @@ namespace chestnut::engine::debug
                 
             if(result == NFD_OKAY) 
             {
+                //FIXME use ResourceManager
                 auto loaded = CTexture2DResource::loadFromFile(filePath);
                 if(loaded.has_value())
                 {
                     m_handle->sprite.setResource(loaded.value());
+                    m_clippingRect = m_handle->sprite.getClippingRect();
                 }
                 else
                 {
