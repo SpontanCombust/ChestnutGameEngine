@@ -67,8 +67,8 @@ option(CHESTNUT_BUILD_TESTS "Build ChestnutGameEngine project tests" ON)
 
 FetchContent_Declare(
     chestnut-ecs
-    GIT_REPOSITORY https://github.com/SpontanCombust/ChestnutECSCore
-    GIT_TAG rework #TODO change to tag when version is complete
+    GIT_REPOSITORY https://github.com/SpontanCombust/chestnut-ecs
+    GIT_TAG v1.1.2
 )
 FetchContent_Declare(
     SDL2
@@ -115,6 +115,11 @@ FetchContent_Declare(
     GIT_REPOSITORY https://github.com/SpontanCombust/nativefiledialog
     GIT_TAG CMakeLists
 )
+FetchContent_Declare(
+    json
+    GIT_REPOSITORY https://github.com/nlohmann/json
+    GIT_TAG v3.11.2
+)
 
 
 # configure lib options
@@ -148,6 +153,7 @@ FetchContent_MakeAvailable(
     stb
     imgui
     nativefiledialog
+    json
 )
 
 # OpenGL
@@ -244,6 +250,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     stb_image
     imgui
     nativefiledialog
+    nlohmann_json
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
