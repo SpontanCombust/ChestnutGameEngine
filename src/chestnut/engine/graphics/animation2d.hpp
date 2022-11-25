@@ -10,8 +10,7 @@
 
 namespace chestnut::engine
 {
-    //TODO rename to "definition"
-    struct SAnimationData2D
+    struct SAnimation2DDefinition
     {
         std::string name;
         float duration = 0.f;
@@ -22,13 +21,13 @@ namespace chestnut::engine
         std::vector< unsigned int > vecFrameIndices;
     };
 
-    struct SAnimationSet2D
+    struct SAnimation2DSet
     {
         //FIXME It can't only be the rectangle, you also need to know how it should be offset at the end
         // Clipping rectangles of animation keyframes in the spritesheet
         std::vector< SRectangle > vecKeyFrameClipRects;
 
-        std::unordered_map< std::string, SAnimationData2D > mapAnimNameToAnimData;
+        std::unordered_map< std::string, SAnimation2DDefinition > mapAnimNameToAnimData;
         // A default animation frame to be used when animation expires or isn't played at all (like T-pose in 3D graphics)
         unsigned int defaultAnimFrameIndex = 0;
     };

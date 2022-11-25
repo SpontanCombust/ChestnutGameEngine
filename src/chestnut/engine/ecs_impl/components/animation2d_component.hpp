@@ -7,7 +7,7 @@ namespace chestnut::engine
 {
     struct CAnimation2DComponent
     {
-        SAnimationSet2D animSet;
+        SAnimation2DSet animSet;
 
         bool isAnimPlaying = false;
         bool isAnimPaused = false;

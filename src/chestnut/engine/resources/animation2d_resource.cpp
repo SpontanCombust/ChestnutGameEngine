@@ -33,16 +33,16 @@ namespace chestnut::engine
         return vecClippingRects;
     }
 
-    std::unordered_map<std::string, SAnimationData2D> parseAnimationDefinitions(json j)
+    std::unordered_map<std::string, SAnimation2DDefinition> parseAnimationDefinitions(json j)
     {
         std::string animNameBuff;
         std::vector<unsigned int> vecFrameIndicesBuff;
-        std::unordered_map<std::string, SAnimationData2D> mapAnimData;
+        std::unordered_map<std::string, SAnimation2DDefinition> mapAnimData;
 
         json obj = j.at(KEY_mapAnimNameToAnimData);
         for(const auto& o : obj)
         {
-            SAnimationData2D animData;
+            SAnimation2DDefinition animData;
 
             o.at(KEY_mapAnimNameToAnimData_name).get_to(animNameBuff);
             animData.name = animNameBuff;
@@ -84,7 +84,7 @@ namespace chestnut::engine
     }
 
     void validateDefinitions(
-        std::unordered_map<std::string, SAnimationData2D>& definitions, 
+        std::unordered_map<std::string, SAnimation2DDefinition>& definitions, 
         unsigned int keyframesTotalNum,
         unsigned int defaultKeyFrameIdx)
     {

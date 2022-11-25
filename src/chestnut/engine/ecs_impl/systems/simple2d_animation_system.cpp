@@ -36,7 +36,7 @@ namespace chestnut::engine
             SRectangle clipRect;
             if(animation.isAnimPlaying)
             {
-                const SAnimationData2D& animData = animation.animSet.mapAnimNameToAnimData[ animation.currentAnimName ];
+                const SAnimation2DDefinition& animData = animation.animSet.mapAnimNameToAnimData[ animation.currentAnimName ];
 
                 if( !animation.isAnimPaused )
                 {

@@ -14,7 +14,7 @@ namespace chestnut::engine
     {
     public:
         std::string m_animationFilePath;
-        SAnimationSet2D m_animationSet;
+        SAnimation2DSet m_animationSet;
 
     public:
         static tl::expected<std::shared_ptr<CAnimation2DResource>, const char *>
