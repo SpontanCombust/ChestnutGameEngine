@@ -4,7 +4,9 @@
 #include "system_test_utils.hpp"
 
 #include "../src/chestnut/engine/main/engine.hpp"
+#include "../src/chestnut/engine/debug/log.hpp"
 #include "../src/chestnut/engine/ecs_impl/system.hpp"
+#include "../src/chestnut/engine/resources/animation2d_resource.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_animation_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_rendering_system.hpp"
@@ -75,47 +77,10 @@ public:
         sprite.setFiltering( GL_NEAREST, GL_NEAREST );
         textureHandle->sprite = sprite;
 
-
         auto animHandle = engine.getEntityWorld().createComponent<CAnimation2DComponent>( ent );
-        animHandle->animSet.defaultAnimFrameIndex = 0;
-
-        for (int y = 0; y < 4; y++)
-        {
-            for (int x = 0; x < 8; x++)
-            {
-                // help a pixel offset to x and y for confident tex coords
-                animHandle->animSet.vecKeyFrameClipRects.push_back( { x * 32.f + 0.5f, y * 32.f + 0.5f, 32.f, 32.f } ); 
-            }
-        }
+        auto animResource = CAnimation2DResource::loadFromFile(CHESTNUT_ENGINE_ASSETS_DIR_PATH"/animations/player_sheet_orig.anim.json");
+        REQUIRE_NOTHROW(animHandle->animSet = animResource.value().get()->m_animationSet);
         
-        SAnimationData2D animation;
-
-        animation.name = "walk_up";
-        animation.framesPerSec = 2.f;
-        animation.vecFrameIndices.clear();
-        animation.vecFrameIndices.insert( animation.vecFrameIndices.end(), {0, 1, 2, 3, 4, 5, 6, 7} );
-        animHandle->animSet.mapAnimNameToAnimData["walk_up"] = animation;
-
-        animation.name = "walk_down";
-        animation.framesPerSec = 4.f;
-        animation.vecFrameIndices.clear();
-        animation.vecFrameIndices.insert( animation.vecFrameIndices.end(), {8, 9, 10, 11, 12, 13, 14, 15} );
-        animHandle->animSet.mapAnimNameToAnimData["walk_down"] = animation;
-
-        animation.name = "walk_left";
-        animation.framesPerSec = 8.f;
-        animation.vecFrameIndices.clear();
-        animation.vecFrameIndices.insert( animation.vecFrameIndices.end(), {16, 17, 18, 19, 20, 21, 22, 23} );
-        animHandle->animSet.mapAnimNameToAnimData["walk_left"] = animation;
-
-        animation.name = "walk_right";
-        animation.framesPerSec = 16.f;
-        animation.vecFrameIndices.clear();
-        animation.vecFrameIndices.insert( animation.vecFrameIndices.end(), {24, 25, 26, 27, 28, 29, 30, 31} );
-        animHandle->animSet.mapAnimNameToAnimData["walk_right"] = animation;
-
-
-
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &CAnimationDemoSystem::handleInput, this );
         l->setFilter( 
@@ -175,6 +140,7 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
     const char *testName = "Simple2D animation system test";
 
     chestnutInit();
+    debug::CLogger::setToFile("engine.log");
 
     CWindow window( testName );
     REQUIRE( window.isValid() );

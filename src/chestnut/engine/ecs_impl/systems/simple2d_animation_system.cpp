@@ -27,9 +27,14 @@ namespace chestnut::engine
         {
             auto [texture, animation] = *it;
 
-            SRectangle clipRect;
 
-            if( animation.isAnimPlaying )
+            if(animation.animSet.vecKeyFrameClipRects.empty())
+            {
+                break;
+            }
+
+            SRectangle clipRect;
+            if(animation.isAnimPlaying)
             {
                 const SAnimationData2D& animData = animation.animSet.mapAnimNameToAnimData[ animation.currentAnimName ];
 
@@ -38,12 +43,20 @@ namespace chestnut::engine
                     animation.elapsedAnimTimeSec += dt * animation.animSpeedMultiplier;
                 }
 
-                float frameDuration = 1.f / animData.framesPerSec;
-
+                float animProgression = animation.elapsedAnimTimeSec / animData.duration;
+                int loopsDone = (int)animProgression;
                 // index in the vector of indices inside animation data, couldn't come up with a better name :)
-                unsigned int frameIndexIndex = (unsigned int)( animation.elapsedAnimTimeSec / frameDuration );
-                int loopsDone = frameIndexIndex / std::max( (size_t)1UL, animData.vecFrameIndices.size() );
-                frameIndexIndex = frameIndexIndex % std::max( (size_t)1UL, animData.vecFrameIndices.size() );
+                unsigned int frameIndexIndex = std::clamp(
+                    (unsigned int)( (animProgression - (float)loopsDone) * (float)animData.vecFrameIndices.size() ),
+                    0U,
+                    (unsigned int)animData.vecFrameIndices.size() - 1
+                );
+
+                unsigned int frameIndex = std::clamp(
+                    animData.vecFrameIndices[ frameIndexIndex ],
+                    0U,
+                    (unsigned int)animation.animSet.vecKeyFrameClipRects.size() - 1
+                );
 
                 // update loops to be done only if they're not specified to be infinite
                 if( animation.remainingAnimLoops > 0 )
@@ -62,7 +75,7 @@ namespace chestnut::engine
                     }
                 }
 
-                clipRect = animation.animSet.vecKeyFrameClipRects[ animData.vecFrameIndices[ frameIndexIndex ] ];
+                clipRect = animation.animSet.vecKeyFrameClipRects[frameIndex];
             }
             else
             {

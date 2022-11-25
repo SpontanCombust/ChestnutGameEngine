@@ -10,10 +10,11 @@
 
 namespace chestnut::engine
 {
+    //TODO rename to "definition"
     struct SAnimationData2D
     {
         std::string name;
-        float framesPerSec = 1.f;
+        float duration = 0.f;
    
         // Sequence of indices identifying specific clipping rectangles for each animation frame
         // Index corresponds to a clipping rectangle in animation set
@@ -23,6 +24,7 @@ namespace chestnut::engine
 
     struct SAnimationSet2D
     {
+        //FIXME It can't only be the rectangle, you also need to know how it should be offset at the end
         // Clipping rectangles of animation keyframes in the spritesheet
         std::vector< SRectangle > vecKeyFrameClipRects;
 

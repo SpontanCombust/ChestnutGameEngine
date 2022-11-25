@@ -1,4 +1,6 @@
 target_sources(${PROJECT_NAME} PRIVATE 
+    ${CMAKE_CURRENT_SOURCE_DIR}/animation2d_resource.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/animation2d_resource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/audio_resource.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/audio_resource.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/font_resource.hpp
