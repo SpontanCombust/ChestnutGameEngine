@@ -27,27 +27,31 @@ namespace chestnut::engine
         {
             auto [texture, animation] = *it;
 
-
             if(animation.animSet.vecKeyFrameClipRects.empty())
             {
-                break;
+                continue;
+            }
+
+            auto animDataIt = animation.animSet.mapAnimNameToAnimData.find(animation.currentAnimName);
+            if(animDataIt == animation.animSet.mapAnimNameToAnimData.end())
+            {
+                continue;
             }
 
             SRectangle clipRect;
             if(animation.isAnimPlaying)
             {
-                const SAnimation2DDefinition& animData = animation.animSet.mapAnimNameToAnimData[ animation.currentAnimName ];
-
-                if( !animation.isAnimPaused )
-                {
-                    animation.elapsedAnimTimeSec += dt * animation.animSpeedMultiplier;
-                }
+                const SAnimation2DDefinition& animData = animDataIt->second;
 
                 float animProgression = animation.elapsedAnimTimeSec / animData.duration;
                 int loopsDone = (int)animProgression;
+
+                animation.elapsedAnimTimeSec = std::fmod(animation.elapsedAnimTimeSec, animData.duration);
+                animProgression -= loopsDone;
+                
                 // index in the vector of indices inside animation data, couldn't come up with a better name :)
                 unsigned int frameIndexIndex = std::clamp(
-                    (unsigned int)( (animProgression - (float)loopsDone) * (float)animData.vecFrameIndices.size() ),
+                    (unsigned int)( animProgression * (float)animData.vecFrameIndices.size() ),
                     0U,
                     (unsigned int)animData.vecFrameIndices.size() - 1
                 );
@@ -59,20 +63,26 @@ namespace chestnut::engine
                 );
 
                 // update loops to be done only if they're not specified to be infinite
-                if( animation.remainingAnimLoops > 0 )
+                if(!animation.isAnimPaused && animation.remainingAnimLoops != 0)
                 {
-                    // even if animation is paused loopsDone should be 0 then, so it won't change the count
-                    animation.remainingAnimLoops = std::max( 0, animation.remainingAnimLoops - loopsDone );
+                    animation.elapsedAnimTimeSec += dt * animation.animSpeedMultiplier;
 
-                    if( animation.remainingAnimLoops == 0 )
+                    if(animation.remainingAnimLoops > 0)
                     {
-                        SAnimationFinishEvent event;
-                        event.animName = animation.currentAnimName;
-                        event.entity = it.entityId();
-                        CEngine::getInstance().getEventManager().raiseEvent( event );
+                        // even if animation is paused loopsDone should be 0 then, so it won't change the count
+                        animation.remainingAnimLoops = std::max(0, animation.remainingAnimLoops - loopsDone);
 
-                        animation.stopAnimation();
                     }
+                }
+                
+                if( animation.remainingAnimLoops == 0 )
+                {
+                    SAnimationFinishEvent event;
+                    event.animName = animation.currentAnimName;
+                    event.entity = it.entityId();
+                    CEngine::getInstance().getEventManager().raiseEvent( event );
+
+                    animation.stopAnimation();
                 }
 
                 clipRect = animation.animSet.vecKeyFrameClipRects[frameIndex];

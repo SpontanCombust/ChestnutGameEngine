@@ -90,6 +90,16 @@ namespace chestnut::engine::debug
 
     static std::unordered_map<std::type_index, SComponentData> mapComponentData = {
         {
+            typeid(CAnimation2DComponent),
+            { 
+                "CAnimation2DComponent",
+                CComponentFactory<CAnimation2DComponent>::create,
+                CComponentFactory<CAnimation2DComponent>::dispose,
+                new CGuiAnimation2DComponentView(),
+                false,
+            },
+        },
+        {
             typeid(CCollision2DComponent),
             { 
                 "CCollision2DComponent",
@@ -163,6 +173,8 @@ namespace chestnut::engine::debug
 
     void guiComponentListPanel(chestnut::ecs::entityid_t entity)
     {
+        // if signature changes, reload views
+
         ImGui::SetNextWindowPos({600, 0}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
         ImGui::Begin("Inspector");
@@ -192,7 +204,7 @@ namespace chestnut::engine::debug
                         {
                             dataIt->second.factoryDispose(entity);
                         }
-                        
+
                         ImGui::PopID();
                     }
 

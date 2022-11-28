@@ -5,6 +5,7 @@
 
 namespace chestnut::engine
 {
+    //TODO refactor the component
     struct CAnimation2DComponent
     {
         SAnimation2DSet animSet;
@@ -13,7 +14,7 @@ namespace chestnut::engine
         bool isAnimPaused = false;
         std::string currentAnimName = "";
         float elapsedAnimTimeSec = 0.f;
-        int remainingAnimLoops = 0;
+        int remainingAnimLoops = -1;
         float animSpeedMultiplier = 1.f;
 
 

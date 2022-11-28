@@ -1,0 +1,127 @@
+#include "chestnut/engine/debug/editor/component_views/gui_animation2d_component_view.hpp"
+
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/resources/animation2d_resource.hpp"
+
+#include <nfd.h>
+
+
+namespace chestnut::engine::debug
+{
+    CGuiAnimation2DComponentView::CGuiAnimation2DComponentView() noexcept
+    {
+        m_animResourcePath.reserve(128);
+    }
+
+    void CGuiAnimation2DComponentView::fetchComponent(ecs::entityid_t entity) 
+    {
+        m_handle = CEngine::getInstance()
+        .getEntityWorld()
+        .getComponent<CAnimation2DComponent>(entity);
+
+        m_cachedAnimNames.clear();
+        for(const auto& [animName, _] : m_handle->animSet.mapAnimNameToAnimData)
+        {
+            m_cachedAnimNames.push_back(animName.c_str());
+        }
+    }
+
+    void CGuiAnimation2DComponentView::drawWidgets() 
+    {
+        ImGui::Text("Animation resource path");
+        ImGui::InputText(
+            "##Animation resource path", 
+            (char *)m_animResourcePath.c_str(),
+            m_animResourcePath.capacity() + 1, 
+            ImGuiInputTextFlags_ReadOnly);
+        ImGui::SameLine();
+        if(ImGui::Button("...##browseForAnimationResource"))
+        {
+            nfdchar_t *filePath = NULL;
+            nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
+                
+            if(result == NFD_OKAY) 
+            {
+                //FIXME use ResourceManager
+                // animation component may need some changes
+                auto loaded = CAnimation2DResource::loadFromFile(filePath);
+                if(loaded.has_value())
+                {
+                    m_handle->animSet = loaded.value()->m_animationSet;
+                    //FIXME even if entity is changed, this value remains 
+                    m_animResourcePath = loaded.value()->m_animationFilePath;
+
+                    if(m_handle->animSet.mapAnimNameToAnimData.size() > 0)
+                    {
+                        m_selectedAnimIdx = 0;
+                    }
+                }
+                else
+                {
+                    //TODO add a popup for this
+                    LOG_ERROR(loaded.error());
+                }
+
+                NFD_Free(filePath);
+            }
+            else if(result == NFD_ERROR)
+            {
+                LOG_ERROR(NFD_GetError());   
+            }
+        }
+        
+        ImGui::NewLine();
+
+        ImGui::BeginDisabled(m_handle->isAnimPlaying);
+
+            ImGui::Text("Animation name");
+            ImGui::Combo(
+                "##Animation name",
+                &m_selectedAnimIdx,
+                m_cachedAnimNames.data(),
+                m_cachedAnimNames.size());
+            
+            ImGui::Text("Loops");
+            ImGui::DragInt("##Loops", &m_handle->remainingAnimLoops);
+
+            ImGui::Text("Speed multiplier");
+            ImGui::DragFloat("##Speed multiplier", &m_handle->animSpeedMultiplier, 0.01f);
+
+        ImGui::EndDisabled();
+
+        if(!m_handle->isAnimPlaying)
+        {
+            if(ImGui::Button("Play"))
+            {
+                if(m_selectedAnimIdx >= 0)
+                {
+                    m_handle->currentAnimName = m_cachedAnimNames[m_selectedAnimIdx];
+                    m_handle->isAnimPlaying = true;
+                    m_handle->elapsedAnimTimeSec = 0.f;
+                }
+                else
+                {
+                    LOG_ERROR("Unable to play animation. The name is invalid.")
+                }
+            }
+        }
+        else
+        {
+            const char *resumeOrPause = m_handle->isAnimPaused ? "Resume" : "Pause";
+
+            if(ImGui::Button(resumeOrPause))
+            {
+                m_handle->isAnimPaused = !m_handle->isAnimPaused;
+            }
+        }
+
+        ImGui::SameLine();
+
+        if(ImGui::Button("Stop"))
+        {
+            m_handle->stopAnimation();
+        }
+    }
+
+} // namespace chestnut::engine

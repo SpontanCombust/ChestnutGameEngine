@@ -32,7 +32,11 @@ namespace chestnut::engine
         isAnimPaused = false;
         currentAnimName = "";
         elapsedAnimTimeSec = 0.f;
-        remainingAnimLoops = 0;
-        animSpeedMultiplier = 1.f;
+
+        if(remainingAnimLoops > 0)
+        {
+            remainingAnimLoops = 0;
+        }
     }
+
 } // namespace chestnut::engine

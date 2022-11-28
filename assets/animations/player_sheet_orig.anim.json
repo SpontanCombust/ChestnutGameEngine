@@ -40,22 +40,22 @@
     "animationDefinitions" : [
         {
             "name": "walk_down",
-            "duration": 2.0,
+            "duration": 1.0,
             "frameIndices": [0, 1, 2, 3, 4, 5, 6, 7]
         },
         {
             "name": "walk_up",
-            "duration": 2.0,
+            "duration": 1.0,
             "frameIndices": [8, 9, 10, 11, 12, 13, 14, 15]
         },
         {
             "name": "walk_left",
-            "duration": 2.0,
+            "duration": 1.0,
             "frameIndices": [16, 17, 18, 19, 20, 21, 22, 23]
         },
         {
             "name": "walk_right",
-            "duration": 2.0,
+            "duration": 1.0,
             "frameIndices": [24, 25, 26, 27, 28, 29, 30, 31]
         }
     ],
