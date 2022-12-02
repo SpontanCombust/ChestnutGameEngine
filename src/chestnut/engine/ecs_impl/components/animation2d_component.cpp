@@ -2,17 +2,20 @@
 
 namespace chestnut::engine
 {    
-    void CAnimation2DComponent::playAnimation( const char *animationName, int loops, float speedMult ) 
+    void CAnimation2DComponent::playAnimation( const char *animationName) 
     {
-        auto it = animSet.mapAnimNameToAnimData.find( animationName );
-        if( it != animSet.mapAnimNameToAnimData.end() )
+        if(!animationResource)
+        {
+            return;
+        }
+
+        auto it = animationResource->m_animationSet.mapAnimNameToAnimData.find( animationName );
+        if( it != animationResource->m_animationSet.mapAnimNameToAnimData.end() )
         {
             isAnimPlaying = true;
             isAnimPaused = false;
             currentAnimName = animationName;
             elapsedAnimTimeSec = 0.f;
-            remainingAnimLoops = loops;
-            animSpeedMultiplier = speedMult;
         }
     }
 

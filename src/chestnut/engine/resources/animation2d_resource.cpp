@@ -108,7 +108,7 @@ namespace chestnut::engine
         }
     }
 
-    tl::expected<std::shared_ptr<CAnimation2DResource>, const char *>    
+    tl::expected<std::shared_ptr<CAnimation2DResource>, std::string>    
     CAnimation2DResource::loadFromFile(const char *jsonPath) 
     {
         LOG_INFO( "Loading animation data from file: " << jsonPath << "..." );
@@ -141,14 +141,8 @@ namespace chestnut::engine
         }
         catch(const std::exception& e)
         {
-            // errors from json lib get passed around using exceptions
-            // the memory for these errors gets dynamically allocated, so we need something
-            // to hold onto it outside of catch block
-            static std::string err;
-            err = e.what();
-
-            LOG_ERROR("Error occured when parsing animation data from JSON: " << err);
-            return tl::make_unexpected(err.c_str());
+            LOG_ERROR("Error occured when parsing animation data from JSON: " << e.what());
+            return tl::make_unexpected(e.what());
         }
     }
 

@@ -21,9 +21,18 @@ namespace chestnut::engine::debug
         .getComponent<CAnimation2DComponent>(entity);
 
         m_cachedAnimNames.clear();
-        for(const auto& [animName, _] : m_handle->animSet.mapAnimNameToAnimData)
+        if(m_handle->animationResource)
         {
-            m_cachedAnimNames.push_back(animName.c_str());
+            m_animResourcePath = m_handle->animationResource->m_animationFilePath;
+
+            for(const auto& [animName, _] : m_handle->animationResource->m_animationSet.mapAnimNameToAnimData)
+            {
+                m_cachedAnimNames.push_back(animName.c_str());
+            }
+        }
+        else
+        {
+            m_animResourcePath = "";
         }
     }
 
@@ -44,15 +53,12 @@ namespace chestnut::engine::debug
             if(result == NFD_OKAY) 
             {
                 //FIXME use ResourceManager
-                // animation component may need some changes
                 auto loaded = CAnimation2DResource::loadFromFile(filePath);
                 if(loaded.has_value())
                 {
-                    m_handle->animSet = loaded.value()->m_animationSet;
-                    //FIXME even if entity is changed, this value remains 
-                    m_animResourcePath = loaded.value()->m_animationFilePath;
+                    m_handle->animationResource = loaded.value();
 
-                    if(m_handle->animSet.mapAnimNameToAnimData.size() > 0)
+                    if(m_handle->animationResource->m_animationSet.mapAnimNameToAnimData.size() > 0)
                     {
                         m_selectedAnimIdx = 0;
                     }
@@ -96,13 +102,12 @@ namespace chestnut::engine::debug
             {
                 if(m_selectedAnimIdx >= 0)
                 {
-                    m_handle->currentAnimName = m_cachedAnimNames[m_selectedAnimIdx];
-                    m_handle->isAnimPlaying = true;
-                    m_handle->elapsedAnimTimeSec = 0.f;
+                    m_handle->playAnimation(m_cachedAnimNames[m_selectedAnimIdx]);
                 }
                 else
                 {
                     LOG_ERROR("Unable to play animation. The name is invalid.")
+                    m_selectedAnimIdx = -1;
                 }
             }
         }

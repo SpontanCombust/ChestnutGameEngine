@@ -79,7 +79,7 @@ public:
 
         auto animHandle = engine.getEntityWorld().createComponent<CAnimation2DComponent>( ent );
         auto animResource = CAnimation2DResource::loadFromFile(CHESTNUT_ENGINE_ASSETS_DIR_PATH"/animations/player_sheet_orig.anim.json");
-        REQUIRE_NOTHROW(animHandle->animSet = animResource.value().get()->m_animationSet);
+        REQUIRE_NOTHROW(animHandle->animationResource = animResource.value());
         
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &CAnimationDemoSystem::handleInput, this );

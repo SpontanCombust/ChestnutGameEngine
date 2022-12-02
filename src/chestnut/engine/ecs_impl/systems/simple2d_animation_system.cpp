@@ -27,19 +27,26 @@ namespace chestnut::engine
         {
             auto [texture, animation] = *it;
 
-            if(animation.animSet.vecKeyFrameClipRects.empty())
+            if(!animation.animationResource)
             {
                 continue;
             }
 
-            auto animDataIt = animation.animSet.mapAnimNameToAnimData.find(animation.currentAnimName);
-            if(animDataIt == animation.animSet.mapAnimNameToAnimData.end())
+            SAnimation2DSet& animSet = animation.animationResource->m_animationSet;
+
+            if(animSet.vecKeyFrameClipRects.empty())
             {
                 continue;
             }
 
+            auto animDataIt = animSet.mapAnimNameToAnimData.find(animation.currentAnimName);
             SRectangle clipRect;
-            if(animation.isAnimPlaying)
+
+            if(animDataIt == animSet.mapAnimNameToAnimData.end() || !animation.isAnimPlaying)
+            {
+                clipRect = animSet.vecKeyFrameClipRects[ animSet.defaultAnimFrameIndex ];
+            }
+            else
             {
                 const SAnimation2DDefinition& animData = animDataIt->second;
 
@@ -59,7 +66,7 @@ namespace chestnut::engine
                 unsigned int frameIndex = std::clamp(
                     animData.vecFrameIndices[ frameIndexIndex ],
                     0U,
-                    (unsigned int)animation.animSet.vecKeyFrameClipRects.size() - 1
+                    (unsigned int)animSet.vecKeyFrameClipRects.size() - 1
                 );
 
                 // update loops to be done only if they're not specified to be infinite
@@ -85,11 +92,7 @@ namespace chestnut::engine
                     animation.stopAnimation();
                 }
 
-                clipRect = animation.animSet.vecKeyFrameClipRects[frameIndex];
-            }
-            else
-            {
-                clipRect = animation.animSet.vecKeyFrameClipRects[ animation.animSet.defaultAnimFrameIndex ];
+                clipRect = animSet.vecKeyFrameClipRects[frameIndex];
             }
 
             texture.sprite.setClippingRect( clipRect );

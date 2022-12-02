@@ -17,7 +17,7 @@ namespace chestnut::engine
         SAnimation2DSet m_animationSet;
 
     public:
-        static tl::expected<std::shared_ptr<CAnimation2DResource>, const char *>
+        static tl::expected<std::shared_ptr<CAnimation2DResource>, std::string>
         loadFromFile(const char *jsonPath);
     };
 
