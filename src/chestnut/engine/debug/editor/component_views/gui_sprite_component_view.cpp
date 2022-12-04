@@ -9,6 +9,7 @@
 namespace chestnut::engine::debug
 {
     static const char * adjustToModelItems[] = {"None", "Scaled", "Spanned", "Zoomed"};
+    static const char * filteringItems[] = {"Nearest", "Linear"};
 
     CGuiSpriteComponentView::CGuiSpriteComponentView() noexcept
     {
@@ -30,10 +31,26 @@ namespace chestnut::engine::debug
             m_texturePath = "";
         }
 
+        GLint magFilter;
+        m_handle->sprite.getFiltering(nullptr, &magFilter);
+        if(magFilter == GL_NEAREST)
+        {
+            m_selectedFiltering = 0;
+        }
+        else if(magFilter == GL_LINEAR)
+        {
+            m_selectedFiltering = 1;
+        }
+        else
+        {
+            m_selectedFiltering = -1;
+        }
+
         m_clippingRect = m_handle->sprite.getClippingRect();
         m_tint = m_handle->sprite.getTint();
         m_tintFactor = m_handle->sprite.getTintFactor();
         m_selectedAdjustToModel = (int)m_handle->adjust;
+        //TODO add attribs from CTexture2D
     }
 
     void CGuiSpriteComponentView::drawWidgets() 
@@ -69,22 +86,31 @@ namespace chestnut::engine::debug
             }
         }
 
+        ImGui::Text("Filtering");
+        ImGui::Combo("##Filtering", &m_selectedFiltering, filteringItems, IM_ARRAYSIZE(filteringItems));
+        if(m_selectedFiltering == 0)
+        {
+            m_handle->sprite.setFiltering(GL_NEAREST, GL_NEAREST);
+        }
+        else if(m_selectedFiltering == 1)
+        {
+            m_handle->sprite.setFiltering(GL_NEAREST, GL_LINEAR);
+        }
+
         ImGui::Text("Clipping rectangle");
         ImGui::DragFloat4("##Clipping rectangle", &m_clippingRect.x);
+        m_handle->sprite.setClippingRect(m_clippingRect);
 
         ImGui::Text("Tint");
         ImGui::ColorEdit3("##Tint", &m_tint.x, ImGuiColorEditFlags_Float);
+        m_handle->sprite.setTint(m_tint);
 
         ImGui::Text("Tint factor");
         ImGui::SliderFloat("##Tint factor", &m_tintFactor, 0.0f, 1.0f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+        m_handle->sprite.setTintFactor(m_tintFactor);
 
         ImGui::Text("Adjust to model");
         ImGui::Combo("##Adjust to model", &m_selectedAdjustToModel, adjustToModelItems, IM_ARRAYSIZE(adjustToModelItems));
-
-        
-        m_handle->sprite.setClippingRect(m_clippingRect);
-        m_handle->sprite.setTint(m_tint);
-        m_handle->sprite.setTintFactor(m_tintFactor);
         m_handle->adjust = (ESpriteToModel2DAdjust)m_selectedAdjustToModel;
     }
 

@@ -91,11 +91,37 @@ namespace chestnut::engine
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter );
     }
 
+    void CTexture2D::getFiltering(GLint *minifyingFilter, GLint *magnifyingFilter) 
+    {
+        bind();
+        if(minifyingFilter)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minifyingFilter);
+        }
+        if(magnifyingFilter)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter);
+        }
+    }
+
     void CTexture2D::setWrapping( GLint wrapS, GLint wrapT )
     {
         bind();
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT );
+    }
+
+    void CTexture2D::getWrapping(GLint *wrapS, GLint *wrapT) 
+    {
+        bind();
+        if(wrapS)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+        }
+        if(wrapT)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+        }
     }
 
 } // namespace chestnut::engine

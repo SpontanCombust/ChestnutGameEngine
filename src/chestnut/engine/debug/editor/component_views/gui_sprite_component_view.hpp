@@ -15,6 +15,7 @@ namespace chestnut::engine::debug
         ecs::CComponentHandle<CSpriteComponent> m_handle;
 
         std::string m_texturePath;
+        int m_selectedFiltering;
         SRectangle m_clippingRect;
         vec3f m_tint;
         float m_tintFactor;

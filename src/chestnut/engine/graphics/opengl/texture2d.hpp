@@ -34,7 +34,9 @@ namespace chestnut::engine
         vec2i getSize() const;
 
         void setFiltering( GLint minifyingFilter, GLint magnifyingFilter );
+        void getFiltering( GLint *minifyingFilter, GLint *magnifyingFilter );
         void setWrapping( GLint wrapS, GLint wrapT );
+        void getWrapping( GLint *wrapS, GLint *wrapT );
     };   
 
 } // namespace chestnut::engine
