@@ -21,6 +21,9 @@ namespace chestnut::engine::debug
 {
     using namespace chestnut::ecs;
 
+    bool s_viewEntityList = true;
+    bool s_viewComponentInspector = true;
+
     bool guiEntityListPanel(entityid_t& selectedEnt)
     {
         static const int ENTITY_NAME_LENGTH = IM_ARRAYSIZE(CIdentityComponent::name);
@@ -31,46 +34,50 @@ namespace chestnut::engine::debug
 
         ImGui::SetNextWindowPos({0, 0}, ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
-        ImGui::Begin("Entities");
-
-        bool confirmedAdd = ImGui::InputText("##createEntity", entityNameInput, ENTITY_NAME_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue);
-        ImGui::SameLine();
-        if(ImGui::Button("Add") || confirmedAdd)
+        if(s_viewEntityList)
         {
-            entityid_t id = world.createEntity();
-            auto handle = world.createComponent<CIdentityComponent>(id);
-            strncpy_s(handle->name, entityNameInput, ENTITY_NAME_LENGTH);
-            memset(entityNameInput, 0, ENTITY_NAME_LENGTH);
-        }
-        
-        for(auto it = world.entityIterator.cbegin(); it != world.entityIterator.cend(); it++)
-        {
-            std::string entityLabel = "";
-
-            if(auto handle = world.getComponent<CIdentityComponent>(it.id()))
+            if(ImGui::Begin("Entities", &s_viewEntityList))
             {
-                entityLabel = handle->name;
-            }
-            // happens either if CIdentityComponent was not found or the name field was empty
-            if(entityLabel[0] == '\0')
-            {
-                entityLabel = std::to_string(it.id());
-            }
-
-            entityLabel += "##" + std::to_string(it.id());
-
-            if(ImGui::Selectable(entityLabel.c_str(), selectedEnt == it.id()))
-            {
-                if(it.id() != selectedEnt)
+                bool confirmedAdd = ImGui::InputText("##createEntity", entityNameInput, ENTITY_NAME_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue);
+                ImGui::SameLine();
+                if(ImGui::Button("Add") || confirmedAdd)
                 {
-                    entityChanged = true;
+                    entityid_t id = world.createEntity();
+                    auto handle = world.createComponent<CIdentityComponent>(id);
+                    strncpy_s(handle->name, entityNameInput, ENTITY_NAME_LENGTH);
+                    memset(entityNameInput, 0, ENTITY_NAME_LENGTH);
                 }
+                
+                for(auto it = world.entityIterator.cbegin(); it != world.entityIterator.cend(); it++)
+                {
+                    std::string entityLabel = "";
 
-                selectedEnt = it.id(); 
+                    if(auto handle = world.getComponent<CIdentityComponent>(it.id()))
+                    {
+                        entityLabel = handle->name;
+                    }
+                    // happens either if CIdentityComponent was not found or the name field was empty
+                    if(entityLabel[0] == '\0')
+                    {
+                        entityLabel = std::to_string(it.id());
+                    }
+
+                    entityLabel += "##" + std::to_string(it.id());
+
+                    if(ImGui::Selectable(entityLabel.c_str(), selectedEnt == it.id()))
+                    {
+                        if(it.id() != selectedEnt)
+                        {
+                            entityChanged = true;
+                        }
+
+                        selectedEnt = it.id(); 
+                    }
+                }
             }
-        }
         
-        ImGui::End();
+            ImGui::End();
+        }
 
         return entityChanged;
     }
@@ -171,69 +178,115 @@ namespace chestnut::engine::debug
         },
     };
 
-    void guiComponentListPanel(chestnut::ecs::entityid_t entity)
+    void guiComponentInspector(chestnut::ecs::entityid_t entity)
     {
-        // if signature changes, reload views
+        //TODO if signature changes, reload views
 
-        ImGui::SetNextWindowPos({600, 0}, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
-        ImGui::Begin("Inspector");
-            const auto& world = CEngine::getInstance().getEntityWorld();
-            auto sign = world.getEntitySignature(entity);
-
-            for(const auto& type: sign.m_setComponentTypes)
+        if(s_viewComponentInspector)
+        {
+            ImGui::SetNextWindowPos({600, 0}, ImGuiCond_FirstUseEver);
+            ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
+            if(ImGui::Begin("Inspector", &s_viewComponentInspector))
             {
-                auto dataIt = mapComponentData.find(type);
-                if(dataIt != mapComponentData.end())
+                const auto& world = CEngine::getInstance().getEntityWorld();
+                auto sign = world.getEntitySignature(entity);
+
+                for(const auto& type: sign.m_setComponentTypes)
                 {
-                    if(ImGui::CollapsingHeader(dataIt->second.name, ImGuiTreeNodeFlags_DefaultOpen))
+                    auto dataIt = mapComponentData.find(type);
+                    if(dataIt != mapComponentData.end())
                     {
-                        ImGui::PushID(dataIt->second.name);
-
-                        // HEADER //
-                        ImGui::NewLine();
-                        ImGui::SameLine(ImGui::GetWindowWidth() - 20);
-                        bool didDelete = ImGui::Button("X##DeleteComponent");
-                        
-                        // ACTUAL COMPONENT CONTENT//
-                        dataIt->second.guiView->fetchComponent(entity);
-                        dataIt->second.guiView->drawWidgets();
-                        ImGui::NewLine();
-
-                        if(didDelete)
+                        if(ImGui::CollapsingHeader(dataIt->second.name, ImGuiTreeNodeFlags_DefaultOpen))
                         {
-                            dataIt->second.factoryDispose(entity);
+                            ImGui::PushID(dataIt->second.name);
+
+                            // HEADER //
+                            ImGui::NewLine();
+                            ImGui::SameLine(ImGui::GetWindowWidth() - 20);
+                            bool didDelete = ImGui::Button("X##DeleteComponent");
+                            
+                            // ACTUAL COMPONENT CONTENT//
+                            dataIt->second.guiView->fetchComponent(entity);
+                            dataIt->second.guiView->drawWidgets();
+                            ImGui::NewLine();
+
+                            if(didDelete)
+                            {
+                                dataIt->second.factoryDispose(entity);
+                            }
+
+                            ImGui::PopID();
                         }
 
-                        ImGui::PopID();
+                        ImGui::Separator();
+
+                        dataIt->second.isPresent = true;
                     }
-
-                    ImGui::Separator();
-
-                    dataIt->second.isPresent = true;
                 }
-            }
 
-            if(ImGui::Button("Add...", {-1, 0}))
-            {
-                ImGui::OpenPopup("AddComponentPopup");
-            }
-
-            if(ImGui::BeginPopup("AddComponentPopup"))
-            {
-                for (auto& [_, data] : mapComponentData)
+                if(ImGui::Button("Add...", {-1, 0}))
                 {
-                    if(!data.isPresent && ImGui::Selectable(data.name))
-                    {
-                        data.factoryCreate(entity);
-                    }
-
-                    data.isPresent = false;
+                    ImGui::OpenPopup("AddComponentPopup");
                 }
 
-                ImGui::EndPopup();
+                if(ImGui::BeginPopup("AddComponentPopup"))
+                {
+                    for (auto& [_, data] : mapComponentData)
+                    {
+                        if(!data.isPresent && ImGui::Selectable(data.name))
+                        {
+                            data.factoryCreate(entity);
+                        }
+
+                        data.isPresent = false;
+                    }
+
+                    ImGui::EndPopup();
+                }
             }
-        ImGui::End();
+
+            ImGui::End();
+        }
+    }
+
+    void guiMenuBar()
+    {
+        if(ImGui::BeginMainMenuBar())
+        {
+            guiMenuBarFile();
+            guiMenuBarView();
+            
+            ImGui::EndMainMenuBar();
+        }
+    }
+
+    void guiMenuBarFile()
+    {
+        if(ImGui::BeginMenu("File"))
+        {
+            if(ImGui::MenuItem("Save scene..."))
+            {
+
+            }
+
+            if(ImGui::MenuItem("Load scene..."))
+            {
+
+            }
+
+            ImGui::EndMenu();
+        }
+    }
+
+    void guiMenuBarView()
+    {
+        if(ImGui::BeginMenu("View"))
+        {
+            ImGui::MenuItem("Entity list", NULL, &s_viewEntityList);
+            ImGui::MenuItem("Inspector", NULL, &s_viewComponentInspector);
+
+            ImGui::EndMenu();
+        }
     }
 
 } // namespace chestnut::engine::debug

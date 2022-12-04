@@ -10,7 +10,8 @@ namespace chestnut::engine
         try
         {
             debug::guiEntityListPanel(m_selectedEntity);
-            debug::guiComponentListPanel(m_selectedEntity);
+            debug::guiComponentInspector(m_selectedEntity);
+            debug::guiMenuBar();
         }
         catch(const std::exception& e)
         {
