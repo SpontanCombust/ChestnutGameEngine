@@ -2,10 +2,6 @@
 
 namespace chestnut::engine
 {
-    std::unordered_map< size_t, std::shared_ptr<IResource> > CResourceManager::m_mapHashToResource;
-    std::hash<std::string> CResourceManager::m_pathHasher;
-
-
     void CResourceManager::freeUnusedResources() 
     {
         auto it = m_mapHashToResource.begin();

@@ -10,7 +10,7 @@ namespace chestnut::engine::debug
     class CHESTNUT_API CLogger
     {
     public:
-        static std::ostream *streamPtr;
+        static std::ostream *getStreamPtr();
 
         static void setToCout();
         static void setToCerr();
@@ -23,7 +23,6 @@ namespace chestnut::engine::debug
         static std::string getCurrentDateString();
 
     private:
-        static bool hasFileOpened;
         static void closeFileIfIsOpened();
     };
 
@@ -31,7 +30,7 @@ namespace chestnut::engine::debug
 
 #ifdef CHESTNUT_DEBUG
     #define LOG(s, lvl) {\
-        *chestnut::engine::debug::CLogger::streamPtr <<\
+        *chestnut::engine::debug::CLogger::getStreamPtr() <<\
         chestnut::engine::debug::CLogger::getCurrentDateString() <<\
         " [" << lvl << "] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl;\
     }

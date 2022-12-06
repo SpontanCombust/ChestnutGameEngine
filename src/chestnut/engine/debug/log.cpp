@@ -8,8 +8,14 @@
 
 namespace chestnut::engine::debug
 {   
-    std::ostream *CLogger::streamPtr = &std::cout;
-    bool CLogger::hasFileOpened = false;
+    std::ostream *streamPtr = &std::cout;
+    bool hasFileOpened = false;
+
+
+    std::ostream* CLogger::getStreamPtr() 
+    {
+        return streamPtr;
+    }
 
     void CLogger::setToCout() 
     {

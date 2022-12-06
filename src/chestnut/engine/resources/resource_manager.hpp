@@ -18,8 +18,8 @@ namespace chestnut::engine
     class CHESTNUT_API CResourceManager
     {
     private:
-        static std::unordered_map< size_t, std::shared_ptr<IResource> > m_mapHashToResource;
-        static std::hash<std::string> m_pathHasher;
+        inline static std::unordered_map< size_t, std::shared_ptr<IResource> > m_mapHashToResource;
+        inline static std::hash<std::string> m_pathHasher;
         
     public:
         // Forwards arguments to the resource type specified in template
