@@ -1,4 +1,4 @@
-#include "chestnut/engine/graphics/renderers/phong_renderer.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/renderers/phong_renderer.hpp"
 
 #include "chestnut/engine/resources/resource_manager.hpp"
 #include "chestnut/engine/macros.hpp"

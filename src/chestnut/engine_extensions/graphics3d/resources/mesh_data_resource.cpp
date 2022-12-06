@@ -1,4 +1,4 @@
-#include "chestnut/engine/resources/mesh_data_resource.hpp"
+#include "chestnut/engine_extensions/graphics3d/resources/mesh_data_resource.hpp"
 
 #include <cstring>
 

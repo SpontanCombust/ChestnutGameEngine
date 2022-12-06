@@ -1,4 +1,4 @@
-#include "chestnut/engine/resources/mesh_resource.hpp"
+#include "chestnut/engine_extensions/graphics3d/resources/mesh_resource.hpp"
 
 #include "chestnut/engine/misc/exception.hpp"
 #include "chestnut/engine/debug/log.hpp"

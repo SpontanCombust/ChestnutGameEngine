@@ -1,10 +1,10 @@
 #pragma once
 
 
-#include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/resources/mesh_data_resource.hpp"
 #include "chestnut/engine/maths/vector3.hpp"
 #include "chestnut/engine/maths/curves.hpp"
+#include "chestnut/engine_extensions/graphics3d/resources/mesh_data_resource.hpp"
+#include "chestnut/engine_extensions/graphics3d/macros.hpp"
 
 
 namespace chestnut::engine

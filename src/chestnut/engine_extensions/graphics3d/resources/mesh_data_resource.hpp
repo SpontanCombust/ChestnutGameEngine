@@ -1,10 +1,10 @@
 #pragma once
 
 
-#include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/resources/resource.hpp"
 #include "chestnut/engine/maths/vector2.hpp"
 #include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine_extensions/graphics3d/macros.hpp"
 
 #include <tl/expected.hpp>
 

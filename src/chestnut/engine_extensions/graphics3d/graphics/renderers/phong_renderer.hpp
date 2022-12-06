@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/graphics/renderers/plain_mesh_renderer.hpp"
-#include "chestnut/engine/graphics/light.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/renderers/plain_mesh_renderer.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/light.hpp"
+#include "chestnut/engine_extensions/graphics3d/macros.hpp"
 
 
 namespace chestnut::engine

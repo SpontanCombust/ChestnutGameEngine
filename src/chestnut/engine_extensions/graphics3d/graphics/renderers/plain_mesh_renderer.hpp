@@ -1,13 +1,13 @@
 #pragma once
 
 
-#include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/graphics/renderers/renderer.hpp"
 #include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
 #include "chestnut/engine/graphics/opengl/buffer.hpp"
 #include "chestnut/engine/graphics/opengl/vertex_array.hpp"
 #include "chestnut/engine/graphics/opengl/uniform.hpp"
-#include "chestnut/engine/graphics/mesh.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/mesh.hpp"
+#include "chestnut/engine_extensions/graphics3d/macros.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -59,5 +59,7 @@ namespace chestnut::engine
         void prepareBuffers();
     };
 
+
 } // namespace chestnut::engine
+
 

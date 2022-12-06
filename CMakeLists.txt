@@ -211,19 +211,12 @@ endif()
 
 # ====================================== CGE LIBRARIES ======================================
 
+
+# ChestnutGameEngine
+
 add_library(${PROJECT_NAME} SHARED)
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
 add_subdirectory(src/chestnut/engine)
-
-if(MSVC)
-    GENERATE_EXPORT_HEADER(
-        ${PROJECT_NAME}
-        BASE_NAME ${PROJECT_NAME}
-        EXPORT_MACRO_NAME CHESTNUT_API
-        EXPORT_FILE_NAME ChestnutGameEngine_EXPORTS.h
-        STATIC_DEFINE SHARED_EXPORTS_BUILT_AS_STATIC
-    )
-endif()
 
 target_compile_options(${PROJECT_NAME} PRIVATE
     # 4100, 4101 - unused variables
@@ -246,7 +239,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
     SDL2_mixer
     optional
     expected
-    assimp
     stb_image
     imgui
     nativefiledialog
@@ -259,15 +251,49 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
 
 
 
+# ChestnutGameEngine_Graphics3D
+
+add_library(${PROJECT_NAME}_Graphics3D SHARED)
+target_include_directories(${PROJECT_NAME}_Graphics3D PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
+add_subdirectory(src/chestnut/engine_extensions/graphics3d)
+
+target_compile_options(${PROJECT_NAME}_Graphics3D PRIVATE
+    # 4100, 4101 - unused variables
+    # 4251 - x needs to have dll interface
+    #   This shows up even for private members which just happened to be STL objects
+    #   You can make the warning go away by exporting individual methods instead of the entire class,
+    #   but this lib is not intended to be C-compatible, so these warnings should be ignored.
+    # 4834 - ignored [[nodiscard]] - this comes from tl::typelist
+    $<$<CXX_COMPILER_ID:MSVC>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC}>
+
+    $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
+)
+
+target_link_libraries(${PROJECT_NAME}_Graphics3D PUBLIC 
+    ${PROJECT_NAME}
+    ${OPENGL_LIBRARIES}
+    glad
+    chestnut-ecs
+    SDL2
+    SDL2_ttf
+    SDL2_mixer
+    optional
+    expected
+    stb_image
+    imgui
+    nativefiledialog
+    nlohmann_json
+    assimp
+)
+
+
+
 
 
 
 # ========================================= TESTS ======================================
 
 if(CHESTNUT_BUILD_TESTS)
-    add_executable(${PROJECT_NAME}_Test)
-    add_subdirectory(tests)
-
     FetchContent_Declare(
         catch2
         GIT_REPOSITORY https://github.com/catchorg/Catch2
@@ -276,7 +302,13 @@ if(CHESTNUT_BUILD_TESTS)
 
     FetchContent_MakeAvailable(catch2)
     list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
-        
+
+
+
+
+    # ChestnutGameEngine_Test
+
+    add_executable(${PROJECT_NAME}_Test)
 
     target_compile_options(${PROJECT_NAME}_Test PRIVATE
         # 4100, 4101 - unused variables
@@ -297,10 +329,48 @@ if(CHESTNUT_BUILD_TESTS)
             COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2>       $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
             COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_ttf>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
             COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_mixer> $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
-            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:assimp>     $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
             COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:freetype>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Test>
         )
     endif()
+
+
+
+
+    
+    # ChestnutGameEngine_Graphics3D_Test
+
+    add_executable(${PROJECT_NAME}_Graphics3D_Test)
+    
+
+    target_compile_options(${PROJECT_NAME}_Graphics3D_Test PRIVATE
+        # 4100, 4101 - unused variables
+        # 4251 - x needs to have dll interface
+        # 4834 - ignored [[nodiscard]]
+        $<$<CXX_COMPILER_ID:MSVC>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC}>
+        $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
+    )
+
+    target_link_libraries(${PROJECT_NAME}_Graphics3D_Test 
+        ${PROJECT_NAME}_Graphics3D
+        Catch2::Catch2
+    )
+
+    # copy DLLs
+    if(WIN32)
+        add_custom_command(TARGET ${PROJECT_NAME}_Graphics3D_Test POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2>       $<TARGET_FILE_DIR:${PROJECT_NAME}_Graphics3D_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_ttf>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Graphics3D_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:SDL2_mixer> $<TARGET_FILE_DIR:${PROJECT_NAME}_Graphics3D_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:freetype>   $<TARGET_FILE_DIR:${PROJECT_NAME}_Graphics3D_Test>
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:assimp>     $<TARGET_FILE_DIR:${PROJECT_NAME}_Graphics3D_Test>
+        )
+    endif()
+
+
+
+    add_subdirectory(tests)
+
+
 
     include(CTest)
     include(Catch)

@@ -1,4 +1,4 @@
-#include "chestnut/engine/graphics/algorithms/heightmap.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/algorithms/heightmap.hpp"
 
 #include "chestnut/engine/resources/image_data_resource.hpp"
 

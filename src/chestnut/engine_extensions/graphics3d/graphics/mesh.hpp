@@ -1,11 +1,11 @@
 #pragma once
 
 
-#include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/resources/mesh_resource.hpp"
-#include "chestnut/engine/resources/mesh_data_resource.hpp"
 #include "chestnut/engine/graphics/opengl/vertex_array.hpp"
 #include "chestnut/engine/graphics/opengl/shader_program.hpp"
+#include "chestnut/engine_extensions/graphics3d/resources/mesh_resource.hpp"
+#include "chestnut/engine_extensions/graphics3d/resources/mesh_data_resource.hpp"
+#include "chestnut/engine_extensions/graphics3d/macros.hpp"
 
 #include <tl/optional.hpp>
 

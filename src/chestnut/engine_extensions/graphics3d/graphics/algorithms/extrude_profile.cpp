@@ -1,4 +1,4 @@
-#include "chestnut/engine/graphics/algorithms/extrude_profile.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/algorithms/extrude_profile.hpp"
 
 #include "chestnut/engine/maths/vector_transform.hpp"
 

@@ -4,12 +4,12 @@
 
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/window.hpp"
-#include "../src/chestnut/engine/graphics/renderers/plain_mesh_renderer.hpp"
 #include "../src/chestnut/engine/constants.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/maths/angles.hpp"
-#include "../src/chestnut/engine/graphics/camera3d.hpp"
 #include "../src/chestnut/engine/misc/auto_timer.hpp"
+#include "../src/chestnut/engine_extensions/graphics3d/graphics/renderers/plain_mesh_renderer.hpp"
+#include "../src/chestnut/engine_extensions/graphics3d/graphics/camera3d.hpp"
 
 #include <SDL.h>
 

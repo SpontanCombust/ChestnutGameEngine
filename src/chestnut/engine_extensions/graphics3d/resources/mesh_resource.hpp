@@ -1,13 +1,13 @@
 #pragma once
 
 
-#include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/resources/resource.hpp"
-#include "chestnut/engine/resources/mesh_data_resource.hpp"
-#include "chestnut/engine/graphics/opengl/buffer.hpp"
-#include "chestnut/engine/graphics/material.hpp"
 #include "chestnut/engine/maths/vector2.hpp"
 #include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/resources/resource.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine_extensions/graphics3d/graphics/material.hpp"
+#include "chestnut/engine_extensions/graphics3d/resources/mesh_data_resource.hpp"
+#include "chestnut/engine_extensions/graphics3d/macros.hpp"
 
 
 namespace chestnut::engine
