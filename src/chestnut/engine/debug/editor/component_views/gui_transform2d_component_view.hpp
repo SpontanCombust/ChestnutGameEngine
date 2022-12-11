@@ -19,4 +19,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CTransform2DComponent>
+    {
+    public:
+        using Mapping = CGuiTransform2DComponentView;
+    };
+
 } // namespace chestnut::engine::debug

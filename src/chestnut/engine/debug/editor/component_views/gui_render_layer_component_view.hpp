@@ -19,4 +19,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CRenderLayerComponent>
+    {
+    public:
+        using Mapping = CGuiRenderLayerComponentView;
+    };
+
 } // namespace chestnut::engine::debug

@@ -19,4 +19,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CKinematics2DComponent>
+    {
+    public:
+        using Mapping = CGuiKinematics2DComponentView;
+    };
+
 } // namespace chestnut::engine::debug

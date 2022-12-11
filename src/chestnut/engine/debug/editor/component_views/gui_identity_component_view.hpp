@@ -19,4 +19,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CIdentityComponent>
+    {
+    public:
+        using Mapping = CGuiIdentityComponentView;
+    };
+
 } // namespace chestnut::engine::debug

@@ -14,4 +14,12 @@ namespace chestnut::engine::debug
         virtual void drawWidgets() = 0;
     };
 
+    template<class C>
+    class CComponentToGuiViewMapping
+    {
+    public:
+        // Set to desired component view type
+        using Mapping = nullptr_t;
+    };
+
 } // namespace chestnut::engine::debug

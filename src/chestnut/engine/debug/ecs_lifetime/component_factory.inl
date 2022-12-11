@@ -1,6 +1,6 @@
 #include "chestnut/engine/main/engine.hpp"
 
-namespace chestnut::engine
+namespace chestnut::engine::debug
 {
     template<class C>
     bool CComponentFactory<C>::create(ecs::entityid_t entity) 
@@ -18,4 +18,4 @@ namespace chestnut::engine
         .destroyComponent<C>(entity);
     }
 
-} // namespace chestnut::engine
+} // namespace chestnut::engine::debug

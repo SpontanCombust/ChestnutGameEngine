@@ -3,7 +3,7 @@
 
 #include <chestnut/ecs/types.hpp>
 
-namespace chestnut::engine
+namespace chestnut::engine::debug
 {
     // These are not your textbook definitions of factories, but their purpose is the same   
 
@@ -18,6 +18,6 @@ namespace chestnut::engine
     typedef bool (*ComponentFactoryCreateCallback)(ecs::entityid_t);
     typedef void (*ComponentFactoryDisposeCallback)(ecs::entityid_t);
 
-} // namespace chestnut::engine
+} // namespace chestnut::engine::debug
 
 #include "component_factory.inl"

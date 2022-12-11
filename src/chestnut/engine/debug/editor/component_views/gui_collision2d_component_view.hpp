@@ -29,4 +29,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CCollision2DComponent>
+    {
+    public:
+        using Mapping = CGuiCollision2DComponentView;
+    };
+
 } // namespace chestnut::engine::debug

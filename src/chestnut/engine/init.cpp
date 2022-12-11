@@ -2,6 +2,16 @@
 
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/debug/component_rtti.hpp"
+#include "chestnut/engine/serialization/serializers_ecs_impl/serializers_components.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_animation2d_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_collision2d_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_identity_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_kinematics2d_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_model2d_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_render_layer_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_sprite_component_view.hpp"
+#include "chestnut/engine/debug/editor/component_views/gui_transform2d_component_view.hpp"
 
 #include <SDL.h>
 #include <SDL_opengl.h>
@@ -91,7 +101,20 @@ namespace chestnut::engine
         {
             SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY );
         }
-        
+
+
+#ifdef CHESTNUT_DEBUG
+        LOG_INFO("Preparing debug RTTI...");
+
+        debug::registerComponentRTTI<CAnimation2DComponent>();
+        debug::registerComponentRTTI<CCollision2DComponent>();
+        debug::registerComponentRTTI<CIdentityComponent>();
+        debug::registerComponentRTTI<CKinematics2DComponent>();
+        debug::registerComponentRTTI<CModel2DComponent>();
+        debug::registerComponentRTTI<CRenderLayerComponent>();
+        debug::registerComponentRTTI<CSpriteComponent>();
+        debug::registerComponentRTTI<CTransform2DComponent>();
+#endif
 
         wasInit = true;
 

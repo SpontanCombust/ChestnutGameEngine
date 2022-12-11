@@ -28,4 +28,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CSpriteComponent>
+    {
+    public:
+        using Mapping = CGuiSpriteComponentView;
+    };
+
 } // namespace chestnut::engine::debug

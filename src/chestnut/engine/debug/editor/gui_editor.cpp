@@ -1,15 +1,8 @@
 #include "chestnut/engine/debug/editor/gui_editor.hpp"
 
 #include "chestnut/engine/main/engine.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_animation2d_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_collision2d_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_identity_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_kinematics2d_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_model2d_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_render_layer_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_sprite_component_view.hpp"
-#include "chestnut/engine/debug/editor/component_views/gui_transform2d_component_view.hpp"
-#include "chestnut/engine/ecs_impl/factories/component_factory.hpp"
+#include "chestnut/engine/debug/component_rtti.hpp"
+#include "chestnut/engine/ecs_impl/components/identity_component.hpp"
 
 #include <chestnut/ecs/constants.hpp>
 #include <imgui.h>
@@ -84,103 +77,11 @@ namespace chestnut::engine::debug
 
 
 
-    struct SComponentData
-    {
-        const char *name;
-        ComponentFactoryCreateCallback factoryCreate;
-        ComponentFactoryDisposeCallback factoryDispose;
-        IGuiComponentView *guiView;
-        bool isPresent;
-    };
 
-    // TEMPORARY SOLUTION TO FINDING TYPES!
-
-    static std::unordered_map<std::type_index, SComponentData> mapComponentData = {
-        {
-            typeid(CAnimation2DComponent),
-            { 
-                "CAnimation2DComponent",
-                CComponentFactory<CAnimation2DComponent>::create,
-                CComponentFactory<CAnimation2DComponent>::dispose,
-                new CGuiAnimation2DComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CCollision2DComponent),
-            { 
-                "CCollision2DComponent",
-                CComponentFactory<CCollision2DComponent>::create,
-                CComponentFactory<CCollision2DComponent>::dispose,
-                new CGuiCollision2DComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CIdentityComponent),
-            { 
-                "CIdentityComponent",
-                CComponentFactory<CIdentityComponent>::create,
-                CComponentFactory<CIdentityComponent>::dispose,
-                new CGuiIdentityComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CKinematics2DComponent),
-            { 
-                "CKinematics2DComponent",
-                CComponentFactory<CKinematics2DComponent>::create,
-                CComponentFactory<CKinematics2DComponent>::dispose,
-                new CGuiKinematics2DComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CModel2DComponent),
-            { 
-                "CModel2DComponent",
-                CComponentFactory<CModel2DComponent>::create,
-                CComponentFactory<CModel2DComponent>::dispose,
-                new CGuiModel2DComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CRenderLayerComponent),
-            { 
-                "CRenderLayerComponent",
-                CComponentFactory<CRenderLayerComponent>::create,
-                CComponentFactory<CRenderLayerComponent>::dispose,
-                new CGuiRenderLayerComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CSpriteComponent),
-            { 
-                "CSpriteComponent",
-                CComponentFactory<CSpriteComponent>::create,
-                CComponentFactory<CSpriteComponent>::dispose,
-                new CGuiSpriteComponentView(),
-                false,
-            },
-        },
-        {
-            typeid(CTransform2DComponent),
-            { 
-                "CTransform2DComponent",
-                CComponentFactory<CTransform2DComponent>::create,
-                CComponentFactory<CTransform2DComponent>::dispose,
-                new CGuiTransform2DComponentView(),
-                false,
-            },
-        },
-    };
 
     void guiComponentInspector(chestnut::ecs::entityid_t entity)
     {
-        //TODO if signature changes, reload views
+        auto rtti = getComponentRTTIRegistry();
 
         if(s_viewComponentInspector)
         {
@@ -193,12 +94,12 @@ namespace chestnut::engine::debug
 
                 for(const auto& type: sign.m_setComponentTypes)
                 {
-                    auto dataIt = mapComponentData.find(type);
-                    if(dataIt != mapComponentData.end())
+                    auto traitsIt = rtti.find(type);
+                    if(traitsIt != rtti.end())
                     {
-                        if(ImGui::CollapsingHeader(dataIt->second.name, ImGuiTreeNodeFlags_DefaultOpen))
+                        if(ImGui::CollapsingHeader(traitsIt->second.name, ImGuiTreeNodeFlags_DefaultOpen))
                         {
-                            ImGui::PushID(dataIt->second.name);
+                            ImGui::PushID(traitsIt->second.name);
 
                             // HEADER //
                             ImGui::NewLine();
@@ -206,21 +107,22 @@ namespace chestnut::engine::debug
                             bool didDelete = ImGui::Button("X##DeleteComponent");
                             
                             // ACTUAL COMPONENT CONTENT//
-                            dataIt->second.guiView->fetchComponent(entity);
-                            dataIt->second.guiView->drawWidgets();
+                            if(traitsIt->second.guiView)
+                            {
+                                traitsIt->second.guiView->fetchComponent(entity);
+                                traitsIt->second.guiView->drawWidgets();
+                            }
                             ImGui::NewLine();
 
                             if(didDelete)
                             {
-                                dataIt->second.factoryDispose(entity);
+                                traitsIt->second.factoryDispose(entity);
                             }
 
                             ImGui::PopID();
                         }
 
                         ImGui::Separator();
-
-                        dataIt->second.isPresent = true;
                     }
                 }
 
@@ -231,14 +133,12 @@ namespace chestnut::engine::debug
 
                 if(ImGui::BeginPopup("AddComponentPopup"))
                 {
-                    for (auto& [_, data] : mapComponentData)
+                    for (auto& [typeIndex, traits] : rtti)
                     {
-                        if(!data.isPresent && ImGui::Selectable(data.name))
+                        if(!sign.has(typeIndex) && ImGui::Selectable(traits.name))
                         {
-                            data.factoryCreate(entity);
+                            traits.factoryCreate(entity);
                         }
-
-                        data.isPresent = false;
                     }
 
                     ImGui::EndPopup();

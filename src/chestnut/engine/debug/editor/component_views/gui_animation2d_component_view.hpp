@@ -27,4 +27,11 @@ namespace chestnut::engine::debug
         void drawWidgets() override;
     };
 
+    template<>
+    class CComponentToGuiViewMapping<CAnimation2DComponent>
+    {
+    public:
+        using Mapping = CGuiAnimation2DComponentView;
+    };
+
 } // namespace chestnut::engine::debug
