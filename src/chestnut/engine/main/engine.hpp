@@ -27,7 +27,7 @@ namespace chestnut::engine
 
         CAutoTimer *m_updateTimer;
 
-        CWindow* m_window;
+        CWindow& m_window;
 
         ecs::CEntityWorld m_entityWorld;
         CEventManager m_eventManager;
@@ -47,7 +47,7 @@ namespace chestnut::engine
         
         ~CEngine();
 
-        static void createInstance(CWindow* window, float updateInterval = -1);
+        static void createInstance(CWindow& window, float updateInterval = -1);
         static CEngine& getInstance();
         static void deleteInstance();
 
@@ -98,7 +98,7 @@ namespace chestnut::engine
         // updateInterval:
         //      <= 0 unlocked update rate
         //       > 0 update rate locked to specified interval in seconds
-        CEngine( CWindow* window, float updateInterval = -1 );
+        CEngine(CWindow& window, float updateInterval = -1 );
 
         void gameLoop();
     };

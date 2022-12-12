@@ -198,7 +198,7 @@ TEST_CASE( "Systems - Simple2D rendering system test - general", "[manual][demo]
     CWindow window( testName, 1000 );
     REQUIRE( window.isValid() );
 
-    CEngine::createInstance( &window, 1.f / 60.f );
+    CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
     CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
@@ -356,7 +356,7 @@ TEST_CASE( "Systems - Simple2D rendering system test - default ordering", "[manu
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CEngine::createInstance( &window, 1.f / 60.f );
+    CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
     CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
@@ -486,7 +486,7 @@ TEST_CASE( "Systems - Simple2D rendering system test - layering", "[manual][demo
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CEngine::createInstance( &window, 1.f / 60.f );
+    CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
     CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
@@ -646,7 +646,7 @@ TEST_CASE( "Systems - Simple2D rendering system test - camera", "[manual][demo]"
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CEngine::createInstance( &window, 1.f / 60.f );
+    CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
     CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );

@@ -1,7 +1,9 @@
 #include <catch2/catch.hpp>
 
-#include "../src/chestnut/engine/ecs_impl/system.hpp"
+#include "../src/chestnut/engine/init.hpp"
+#include "../src/chestnut/engine/main/window.hpp"
 #include "../src/chestnut/engine/main/engine.hpp"
+#include "../src/chestnut/engine/ecs_impl/system.hpp"
 
 #include <string>
 
@@ -80,8 +82,11 @@ public:
 
 TEST_CASE( "Engine - Handling systems" )
 {
+    chestnutInit();
+
     // in this case we won't be doing any rendering, so a working window is not necessary
-    CEngine::createInstance(nullptr);
+    CWindow window("");
+    CEngine::createInstance(window);
 
     auto& engine = CEngine::getInstance(); 
 
@@ -193,4 +198,5 @@ TEST_CASE( "Engine - Handling systems" )
     }
 
     CEngine::deleteInstance();
+    chestnutQuit();
 }

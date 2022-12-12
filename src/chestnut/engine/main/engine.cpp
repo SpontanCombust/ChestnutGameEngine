@@ -16,15 +16,9 @@ namespace chestnut::engine
     CEngine *CEngine::sm_instance = nullptr;
 
 
-    CEngine::CEngine( CWindow* window, float updateInterval )
+    CEngine::CEngine(CWindow& window, float updateInterval )
+    : m_window(window)
     {
-        if( !window )
-        {
-            LOG_WARNING( "Null window pointer passed to the engine" );
-        }
-        
-        m_window = window;
-
         if( updateInterval <= 0 )
         {
             m_updateTimer = new CAutoTimer(0);
@@ -42,22 +36,12 @@ namespace chestnut::engine
     CEngine::~CEngine() 
     {
         delete m_updateTimer;
-
-        // for( ISystem *sys : m_listLogicSystems )
-        // {
-        //     delete sys;
-        // }
-
-        // for( IRenderingSystem  *sys : m_listRenderingSystems )
-        // {
-        //     delete sys;
-        // }
     }
 
 
 
 
-    void CEngine::createInstance(CWindow* window, float updateInterval)
+    void CEngine::createInstance(CWindow& window, float updateInterval)
     {
         if(sm_instance != nullptr)
         {
@@ -86,7 +70,7 @@ namespace chestnut::engine
 
     CWindow& CEngine::getWindow() 
     {
-        return *m_window;
+        return m_window;
     }
 
     ecs::CEntityWorld& CEngine::getEntityWorld() 
@@ -211,7 +195,7 @@ namespace chestnut::engine
                 }
 
 
-                m_window->clear();
+                m_window.clear();
 
             #ifdef CHESTNUT_DEBUG
                 ImGui_ImplOpenGL3_NewFrame();
@@ -229,7 +213,7 @@ namespace chestnut::engine
                 ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
             #endif
 
-                m_window->flipBuffer();
+                m_window.flipBuffer();
             }
         }
     }

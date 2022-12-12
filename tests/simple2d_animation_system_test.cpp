@@ -145,7 +145,7 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
     CWindow window( testName );
     REQUIRE( window.isValid() );
 
-    CEngine::createInstance( &window, 1.f / 60.f );
+    CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
     CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
