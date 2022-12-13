@@ -29,6 +29,7 @@ namespace chestnut::engine
         ecs::CEntityQuery *m_layerSpriteQuery;
         ecs::CEntityQuery *m_spriteModelQuery;
         ecs::CEntityQuery *m_layerSpriteModelQuery;
+        ecs::CEntityQuery *m_colliderQuery;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
@@ -37,6 +38,11 @@ namespace chestnut::engine
         EDefaultRenderOrder m_defaultRenderOrder;
 
         CCamera2D m_camera;
+
+
+    public:
+        //TODO make configurable in debug gui
+        bool renderCollidersBounds = true;
 
 
     public:

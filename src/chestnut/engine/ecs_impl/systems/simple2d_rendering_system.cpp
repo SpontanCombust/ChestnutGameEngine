@@ -8,6 +8,7 @@
 #include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
 #include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
 #include "chestnut/engine/ecs_impl/components/render_layer_component.hpp"
+#include "chestnut/engine/ecs_impl/components/collision2d_component.hpp"
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/macros.hpp"
 
@@ -64,6 +65,10 @@ namespace chestnut::engine
             ecs::makeEntitySignature()
         );
 
+        m_colliderQuery = CEngine::getInstance().getEntityWorld().createQuery(
+            ecs::makeEntitySignature< CCollision2DComponent >()
+        );
+
 
         const CWindow& win = CEngine::getInstance().getWindow();
         m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
@@ -71,7 +76,11 @@ namespace chestnut::engine
 
     CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
     {
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_spriteQuery );
         CEngine::getInstance().getEntityWorld().destroyQuery( m_spriteModelQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_layerSpriteQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_layerSpriteModelQuery );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_colliderQuery );
     }
 
 
@@ -265,6 +274,44 @@ namespace chestnut::engine
                 m_spriteRenderer.submitSprite( texture.sprite, transform.position, model.origin, adjustScale * transform.scale, transform.rotation );
             }
         ));
+
+        if(renderCollidersBounds)
+        {
+            m_polygonRenderer.clear();
+
+            CEngine::getInstance().getEntityWorld().queryEntities( m_colliderQuery );
+
+            m_colliderQuery->forEach<CCollision2DComponent>(std::function(
+                [this](CCollision2DComponent& collision)
+                {
+                    const auto& collider = collision.getBaseCollider();
+
+                    std::visit([this, &collision](auto&& arg) {
+                        using T = std::decay_t<decltype(arg)>;
+
+                        //FIXME the way polygon renderer works causes vertex joining between subsequent polygons when drawing mode is GL_LINE_STRIP
+                        if constexpr(std::is_same_v<T, CBoxCollider2D>)
+                        {
+                            vec2f size = arg.getSize();
+                            auto poly = colored_polygon_templates::coloredPolygonRectangle(size.x, size.y);
+                            poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
+                            poly.drawMode = GL_LINE_STRIP;
+
+                            m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
+                        }
+                        else if constexpr(std::is_same_v<T, CCircleCollider2D>)
+                        {
+                            auto poly = colored_polygon_templates::coloredPolygonCircle(arg.getRadius(), 100);
+                            poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
+                            poly.drawMode = GL_LINE_STRIP;
+
+                            m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
+                        }
+
+                    }, collision.colliderVariant);
+                }
+            ));
+        }
     }
 
     void CSimple2DRenderingSystem::render()
@@ -272,14 +319,21 @@ namespace chestnut::engine
         updateQueries();
        
         m_camera.calculateMatrices();
+
         m_spriteRenderer.setViewMatrix( m_camera.getViewMatrix() );
         m_spriteRenderer.setProjectionMatrix( m_camera.getProjectionMatrix() );
+
+        m_polygonRenderer.setViewMatrix(m_camera.getViewMatrix());
+        m_polygonRenderer.setProjectionMatrix(m_camera.getProjectionMatrix());
 
 #if CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_FORCE_GPU_SYNCHRONIZATION > 0
         glFinish(); // prevent CPU getting too hasty with sending requests to GPU
 #endif
 
-        m_spriteRenderer.render( CEngine::getInstance().getWindow().getFramebuffer() );
+        const auto& winFrameBuffer = CEngine::getInstance().getWindow().getFramebuffer();
+        // this simple one-after-the-other ordering will have to do for now
+        m_spriteRenderer.render(winFrameBuffer);
+        m_polygonRenderer.render(winFrameBuffer);
     }
 
 
