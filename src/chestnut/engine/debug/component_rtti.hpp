@@ -5,6 +5,7 @@
 #include "chestnut/engine/debug/ecs_lifetime/component_serializer_provider.hpp"
 #include "chestnut/engine/debug/editor/component_views/i_gui_component_view.hpp"
 		
+#include <typeindex>
 #include <unordered_map>
 
 namespace chestnut::engine::debug
@@ -28,6 +29,11 @@ namespace chestnut::engine::debug
     // with serializer functions (to_json and from_json) and component-to-guiview mappings
     template<class C>
     void registerComponentRTTI();
+
+    // Return null on error
+    SComponentDebugTraits* getComponentRTTIByTypeIndex(std::type_index typeIndex);
+    // Return null on error
+    SComponentDebugTraits* getComponentRTTIByTypeName(const char *typeName);
 
 } // namespace chestnut::engine::debug
 

@@ -17,7 +17,7 @@ namespace chestnut::engine::debug
     {
         ecs::CComponentHandle<C> handle = CEngine::getInstance()
         .getEntityWorld()
-        .getComponent<C>(entity);
+        .createComponent<C>(entity); // if already exists it will return that
 
         from_json(j, handle.get());
     }

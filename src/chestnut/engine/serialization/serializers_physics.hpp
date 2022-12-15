@@ -11,7 +11,7 @@ namespace chestnut::engine
         {EColliderActivity::STATIC, "STATIC"},
         {EColliderActivity::DYNAMIC, "DYNAMIC"}
     });
-
+    //FIXME can't serialize as normal enum, these are bit flags
     NLOHMANN_JSON_SERIALIZE_ENUM(ECollisionPolicyFlags, {
         {ECollisionPolicyFlags::NONE, "NONE"},
         {ECollisionPolicyFlags::AFFECTED, "AFFECTED"},

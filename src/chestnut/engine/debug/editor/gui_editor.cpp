@@ -3,9 +3,11 @@
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/debug/component_rtti.hpp"
 #include "chestnut/engine/ecs_impl/components/identity_component.hpp"
+#include "chestnut/engine/resources/scene_resource.hpp"
 
 #include <chestnut/ecs/constants.hpp>
 #include <imgui.h>
+#include <nfd.h>
 
 #include <unordered_map>
 
@@ -17,6 +19,7 @@ namespace chestnut::engine::debug
     bool s_viewEntityList = true;
     bool s_viewComponentInspector = true;
 
+    //TODO entity deletion
     bool guiEntityListPanel(entityid_t& selectedEnt)
     {
         static const int ENTITY_NAME_LENGTH = IM_ARRAYSIZE(CIdentityComponent::name);
@@ -149,6 +152,11 @@ namespace chestnut::engine::debug
         }
     }
 
+
+
+
+
+
     void guiMenuBar()
     {
         if(ImGui::BeginMainMenuBar())
@@ -166,12 +174,60 @@ namespace chestnut::engine::debug
         {
             if(ImGui::MenuItem("Save scene..."))
             {
+                nfdchar_t *filePath = NULL;
+                nfdresult_t result = NFD_SaveDialog( NULL, NULL, &filePath );
 
+                if(result == NFD_OKAY) 
+                {
+                    auto resource = CSceneResource::loadFromEntityWorld();
+                    if(resource)
+                    {
+                        (**resource).saveToFile(filePath).map([](const std::string& err) {
+                            //TODO error popup
+                            LOG_ERROR(err);
+                        });
+                    }
+                    else
+                    {
+                        LOG_ERROR(resource.error());
+                    }
+
+                    NFD_Free(filePath);
+                }
+                else if(result == NFD_ERROR)
+                {
+                    //TODO error popup
+                    LOG_ERROR(NFD_GetError());
+                }
             }
+
 
             if(ImGui::MenuItem("Load scene..."))
             {
+                nfdchar_t *filePath = NULL;
+                nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
 
+                if(result == NFD_OKAY) 
+                {
+                    auto resource = CSceneResource::loadFromFile(filePath);
+                    if(resource)
+                    {
+                        (**resource).parseAndTransferToScene().map([](const std::string& err) {
+                            LOG_ERROR(err);
+                        });
+                    }
+                    else
+                    {
+                        LOG_ERROR(resource.error());
+                    }
+                    
+                    NFD_Free(filePath);
+                }
+                else if(result == NFD_ERROR)
+                {
+                    //TODO error popup
+                    LOG_ERROR(NFD_GetError());
+                }
             }
 
             ImGui::EndMenu();

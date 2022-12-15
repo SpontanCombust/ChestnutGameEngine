@@ -54,7 +54,7 @@ namespace chestnut::engine
     void to_json(nlohmann::json& j, const CCollision2DComponent& c)
     {
         std::visit([&j](auto&& arg) {
-            using T = std::decay_t<decltype(arg)>();
+            using T = std::decay<decltype(arg)>::type;
 
             if constexpr(std::is_same_v<T, CPointCollider2D>)
             {
