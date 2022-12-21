@@ -2,6 +2,7 @@
 
 #include "chestnut/engine/misc/locked_auto_timer.hpp"
 #include "chestnut/engine/misc/exception.hpp"
+#include "chestnut/engine/misc/message_boxes.hpp"
 #include "chestnut/engine/debug/log.hpp"
 
 #include <imgui.h>
@@ -185,35 +186,46 @@ namespace chestnut::engine
     {
         while( m_isRunning )
         {
-            if( m_updateTimer->tick() )
+            try
             {
-                float dt = m_updateTimer->getDeltaTime();
-
-                for( ILogicSystem *sys : m_listLogicSystems )
+                if( m_updateTimer->tick() )
                 {
-                    sys->update( dt );
+                    float dt = m_updateTimer->getDeltaTime();
+
+                    for( ILogicSystem *sys : m_listLogicSystems )
+                    {
+                        sys->update( dt );
+                    }
+
+
+                    m_window.clear();
+
+                #ifdef CHESTNUT_DEBUG
+                    ImGui_ImplOpenGL3_NewFrame();
+                    ImGui_ImplSDL2_NewFrame();
+                    ImGui::NewFrame();
+                #endif
+
+                    for( IRenderingSystem  *sys : m_listRenderingSystems )
+                    {
+                        sys->render();
+                    }
+
+                #ifdef CHESTNUT_DEBUG
+                    ImGui::Render();
+                    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+                #endif
+                
+                    m_window.flipBuffer();
                 }
-
-
-                m_window.clear();
-
-            #ifdef CHESTNUT_DEBUG
-                ImGui_ImplOpenGL3_NewFrame();
-                ImGui_ImplSDL2_NewFrame();
-                ImGui::NewFrame();
-            #endif
-
-                for( IRenderingSystem  *sys : m_listRenderingSystems )
+            }
+            catch(const std::exception& e)
+            {
+                LOG_ERROR("Uncaught error in the engine: " << e.what());
+                if(messageBoxYesNo("Unexpected error occured:\n" + std::string(e.what()) + "\nAbort the program?", "Error"))
                 {
-                    sys->render();
+                    m_isRunning = false;
                 }
-
-            #ifdef CHESTNUT_DEBUG
-                ImGui::Render();
-                ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-            #endif
-
-                m_window.flipBuffer();
             }
         }
     }

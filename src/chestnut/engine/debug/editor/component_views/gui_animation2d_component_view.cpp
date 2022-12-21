@@ -3,6 +3,7 @@
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/resources/animation2d_resource.hpp"
+#include "chestnut/engine/misc/message_boxes.hpp"
 
 #include <nfd.h>
 
@@ -49,7 +50,9 @@ namespace chestnut::engine::debug
         {
             nfdchar_t *filePath = NULL;
             nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
-                
+            
+            static const std::string errBeginning("Error occured when loading animation file:\n");
+
             if(result == NFD_OKAY) 
             {
                 //FIXME use ResourceManager
@@ -65,15 +68,15 @@ namespace chestnut::engine::debug
                 }
                 else
                 {
-                    //TODO add a popup for this
                     LOG_ERROR(loaded.error());
+                    messageBoxInfo(errBeginning + loaded.error());
                 }
 
                 NFD_Free(filePath);
             }
             else if(result == NFD_ERROR)
             {
-                LOG_ERROR(NFD_GetError());   
+                messageBoxInfo(errBeginning + NFD_GetError());
             }
         }
         

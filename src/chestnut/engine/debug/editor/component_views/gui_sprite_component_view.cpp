@@ -2,6 +2,7 @@
 
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/misc/message_boxes.hpp"
 
 #include <nfd.h>
 
@@ -62,7 +63,9 @@ namespace chestnut::engine::debug
         {
             nfdchar_t *filePath = NULL;
             nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
-                
+
+            static const std::string errBeginning("Error occured when loading a texture:\n");
+
             if(result == NFD_OKAY) 
             {
                 //FIXME use ResourceManager
@@ -74,15 +77,18 @@ namespace chestnut::engine::debug
                 }
                 else
                 {
-                    //TODO add a popup for this
-                    LOG_ERROR(loaded.error());
+                    std::string err(loaded.error());
+                    LOG_ERROR(err);
+                    messageBoxInfo(errBeginning + err);
                 }
 
                 NFD_Free(filePath);
             }
             else if(result == NFD_ERROR)
             {
-                LOG_ERROR(NFD_GetError());   
+                std::string err(NFD_GetError());
+                LOG_ERROR(err);
+                messageBoxInfo(errBeginning + err);
             }
         }
 
