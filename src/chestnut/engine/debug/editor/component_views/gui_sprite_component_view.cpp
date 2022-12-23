@@ -2,7 +2,7 @@
 
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/debug/log.hpp"
-#include "chestnut/engine/misc/message_boxes.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 
 #include <nfd.h>
 
@@ -25,7 +25,7 @@ namespace chestnut::engine::debug
 
         if(m_handle->sprite.getResource())
         {
-            m_texturePath = m_handle->sprite.getResource()->m_texturePath.value_or("").c_str();
+            m_texturePath = m_handle->sprite.getResource()->m_location.value_or("").string();
         }
         else
         {
@@ -69,7 +69,7 @@ namespace chestnut::engine::debug
             if(result == NFD_OKAY) 
             {
                 //FIXME use ResourceManager
-                auto loaded = CTexture2DResource::loadFromFile(filePath);
+                auto loaded = CTexture2DResource::loadFromImageFile(filePath);
                 if(loaded.has_value())
                 {
                     m_handle->sprite.setResource(loaded.value());

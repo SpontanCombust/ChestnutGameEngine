@@ -11,10 +11,8 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/locked_manual_timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manual_timer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/manual_timer.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/message_boxes.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/message_boxes.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/rtti_type_name.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/rtti_type_name.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/timer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/timer.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utility_functions.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/utility_functions.cpp
 )

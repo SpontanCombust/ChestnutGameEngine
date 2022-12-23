@@ -1,4 +1,4 @@
-#include "chestnut/engine/misc/rtti_type_name.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 #include "chestnut/engine/debug/log.hpp"
 
 #include <type_traits>

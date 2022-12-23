@@ -97,7 +97,7 @@ namespace chestnut::engine
 
 
     #ifdef CHESTNUT_DEBUG
-        // ========= Init OpenGL ========= //
+        // ========= Init ImGui ========= //
 
         LOG_INFO("Initializing ImGui...");
 
