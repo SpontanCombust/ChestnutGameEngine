@@ -4,7 +4,6 @@
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/resources/shader_program_resource.hpp"
-#include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
 #include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
@@ -14,9 +13,7 @@ namespace chestnut::engine
 {
     bool CTextRenderer::setShaderProgram()
     {
-        auto shader = CEngine::getInstance().getResourceManager().getOrLoadResource<CShaderProgramResource>(
-            assetPathToAbsolute("shaders/text.shader")
-        );
+        auto shader = CShaderProgramResource::load(assetPathToAbsolute("shaders/text.shader"));
 
         if(shader) {
             m_shader = CShaderProgram(shader.value());

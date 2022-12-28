@@ -3,16 +3,13 @@
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/resources/shader_program_resource.hpp"
-#include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
 
 namespace chestnut::engine
 {
     bool CColoredPolygon2DRenderer::setShaderProgram()
     {
-        auto shader = CEngine::getInstance().getResourceManager().getOrLoadResource<CShaderProgramResource>(
-            assetPathToAbsolute("shaders/coloredPolygon2D.shader")
-        );
+        auto shader = CShaderProgramResource::load(assetPathToAbsolute("shaders/coloredPolygon2D.shader"));
 
         if(shader) {
             m_shader = CShaderProgram(shader.value());
