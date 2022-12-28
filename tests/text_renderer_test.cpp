@@ -23,7 +23,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[manual]" )
     REQUIRE( window.isValid() );
 
     std::shared_ptr< CFontResource > fontResource;
-    REQUIRE_NOTHROW( fontResource = CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ).value() );  
+    REQUIRE_NOTHROW( fontResource = CFontResource::load( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/fonts/arial.ttf" ).value() );  
 
     CSpriteRenderer spriteRenderer;
     REQUIRE_NOTHROW( spriteRenderer.init() );
@@ -105,7 +105,7 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
     REQUIRE( window.isValid() );
 
     std::shared_ptr< CFontResource > fontResource;
-    REQUIRE_NOTHROW( fontResource = CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ).value() );  
+    REQUIRE_NOTHROW( fontResource = CFontResource::load( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/fonts/arial.ttf" ).value() );  
     REQUIRE( fontResource );
 
     CTextRenderer textRenderer;

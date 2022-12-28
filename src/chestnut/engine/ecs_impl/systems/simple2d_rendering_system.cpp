@@ -17,33 +17,10 @@ namespace chestnut::engine
     CSimple2DRenderingSystem::CSimple2DRenderingSystem(systempriority_t priority) 
     : IRenderingSystem(priority)
     {
-        try
-        {
-            m_spriteRenderer.init();
-        }
-        catch(const std::exception& e)
-        {
-            LOG_ERROR( e.what() );
-        }
-
-        try
-        {
-            m_polygonRenderer.init();
-        }
-        catch(const std::exception& e)
-        {
-            LOG_ERROR( e.what() );   
-        }
-        
-        try
-        {
-            m_textRenderer.init();
-        }
-        catch(const std::exception& e)
-        {
-            LOG_ERROR( e.what() );  
-        }
-
+        // let any possible exception from renderers propagate 
+        m_spriteRenderer.init();
+        m_polygonRenderer.init();
+        m_textRenderer.init();
 
         m_spriteQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent >(),

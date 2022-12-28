@@ -2,6 +2,7 @@
 
 #include "chestnut/engine/debug/log.hpp"
 
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #include <locale>
 #include <codecvt>
 
@@ -17,7 +18,7 @@ namespace chestnut::engine
     {
         m_pointSize = 0;
         m_alignment = ETextAlignment::LEFT;
-        m_maxWidth = -1.f;
+        m_maxWidth = -1;
         m_lineSpacing = 1.f;
     }
 
@@ -26,7 +27,7 @@ namespace chestnut::engine
         m_resource = fontResource;
         m_pointSize = pointSize;
         m_alignment = ETextAlignment::LEFT;
-        m_maxWidth = -1.f;
+        m_maxWidth = -1;
         m_lineSpacing = 1.f;
     }
 
@@ -122,7 +123,7 @@ namespace chestnut::engine
             if( width > maxFragmentWidth )
             {
                 vecWordFragments.push_back( frag );
-                width = 0.f;
+                width = 0;
                 frag = L"";
             }
         }

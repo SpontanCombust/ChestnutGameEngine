@@ -30,15 +30,15 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     spriteRenderer.setViewMatrix( mat4f() );
     spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, (float)window.getSizeWidth(), (float)window.getSizeHeight(), 0, -1, 1 ) ); 
 
-
-    showInfoMessageBox( testName, "This test should show the same results received through direct and indirect (through target texture) rendering of text." );
-
-
     CText text;
-    REQUIRE_NOTHROW( text = CText( CFontResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/fonts/arial.ttf" ).value(), 32 ) );
+    REQUIRE_NOTHROW( text = CText( CFontResource::load( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/fonts/arial.ttf" ).value(), 32 ) );
     text.append( L"This is an example text.\n" );
     text.append( L"Remember how it looks!", EFontStyle::BOLD, vec3f{ 1.f, 0.f, 0.f } );
     text.generateData();
+
+
+    showInfoMessageBox( testName, "This test should show the same results received through direct and indirect (through target texture) rendering of text." );
+
 
     window.clear();
         textRenderer.clear();

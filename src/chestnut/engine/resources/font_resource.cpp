@@ -191,7 +191,7 @@ namespace chestnut::engine
     {
         if( !hasConfig( pointSize, styleMask ) )
         {
-            TTF_Font *font = TTF_OpenFont( m_fontPath.c_str(), pointSize );
+            TTF_Font *font = TTF_OpenFont( m_location->string().c_str(), pointSize );
 
             SFontConfig config = loadConfigInternal( font, pointSize, styleMask );
             size_t hash = getConfigHash( pointSize, styleMask );

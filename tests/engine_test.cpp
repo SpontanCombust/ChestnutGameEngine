@@ -85,7 +85,7 @@ TEST_CASE( "Engine - Handling systems" )
     chestnutInit();
 
     // in this case we won't be doing any rendering, so a working window is not necessary
-    CWindow window("");
+    CWindow window("", 800, 600, EWindowDisplayMode::WINDOWED, -1, -1, false);
     CEngine::createInstance(window);
 
     auto& engine = CEngine::getInstance(); 

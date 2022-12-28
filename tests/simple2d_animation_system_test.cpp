@@ -73,12 +73,12 @@ public:
 
         auto textureHandle = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );
         CSprite sprite;
-        REQUIRE_NOTHROW( sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/player_sheet_orig.png" ).value() ) );
+        REQUIRE_NOTHROW( sprite = CSprite( CTexture2DResource::loadFromImageFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/images/player_sheet_orig.png" ).value() ) );
         sprite.setFiltering( GL_NEAREST, GL_NEAREST );
         textureHandle->sprite = sprite;
 
         auto animHandle = engine.getEntityWorld().createComponent<CAnimation2DComponent>( ent );
-        auto animResource = CAnimation2DResource::loadFromFile(CHESTNUT_ENGINE_ASSETS_DIR_PATH"/animations/player_sheet_orig.anim.json");
+        auto animResource = CAnimation2DResource::load(CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/animations/player_sheet_orig.anim");
         REQUIRE_NOTHROW(animHandle->animationResource = animResource.value());
         
         auto l = new CEventListener<SDL_KeyboardEvent>();
@@ -164,7 +164,4 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
 
     CEngine::deleteInstance();
     chestnutQuit();
-    
-
-    REQUIRE( showConfirmMessageBox( testName ) );
 }

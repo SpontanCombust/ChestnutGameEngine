@@ -52,8 +52,6 @@ namespace chestnut::engine
     class CHESTNUT_API CFontResource : public IResource
     {
     public:
-        std::string m_fontPath;
-        
         std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
     public:

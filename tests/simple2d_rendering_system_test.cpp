@@ -59,7 +59,7 @@ public:
         modelHandle->size = { 100.f, 100.f };
 
         auto spriteHandle = CEngine::getInstance().getEntityWorld().createComponent<CSpriteComponent>( player );
-        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() ) );
+        REQUIRE_NOTHROW( spriteHandle->sprite = CSprite( CTexture2DResource::loadFromImageFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/images/awesomeface.png" ).value() ) );
     }
 
     ~CSpriteSteeringSystem()
@@ -217,9 +217,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - general", "[manual][demo]
 
     CEngine::deleteInstance();
     chestnutQuit();
-
-
-    REQUIRE( showConfirmMessageBox( testName ) );
 }
 
 
@@ -252,7 +249,7 @@ public:
     COrderingDemonstationSystem(systempriority_t prio) : ILogicSystem(prio) 
     {
         std::shared_ptr<CTexture2DResource> tex;
-        REQUIRE_NOTHROW(tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() );
+        REQUIRE_NOTHROW(tex = CTexture2DResource::loadFromImageFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/images/awesomeface.png" ).value() );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -371,9 +368,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - default ordering", "[manu
 
     CEngine::deleteInstance();
     chestnutQuit();
-
-
-    REQUIRE( showConfirmMessageBox( testName ) );
 }
 
 
@@ -389,7 +383,7 @@ public:
     CLayeringDemonstrationSystem(systempriority_t prio) : ILogicSystem(prio)
     {
         std::shared_ptr<CTexture2DResource> tex;
-        REQUIRE_NOTHROW( tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() );
+        REQUIRE_NOTHROW( tex = CTexture2DResource::loadFromImageFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/images/awesomeface.png" ).value() );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -503,9 +497,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - layering", "[manual][demo
 
     CEngine::deleteInstance();
     chestnutQuit();
-    
-
-    REQUIRE( showConfirmMessageBox( testName ) );
 }
 
 
@@ -526,7 +517,7 @@ public:
     CCameraDemonstrationSystem(systempriority_t prio) : ILogicSystem(prio)
     {
         std::shared_ptr<CTexture2DResource> tex;
-        REQUIRE_NOTHROW( tex = CTexture2DResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/images/awesomeface.png" ).value() );
+        REQUIRE_NOTHROW( tex = CTexture2DResource::loadFromImageFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/images/awesomeface.png" ).value() );
         
         ecs::CComponentHandle< CTransform2DComponent > transform;
         ecs::CComponentHandle< CSpriteComponent > sprite;
@@ -664,7 +655,4 @@ TEST_CASE( "Systems - Simple2D rendering system test - camera", "[manual][demo]"
 
     CEngine::deleteInstance();
     chestnutQuit();
-    
-
-    REQUIRE( showConfirmMessageBox( testName ) );
 }

@@ -17,9 +17,8 @@ namespace chestnut::engine
     class CHESTNUT_API IResource
     {
     public:
-        // Resource should be able to get identified by some unqiue, abstract "location"
-        // Usually this location is path to a file on a disk, but it doesn't have to be exactly that
-        // If resource is not loaded from a file this stay as nullopt
+        // Absolute path to a file the resource is loaded from
+        // If resource is not loaded from a file this stays as nullopt
         tl::optional<std::filesystem::path> m_location = tl::nullopt;
 
     public:
