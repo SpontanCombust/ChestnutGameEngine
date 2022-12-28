@@ -1,0 +1,107 @@
+{
+    "entities": [
+        {
+            "chestnut::engine::CAnimation2DComponent": {
+                "animSpeedMultiplier": 1.0,
+                "animationResource": "animations\\player_sheet_orig.anim",
+                "currentAnimName": "",
+                "elapsedAnimTimeSec": 0.0,
+                "isAnimPaused": false,
+                "isAnimPlaying": false,
+                "remainingAnimLoops": -1
+            },
+            "chestnut::engine::CCollision2DComponent": {
+                "collider": {
+                    "activity": "DYNAMIC",
+                    "policyFlags": "AFFECTING",
+                    "position": {
+                        "x": 479.9519958496094,
+                        "y": 99.00406646728516
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    },
+                    "size": {
+                        "x": 38.0,
+                        "y": 48.0
+                    }
+                },
+                "variant": "box"
+            },
+            "chestnut::engine::CIdentityComponent": {
+                "name": "ent1"
+            },
+            "chestnut::engine::CKinematics2DComponent": {
+                "angularAcceleration": 0.0,
+                "angularVelocity": 0.23000000417232513,
+                "linearAcceleration": {
+                    "x": 0.0,
+                    "y": 0.0
+                },
+                "linearVelocity": {
+                    "x": 5.0,
+                    "y": 5.0
+                }
+            },
+            "chestnut::engine::CTransform2DComponent": {
+                "position": {
+                    "x": 479.9519958496094,
+                    "y": 99.00406646728516
+                },
+                "rotation": 21.1066951751709,
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0
+                }
+            }
+        },
+        {
+            "chestnut::engine::CIdentityComponent": {
+                "name": "etn2"
+            },
+            "chestnut::engine::CModel2DComponent": {
+                "origin": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "size": {
+                    "x": 207.0,
+                    "y": 120.0
+                }
+            },
+            "chestnut::engine::CRenderLayerComponent": {
+                "layer": 51
+            },
+            "chestnut::engine::CSpriteComponent": {
+                "adjust": "SCALED",
+                "sprite": {
+                    "clipRect": {
+                        "h": 128.0,
+                        "w": 256.0,
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "textureResource": "textures\\player_sheet_orig.texture",
+                    "tint": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "tintFactor": 0.0
+                }
+            },
+            "chestnut::engine::CTransform2DComponent": {
+                "position": {
+                    "x": 463.0,
+                    "y": 207.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                    "x": 1.0,
+                    "y": 1.0
+                }
+            }
+        }
+    ]
+}

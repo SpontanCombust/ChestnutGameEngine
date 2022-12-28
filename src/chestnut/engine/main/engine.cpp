@@ -89,8 +89,10 @@ namespace chestnut::engine
         return m_audioManager;
     }
 
-
-
+    CResourceManager &CEngine::getResourceManager()
+    {
+        return m_resourceManager;
+    }
 
     void CEngine::attachSystem(ILogicSystem *system)
     {

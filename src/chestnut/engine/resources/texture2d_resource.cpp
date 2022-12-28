@@ -2,6 +2,13 @@
 
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/misc/glu_error_string.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
+
+#include <nlohmann/json.hpp>
+
+#include <algorithm>
+#include <fstream>
+
 
 namespace chestnut::engine
 {
@@ -26,13 +33,10 @@ namespace chestnut::engine
 
 
 
-    CTexture2DResource::CTexture2DResource() noexcept
+    CTexture2DResource::CTexture2DResource(tl::optional<std::filesystem::path> location) noexcept
+    : IResource(location)
     {
-        m_texID = 0;
-        m_texturePath.reset();
-        m_pixelFormat = 0;
-        m_width = 0;
-        m_height = 0;
+
     }
 
     CTexture2DResource::~CTexture2DResource() noexcept
@@ -43,7 +47,8 @@ namespace chestnut::engine
 
 
 
-    tl::expected<std::shared_ptr<CTexture2DResource>, const char *> CTexture2DResource::loadFromImageData(std::shared_ptr<CImageDataResource> imageData) noexcept
+    tl::expected<std::shared_ptr<CTexture2DResource>, std::string> 
+    CTexture2DResource::loadFromImageData(const std::shared_ptr<CImageDataResource>& imageData) noexcept
     {
         if( imageData->m_width != imageData->m_height || ( imageData->m_width & ( imageData->m_width - 1 ) ) != 0 )
         {
@@ -98,9 +103,8 @@ namespace chestnut::engine
             glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
             glBindTexture( GL_TEXTURE_2D, 0 );
 
-            std::shared_ptr<CTexture2DResource> resource = std::make_shared<CTexture2DResource>();
+            std::shared_ptr<CTexture2DResource> resource(new CTexture2DResource(imageData->m_location));
             resource->m_texID = texID;
-            resource->m_texturePath = imageData->m_sourcePath;
             resource->m_pixelFormat = format;
             resource->m_width = imageData->m_width;
             resource->m_height = imageData->m_height;
@@ -109,7 +113,8 @@ namespace chestnut::engine
         }
     }
 
-    tl::expected<std::shared_ptr<CTexture2DResource>, const char *> CTexture2DResource::loadFromPixels(const unsigned char *pixelData, int width, int height, int numChannels) noexcept
+    tl::expected<std::shared_ptr<CTexture2DResource>, std::string> 
+    CTexture2DResource::loadFromPixels(const unsigned char *pixelData, int width, int height, int numChannels) noexcept
     {
         auto imageData = CImageDataResource::loadFromPixels(pixelData, width, height, numChannels);
         if(imageData)
@@ -122,11 +127,13 @@ namespace chestnut::engine
         }
     }
 
-    tl::expected<std::shared_ptr<CTexture2DResource>, const char *> CTexture2DResource::loadFromFile(const char *texturePath) noexcept
+    tl::expected<std::shared_ptr<CTexture2DResource>, std::string> 
+    CTexture2DResource::loadFromImageFile(std::filesystem::path texturePath) noexcept
     {
         LOG_INFO( "Loading texture from file: " << texturePath << "..." );
 
-        auto imageData = CImageDataResource::loadFromFile(texturePath, true);
+        // checks for path existance and extensions are done in CImageDataResource
+        auto imageData = CImageDataResource::loadFromImageFile(texturePath, true);
         if(imageData)
         {
             return loadFromImageData(*imageData);
@@ -137,5 +144,101 @@ namespace chestnut::engine
         }
     }
 
-} // namespace chestnut::engine
+    tl::expected<std::shared_ptr<CTexture2DResource>, std::string> 
+    CTexture2DResource::loadFromDefinition(std::filesystem::path definitionPath) noexcept
+    {
+        LOG_INFO( "Loading texture from definition: " << definitionPath << "..." );
 
+        if(!std::filesystem::exists(definitionPath))
+        {
+            return tl::make_unexpected("File does not exist: " + definitionPath.string());
+        }
+
+        auto [ext, supported] = isExtensionSupported(definitionPath, SUPPORTED_FILE_EXTENSIONS_DEFINITIONS);
+        if(!supported)
+        {
+            return tl::make_unexpected("Unsupported file type: " + ext);
+        }
+
+
+        std::ifstream f(definitionPath);
+
+        if(!f)
+        {
+            return tl::make_unexpected("Definition file could not be opened");
+        }
+
+        try
+        {
+            auto j = nlohmann::json::parse(f); 
+            
+            std::filesystem::path imageFilePath;
+            std::string filtering;
+            j.at("imageFilePath").get_to(imageFilePath);
+            j.at("filtering").get_to(filtering);
+
+            if(!imageFilePath.is_absolute())
+            {
+                imageFilePath = assetPathToAbsolute(imageFilePath);
+            }
+
+            auto resource = loadFromImageFile(imageFilePath);
+            if(!resource.has_value())
+            {
+                return resource;
+            }
+
+            (**resource).m_location = definitionPath;
+
+            glBindTexture(GL_TEXTURE_2D, resource.value().get()->m_texID);
+            if(filtering == "NEAREST")
+            {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+                
+            }
+            else if(filtering == "LINEAR")
+            {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            }
+            else
+            {
+                LOG_WARNING("Unsupported texture filtering method: " << filtering);
+            }
+            glBindTexture(GL_TEXTURE_2D, 0);
+
+            return resource;
+        }
+        catch(const std::exception& e)
+        {
+            return tl::make_unexpected("Error when parsing the file: " + std::string(e.what()));
+        }
+    }
+
+    tl::expected<std::shared_ptr<CTexture2DResource>, std::string> 
+    CTexture2DResource::load(std::filesystem::path location) noexcept
+    {
+        if(!std::filesystem::exists(location))
+        {
+            return tl::make_unexpected("File does not exist: " + location.string());
+        }
+
+        auto [ext, isDefinition] = isExtensionSupported(location, SUPPORTED_FILE_EXTENSIONS_DEFINITIONS);
+        auto [_, isImageFile] = isExtensionSupported(location, SUPPORTED_FILE_EXTENSIONS_IMAGE_FILES);
+
+        if(isDefinition)
+        {
+            return loadFromDefinition(location);
+        }
+        else if(isImageFile)
+        {
+            return loadFromImageFile(location);
+        }
+        else
+        {
+            return tl::make_unexpected("Unsupported file type: " + ext);
+        }
+    }
+
+} // namespace chestnut::engine

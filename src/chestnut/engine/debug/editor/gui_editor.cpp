@@ -178,7 +178,11 @@ namespace chestnut::engine::debug
                 static const std::string errBeginning("Error occured when saving the scene to file:\n");
 
                 nfdchar_t *filePath = NULL;
-                nfdresult_t result = NFD_SaveDialog( NULL, NULL, &filePath );
+                nfdresult_t result = NFD_SaveDialog(
+                    makeNFDFiltersList(CSceneResource::SUPPORTED_FILE_EXTENSIONS).c_str(), 
+                    std::filesystem::absolute(CHESTNUT_ENGINE_ASSETS_DIR_PATH).string().c_str(), 
+                    &filePath 
+                );
 
                 if(result == NFD_OKAY) 
                 {
@@ -211,17 +215,22 @@ namespace chestnut::engine::debug
                 static const std::string errBeginning("Error occured when saving the scene to file:\n");
 
                 nfdchar_t *filePath = NULL;
-                nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
+                nfdresult_t result = NFD_OpenDialog( 
+                    makeNFDFiltersList(CSceneResource::SUPPORTED_FILE_EXTENSIONS).c_str(), 
+                    std::filesystem::absolute(CHESTNUT_ENGINE_ASSETS_DIR_PATH).string().c_str(), 
+                    &filePath 
+                );
 
                 if(result == NFD_OKAY) 
                 {
                     auto resource = CSceneResource::loadFromFile(filePath);
                     if(resource)
                     {
-                        (**resource).parseAndTransferToScene().map([](const std::string& err) {
-                            LOG_ERROR(err);
-                            messageBoxInfo(errBeginning + err);
-                        });
+                        if(auto err = (**resource).parseAndTransferToScene())
+                        {
+                            LOG_ERROR(err.value());
+                            messageBoxInfo(errBeginning + err.value());
+                        }
                     }
                     else
                     {

@@ -7,10 +7,28 @@
 
 namespace chestnut::engine
 {
+    CSceneResource::CSceneResource(tl::optional<std::filesystem::path> location) noexcept
+    : IResource(location)
+    {
+
+    }
+
+
     tl::expected<std::shared_ptr<CSceneResource>, std::string> 
-    CSceneResource::loadFromFile(const char *filePath) noexcept
+    CSceneResource::loadFromFile(std::filesystem::path filePath) noexcept
     {
         LOG_INFO("Loading scene resource from file " << filePath << "...");
+
+        if(!std::filesystem::exists(filePath))
+        {
+            return tl::make_unexpected("File does not exist");
+        }
+
+        auto [ext, supported] = isExtensionSupported(filePath, SUPPORTED_FILE_EXTENSIONS);
+        if(!supported)
+        {
+            return tl::make_unexpected("File type not supported: " + ext);
+        }
 
         try
         {
@@ -26,8 +44,7 @@ namespace chestnut::engine
                 return tl::make_unexpected("No entities array found in the file");
             }
 
-            auto resource = std::make_shared<CSceneResource>();
-            resource->m_sceneFilePath = filePath;
+            auto resource = std::shared_ptr<CSceneResource>(new CSceneResource(filePath));
             resource->m_sceneJson = j;
 
             return resource;
@@ -74,13 +91,18 @@ namespace chestnut::engine
             return tl::make_unexpected(e.what());
         }  
 
-        auto resource = std::make_shared<CSceneResource>();
-        resource->m_sceneFilePath = tl::nullopt;
+        auto resource = std::shared_ptr<CSceneResource>(new CSceneResource(tl::nullopt));
         resource->m_sceneJson = {
             {"entities", entitiesArrayJson}
         };
 
         return resource;
+    }
+
+    tl::expected<std::shared_ptr<CSceneResource>, std::string> 
+    CSceneResource::load(std::filesystem::path location) noexcept
+    {
+        return loadFromFile(location);    
     }
 
     tl::optional<std::string> CSceneResource::parseAndTransferToScene() const

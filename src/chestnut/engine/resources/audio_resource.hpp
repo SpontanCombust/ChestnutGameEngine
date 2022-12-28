@@ -16,7 +16,8 @@ namespace chestnut::engine
         MUSIC
     };
     
-    class CHESTNUT_API CAudioResource : public IResource
+    //TODO divide into music and sound bank resources
+    class CHESTNUT_API CAudioResource
     {
     public:
         std::string m_audioPath;

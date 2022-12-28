@@ -24,7 +24,7 @@ namespace chestnut::engine::debug
         m_cachedAnimNames.clear();
         if(m_handle->animationResource)
         {
-            m_animResourcePath = m_handle->animationResource->m_animationFilePath;
+            m_animResourcePath = m_handle->animationResource->m_location.value_or("").string();
 
             for(const auto& [animName, _] : m_handle->animationResource->m_animationSet.mapAnimNameToAnimData)
             {
@@ -49,14 +49,20 @@ namespace chestnut::engine::debug
         if(ImGui::Button("...##browseForAnimationResource"))
         {
             nfdchar_t *filePath = NULL;
-            nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
+            nfdresult_t result = NFD_OpenDialog(
+                makeNFDFiltersList(CAnimation2DResource::SUPPORTED_FILE_EXTENSIONS).c_str(), 
+                std::filesystem::absolute(CHESTNUT_ENGINE_ASSETS_DIR_PATH).string().c_str(), 
+                &filePath 
+            );
             
             static const std::string errBeginning("Error occured when loading animation file:\n");
 
             if(result == NFD_OKAY) 
             {
-                //FIXME use ResourceManager
-                auto loaded = CAnimation2DResource::loadFromFile(filePath);
+                auto loaded = CEngine::getInstance()
+                    .getResourceManager()
+                    .getOrLoadResource<CAnimation2DResource>(filePath);
+
                 if(loaded.has_value())
                 {
                     m_handle->animationResource = loaded.value();

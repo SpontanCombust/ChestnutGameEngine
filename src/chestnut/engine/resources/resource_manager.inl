@@ -1,102 +1,109 @@
-#include "chestnut/engine/resources/resource.hpp"
-#include "chestnut/engine/resources/texture2d_resource.hpp"
-#include "chestnut/engine/resources/shader_program_resource.hpp"
-#include "chestnut/engine/resources/font_resource.hpp"
-
-#include <type_traits>
-
 namespace chestnut::engine
 {
-    inline size_t CResourceManager::hashPaths(const std::string& p)
+    template<class R> 
+    tl::expected<std::shared_ptr<R>, std::string> 
+    CResourceManager::loadResource(std::filesystem::path location)
     {
-        return m_pathHasher(p);
-    }
+        const size_t hash = resourceHash(typeid(R), location);
+        auto resource = R::load(location);
 
-    template<typename ...Args>
-    inline size_t CResourceManager::hashPaths(const std::string& p, Args&& ...args)
-    {
-
-        return m_pathHasher(p) ^ hashPaths(args...);
-    }
-
-    inline size_t CResourceManager::hashType(std::type_index tindex)
-    {
-        static std::hash<std::type_index> hasher;
-        return hasher(tindex);
-    }
-
-
-
-    template<typename R, typename ...Args>
-    tl::expected<std::shared_ptr<R>, const char *> CResourceManager::loadResource(Args&&... args)
-    {
-        const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
-
-        tl::expected<std::shared_ptr<R>, const char *> resource = tl::make_unexpected("");
-
-        if constexpr( std::is_same_v<R, CShaderProgramResource> ) {
-            resource = R::loadFromFiles(std::forward<Args>(args)...);
-        } else {
-            resource = R::loadFromFile(std::forward<Args>(args)...);
-        }
-
-        if(resource) {
+        if(resource.has_value()) 
+        {
             m_mapHashToResource[hash] = resource.value();
         }
 
         return resource;
     }
 
-    template<typename R, typename ...Args>
-    tl::optional<std::shared_ptr<R>> CResourceManager::getResource(Args&&... args)
+    template<class R>
+    tl::optional<std::shared_ptr<R>>  
+    CResourceManager::getResource(std::filesystem::path location)
     {
-        const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
+        const size_t hash = resourceHash(typeid(R), location);
 
-        auto it = m_mapHashToResource.find( hash );
-        if( it != m_mapHashToResource.end() ) {
+        auto it = m_mapHashToResource.find(hash);
+        if(it != m_mapHashToResource.end()) 
+        {
             return std::dynamic_pointer_cast<R>(it->second);
         }
 
         return tl::nullopt;
     }
 
-    template<typename R, typename ...Args>
-    tl::expected<std::shared_ptr<R>, const char *> CResourceManager::getOrLoadResource(Args&&... args)
+    template<class R>
+    tl::expected<std::shared_ptr<R>, std::string> 
+    CResourceManager::getOrLoadResource(std::filesystem::path location)
     {
-        const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
+        const size_t hash = resourceHash(typeid(R), location);
 
-        tl::expected<std::shared_ptr<R>, const char *> resource = tl::make_unexpected("");
+        auto it = m_mapHashToResource.find(hash);
+        if(it != m_mapHashToResource.end()) 
+        {
+            return std::dynamic_pointer_cast<R>(it->second);
+        }
+        else
+        {
+            auto resource = R::load(location);
 
-        auto it = m_mapHashToResource.find( hash );
-        if( it != m_mapHashToResource.end() ) {
-            resource = std::dynamic_pointer_cast<R>(it->second);
-        } else {
-            if constexpr( std::is_same_v<R, CShaderProgramResource> ) {
-                resource = R::loadFromFiles(std::forward<Args>(args)...);
-            } else {
-                resource = R::loadFromFile(std::forward<Args>(args)...);
-            }
-
-            if(resource) {
+            if(resource.has_value()) 
+            {
                 m_mapHashToResource[hash] = resource.value();
             }
+
+            return resource;
+        }
+    }
+
+    template<class R>
+    tl::expected<void, std::string> 
+    CResourceManager::addResource(std::shared_ptr<R> resource, tl::optional<std::filesystem::path> customLocation)
+    {
+        if(!resource)
+        {
+            return tl::make_unexpected("Resource in empty");
         }
 
-        return resource;
+        std::filesystem::path location;
+        if(!customLocation.has_value())
+        {
+            if(!resource->m_location.has_value())
+            {
+                return tl::make_unexpected("Resource's location nor the custom location are valid");
+            }
+
+            location = resource->m_location.value();
+        }
+        else
+        {
+            location = customLocation.value();
+        }
+
+
+        const size_t hash = resourceHash(typeid(R), location);
+
+        auto it = m_mapHashToResource.find(hash);
+        if(it != m_mapHashToResource.end()) 
+        {
+            return tl::make_unexpected("There already is a resource at given location");
+        }
+
+        m_mapHashToResource[hash] = resource;
+
+        return {};
     }
 
-    template<typename R, typename ...Args>
-    bool CResourceManager::isResourceLoaded(Args&&... args)
+    template<class R>
+    bool CResourceManager::isResourceLoaded(std::filesystem::path location)
     {
-        const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
+        const size_t hash = resourceHash(typeid(R), location);
 
-        return m_mapHashToResource.find( hash ) != m_mapHashToResource.end();
+        return m_mapHashToResource.find(hash) != m_mapHashToResource.end();
     }
 
-    template<typename R, typename ...Args>
-    bool CResourceManager::freeResource(Args&&... args)
+    template<class R>
+    bool CResourceManager::freeResource(std::filesystem::path location)
     {
-        const size_t hash = hashType(typeid(R)) ^ hashPaths(args...);
+        const size_t hash = resourceHash(typeid(R), location);
 
         return m_mapHashToResource.erase(hash) > 0;
     }

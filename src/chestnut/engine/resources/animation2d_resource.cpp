@@ -108,15 +108,36 @@ namespace chestnut::engine
         }
     }
 
-    tl::expected<std::shared_ptr<CAnimation2DResource>, std::string>    
-    CAnimation2DResource::loadFromFile(const char *jsonPath) 
-    {
-        LOG_INFO( "Loading animation data from file: " << jsonPath << "..." );
 
-        std::ifstream stream(jsonPath);
+
+
+
+    CAnimation2DResource::CAnimation2DResource(std::filesystem::path location) noexcept
+    : IResource(location)
+    {
+
+    }
+
+    tl::expected<std::shared_ptr<CAnimation2DResource>, std::string>    
+    CAnimation2DResource::load(std::filesystem::path animPath) 
+    {
+        LOG_INFO( "Loading animation data from file: " << animPath << "..." );
+
+        if(!std::filesystem::exists(animPath))
+        {
+            return tl::make_unexpected("File does not exist");
+        }
+
+        auto [ext, supported] = isExtensionSupported(animPath, SUPPORTED_FILE_EXTENSIONS);
+        if(!supported)
+        {
+            return tl::make_unexpected("File type not supported: " + ext);
+        }
+
+        std::ifstream stream(animPath);
         if(!stream)
         {
-            LOG_ERROR("Failed to open animation data from file " << jsonPath);
+            LOG_ERROR("Failed to open animation data from file " << animPath);
             return tl::make_unexpected("Failed to open the file");
         }
 
@@ -131,8 +152,7 @@ namespace chestnut::engine
             validateDefaultFrameIndex(defaultAnimIndex, (unsigned int)clippingRects.size());
             validateDefinitions(definitions, (unsigned int)clippingRects.size(), defaultAnimIndex);
 
-            auto resource = std::make_shared<CAnimation2DResource>();
-            resource->m_animationFilePath = jsonPath;
+            auto resource = std::shared_ptr<CAnimation2DResource>(new CAnimation2DResource(animPath));
             resource->m_animationSet.vecKeyFrameClipRects = std::move(clippingRects);
             resource->m_animationSet.mapAnimNameToAnimData = std::move(definitions);
             resource->m_animationSet.defaultAnimFrameIndex = defaultAnimIndex;
@@ -142,7 +162,7 @@ namespace chestnut::engine
         catch(const std::exception& e)
         {
             LOG_ERROR("Error occured when parsing animation data from JSON: " << e.what());
-            return tl::make_unexpected(e.what());
+            return tl::make_unexpected("Animation file parsing error: " + std::string(e.what()));
         }
     }
 

@@ -1,7 +1,10 @@
 #include "chestnut/engine/misc/utility_functions.hpp"
 
+#include "chestnut/engine/macros.hpp"
+
 #include <SDL_messagebox.h>
 
+#include <sstream>
 #ifdef __GNUG__
 #include <cstdlib>
 #include <memory>
@@ -9,6 +12,7 @@
 #else
 #include <cstring>
 #endif
+
 
 namespace chestnut::engine
 {
@@ -97,6 +101,51 @@ namespace chestnut::engine
     const char *chestnut::engine::rttiTypeName(const std::type_info& typeInfo)
     {
         return rttiTypeName(std::type_index(typeInfo));
+    }
+
+    std::tuple<std::filesystem::path, bool> assetPathFromAbsolute(const std::filesystem::path &path)
+    {
+        static const auto ASSETS_ABSOLUTE = std::filesystem::absolute(CHESTNUT_ENGINE_ASSETS_DIR_PATH);
+        const auto pathAbsolute = std::filesystem::absolute(path);
+        
+        auto relativeToAssets = std::filesystem::relative(pathAbsolute, ASSETS_ABSOLUTE);
+
+
+        static const auto ASSETS_ABSOLUTE_STR = ASSETS_ABSOLUTE.string();
+        const auto pathAbsoluteStr = pathAbsolute.string();
+
+        if(pathAbsoluteStr.length() >= ASSETS_ABSOLUTE_STR.length())
+        {
+            if(pathAbsoluteStr.substr(0, ASSETS_ABSOLUTE_STR.length()) == ASSETS_ABSOLUTE_STR)
+            {
+                return {relativeToAssets, true};   
+            }
+        }
+
+        return {relativeToAssets, false};
+    }
+
+    std::filesystem::path assetPathToAbsolute(const std::filesystem::path& path)
+    {
+        return std::filesystem::absolute(CHESTNUT_ENGINE_ASSETS_DIR_PATH/path);
+    }
+
+    std::string makeNFDFiltersList(const std::vector<std::string>& vecExtensions)
+    {
+        std::ostringstream ss;
+
+        if(!vecExtensions.empty())
+        {
+            size_t i;
+            for (i = 0; i < vecExtensions.size() - 1; i++)
+            {
+                ss << vecExtensions[i] + ",";
+            }
+            
+            ss << vecExtensions[i];
+        }
+
+        return ss.str();
     }
 
 } // namespace chestnut::engine

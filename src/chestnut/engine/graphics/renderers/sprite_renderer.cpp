@@ -2,8 +2,9 @@
 
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/macros.hpp"
-#include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 #include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
 namespace chestnut::engine
@@ -25,9 +26,8 @@ namespace chestnut::engine
 
     bool CSpriteRenderer::setShaderProgram()
     {
-        auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", 
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag"
+        auto shader = CEngine::getInstance().getResourceManager().getOrLoadResource<CShaderProgramResource>(
+            assetPathToAbsolute("shaders/sprite.shader")
         );
 
         if(shader) {

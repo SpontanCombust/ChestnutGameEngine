@@ -181,14 +181,10 @@ namespace chestnut::engine
 
 
 
-    CFontResource::CFontResource() noexcept
+    CFontResource::CFontResource(std::filesystem::path location) noexcept
+    : IResource(location)
     {
-        m_fontPath = "";
-    }
 
-    CFontResource::~CFontResource() noexcept
-    {
-        m_mapConfigHashToConfig.clear();
     }
 
     bool CFontResource::loadConfig( int pointSize, EFontStyle styleMask ) noexcept
@@ -238,19 +234,18 @@ namespace chestnut::engine
 
 
 
-    tl::expected<std::shared_ptr<CFontResource>, const char *> CFontResource::loadFromFile(const char *fontPath) noexcept
+    tl::expected<std::shared_ptr<CFontResource>, std::string> CFontResource::load(std::filesystem::path fontPath) noexcept
     {
         LOG_INFO( "Loading font resource from file: " << fontPath );
 
-        TTF_Font *font = TTF_OpenFont( fontPath, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
+        TTF_Font *font = TTF_OpenFont( fontPath.string().c_str(), CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );
 
         if( font )
         {
             SFontConfig initConfig = loadConfigInternal( font, CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE );
             size_t hash = getConfigHashInternal( CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE, CHESTNUT_FONT_RESOURCE_INIT_FONT_STYLE );
 
-            CFontResource *resource = new CFontResource();
-            resource->m_fontPath = fontPath;
+            CFontResource *resource = new CFontResource(fontPath);
             resource->m_mapConfigHashToConfig[ hash ] = initConfig;
 
             TTF_CloseFont( font );
@@ -259,7 +254,7 @@ namespace chestnut::engine
         }        
         else
         {
-            return tl::make_unexpected<const char *>("Failed to load font from file");
+            return tl::make_unexpected("Failed to load font from file");
         }
     }
 

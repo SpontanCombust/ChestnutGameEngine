@@ -12,6 +12,7 @@
 #include "chestnut/engine/serialization/serializers_math.hpp"
 #include "chestnut/engine/serialization/serializers_physics.hpp"
 #include "chestnut/engine/serialization/serializers_graphics.hpp"
+#include "chestnut/engine/serialization/serializers_resources.hpp"
 
 namespace chestnut::engine
 {
@@ -21,7 +22,7 @@ namespace chestnut::engine
     void to_json(nlohmann::json& j, const CAnimation2DComponent& c)
     {
         j = json {
-            {"animationResourceFilePath", c.animationResource ? c.animationResource->m_animationFilePath : ""},
+            {"animationResource", c.animationResource},
             {"currentAnimName", c.currentAnimName},
             {"animSpeedMultiplier", c.animSpeedMultiplier},
             {"remainingAnimLoops", c.remainingAnimLoops},
@@ -33,14 +34,7 @@ namespace chestnut::engine
 
     void from_json(const nlohmann::json& j, CAnimation2DComponent& c)
     {
-        std::string path;
-        j.at("animationResourceFilePath").get_to(path);
-
-        //TODO use resource manager
-        // if error was returned, exception will be throws from this function
-        auto res = CAnimation2DResource::loadFromFile(path.c_str()).value();
-
-        c.animationResource = res;
+        j.at("animationResource").get_to(c.animationResource);
         j.at("currentAnimName").get_to(c.currentAnimName);
         j.at("animSpeedMultiplier").get_to(c.animSpeedMultiplier);
         j.at("remainingAnimLoops").get_to(c.remainingAnimLoops);

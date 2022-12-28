@@ -13,16 +13,23 @@ namespace chestnut::engine
     class CSceneResource : public IResource
     {
     public:
-        tl::optional<std::string> m_sceneFilePath;
+        inline static const std::vector<std::string> SUPPORTED_FILE_EXTENSIONS = {
+            "scene"
+        };
+
         nlohmann::json m_sceneJson;
 
     public:
         static tl::expected<std::shared_ptr<CSceneResource>, std::string> 
-        loadFromFile(const char *filePath) noexcept;
+        loadFromFile(std::filesystem::path filePath) noexcept;
 
         // Serialize all entities in engine's entity world
         static tl::expected<std::shared_ptr<CSceneResource>, std::string> 
         loadFromEntityWorld() noexcept;
+
+        // Calls loadFromFile
+        static tl::expected<std::shared_ptr<CSceneResource>, std::string> 
+        load(std::filesystem::path location) noexcept;
 
 
         // If comes accross an error will return error message value
@@ -30,6 +37,10 @@ namespace chestnut::engine
 
         // If comes accross an error will return error message value
         tl::optional<std::string> saveToFile(const char *filePath) const;
+
+
+    private:
+        CSceneResource(tl::optional<std::filesystem::path> location) noexcept;
     };
 
 } // namespace chestnut::engine

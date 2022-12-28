@@ -1,22 +1,20 @@
 #include "chestnut/engine/resources/image_data_resource.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
 #include <stb_image.h>
 
+#include <algorithm>
 #include <cstring>
 
 
 namespace chestnut::engine
-{    
-    CImageDataResource::CImageDataResource() noexcept
-    : m_sourcePath(tl::nullopt),
-      m_data(nullptr),
-      m_width(0),
-      m_height(0),
-      m_numChannels(0)
+{   
+    CImageDataResource::CImageDataResource(tl::optional<std::filesystem::path> location) noexcept
+    : IResource(location)
     {
 
     }
@@ -26,7 +24,7 @@ namespace chestnut::engine
         if(m_data)
         {
             // if was loaded from file
-            if(m_sourcePath.has_value())
+            if(wasLoadedFromFile())
             {
                 stbi_image_free(m_data);
             }
@@ -39,18 +37,30 @@ namespace chestnut::engine
 
 
 
-    tl::expected<std::shared_ptr<CImageDataResource>, const char *> CImageDataResource::loadFromFile(const char *imagePath, bool flipVertically) noexcept
+    tl::expected<std::shared_ptr<CImageDataResource>, std::string> 
+    CImageDataResource::loadFromImageFile(std::filesystem::path imagePath, bool flipVertically) noexcept
     {
         LOG_INFO( "Loading image from file: " << imagePath << "..." );
+
+        if(!std::filesystem::exists(imagePath))
+        {
+            return tl::make_unexpected("File does not exist: " + imagePath.string());
+        }
+
+        auto [ext, supported] = isExtensionSupported(imagePath, SUPPORTED_FILE_EXTENSIONS);
+        if(!supported)
+        {
+            return tl::make_unexpected("Unsupported file type: " + ext);
+        }
+
 
         stbi_set_flip_vertically_on_load(flipVertically);
 
         int w, h, ch;
-        unsigned char *data = stbi_load(imagePath, &w, &h, &ch, 0); 
+        unsigned char *data = stbi_load(imagePath.string().c_str(), &w, &h, &ch, 0); 
         if(data)
         {
-            CImageDataResource *resource = new CImageDataResource();
-            resource->m_sourcePath = imagePath;
+            CImageDataResource *resource = new CImageDataResource(imagePath);
             resource->m_data = data;
             resource->m_width = w;
             resource->m_height = h;
@@ -64,7 +74,8 @@ namespace chestnut::engine
         }
     }
 
-    tl::expected<std::shared_ptr<CImageDataResource>, const char *> CImageDataResource::loadFromPixels(const unsigned char *data, int width, int height, int numChannels) noexcept
+    tl::expected<std::shared_ptr<CImageDataResource>, std::string> 
+    CImageDataResource::loadFromPixels(const unsigned char *data, int width, int height, int numChannels) noexcept
     {
         if(width <= 0 || height <= 0)
         {
@@ -75,8 +86,7 @@ namespace chestnut::engine
             return tl::make_unexpected("Number of channels must be between 1 and 4");
         }
 
-        CImageDataResource *resource = new CImageDataResource();
-        resource->m_sourcePath = std::move(tl::nullopt);
+        CImageDataResource *resource = new CImageDataResource(tl::nullopt);
         resource->m_data = new unsigned char[width * height * numChannels];
         if(data) {
             std::memcpy(resource->m_data, data, width * height * numChannels);
@@ -88,6 +98,12 @@ namespace chestnut::engine
         resource->m_numChannels = numChannels;
 
         return std::shared_ptr<CImageDataResource>(resource);
+    }
+
+    tl::expected<std::shared_ptr<CImageDataResource>, std::string> 
+    CImageDataResource::load(std::filesystem::path location) noexcept
+    {
+        return loadFromImageFile(location, true);
     }
 
 } // namespace chestnut::engine

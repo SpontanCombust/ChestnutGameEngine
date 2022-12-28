@@ -62,14 +62,22 @@ namespace chestnut::engine::debug
         if(ImGui::Button("...##browseForImage"))
         {
             nfdchar_t *filePath = NULL;
-            nfdresult_t result = NFD_OpenDialog( NULL, NULL, &filePath );
+            nfdresult_t result = NFD_OpenDialog( 
+                (makeNFDFiltersList(CTexture2DResource::SUPPORTED_FILE_EXTENSIONS_IMAGE_FILES) + ";" + 
+                 makeNFDFiltersList(CTexture2DResource::SUPPORTED_FILE_EXTENSIONS_DEFINITIONS)
+                ).c_str(), 
+                std::filesystem::absolute(CHESTNUT_ENGINE_ASSETS_DIR_PATH).string().c_str(), 
+                &filePath 
+            );
 
             static const std::string errBeginning("Error occured when loading a texture:\n");
 
             if(result == NFD_OKAY) 
             {
-                //FIXME use ResourceManager
-                auto loaded = CTexture2DResource::loadFromImageFile(filePath);
+                auto loaded = CEngine::getInstance()
+                    .getResourceManager()
+                    .getOrLoadResource<CTexture2DResource>(filePath);
+                    
                 if(loaded.has_value())
                 {
                     m_handle->sprite.setResource(loaded.value());

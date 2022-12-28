@@ -57,24 +57,21 @@ namespace chestnut::engine
         std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
     public:
-        CFontResource() noexcept;
-        
-        ~CFontResource() noexcept;
-
-
         bool loadConfig( int pointSize, EFontStyle styleMask ) noexcept;
 
         bool hasConfig( int pointSize, EFontStyle styleMask ) noexcept;
         
-        // TODO optional reference wrapper
         const SFontConfig& getConfig( int pointSize, EFontStyle styleMask ) noexcept;
 
         size_t getConfigHash( int pointSize, EFontStyle styleMask ) noexcept;
 
 
         // fontPath - path to .ttf file
-        static tl::expected<std::shared_ptr<CFontResource>, const char *> 
-        loadFromFile( const char *fontPath ) noexcept;
+        static tl::expected<std::shared_ptr<CFontResource>, std::string> 
+        load(std::filesystem::path fontPath) noexcept;
+
+    private:
+        CFontResource(std::filesystem::path location) noexcept;
     };
 
 } // namespace chestnut::engine

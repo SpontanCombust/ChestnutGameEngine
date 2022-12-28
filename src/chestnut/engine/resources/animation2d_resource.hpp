@@ -13,12 +13,18 @@ namespace chestnut::engine
     class CHESTNUT_API CAnimation2DResource : public IResource
     {
     public:
-        std::string m_animationFilePath;
+        inline static const std::vector<std::string> SUPPORTED_FILE_EXTENSIONS = {
+            "anim", "animation"
+        };
+
         SAnimation2DSet m_animationSet;
 
     public:
         static tl::expected<std::shared_ptr<CAnimation2DResource>, std::string>
-        loadFromFile(const char *jsonPath);
+        load(std::filesystem::path animPath);
+
+    private:
+        CAnimation2DResource(std::filesystem::path location) noexcept;
     };
 
 } // namespace chestnut::engine
