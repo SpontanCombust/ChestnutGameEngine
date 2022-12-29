@@ -15,6 +15,9 @@
 
 namespace chestnut::engine
 {
+    static unsigned char s_activeCount = 0;
+
+
     CWindow::CWindow( const char *title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
         assert(chestnutWasInit() && "Can't create a window without first initializing the dependency libraries! Use chestnutInit() first!");
@@ -110,6 +113,22 @@ namespace chestnut::engine
 
         m_framebuffer = new CFramebuffer( width, height );
         m_framebuffer->setClearColor( vec4f{ 0.f, 0.f, 0.f, 1.f } );
+
+        s_activeCount++;
+    }
+
+    CWindow::CWindow(CWindowAttribs attribs)
+    : CWindow(
+        attribs.m_title.c_str(),
+        attribs.m_width,
+        attribs.m_height,
+        attribs.m_displayMode,
+        attribs.m_position.x,
+        attribs.m_position.y,
+        attribs.m_show,
+        attribs.m_vsync)
+    {
+
     }
 
     CWindow::~CWindow() 
@@ -123,6 +142,8 @@ namespace chestnut::engine
         delete m_framebuffer;
         SDL_GL_DeleteContext( m_sdlGLContext );
         SDL_DestroyWindow( m_sdlWindow );
+
+        s_activeCount--;
     }
 
     void CWindow::setTitle( const std::string& title ) 
@@ -307,11 +328,62 @@ namespace chestnut::engine
         SDL_GL_SwapWindow( m_sdlWindow );
     }
 
-
-
     bool CWindow::isAnyActive()
     {
-        return false;
+        return s_activeCount > 0;
+    }
+
+
+
+
+
+
+    CWindowAttribs::CWindowAttribs(const std::string& title) noexcept
+    : m_title(title)
+    {
+
+    }
+    
+    CWindowAttribs& CWindowAttribs::title(const std::string& t) noexcept
+    {
+        m_title = t;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::width(int w) noexcept
+    {
+        m_width = w;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::height(int h) noexcept
+    {
+        m_height = h;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::displayMode(EWindowDisplayMode mode) noexcept
+    {
+        m_displayMode = mode;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::position(vec2i p) noexcept
+    {
+        m_position = p;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::show(bool b) noexcept
+    {
+        m_show = b;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::vsync(bool b) noexcept
+    {
+        m_vsync = b;
+        return *this;
     }
 
 } // namespace chestnut::engine

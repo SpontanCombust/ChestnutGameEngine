@@ -19,6 +19,31 @@ namespace chestnut::engine
         FULLSCREEN
     };
 
+
+    class CHESTNUT_API CWindowAttribs
+    {
+    public:
+        std::string m_title;
+        int m_width = 800;
+        int m_height = 600;
+        EWindowDisplayMode m_displayMode = EWindowDisplayMode::WINDOWED;
+        vec2i m_position = {0, 0};
+        bool m_show = true;
+        bool m_vsync = false;
+
+    public:
+        CWindowAttribs(const std::string& title) noexcept;
+
+        CWindowAttribs& title(const std::string& t) noexcept;
+        CWindowAttribs& width(int w) noexcept;
+        CWindowAttribs& height(int h) noexcept;
+        CWindowAttribs& displayMode(EWindowDisplayMode mode) noexcept;
+        CWindowAttribs& position(vec2i p) noexcept;
+        CWindowAttribs& show(bool b) noexcept;
+        CWindowAttribs& vsync(bool b) noexcept;
+    };
+
+
     class CHESTNUT_API CWindow
     {
     private:
@@ -44,6 +69,8 @@ namespace chestnut::engine
                  int y = -1, 
                  bool showAfterCreating = true, 
                  bool useVsync = false );
+
+        CWindow(CWindowAttribs attribs);
 
         ~CWindow();
 
