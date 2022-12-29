@@ -3,10 +3,12 @@
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/resources/texture2d_resource.hpp"
 #include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/main/window.hpp"
 
 #include <SDL_ttf.h>
 
 #include <array>
+#include <cassert>
 #include <cmath> // ceil, sqrt
 #include <map>
 #include <utility> // pair
@@ -236,6 +238,9 @@ namespace chestnut::engine
 
     tl::expected<std::shared_ptr<CFontResource>, std::string> CFontResource::load(std::filesystem::path fontPath) noexcept
     {
+        assert(CWindow::isAnyActive() && "OpenGL context is needed to use this type of resource."
+                                        " Make sure to instantiate CWindow before trying to load it.");
+
         LOG_INFO( "Loading font resource from file: " << fontPath );
 
         TTF_Font *font = TTF_OpenFont( fontPath.string().c_str(), CHESTNUT_FONT_RESOURCE_INIT_FONT_POINT_SIZE );

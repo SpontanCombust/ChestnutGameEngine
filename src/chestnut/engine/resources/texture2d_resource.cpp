@@ -3,10 +3,12 @@
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/misc/glu_error_string.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
+#include "chestnut/engine/main/window.hpp"
 
 #include <nlohmann/json.hpp>
 
 #include <algorithm>
+#include <cassert>
 #include <fstream>
 
 
@@ -50,6 +52,9 @@ namespace chestnut::engine
     tl::expected<std::shared_ptr<CTexture2DResource>, std::string> 
     CTexture2DResource::loadFromImageData(const std::shared_ptr<CImageDataResource>& imageData) noexcept
     {
+        assert(CWindow::isAnyActive() && "OpenGL context is needed to use this type of resource."
+                                        " Make sure to instantiate CWindow before trying to load it.");
+
         if( imageData->m_width != imageData->m_height || ( imageData->m_width & ( imageData->m_width - 1 ) ) != 0 )
         {
             LOG_WARNING("Loading non-power-of-two texture...");

@@ -20,7 +20,6 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[manual]" )
     const char *testName = "Text test - font style sheets";
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     std::shared_ptr< CFontResource > fontResource;
     REQUIRE_NOTHROW( fontResource = CFontResource::load( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/fonts/arial.ttf" ).value() );  
@@ -102,7 +101,6 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
     const char *testName = "Text test - rendering text glyphs";
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     std::shared_ptr< CFontResource > fontResource;
     REQUIRE_NOTHROW( fontResource = CFontResource::load( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/fonts/arial.ttf" ).value() );  

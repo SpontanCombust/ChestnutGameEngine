@@ -7,18 +7,11 @@
 
 using namespace chestnut::engine;
 
-TEST_CASE( "Window - Creating without initializing libraries" )
-{
-    CWindow window( "Window test - this window should not be created" );
-    REQUIRE_FALSE( window.isValid() );
-}
-
 TEST_CASE( "Window - Default state" )
 {
     REQUIRE( chestnutInit() );
     CWindow window( "Window test - Default state", 800, 600, EWindowDisplayMode::WINDOWED, 500, 400 );
 
-    REQUIRE( window.isValid() );
     REQUIRE( window.getTitle() == std::string( "Window test - Default state" ) );
     REQUIRE( window.getDisplayMode() == EWindowDisplayMode::WINDOWED );
     REQUIRE( window.getSizeWidth() == 800 );

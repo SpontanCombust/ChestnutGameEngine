@@ -18,7 +18,6 @@ TEST_CASE( "Renderers - Sprite renderer test", "[manual]" )
     chestnutInit();
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CSpriteRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );

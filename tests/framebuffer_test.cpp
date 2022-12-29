@@ -18,7 +18,6 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     chestnutInit();
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CTextRenderer textRenderer;
     REQUIRE_NOTHROW( textRenderer.init() );

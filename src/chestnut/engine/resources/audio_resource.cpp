@@ -1,8 +1,12 @@
 #include "chestnut/engine/resources/audio_resource.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/main/window.hpp"
 
 #include <SDL_mixer.h>
+
+#include <cassert>
+
 
 namespace chestnut::engine
 {
@@ -54,6 +58,9 @@ namespace chestnut::engine
 
     tl::expected<std::shared_ptr<CAudioResource>, const char *> CAudioResource::loadFromFile(const char *audioPath, EAudioResourceType type) noexcept
     {
+        assert(CWindow::isAnyActive() && "OpenGL context is needed to use this type of resource."
+                                        " Make sure to instantiate CWindow before trying to load it.");
+                   
         CAudioResource::UAudio audio;
 
         LOG_INFO("Loading audio resource from file " << audioPath << "...");

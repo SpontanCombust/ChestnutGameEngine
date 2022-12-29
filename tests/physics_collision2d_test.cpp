@@ -18,7 +18,6 @@ TEST_CASE( "Physics - point vs AABB collision", "[manual][demo]" )
     chestnutInit();
 
     CWindow window( "Point vs AABB collision" );
-    REQUIRE( window.isValid() );
     window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
@@ -132,7 +131,6 @@ TEST_CASE( "Physics - point vs circle collision", "[manual][demo]" )
     chestnutInit();
 
     CWindow window( "Point vs circle collision" );
-    REQUIRE( window.isValid() );
     window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
@@ -231,7 +229,6 @@ TEST_CASE( "Physics - circle vs circle collision", "[manual][demo]" )
     chestnutInit();
 
     CWindow window( "Circle vs circle collision", 1280, 720 );
-    REQUIRE( window.isValid() );
     window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
@@ -330,7 +327,6 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[manual][demo]" )
     chestnutInit();
 
     CWindow window( "AABB vs AABB collision", 1280, 720 );
-    REQUIRE( window.isValid() );
     window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;
@@ -445,7 +441,6 @@ TEST_CASE( "Physics - circle vs AABB collision", "[manual][demo]" )
     chestnutInit();
 
     CWindow window( "Circle vs AABB collision", 1280, 720 );
-    REQUIRE( window.isValid() );
     window.toggleVsync( true );
 
     CColoredPolygon2DRenderer renderer;

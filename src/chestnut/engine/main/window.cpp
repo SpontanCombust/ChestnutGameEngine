@@ -1,6 +1,7 @@
 #include "chestnut/engine/main/window.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/misc/exception.hpp"
 #include "chestnut/engine/init.hpp"
 
 #include <imgui.h>
@@ -10,22 +11,13 @@
 #include <glad/glad.h>
 #include <SDL_opengl.h>
 
+#include <cassert>
+
 namespace chestnut::engine
 {
     CWindow::CWindow( const char *title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
-        m_sdlWindow = nullptr;
-        m_sdlGLContext = nullptr;
-        m_framebuffer = nullptr;
-
-
-        if( !chestnutWasInit() )
-        {
-            LOG_ERROR( "Can't create a window without first initializing the dependency libraries! Use chestnutInit() first!" );
-            return;
-        }
-
-
+        assert(chestnutWasInit() && "Can't create a window without first initializing the dependency libraries! Use chestnutInit() first!");
 
         // ========= Create window and context ========= //
 
@@ -55,7 +47,7 @@ namespace chestnut::engine
         if( !window )
         {
             LOG_ERROR( "Failed to create window. Error: " << SDL_GetError() );
-            return;
+            throw ChestnutException("SDL_CreateWindow() failure");
         }
 
 
@@ -66,7 +58,7 @@ namespace chestnut::engine
         {
             LOG_ERROR( "Failed to create OpenGL context for the window. Error: " << SDL_GetError() );
             SDL_DestroyWindow( window );
-            return;
+            throw ChestnutException("SDL_GL_CreateContext() failure");
         }
 
 
@@ -80,7 +72,7 @@ namespace chestnut::engine
             LOG_ERROR( "Failed to initialize GLAD!" );
             SDL_GL_DeleteContext( context );
             SDL_DestroyWindow( window );
-            return;
+            throw ChestnutException("gladLoadGLLoader() failure");
         }
 
         glViewport( 0, 0, width, height );
@@ -122,28 +114,15 @@ namespace chestnut::engine
 
     CWindow::~CWindow() 
     {
-        if(isValid())
-        {
-        #ifdef CHESTNUT_DEBUG
-            ImGui_ImplOpenGL3_Shutdown();
-            ImGui_ImplSDL2_Shutdown();
-            ImGui::DestroyContext();
-        #endif
+    #ifdef CHESTNUT_DEBUG
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
+    #endif
 
-            SDL_GL_DeleteContext( m_sdlGLContext );
-            SDL_DestroyWindow( m_sdlWindow );
-            delete m_framebuffer;
-        }
-    }
-
-    bool CWindow::isValid() const
-    {
-        if( m_sdlWindow && m_sdlGLContext && m_framebuffer )
-        {
-            return true;
-        }
-
-        return false;
+        delete m_framebuffer;
+        SDL_GL_DeleteContext( m_sdlGLContext );
+        SDL_DestroyWindow( m_sdlWindow );
     }
 
     void CWindow::setTitle( const std::string& title ) 
@@ -326,6 +305,13 @@ namespace chestnut::engine
     void CWindow::flipBuffer() 
     {
         SDL_GL_SwapWindow( m_sdlWindow );
+    }
+
+
+
+    bool CWindow::isAnyActive()
+    {
+        return false;
     }
 
 } // namespace chestnut::engine

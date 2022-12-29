@@ -196,7 +196,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - general", "[manual][demo]
     chestnutInit();
 
     CWindow window( testName, 1000 );
-    REQUIRE( window.isValid() );
 
     CEngine::createInstance( window, 1.f / 60.f );
 
@@ -351,7 +350,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - default ordering", "[manu
     chestnutInit();
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CEngine::createInstance( window, 1.f / 60.f );
 
@@ -478,7 +476,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - layering", "[manual][demo
     chestnutInit();
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CEngine::createInstance( window, 1.f / 60.f );
 
@@ -635,7 +632,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - camera", "[manual][demo]"
     chestnutInit();
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CEngine::createInstance( window, 1.f / 60.f );
 

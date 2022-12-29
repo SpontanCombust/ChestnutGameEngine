@@ -20,7 +20,6 @@ TEST_CASE( "Renderers - Colored polygon renderer test - general presentation", "
     REQUIRE( chestnutInit( ) );
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );
@@ -85,7 +84,6 @@ TEST_CASE( "Renderers - Colored polygon renderer test - template polygons", "[ma
     REQUIRE( chestnutInit() );
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CColoredPolygon2DRenderer renderer;
     REQUIRE_NOTHROW( renderer.init() );

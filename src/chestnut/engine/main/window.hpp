@@ -3,6 +3,7 @@
 
 #include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/graphics/opengl/framebuffer.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
 
 #include <string>
 
@@ -26,6 +27,11 @@ namespace chestnut::engine
         CFramebuffer *m_framebuffer; // for now just a dummy with no texture bound
 
     public:
+        // Says whether any window is running in the program
+        // If so this means, among other things, that an OpenGL context is available
+        static bool isAnyActive();
+
+
         // Make sure to call chestnutInit() before creating a window
         // To configure more aspects of how OpenGL will behave use SDL_GL_SetAttribute() after chestnutInit()
         // See https://wiki.libsdl.org/SDL_GL_SetAttribute
@@ -40,8 +46,6 @@ namespace chestnut::engine
                  bool useVsync = false );
 
         ~CWindow();
-
-        bool isValid() const;
 
         void setTitle( const std::string& title );
         void setTitle( const char *title );

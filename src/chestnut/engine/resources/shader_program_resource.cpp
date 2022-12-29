@@ -1,9 +1,11 @@
 #include "chestnut/engine/resources/shader_program_resource.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/main/window.hpp"
 
 #include <nlohmann/json.hpp>
 
+#include <cassert>
 #include <fstream>
 #include <sstream>
 #include <tuple>
@@ -179,6 +181,9 @@ namespace chestnut::engine
     tl::expected<std::shared_ptr<CShaderProgramResource>, std::string> 
     CShaderProgramResource::loadFromSourceFiles(std::filesystem::path vertPath, std::filesystem::path fragPath) noexcept
     {
+        assert(CWindow::isAnyActive() && "OpenGL context is needed to use this type of resource."
+                                        " Make sure to instantiate CWindow before trying to load it.");
+
         LOG_INFO("Loading shader program from files: " << vertPath << " and " << fragPath << "..." );
 
         auto program = loadOpenGLShaderProgramFromFiles(vertPath, fragPath);
@@ -199,6 +204,9 @@ namespace chestnut::engine
     tl::expected<std::shared_ptr<CShaderProgramResource>, std::string> 
     CShaderProgramResource::loadFromDefinition(std::filesystem::path location) noexcept
     {
+        assert(CWindow::isAnyActive() && "OpenGL context is needed to use this type of resource."
+                                        " Make sure to instantiate CWindow before trying to load it.");
+                                        
         LOG_INFO("Loading shader program from definition: " << location << "..." );
 
         if(!std::filesystem::exists(location))

@@ -143,7 +143,6 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
     debug::CLogger::setToFile("engine.log");
 
     CWindow window( testName );
-    REQUIRE( window.isValid() );
 
     CEngine::createInstance( window, 1.f / 60.f );
 
