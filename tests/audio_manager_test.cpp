@@ -1,8 +1,8 @@
 #include <catch2/catch.hpp>
 
-#include "../src/chestnut/engine/init.hpp"
-#include "../src/chestnut/engine/audio/audio_manager.hpp"
-#include "../src/chestnut/engine/macros.hpp"
+#include "chestnut/engine/init.hpp"
+#include "chestnut/engine/audio/audio_manager.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 
 #include "test_utils.hpp"
 
@@ -16,31 +16,56 @@ TEST_CASE( "Audio - Audio manager test - general" )
 
     CAudioManager manager;
 
-    std::shared_ptr< CAudioResource > sfx;
-    REQUIRE_NOTHROW( sfx = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/audio/timgormly__8-bit-explosion2.aiff", EAudioResourceType::SFX ).value() );
-
-    std::shared_ptr< CAudioResource > music;
-    REQUIRE_NOTHROW( music = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/audio/puredesigngirl__dramatic-music.mp3", EAudioResourceType::MUSIC ).value() );
-
-
-    SECTION( "Add-get-remove" )
+    SECTION("Music")
     {
-        REQUIRE_FALSE( manager.getAudio( "sfx" ) );
-        REQUIRE_FALSE( manager.getAudio( "music" ) );
+        std::shared_ptr<CMusicResource> music;
+        REQUIRE_NOTHROW(music = CMusicResource::load(assetPathToAbsolute("testing/audio/dramatic-music.mp3")).value());
 
-        manager.addAudio( sfx, "sfx" );
-        REQUIRE( manager.getAudio( "sfx" ) );
-        REQUIRE_FALSE( manager.getAudio( "music" ) );
+        // doesn't have music yet
+        REQUIRE_FALSE(manager.hasMusic("dramatic-music"));
+        REQUIRE_FALSE(manager.removeMusic("dramatic-music"));
 
-        manager.addAudio( music, "music" );
-        REQUIRE( manager.getAudio( "sfx" ) );
-        REQUIRE( manager.getAudio( "music" ) );
+        // add music
+        REQUIRE(manager.addAudio(music));
+        REQUIRE(manager.hasMusic("dramatic-music"));
 
-        manager.removeAudio( "sfx" );
-        REQUIRE_FALSE( manager.getAudio( "sfx" ) );
-        REQUIRE( manager.getAudio( "music" ) );
+        // music is already present
+        REQUIRE_FALSE(manager.addAudio(music));
+
+        // remove music
+        REQUIRE(manager.removeMusic("dramatic-music"));
+        REQUIRE_FALSE(manager.hasMusic("dramatic-music"));
     }
 
+    SECTION("SFX")
+    {
+        std::shared_ptr<CSoundBankResource> soundBank;
+        REQUIRE_NOTHROW(soundBank = CSoundBankResource::load(assetPathToAbsolute("testing/audio/sounds.bnk")).value());
+
+        // doesn't have sound bank yet
+        REQUIRE_FALSE(manager.hasSoundBank("sounds"));
+        REQUIRE_FALSE(manager.removeSoundBank("sounds"));
+        REQUIRE_FALSE(manager.hasSFX("explosion"));
+        REQUIRE_FALSE(manager.hasSFX("hurt"));
+        REQUIRE_FALSE(manager.hasSFX("sword-slash"));
+
+        // bank is added
+        REQUIRE(manager.addAudio(soundBank));
+        REQUIRE(manager.hasSoundBank("sounds"));
+        REQUIRE(manager.hasSFX("explosion"));
+        REQUIRE(manager.hasSFX("hurt"));
+        REQUIRE(manager.hasSFX("sword-slash"));
+
+        // bank is already present
+        REQUIRE_FALSE(manager.addAudio(soundBank));
+
+        // remove bank
+        REQUIRE(manager.removeSoundBank("sounds"));
+        REQUIRE_FALSE(manager.hasSoundBank("sounds"));
+        REQUIRE_FALSE(manager.hasSFX("explosion"));
+        REQUIRE_FALSE(manager.hasSFX("hurt"));
+        REQUIRE_FALSE(manager.hasSFX("sword-slash"));
+    }
 
     chestnutQuit();
 }
@@ -55,29 +80,36 @@ TEST_CASE( "Audio - Audio manager test - SFX", "[manual]" )
 
     CAudioManager manager;
 
-    std::shared_ptr< CAudioResource > sfx;
-    REQUIRE_NOTHROW( sfx = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/audio/timgormly__8-bit-explosion2.aiff", EAudioResourceType::SFX ).value() );
+    std::shared_ptr<CSoundBankResource> bnk;
+    REQUIRE_NOTHROW(bnk = CSoundBankResource::load(assetPathToAbsolute("testing/audio/sounds.bnk")).value());
 
-    manager.addAudio( sfx, "sfx" );
+    manager.addAudio(bnk);
 
 
     SECTION( "Play SFX once" )
     {
         showInfoMessageBox( testTitle, "Continue to play a sound effect once" );
-        REQUIRE( manager.playSFX( "sfx" ) >= 0 );
+        REQUIRE( manager.playSFX( "explosion" ) >= 0 );
+        REQUIRE( showConfirmMessageBox( testTitle ) );
+    }
+
+    SECTION( "Play SFX 3 times" )
+    {
+        showInfoMessageBox( testTitle, "Continue to play a sound effect 3 times" );
+        REQUIRE( manager.playSFX( "explosion", 3 ) >= 0 );
         REQUIRE( showConfirmMessageBox( testTitle ) );
     }
 
     SECTION( "Play SFX in loop for 2 seconds" )
     {
         showInfoMessageBox( testTitle, "Continue to play a sound effect in loop for 2 seconds" );
-        REQUIRE( manager.playSFXFor( "sfx", 2.f, -1, -1 ) >= 0 );
+        REQUIRE( manager.playSFXFor( "explosion", 2.f, -1 ) >= 0 );
         REQUIRE( showConfirmMessageBox( testTitle ) );
     }
 
     SECTION( "Reduce global and SFX volume" )
     {
-        audiochannel_t ch = manager.playSFX( "sfx", -1, -1 );
+        audiochannel_t ch = manager.playSFX( "hurt", -1 );
         REQUIRE( ch >= 0 );
         showInfoMessageBox( testTitle, "Continue to reduce the SFX volume by 50%" );
         manager.setSFXVolume( ch, 0.5f );
@@ -88,7 +120,7 @@ TEST_CASE( "Audio - Audio manager test - SFX", "[manual]" )
 
     SECTION( "Pausing SFX" )
     {
-        audiochannel_t ch = manager.playSFX( "sfx", -1, -1 );
+        audiochannel_t ch = manager.playSFX( "hurt", -1 );
         REQUIRE( ch >= 0 );
         showInfoMessageBox( testTitle, "Click to pause the SFX" );
         manager.pauseSFX( ch );
@@ -99,7 +131,7 @@ TEST_CASE( "Audio - Audio manager test - SFX", "[manual]" )
 
     SECTION( "Stopping SFX" )
     {
-        audiochannel_t ch = manager.playSFX( "sfx", -1, -1 );
+        audiochannel_t ch = manager.playSFX( "sword-slash", -1 );
         REQUIRE( ch >= 0 );
         showInfoMessageBox( testTitle, "Click to stop the SFX" );
         manager.stopSFX( ch );
@@ -111,6 +143,7 @@ TEST_CASE( "Audio - Audio manager test - SFX", "[manual]" )
 
     chestnutQuit();
 
+    // add delay between sections
     sleepFor(1000);
 }
 
@@ -124,22 +157,22 @@ TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
 
     CAudioManager manager;
 
-    std::shared_ptr< CAudioResource > music;
-    REQUIRE_NOTHROW( music = CAudioResource::loadFromFile( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/audio/puredesigngirl__dramatic-music.mp3", EAudioResourceType::MUSIC ).value() );
+    std::shared_ptr<CMusicResource> music;
+    REQUIRE_NOTHROW(music = CMusicResource::load(assetPathToAbsolute("testing/audio/dramatic-music.mp3")).value());
 
-    manager.addAudio( music, "music" );
+    manager.addAudio(music);
 
 
     SECTION( "Play music once" )
     {
         showInfoMessageBox( testTitle, "Continue to play some music" );
-        manager.playMusic( "music" );
+        manager.playMusic( "dramatic-music" );
         REQUIRE( showConfirmMessageBox( testTitle ) );
     }
 
     SECTION( "Reduce global and music volume" )
     {
-        manager.playMusic( "music" );
+        manager.playMusic( "dramatic-music" );
         showInfoMessageBox( testTitle, "Continue to reduce the music volume by 50%" );
         manager.setMusicVolume( 0.5f );
         showInfoMessageBox( testTitle, "Continue to reduce the global volume by 50%" );
@@ -149,7 +182,7 @@ TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
 
     SECTION( "Pausing music" )
     {
-        manager.playMusic( "music" );
+        manager.playMusic( "dramatic-music" );
         showInfoMessageBox( testTitle, "Click to pause the music" );
         manager.pauseMusic();
         showInfoMessageBox( testTitle, "Click to resume the music" );
@@ -159,7 +192,7 @@ TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
 
     SECTION( "Stopping music" )
     {
-        manager.playMusic( "music" );
+        manager.playMusic( "dramatic-music" );
         showInfoMessageBox( testTitle, "Click to stop the music" );
         manager.stopMusic();
         showInfoMessageBox( testTitle, "Click to try to resume the music. This shouldn't do anything." );
@@ -170,13 +203,13 @@ TEST_CASE( "Audio - Audio manager test - music", "[manual]" )
     SECTION( "Fade in music" )
     {
         showInfoMessageBox( testTitle, "Click to play music with 3 second fade in" );
-        manager.playMusicFadeIn( "music", 3.f );
+        manager.playMusicFadeIn( "dramatic-music", 3.f );
         REQUIRE( showConfirmMessageBox( testTitle ) );
     }
 
     SECTION( "Fade out music" )
     {
-        manager.playMusic( "music" );
+        manager.playMusic( "dramatic-music" );
         showInfoMessageBox( testTitle, "Click to fade out music over the course of 5 seconds" );
         manager.fadeOutMusic(5.f);
         REQUIRE( showConfirmMessageBox( testTitle ) );
