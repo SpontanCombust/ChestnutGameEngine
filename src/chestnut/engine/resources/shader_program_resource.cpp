@@ -2,6 +2,7 @@
 
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/main/window.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 
 #include <nlohmann/json.hpp>
 
@@ -192,8 +193,8 @@ namespace chestnut::engine
         {
             CShaderProgramResource *resource = new CShaderProgramResource(tl::nullopt);
             resource->m_programID = *program;
-            resource->m_vertexShaderPath = vertPath;
-            resource->m_fragmentShaderPath = fragPath;
+            resource->m_vertexShaderPath = std::filesystem::absolute(vertPath);
+            resource->m_fragmentShaderPath = std::filesystem::absolute(fragPath);
 
             return std::shared_ptr<CShaderProgramResource>( resource );
         } 
@@ -244,11 +245,11 @@ namespace chestnut::engine
 
         if(!vs.is_absolute())
         {
-            vs = CHESTNUT_ENGINE_ASSETS_DIR_PATH/vs;
+            vs = assetPathToAbsolute(vs);
         }
         if(!fs.is_absolute())
         {
-            fs = CHESTNUT_ENGINE_ASSETS_DIR_PATH/fs;
+            fs = assetPathToAbsolute(fs);
         }
 
         if(auto program = loadOpenGLShaderProgramFromFiles(vs, fs))

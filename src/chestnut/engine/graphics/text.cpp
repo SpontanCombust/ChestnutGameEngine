@@ -1,8 +1,8 @@
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #include "chestnut/engine/graphics/text.hpp"
 
 #include "chestnut/engine/debug/log.hpp"
 
-#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
 #include <locale>
 #include <codecvt>
 
@@ -479,7 +479,7 @@ namespace chestnut::engine
 
             currLine.str = computeLineString( currLine );
             currLine.offset.x = computeLineOffsetX( currLineWidth, maxWidth );
-            currLine.offset.y = prevLine.offset.y + prevLineHeight * m_lineSpacing;
+            currLine.offset.y = (int)(prevLine.offset.y + prevLineHeight * m_lineSpacing);
         }
     }
 

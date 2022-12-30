@@ -10,6 +10,7 @@
 #include <imgui_impl_opengl3.h>
 
 #include <algorithm>
+#include <cassert>
 
 
 namespace chestnut::engine
@@ -54,6 +55,8 @@ namespace chestnut::engine
 
     CEngine& CEngine::getInstance()
     {
+        assert(sm_instance != nullptr && "Engine has not yet been instantiated");
+
         return *sm_instance;
     }
 
