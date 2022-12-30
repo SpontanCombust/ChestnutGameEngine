@@ -1,0 +1,5 @@
+{
+    "explosion": "testing/audio/explosion2.aiff",
+    "hurt": "testing/audio/hurt03.wav",
+    "sword-slash": "testing/audio/sword_slash1.ogg"
+}

@@ -3,7 +3,7 @@
         {
             "chestnut::engine::CAnimation2DComponent": {
                 "animSpeedMultiplier": 1.0,
-                "animationResource": "animations\\player_sheet_orig.anim",
+                "animationResource": "testing\\animations\\player_sheet_orig.anim",
                 "currentAnimName": "",
                 "elapsedAnimTimeSec": 0.0,
                 "isAnimPaused": false,
@@ -82,7 +82,7 @@
                         "x": 0.0,
                         "y": 0.0
                     },
-                    "textureResource": "textures\\player_sheet_orig.texture",
+                    "textureResource": "testing\\textures\\player_sheet_orig.texture",
                     "tint": {
                         "x": 1.0,
                         "y": 1.0,

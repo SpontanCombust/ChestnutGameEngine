@@ -22,6 +22,8 @@ target_sources(${PROJECT_NAME}_Test PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/math_vector_n_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/math_vector_transform_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/physics_collision2d_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resource_manager_test.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/resources_tests.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/simple2d_animation_system_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/simple2d_rendering_system_test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/sprite_renderer_test.cpp
