@@ -266,21 +266,18 @@ namespace chestnut::engine
                     std::visit([this, &collision](auto&& arg) {
                         using T = std::decay_t<decltype(arg)>;
 
-                        //FIXME the way polygon renderer works causes vertex joining between subsequent polygons when drawing mode is GL_LINE_STRIP
                         if constexpr(std::is_same_v<T, CBoxCollider2D>)
                         {
                             vec2f size = arg.getSize();
-                            auto poly = colored_polygon_templates::coloredPolygonRectangle(size.x, size.y);
+                            auto poly = colored_polygon_templates::coloredPolygonRectangle(size.x, size.y, true);
                             poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
-                            poly.drawMode = GL_LINE_STRIP;
 
                             m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
                         }
                         else if constexpr(std::is_same_v<T, CCircleCollider2D>)
                         {
-                            auto poly = colored_polygon_templates::coloredPolygonCircle(arg.getRadius(), 100);
+                            auto poly = colored_polygon_templates::coloredPolygonCircle(arg.getRadius(), 100, true);
                             poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
-                            poly.drawMode = GL_LINE_STRIP;
 
                             m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
                         }

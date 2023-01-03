@@ -63,15 +63,15 @@ namespace chestnut::engine
 
     namespace colored_polygon_templates
     {
-        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a, bool outlineOnly = false );
 
-        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a, float h );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a, float h, bool outlineOnly = false );
 
-        SColoredPolygon2D CHESTNUT_API coloredPolygonSquare( float a );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonSquare( float a, bool outlineOnly = false );
 
-        SColoredPolygon2D CHESTNUT_API coloredPolygonRectangle( float a, float b );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonRectangle( float a, float b, bool outlineOnly = false );
 
-        SColoredPolygon2D CHESTNUT_API coloredPolygonCircle( float r, unsigned int segments );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonCircle( float r, unsigned int segments, bool outlineOnly = false );
 
     } // namespace coloredPolygonTemplates
     

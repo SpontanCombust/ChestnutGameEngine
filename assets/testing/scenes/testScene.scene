@@ -58,7 +58,7 @@
         },
         {
             "chestnut::engine::CIdentityComponent": {
-                "name": "etn2"
+                "name": "ent2"
             },
             "chestnut::engine::CModel2DComponent": {
                 "origin": {
@@ -101,6 +101,22 @@
                     "x": 1.0,
                     "y": 1.0
                 }
+            },
+            "chestnut::engine::CCollision2DComponent": {
+                "collider": {
+                    "activity": "DYNAMIC",
+                    "policyFlags": "AFFECTED",
+                    "position": {
+                        "x": 479.9519958496094,
+                        "y": 99.00406646728516
+                    },
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    },
+                    "radius": 60.0
+                },
+                "variant": "circle"
             }
         }
     ]
