@@ -3,7 +3,6 @@
 #include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
 #include "chestnut/engine/debug/log.hpp"
-#include "chestnut/engine/debug/component_rtti.hpp"
 
 namespace chestnut::engine
 {
@@ -52,11 +51,6 @@ namespace chestnut::engine
         resource_from_json(j, r);
     }
 
-    // void from_json(const nlohmann::json& j, std::shared_ptr<CAudioResource>& r)
-    // {
-
-    // }
-
     void from_json(const nlohmann::json& j, std::shared_ptr<CFontResource>& r)
     {
         resource_from_json(j, r);
@@ -67,12 +61,22 @@ namespace chestnut::engine
         resource_from_json(j, r);
     }
 
+    void from_json(const nlohmann::json& j, std::shared_ptr<CMusicResource>& r)
+    {
+        resource_from_json(j, r);
+    }
+
     void from_json(const nlohmann::json& j, std::shared_ptr<CSceneResource>& r)
     {
         resource_from_json(j, r);
     }
 
     void from_json(const nlohmann::json& j, std::shared_ptr<CShaderProgramResource>& r)
+    {
+        resource_from_json(j, r);
+    }
+
+    void from_json(const nlohmann::json& j, std::shared_ptr<CSoundBankResource>& r)
     {
         resource_from_json(j, r);
     }
