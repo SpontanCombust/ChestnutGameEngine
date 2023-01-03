@@ -1,6 +1,8 @@
 target_sources(${PROJECT_NAME} PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/debug_gui_rendering_system.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/debug_gui_rendering_system.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/garbage_collector_system.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/garbage_collector_system.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/input_event_dispatch_system.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/input_event_dispatch_system.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/kinematics2d_system.hpp
