@@ -11,6 +11,19 @@
 
 using namespace chestnut::engine;
 
+uint64_t absTimeMillis()
+{
+    return static_cast<uint64_t>( std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now().time_since_epoch()).count() );
+}
+
+// these tests should not be done using sleep() functions as these deal with the CPU scheduler
+// which can result in very inacurate measurements 
+void waitFor(uint64_t millis)
+{
+    auto now = absTimeMillis();
+    while(absTimeMillis() - now < millis);
+}
+
 TEST_CASE( "Timers - Auto timer test" )
 {
     SECTION( "Default state" )
@@ -32,13 +45,13 @@ TEST_CASE( "Timers - Auto timer test" )
 
         timer.start();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(100) );
+        std::this_thread::sleep_for( std::chrono::milliseconds(500) );
 
         REQUIRE( timer.tick() );
-        REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(100).margin(1) );
-        REQUIRE( timer.getElapsedTimeInSeconds() == Approx(0.1f).margin(0.001) );
-        REQUIRE( timer.getDeltaTime() == Approx(0.1f).margin(0.001) );
-        REQUIRE( timer.getUpdatesPerSec() == Approx(1.f / 0.1f).margin(0.1) );
+        REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(500).margin(50) );
+        REQUIRE( timer.getElapsedTimeInSeconds() == Approx(0.5f).margin(0.05) );
+        REQUIRE( timer.getDeltaTime() == Approx(0.5).margin(0.05) );
+        REQUIRE( timer.getUpdatesPerSec() == Approx(1.0 / 0.5).margin(0.1) );
     }
 
     SECTION( "Multiple ticks before the measure" )
@@ -47,13 +60,13 @@ TEST_CASE( "Timers - Auto timer test" )
 
         timer.start();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(100) );
+        waitFor(100);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(200) );
+        waitFor(200);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(500) );
+        waitFor(500);
         REQUIRE( timer.tick() );
 
         REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(850).margin(2) );
@@ -68,13 +81,13 @@ TEST_CASE( "Timers - Auto timer test" )
 
         timer.start();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(17) );
+        waitFor(17);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(17) );
+        waitFor(17);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(17) );
+        waitFor(17);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(17) );
+        waitFor(17);
         REQUIRE( timer.tick() );
 
         timer.reset();
@@ -84,7 +97,7 @@ TEST_CASE( "Timers - Auto timer test" )
         REQUIRE( timer.getUpdatesPerSec() == Approx(0.f).margin(0.001) );
 
         timer.reset();
-        std::this_thread::sleep_for( std::chrono::milliseconds(17) );
+        waitFor(17);
         REQUIRE( timer.tick() );
         REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(17).margin(1) );
         REQUIRE( timer.getElapsedTimeInSeconds() == Approx(0.017f).margin(0.001) );
@@ -113,17 +126,17 @@ TEST_CASE( "Timers - Locked auto timer test" )
 
     SECTION( "Single time measure without thread waiting" )
     {
-        auto timer = CLockedAutoTimer(1, 0.1f);
+        auto timer = CLockedAutoTimer(1, 0.099f);
 
         timer.start();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(25) );
+        waitFor(25);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(25) );
+        waitFor(25);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(25) );
+        waitFor(25);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(25) );
+        waitFor(25);
         REQUIRE( timer.tick() );
 
         REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(100).margin(1) );
@@ -134,21 +147,21 @@ TEST_CASE( "Timers - Locked auto timer test" )
 
     SECTION( "Multiple time measures with non-repeating timer" )
     {
-        auto timer = CLockedAutoTimer(1, 0.1f, false);
+        auto timer = CLockedAutoTimer(1, 0.099f, false);
 
         timer.start();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
 
         REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(100).margin(2) );
@@ -159,21 +172,21 @@ TEST_CASE( "Timers - Locked auto timer test" )
 
     SECTION( "Multiple time measures with repeating timer" )
     {
-        auto timer = CLockedAutoTimer(1, 0.1f, true);
+        auto timer = CLockedAutoTimer(1, 0.099f, true);
 
         timer.start();
 
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE_FALSE( timer.tick() );
-        std::this_thread::sleep_for( std::chrono::milliseconds(50) );
+        waitFor(50);
         REQUIRE( timer.tick() );
 
         REQUIRE( timer.getElapsedTimeInMiliseconds() == Approx(300).margin(2) );

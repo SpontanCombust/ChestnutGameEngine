@@ -66,9 +66,7 @@ namespace chestnut::engine
             {
                 if( m_shouldThreadWaitForTimer )
                 {
-                    uint32_t timeToNextTick = static_cast<uint32_t>( m_nextRelativeTick - currentIntermediaryRelativeTick );
-
-                    std::this_thread::sleep_for( std::chrono::microseconds( timeToNextTick ) );
+                    while(getAbsoluteTimeInMicroseconds() - m_startAbsoluteTick < m_nextRelativeTick);
 
                     m_lastRelativeTick = m_currentRelativeTick;
                     m_currentRelativeTick = m_nextRelativeTick;
