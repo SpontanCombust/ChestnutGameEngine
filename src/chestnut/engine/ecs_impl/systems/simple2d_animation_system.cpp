@@ -9,12 +9,16 @@
 
 namespace chestnut::engine
 {
-    CSimple2DAnimationSystem::CSimple2DAnimationSystem(systempriority_t priority)
-    : ILogicSystem(priority) 
+    void CSimple2DAnimationSystem::onAttach() 
     {
         m_animatedTextureQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature<CSpriteComponent, CAnimation2DComponent>()
         );
+    }
+
+    void CSimple2DAnimationSystem::onDetach() 
+    {
+        CEngine::getInstance().getEntityWorld().destroyQuery(m_animatedTextureQuery);
     }
 
     void CSimple2DAnimationSystem::update( float dt ) 

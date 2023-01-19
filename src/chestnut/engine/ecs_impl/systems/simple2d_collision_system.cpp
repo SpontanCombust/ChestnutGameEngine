@@ -7,15 +7,14 @@
 
 namespace chestnut::engine
 {    
-    CSimple2DCollisionSystem::CSimple2DCollisionSystem(systempriority_t priority) 
-    : ILogicSystem(priority)
+    void CSimple2DCollisionSystem::onAttach() 
     {
         m_collisionQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CCollision2DComponent >()
         );
     }
 
-    CSimple2DCollisionSystem::~CSimple2DCollisionSystem() 
+    void CSimple2DCollisionSystem::onDetach() 
     {
         CEngine::getInstance().getEntityWorld().destroyQuery( m_collisionQuery );
     }

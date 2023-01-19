@@ -18,6 +18,9 @@ namespace chestnut::engine
 
         void setPriority(systempriority_t priority);
         systempriority_t getPriority() const;
+
+        virtual void onAttach() {}
+        virtual void onDetach() {}
     };
     
 } // namespace chestnut::engine

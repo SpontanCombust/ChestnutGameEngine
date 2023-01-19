@@ -22,6 +22,18 @@ namespace chestnut::engine
         m_polygonRenderer.init();
         m_textRenderer.init();
 
+        const CWindow& win = CEngine::getInstance().getWindow();
+        m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
+    }
+
+    CSimple2DRenderingSystem::CSimple2DRenderingSystem()
+    : CSimple2DRenderingSystem(SYSTEM_PRIORITY_ANY)
+    {
+
+    }
+
+    void CSimple2DRenderingSystem::onAttach() 
+    {
         m_spriteQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CTransform2DComponent, CSpriteComponent >(),
             ecs::makeEntitySignature< CModel2DComponent, CRenderLayerComponent >()
@@ -45,13 +57,9 @@ namespace chestnut::engine
         m_colliderQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature< CCollision2DComponent >()
         );
-
-
-        const CWindow& win = CEngine::getInstance().getWindow();
-        m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
     }
 
-    CSimple2DRenderingSystem::~CSimple2DRenderingSystem() 
+    void CSimple2DRenderingSystem::onDetach() 
     {
         CEngine::getInstance().getEntityWorld().destroyQuery( m_spriteQuery );
         CEngine::getInstance().getEntityWorld().destroyQuery( m_spriteModelQuery );

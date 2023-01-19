@@ -49,7 +49,7 @@ namespace chestnut::engine
         
         ~CEngine();
 
-        static void createInstance(CWindow& window, float updateInterval = -1);
+        static CEngine& createInstance(CWindow& window, float updateInterval = -1);
         static CEngine& getInstance();
         static void deleteInstance();
 

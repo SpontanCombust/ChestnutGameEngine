@@ -43,7 +43,7 @@ namespace chestnut::engine
 
 
 
-    void CEngine::createInstance(CWindow& window, float updateInterval)
+    CEngine& CEngine::createInstance(CWindow& window, float updateInterval)
     {
         if(sm_instance != nullptr)
         {
@@ -51,6 +51,7 @@ namespace chestnut::engine
         }
 
         sm_instance = new CEngine(window, updateInterval);
+        return *sm_instance;
     }
 
     CEngine& CEngine::getInstance()
@@ -110,6 +111,7 @@ namespace chestnut::engine
         }
 
         m_listLogicSystems.insert( it, system );
+        system->onAttach();
     }
 
     void CEngine::attachSystem(IRenderingSystem *system)
@@ -125,6 +127,7 @@ namespace chestnut::engine
         }
 
         m_listRenderingSystems.insert( it, system );
+        system->onAttach();
     }
 
     void CEngine::detachSystem(ILogicSystem *system)
@@ -133,6 +136,7 @@ namespace chestnut::engine
         {
             if(*it == system)
             {
+                system->onDetach();
                 m_listLogicSystems.erase(it);
                 return;
             }
@@ -145,6 +149,7 @@ namespace chestnut::engine
         {
             if(*it == system)
             {
+                system->onDetach();
                 m_listRenderingSystems.erase(it);
                 return;
             }

@@ -6,15 +6,14 @@
 
 namespace chestnut::engine
 {
-    CKinematics2DSystem::CKinematics2DSystem(systempriority_t priority) 
-    : ILogicSystem(priority) 
+    void CKinematics2DSystem::onAttach() 
     {
         m_kinematicQuery = CEngine::getInstance().getEntityWorld().createQuery( 
             ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >()
         );
     }
 
-    CKinematics2DSystem::~CKinematics2DSystem() 
+    void CKinematics2DSystem::onDetach() 
     {
         CEngine::getInstance().getEntityWorld().destroyQuery( m_kinematicQuery );
     }

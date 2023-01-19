@@ -14,9 +14,11 @@ namespace chestnut::engine
         ecs::CEntityQuery *m_collisionQuery;
 
     public:
-        CSimple2DCollisionSystem() = default;
-        CSimple2DCollisionSystem(systempriority_t priority);
-        ~CSimple2DCollisionSystem();
+        CSimple2DCollisionSystem() : ILogicSystem() {}
+        CSimple2DCollisionSystem(systempriority_t priority) : ILogicSystem(priority) {}
+        
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float dt ) override;
     };

@@ -14,8 +14,11 @@ namespace chestnut::engine
         ecs::CEntityQuery *m_animatedTextureQuery;
 
     public:
-        CSimple2DAnimationSystem() = default;
-        CSimple2DAnimationSystem(systempriority_t priority);
+        CSimple2DAnimationSystem() : ILogicSystem() {}
+        CSimple2DAnimationSystem(systempriority_t priority) : ILogicSystem(priority) {}
+
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float dt ) override;
     };

@@ -14,9 +14,11 @@ namespace chestnut::engine
         ecs::CEntityQuery *m_kinematicQuery;
         
     public:
-        CKinematics2DSystem() = default;
-        CKinematics2DSystem(systempriority_t priority);
-        ~CKinematics2DSystem();
+        CKinematics2DSystem() : ILogicSystem() {}
+        CKinematics2DSystem(systempriority_t priority) : ILogicSystem(priority) {}
+        
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float deltaTime ) override;
     };

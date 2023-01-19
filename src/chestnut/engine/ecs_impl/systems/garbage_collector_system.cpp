@@ -5,11 +5,28 @@
 
 namespace chestnut::engine
 {
+    CGarbageCollectorSystem::CGarbageCollectorSystem()
+    : ILogicSystem(),
+      m_timer(0, 2.f, true)
+    {
+
+    }
+
     CGarbageCollectorSystem::CGarbageCollectorSystem(systempriority_t prio)
     : ILogicSystem(prio),
       m_timer(0, 2.f, true)
     {
+        
+    }
+
+    void CGarbageCollectorSystem::onAttach() 
+    {
         m_timer.start();
+    }
+
+    void CGarbageCollectorSystem::onDetach() 
+    {
+        m_timer.reset();
     }
 
     void CGarbageCollectorSystem::update(float dt) 

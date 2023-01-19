@@ -14,9 +14,11 @@ namespace chestnut::engine
         ecs::CEntityQuery *m_timerQuery;
 
     public:
-        CTimerSystem() = default;
-        CTimerSystem(systempriority_t priority);
-        ~CTimerSystem();
+        CTimerSystem() : ILogicSystem() {}
+        CTimerSystem(systempriority_t priority) : ILogicSystem(priority) {}
+    
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float deltaTime ) override;
     };

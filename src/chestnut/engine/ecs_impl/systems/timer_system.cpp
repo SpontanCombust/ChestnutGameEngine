@@ -6,15 +6,14 @@
 
 namespace chestnut::engine
 {
-    CTimerSystem::CTimerSystem(systempriority_t priority) 
-    : ILogicSystem(priority)
+    void CTimerSystem::onAttach() 
     {
         m_timerQuery = CEngine::getInstance().getEntityWorld().createQuery(
             ecs::makeEntitySignature<CTimerComponent>()
         );
     }
 
-    CTimerSystem::~CTimerSystem() 
+    void CTimerSystem::onDetach() 
     {
         CEngine::getInstance().getEntityWorld().destroyQuery( m_timerQuery );
     }

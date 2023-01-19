@@ -14,7 +14,7 @@ namespace chestnut::engine
         ecs::entityid_t m_selectedEntity = ecs::ENTITY_ID_INVALID;
 
     public:
-        CDebugGuiRenderingSystem() = default;
+        CDebugGuiRenderingSystem() : IRenderingSystem() {}
         CDebugGuiRenderingSystem(systempriority_t priority) : IRenderingSystem(priority) {}
 
         void render() override;

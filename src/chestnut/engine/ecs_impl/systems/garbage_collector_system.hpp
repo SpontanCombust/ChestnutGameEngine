@@ -12,8 +12,11 @@ namespace chestnut::engine
         CLockedManualTimer m_timer;
 
     public:
-        CGarbageCollectorSystem() = default;
+        CGarbageCollectorSystem();
         CGarbageCollectorSystem(systempriority_t prio);
+
+        void onAttach() override;
+        void onDetach() override;
 
         void update(float dt) override;
     };

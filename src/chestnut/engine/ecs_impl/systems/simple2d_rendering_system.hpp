@@ -46,10 +46,11 @@ namespace chestnut::engine
 
 
     public:
-        CSimple2DRenderingSystem() = default;
+        CSimple2DRenderingSystem();
         CSimple2DRenderingSystem(systempriority_t priority);
-        ~CSimple2DRenderingSystem();
 
+        void onAttach() override;
+        void onDetach() override;
 
         void render() override;
 
