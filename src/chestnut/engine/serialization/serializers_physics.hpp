@@ -11,12 +11,11 @@ namespace chestnut::engine
         {EColliderActivity::STATIC, "STATIC"},
         {EColliderActivity::DYNAMIC, "DYNAMIC"}
     });
-    //FIXME can't serialize as normal enum, these are bit flags
-    NLOHMANN_JSON_SERIALIZE_ENUM(ECollisionPolicyFlags, {
-        {ECollisionPolicyFlags::NONE, "NONE"},
-        {ECollisionPolicyFlags::AFFECTED, "AFFECTED"},
-        {ECollisionPolicyFlags::AFFECTING, "AFFECTING"},
-        {ECollisionPolicyFlags::TRIGGER, "TRIGGER"}
+    
+    NLOHMANN_JSON_SERIALIZE_ENUM(ECollisionPolicy, {
+        {ECollisionPolicy::AFFECTED, "AFFECTED"},
+        {ECollisionPolicy::AFFECTING, "AFFECTING"},
+        {ECollisionPolicy::TRIGGER, "TRIGGER"}
     });
 
     void to_json(nlohmann::json& j, const CPointCollider2D& p);

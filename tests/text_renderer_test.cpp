@@ -77,7 +77,7 @@ TEST_CASE( "Renderers - Text renderer test - font style sheets", "[manual]" )
         
     SECTION( "Underline strikethrough font" )
     {
-        const auto& underlineStrikethroughSheet = fontResource->getConfig( 32, EFontStyle::UNDERLINE | EFontStyle::STRIKETHROUGH ).textureResource;
+        const auto& underlineStrikethroughSheet = fontResource->getConfig( 32, {EFontStyle::UNDERLINE, EFontStyle::STRIKETHROUGH} ).textureResource;
 
         showInfoMessageBox( testName, "Click to render a sheet with underline strikethrough font" );
 

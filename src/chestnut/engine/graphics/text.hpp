@@ -16,7 +16,7 @@ namespace chestnut::engine
         {   
             // debug
             wchar_t g;
-            EFontStyle styleMask;
+            CFlags<EFontStyle> styleMask;
 
             // data
             GLuint texID;

@@ -15,30 +15,27 @@
 
 namespace chestnut::engine
 {
-    DEFINE_ENUM_FLAG_OPERATORS(EFontStyle)
-
-
-    static int convertToSDLFontStyle( EFontStyle styleMask ) noexcept
+    static int convertToSDLFontStyle(CFlags<EFontStyle> styleMask ) noexcept
     {
         int sdlStyle = 0;
 
-        if( ( styleMask & EFontStyle::NORMAL ) == EFontStyle::NORMAL )
+        if(styleMask & EFontStyle::NORMAL)
         {
             sdlStyle |= TTF_STYLE_NORMAL;   
         }
-        if( ( styleMask & EFontStyle::BOLD ) == EFontStyle::BOLD )
+        if(styleMask & EFontStyle::BOLD)
         {
             sdlStyle |= TTF_STYLE_BOLD;   
         }
-        if( ( styleMask & EFontStyle::ITALIC ) == EFontStyle::ITALIC )
+        if(styleMask & EFontStyle::ITALIC)
         {
             sdlStyle |= TTF_STYLE_ITALIC;   
         }
-        if( ( styleMask & EFontStyle::UNDERLINE ) == EFontStyle::UNDERLINE )
+        if(styleMask & EFontStyle::UNDERLINE)
         {
             sdlStyle |= TTF_STYLE_UNDERLINE;   
         }
-        if( ( styleMask & EFontStyle::STRIKETHROUGH ) == EFontStyle::STRIKETHROUGH )
+        if(styleMask & EFontStyle::STRIKETHROUGH)
         {
             sdlStyle |= TTF_STYLE_STRIKETHROUGH;   
         }
@@ -53,7 +50,7 @@ namespace chestnut::engine
         { 0x0180, 0x024F }
     }};
 
-    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, EFontStyle styleMask ) noexcept
+    SFontConfig loadConfigInternal( TTF_Font *font, int pointSize, CFlags<EFontStyle> styleMask ) noexcept
     {
         SFontConfig config;
 
@@ -169,12 +166,12 @@ namespace chestnut::engine
         return config;
     }
 
-    size_t getConfigHashInternal( int pointSize, EFontStyle styleMask ) noexcept
+    size_t getConfigHashInternal( int pointSize, CFlags<EFontStyle> styleMask ) noexcept
     {
         static std::hash<std::string> hasher;
 
         size_t pointSizeHash = hasher( std::to_string( pointSize ) );
-        size_t styleHash = hasher( std::to_string( static_cast<int>( styleMask ) ) );
+        size_t styleHash = hasher( std::to_string(styleMask.m_buffer) );
 
         return pointSizeHash ^ styleHash;
     }
@@ -189,7 +186,7 @@ namespace chestnut::engine
 
     }
 
-    bool CFontResource::loadConfig( int pointSize, EFontStyle styleMask ) noexcept
+    bool CFontResource::loadConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept
     {
         if( !hasConfig( pointSize, styleMask ) )
         {
@@ -206,7 +203,7 @@ namespace chestnut::engine
         return false;
     }
 
-    bool CFontResource::hasConfig( int pointSize, EFontStyle styleMask ) noexcept
+    bool CFontResource::hasConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept
     {
         size_t hash = getConfigHash( pointSize, styleMask );
 
@@ -220,7 +217,7 @@ namespace chestnut::engine
         return false;
     }
 
-    const SFontConfig& CFontResource::getConfig( int pointSize, EFontStyle styleMask ) noexcept
+    const SFontConfig& CFontResource::getConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept
     {
         // checks for whether config is already loaded are already in that function
         loadConfig( pointSize, styleMask );
@@ -229,7 +226,7 @@ namespace chestnut::engine
         return m_mapConfigHashToConfig[ hash ];
     }
 
-    size_t CFontResource::getConfigHash( int pointSize, EFontStyle styleMask ) noexcept
+    size_t CFontResource::getConfigHash( int pointSize, CFlags<EFontStyle> styleMask ) noexcept
     {
         return getConfigHashInternal( pointSize, styleMask );
     }

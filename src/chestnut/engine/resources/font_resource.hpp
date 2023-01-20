@@ -23,9 +23,6 @@ namespace chestnut::engine
         STRIKETHROUGH
     };
 
-    DECLARE_ENUM_FLAG_OPERATORS(EFontStyle)
-
-
     struct SGlyphMetrics
     {
         int width;
@@ -40,7 +37,7 @@ namespace chestnut::engine
     struct SFontConfig
     {
         int pointSize;
-        EFontStyle styleMask;
+        CFlags<EFontStyle> styleMask;
         int ascent;
         int descent;
         int height;
@@ -55,13 +52,13 @@ namespace chestnut::engine
         std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
     public:
-        bool loadConfig( int pointSize, EFontStyle styleMask ) noexcept;
+        bool loadConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
 
-        bool hasConfig( int pointSize, EFontStyle styleMask ) noexcept;
+        bool hasConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
         
-        const SFontConfig& getConfig( int pointSize, EFontStyle styleMask ) noexcept;
+        const SFontConfig& getConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
 
-        size_t getConfigHash( int pointSize, EFontStyle styleMask ) noexcept;
+        size_t getConfigHash( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
 
 
         // fontPath - path to .ttf file

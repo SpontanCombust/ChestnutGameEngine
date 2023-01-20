@@ -1,5 +1,6 @@
 #include "chestnut/engine/serialization/serializers_physics.hpp"
 
+#include "chestnut/engine/serialization/serializers_misc.hpp"
 #include "chestnut/engine/serialization/serializers_math.hpp"
 
 
@@ -19,7 +20,7 @@ namespace chestnut::engine
     static void from_json(const nlohmann::json& j, CCollider2D& p)
     {
         p.setActivity(j.at("activity").get<EColliderActivity>());
-        p.setPolicyFlags(j.at("policyFlags").get<ECollisionPolicyFlags>());
+        p.setPolicyFlags(j.at("policyFlags").get<CFlags<ECollisionPolicy>>());
         p.setPosition(j.at("position").get<vec2f>());
         p.setScale(j.at("scale").get<vec2f>());
     }

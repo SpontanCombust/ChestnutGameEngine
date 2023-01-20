@@ -1,88 +1,116 @@
 #pragma once
 
+#include <initializer_list>
+#include <type_traits>
 
-#define DECLARE_ENUM_FLAG_OPERATORS(T) \
-    CHESTNUT_API T operator|( T lhs, T rhs ); \
-    CHESTNUT_API T& operator|=( T& lhs, T rhs ); \
-    CHESTNUT_API T operator&( T lhs, T rhs ); \
-    CHESTNUT_API T& operator&=( T& lhs, T rhs ); \
-    CHESTNUT_API T operator^( T lhs, T rhs ); \
-    CHESTNUT_API T& operator^=( T& lhs, T rhs ); \
-    CHESTNUT_API T operator~( T rhs ); \
-    CHESTNUT_API bool operator==( T lhs, int rhs ); \
-    CHESTNUT_API bool operator==( int lhs, T rhs ); \
-    CHESTNUT_API bool operator!=( T lhs, int rhs ); \
-    CHESTNUT_API bool operator!=( int lhs, T rhs ); \
-    CHESTNUT_API bool operator>( T lhs, int rhs ); \
-    CHESTNUT_API bool operator>( int lhs, T rhs ); \
-    CHESTNUT_API bool operator<( T lhs, int rhs ); \
-    CHESTNUT_API bool operator<( int lhs, T rhs ); \
+namespace chestnut::engine
+{
+    // Requires enum type with default values
+    template<typename E>
+    struct CFlags
+    {
+        static_assert(std::is_enum_v<E>, "E must be enum");
 
-#define DEFINE_ENUM_FLAG_OPERATORS(T) \
-    T operator|( T lhs, T rhs ) \
-    { \
-        return static_cast<T>( static_cast<int>(lhs) | static_cast<int>(rhs) ); \
-    } \
-    T& operator|=( T& lhs, T rhs ) \
-    { \
-        T result = lhs | rhs; \
-        lhs = result; \
-        return lhs; \
-    } \
-    T operator&( T lhs, T rhs ) \
-    { \
-        return static_cast<T>( static_cast<int>(lhs) & static_cast<int>(rhs) ); \
-    } \
-    T& operator&=( T& lhs, T rhs ) \
-    { \
-        T result = lhs & rhs; \
-        lhs = result; \
-        return lhs; \
-    } \
-    T operator^( T lhs, T rhs ) \
-    { \
-        return static_cast<T>( static_cast<int>(lhs) ^ static_cast<int>(rhs) ); \
-    } \
-    T& operator^=( T& lhs, T rhs ) \
-    { \
-        T result = lhs ^ rhs; \
-        lhs = result; \
-        return lhs; \
-    } \
-    T operator~( T rhs ) \
-    { \
-        return static_cast<T>( ~ static_cast<int>(rhs) ); \
-    } \
-    bool operator==( T lhs, int rhs ) \
-    { \
-        return static_cast<int>( lhs ) == rhs; \
-    } \
-    bool operator==( int lhs, T rhs ) \
-    { \
-        return static_cast<int>( rhs ) == lhs; \
-    } \
-    bool operator!=( T lhs, int rhs ) \
-    { \
-        return static_cast<int>( lhs ) != rhs; \
-    } \
-    bool operator!=( int lhs, T rhs ) \
-    { \
-        return static_cast<int>( rhs ) != lhs; \
-    } \
-    bool operator>( T lhs, int rhs ) \
-    { \
-        return static_cast<int>( lhs ) > rhs; \
-    } \
-    bool operator>( int lhs, T rhs ) \
-    { \
-        return lhs > static_cast<int>( rhs ); \
-    } \
-    bool operator<( T lhs, int rhs ) \
-    { \
-        return static_cast<int>( lhs ) < rhs; \
-    } \
-    bool operator<( int lhs, T rhs ) \
-    { \
-        return lhs < static_cast<int>( rhs ); \
-    } \
+    public:
+        unsigned long m_buffer;
 
+    public:
+        CFlags() noexcept
+        {
+            m_buffer = 0;
+        }
+
+        CFlags(E e) noexcept
+        {
+            m_buffer = static_cast<unsigned long>(1 << static_cast<unsigned long>(e));
+        }
+
+        CFlags(std::initializer_list<E> il) noexcept
+        {
+            m_buffer = 0;
+            for(E e : il)
+            {
+                m_buffer |= static_cast<unsigned long>(1 << static_cast<unsigned long>(e));
+            }
+        }
+
+
+        bool empty() const
+        {
+            return m_buffer == 0;
+        }
+
+        operator bool() const
+        {
+            return m_buffer > 0;
+        }
+
+
+        CFlags<E> operator|(CFlags<E> rhs) const
+        {
+            return CFlags<E>(m_buffer | rhs.m_buffer);
+        }
+
+        CFlags<E>& operator|=(CFlags<E> rhs)
+        {
+            m_buffer |= rhs.m_buffer;
+            return *this;
+        }
+
+        CFlags<E> operator&(CFlags<E> rhs) const
+        {
+            return CFlags<E>(m_buffer & rhs.m_buffer);
+        }
+
+        CFlags<E>& operator&=(CFlags<E> rhs)
+        {
+            m_buffer &= rhs.m_buffer;
+            return *this;
+        }
+
+        CFlags<E> operator^(CFlags<E> rhs) const
+        {
+            return CFlags<E>(m_buffer ^ rhs.m_buffer);
+        }
+
+        CFlags<E>& operator^=(CFlags<E> rhs)
+        {
+            m_buffer ^= rhs.m_buffer;
+            return *this;
+        }
+
+        CFlags<E> operator~() const
+        {
+            return CFlags<E>(~m_buffer);
+        }
+
+
+        bool operator==(CFlags<E> rhs) const
+        {
+            return m_buffer == rhs.m_buffer;
+        }
+
+        bool operator!=(CFlags<E> rhs) const
+        {
+            return m_buffer != rhs.m_buffer;
+        }
+
+        bool operator<(CFlags<E> rhs) const
+        {
+            return m_buffer <  rhs.m_buffer;
+        }
+
+        bool operator>(CFlags<E> rhs) const
+        {
+            return m_buffer >  rhs.m_buffer;
+        }
+
+    private:
+        CFlags(int initBuffer) noexcept 
+        : m_buffer(initBuffer) 
+        {
+
+        }
+    };
+
+} // namespace chestnut::engine

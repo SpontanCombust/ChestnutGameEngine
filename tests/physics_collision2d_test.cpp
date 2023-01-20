@@ -29,32 +29,32 @@ TEST_CASE( "Physics - point vs AABB collision", "[manual][demo]" )
     CBoxCollider2D box1Collider;
     box1Collider.setPosition(vec2f( 100.f, 250.f ));
     box1Collider.setSize(vec2f(100.f, 300.f));
-    box1Collider.setPolicyFlags(ECollisionPolicyFlags::NONE);
+    box1Collider.setPolicyFlags({});
 
     SColoredPolygon2D box2 = colored_polygon_templates::coloredPolygonRectangle( 200.f, 100.f );
     CBoxCollider2D box2Collider;
     box2Collider.setPosition(vec2f( 400.f, 250.f ));
     box2Collider.setSize(vec2f(200.f, 100.f));
-    box2Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    box2Collider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
     SColoredPolygon2D box3 = colored_polygon_templates::coloredPolygonSquare( 50.f );
     CBoxCollider2D box3Collider;
     box3Collider.setPosition(vec2f( 400.f, 500.f ));
     box3Collider.setSize(vec2f(50.f, 50.f));
-    box3Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED);
+    box3Collider.setPolicyFlags(ECollisionPolicy::AFFECTED);
 
     SColoredPolygon2D box4 = colored_polygon_templates::coloredPolygonSquare( 25.f );
     CBoxCollider2D box4Collider;
     box4Collider.setPosition(vec2f( 700.f, 300.f ));
     box4Collider.setScale(vec2f(4.f, 4.f));
     box4Collider.setSize(vec2f(25.f, 25.f));
-    box4Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTING);
+    box4Collider.setPolicyFlags(ECollisionPolicy::AFFECTING);
     
     SColoredPolygon2D point = colored_polygon_templates::coloredPolygonSquare( 4.f );
     point.color = { 0.f, 0.f, 1.f, 1.f };
     CPointCollider2D pointCollider;
     pointCollider.setPosition(vec2f(0.f, 0.f));
-    pointCollider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    pointCollider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
 
     SDL_Event e;
@@ -142,26 +142,26 @@ TEST_CASE( "Physics - point vs circle collision", "[manual][demo]" )
     CCircleCollider2D circle1Collider;
     circle1Collider.setPosition(vec2f(200.f, 200.f));
     circle1Collider.setRadius(150.f);
-    circle1Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTING);
+    circle1Collider.setPolicyFlags(ECollisionPolicy::AFFECTING);
 
     SColoredPolygon2D circle2 = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
     CCircleCollider2D circle2Collider;
     circle2Collider.setPosition(vec2f(500.f, 200.f));
     circle2Collider.setRadius(50.f);
-    circle2Collider.setPolicyFlags(ECollisionPolicyFlags::NONE);
+    circle2Collider.setPolicyFlags({});
 
     SColoredPolygon2D circle3 = colored_polygon_templates::coloredPolygonCircle( 200.f, 36 );
     CCircleCollider2D circle3Collider;
     circle3Collider.setPosition(vec2f(500.f, 400.f));
     circle3Collider.setRadius(200.f);
     circle3Collider.setScale(vec2f(0.5f));
-    circle3Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    circle3Collider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
     SColoredPolygon2D point = colored_polygon_templates::coloredPolygonSquare( 4.f );
     point.color = { 0.f, 0.f, 1.f, 1.f };
     CPointCollider2D pointCollider;
     pointCollider.setPosition(vec2f(0.f, 0.f));
-    pointCollider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED);
+    pointCollider.setPolicyFlags(ECollisionPolicy::AFFECTED);
 
 
     SDL_Event e;
@@ -240,27 +240,27 @@ TEST_CASE( "Physics - circle vs circle collision", "[manual][demo]" )
     CCircleCollider2D circle1Collider;
     circle1Collider.setPosition(vec2f(300.f, 300.f));
     circle1Collider.setRadius(150.f);
-    circle1Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTING);
+    circle1Collider.setPolicyFlags(ECollisionPolicy::AFFECTING);
 
     SColoredPolygon2D circle2 = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
     CCircleCollider2D circle2Collider;
     circle2Collider.setPosition(vec2f(800.f, 300.f));
     circle2Collider.setRadius(50.f);
-    circle2Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED);
+    circle2Collider.setPolicyFlags(ECollisionPolicy::AFFECTED);
     
     SColoredPolygon2D circle3 = colored_polygon_templates::coloredPolygonCircle( 50.f, 36 );
     CCircleCollider2D circle3Collider;
     circle3Collider.setPosition(vec2f(500.f, 600.f));
     circle3Collider.setRadius(50.f);
     circle3Collider.setScale(vec2f(2.f));
-    circle3Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    circle3Collider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
     
     SColoredPolygon2D circleUser = colored_polygon_templates::coloredPolygonCircle( 200.f, 36 );
     circleUser.color = { 0.f, 0.f, 1.f, 1.f };
     CCircleCollider2D circleUserCollider;
     circleUserCollider.setScale(vec2f(0.5f));
     circleUserCollider.setRadius(200.f);
-    circleUserCollider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    circleUserCollider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
     SDL_Event e;
     bool quit = false;
@@ -340,32 +340,32 @@ TEST_CASE( "Physics - AABB vs AABB collision", "[manual][demo]" )
     CBoxCollider2D box1Collider;
     box1Collider.setPosition(vec2f(200.f, 250.f));
     box1Collider.setSize(vec2f(100.f, 200.f));
-    box1Collider.setPolicyFlags(ECollisionPolicyFlags::NONE);
+    box1Collider.setPolicyFlags({});
 
     SColoredPolygon2D box2 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 50.f );
     CBoxCollider2D box2Collider;
     box2Collider.setPosition(vec2f(600.f, 250.f));
     box2Collider.setSize(vec2f(100.f, 50.f));
-    box2Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED);
+    box2Collider.setPolicyFlags(ECollisionPolicy::AFFECTED);
 
     SColoredPolygon2D box3 = colored_polygon_templates::coloredPolygonRectangle( 150.f, 150.f );
     CBoxCollider2D box3Collider;
     box3Collider.setPosition(vec2f(1000.f, 250.f));
     box3Collider.setSize(vec2f(150.f, 150.f));
-    box3Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTING);
+    box3Collider.setPolicyFlags(ECollisionPolicy::AFFECTING);
     
     SColoredPolygon2D box4 = colored_polygon_templates::coloredPolygonRectangle( 400.f, 50.f );
     CBoxCollider2D box4Collider;
     box4Collider.setPosition(vec2f(600.f, 500.f));
     box4Collider.setSize(vec2f(400.f, 50.f));
     box4Collider.setScale(vec2f(0.75f, 2.f));
-    box4Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    box4Collider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
     SColoredPolygon2D boxUser = colored_polygon_templates::coloredPolygonRectangle( 80.f, 120.f );
     boxUser.color = { 0.f, 0.f, 1.f, 1.f };
     CBoxCollider2D boxUserCollider;
     boxUserCollider.setSize(vec2f(80.f, 120.f));
-    boxUserCollider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    boxUserCollider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
     SDL_Event e;
     bool quit = false;
@@ -453,33 +453,33 @@ TEST_CASE( "Physics - circle vs AABB collision", "[manual][demo]" )
     CBoxCollider2D box1Collider;
     box1Collider.setPosition(vec2f(100.f, 150.f));
     box1Collider.setSize(vec2f(100.f, 200.f));
-    box1Collider.setPolicyFlags(ECollisionPolicyFlags::NONE);
+    box1Collider.setPolicyFlags({});
     
     SColoredPolygon2D box2 = colored_polygon_templates::coloredPolygonRectangle( 100.f, 50.f );
     CBoxCollider2D box2Collider;
     box2Collider.setPosition(vec2f(500.f, 150.f));
     box2Collider.setSize(vec2f(100.f, 50.f));
-    box2Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED);
+    box2Collider.setPolicyFlags(ECollisionPolicy::AFFECTED);
     
     SColoredPolygon2D box3 = colored_polygon_templates::coloredPolygonSquare( 200.f );
     CBoxCollider2D box3Collider;
     box3Collider.setPosition(vec2f(900.f, 150.f));
     box3Collider.setSize(vec2f(200.f, 200.f));
     box3Collider.setScale(vec2f(0.75f, 0.75f));
-    box3Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTING);
+    box3Collider.setPolicyFlags(ECollisionPolicy::AFFECTING);
 
     SColoredPolygon2D box4 = colored_polygon_templates::coloredPolygonRectangle( 300.f, 100.f );
     CBoxCollider2D box4Collider;
     box4Collider.setPosition(vec2f(400.f, 500.f));
     box4Collider.setSize(vec2f(300.f, 100.f));
-    box4Collider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    box4Collider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
 
     SColoredPolygon2D circleUser = colored_polygon_templates::coloredPolygonCircle( 25.f, 36 );
     circleUser.color = { 0.f, 0.f, 1.f, 1.f };
     CCircleCollider2D circleUserCollider;
     circleUserCollider.setScale(vec2f(2.f));
     circleUserCollider.setRadius(25.f);
-    circleUserCollider.setPolicyFlags(ECollisionPolicyFlags::AFFECTED | ECollisionPolicyFlags::AFFECTING);
+    circleUserCollider.setPolicyFlags({ECollisionPolicy::AFFECTED, ECollisionPolicy::AFFECTING});
     
 
     SDL_Event e;

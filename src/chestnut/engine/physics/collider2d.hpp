@@ -19,7 +19,7 @@ namespace chestnut::engine
     {
     protected:
         EColliderActivity m_activity;
-        ECollisionPolicyFlags m_policyFlags;
+        CFlags<ECollisionPolicy> m_policyFlags;
 
         vec2f m_position;
         vec2f m_scale;
@@ -32,8 +32,8 @@ namespace chestnut::engine
         EColliderActivity getActivity() const;
         void setActivity( EColliderActivity activity );
         
-        ECollisionPolicyFlags getPolicyFlags() const;
-        void setPolicyFlags( ECollisionPolicyFlags policyFlags );
+        CFlags<ECollisionPolicy> getPolicyFlags() const;
+        void setPolicyFlags( CFlags<ECollisionPolicy> policyFlags );
 
         vec2f getPosition() const;
         void setPosition( vec2f position );

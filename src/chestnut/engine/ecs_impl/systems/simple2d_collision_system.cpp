@@ -19,9 +19,9 @@ namespace chestnut::engine
         CEngine::getInstance().getEntityWorld().destroyQuery( m_collisionQuery );
     }
 
-    inline bool canCollidersTrigger( ECollisionPolicyFlags policy1, ECollisionPolicyFlags policy2 )
+    inline bool canCollidersTrigger( CFlags<ECollisionPolicy> policy1, CFlags<ECollisionPolicy> policy2 )
     {
-        return ( policy1 & ECollisionPolicyFlags::TRIGGER ) > 0 && ( policy2 & ECollisionPolicyFlags::TRIGGER ) > 0;
+        return ( policy1 & ECollisionPolicy::TRIGGER ) && ( policy2 & ECollisionPolicy::TRIGGER );
     }
 
     void CSimple2DCollisionSystem::update( float dt )

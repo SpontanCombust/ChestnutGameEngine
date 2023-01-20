@@ -7,7 +7,7 @@ namespace chestnut::engine
     CCollider2D::CCollider2D()
     {
         m_activity = EColliderActivity::STATIC;
-        m_policyFlags = ECollisionPolicyFlags::NONE;
+        m_policyFlags = CFlags<ECollisionPolicy>(); // no flags
         m_position = vec2f(0.0f, 0.0f);
         m_scale = vec2f(1.0f, 1.0f);
     }
@@ -22,12 +22,12 @@ namespace chestnut::engine
         m_activity = activity;
     }
 
-    ECollisionPolicyFlags CCollider2D::getPolicyFlags() const
+    CFlags<ECollisionPolicy> CCollider2D::getPolicyFlags() const
     {
         return m_policyFlags;
     }
 
-    void CCollider2D::setPolicyFlags(ECollisionPolicyFlags policyFlags)
+    void CCollider2D::setPolicyFlags(CFlags<ECollisionPolicy> policyFlags)
     {
         m_policyFlags = policyFlags;
     }

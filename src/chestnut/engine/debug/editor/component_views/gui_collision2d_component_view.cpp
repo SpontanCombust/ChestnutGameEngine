@@ -18,9 +18,9 @@ namespace chestnut::engine::debug
         .getComponent<CCollision2DComponent>(entity);
 
         m_selectedActivity = (int)m_handle->getBaseCollider().getActivity();
-        m_selectedPolicyAffected = (m_handle->getBaseCollider().getPolicyFlags() & ECollisionPolicyFlags::AFFECTED) > 0;
-        m_selectedPolicyAffecting = (m_handle->getBaseCollider().getPolicyFlags() & ECollisionPolicyFlags::AFFECTING) > 0;
-        m_selectedPolicyTrigger = (m_handle->getBaseCollider().getPolicyFlags() & ECollisionPolicyFlags::TRIGGER) > 0;
+        m_selectedPolicyAffected = m_handle->getBaseCollider().getPolicyFlags() & ECollisionPolicy::AFFECTED;
+        m_selectedPolicyAffecting = m_handle->getBaseCollider().getPolicyFlags() & ECollisionPolicy::AFFECTING;
+        m_selectedPolicyTrigger = m_handle->getBaseCollider().getPolicyFlags() & ECollisionPolicy::TRIGGER;
         m_position = m_handle->getBaseCollider().getPosition();
         m_scale = m_handle->getBaseCollider().getScale();
 
@@ -101,9 +101,9 @@ namespace chestnut::engine::debug
 
         m_handle->getBaseCollider().setActivity(m_selectedActivity == 0 ? EColliderActivity::STATIC : EColliderActivity::DYNAMIC);
         m_handle->getBaseCollider().setPolicyFlags(
-            (m_selectedPolicyAffected   ? ECollisionPolicyFlags::AFFECTED : ECollisionPolicyFlags::NONE) |
-            (m_selectedPolicyAffecting  ? ECollisionPolicyFlags::AFFECTING : ECollisionPolicyFlags::NONE) |
-            (m_selectedPolicyTrigger    ? ECollisionPolicyFlags::TRIGGER : ECollisionPolicyFlags::NONE)
+            (m_selectedPolicyAffected   ? ECollisionPolicy::AFFECTED    :   CFlags<ECollisionPolicy>()) |
+            (m_selectedPolicyAffecting  ? ECollisionPolicy::AFFECTING   :   CFlags<ECollisionPolicy>()) |
+            (m_selectedPolicyTrigger    ? ECollisionPolicy::TRIGGER     :   CFlags<ECollisionPolicy>())
         );
         m_handle->getBaseCollider().setPosition(m_position);
         m_handle->getBaseCollider().setScale(m_scale); 
