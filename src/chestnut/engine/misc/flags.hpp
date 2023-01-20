@@ -79,11 +79,6 @@ namespace chestnut::engine
             return *this;
         }
 
-        CFlags<E> operator~() const
-        {
-            return CFlags<E>(~m_buffer);
-        }
-
 
         bool operator==(CFlags<E> rhs) const
         {
