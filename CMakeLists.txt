@@ -68,7 +68,7 @@ option(CHESTNUT_BUILD_TESTS "Build ChestnutGameEngine project tests" ON)
 FetchContent_Declare(
     chestnut-ecs
     GIT_REPOSITORY https://github.com/SpontanCombust/chestnut-ecs
-    GIT_TAG v1.1.2
+    GIT_TAG v1.2.0
 )
 FetchContent_Declare(
     SDL2
@@ -123,9 +123,15 @@ FetchContent_Declare(
 
 
 # configure lib options
+set(SDL_SHARED ON)
+set(SDL_STATIC OFF)
+set(SDL_TEST OFF)
+
+set(SDL2TTF_VENDORED ON)
 set(SDL2TTF_INSTALL OFF)
 set(SDL2TTF_SAMPLES OFF)
 
+set(SDL2MIXER_VENDORED ON)
 set(SDL2MIXER_INSTALL OFF)
 set(SDL2MIXER_SAMPLES OFF)
 
