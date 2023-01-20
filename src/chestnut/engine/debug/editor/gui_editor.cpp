@@ -70,6 +70,16 @@ namespace chestnut::engine::debug
 
                         selectedEnt = it.id(); 
                     }
+
+                    if(ImGui::BeginPopupContextItem())
+                    {
+                        if(ImGui::Button("Remove"))
+                        {
+                            world.destroyEntity(selectedEnt);
+                        }
+
+                        ImGui::EndPopup();
+                    }
                 }
             }
         
