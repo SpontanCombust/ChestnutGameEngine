@@ -29,6 +29,11 @@ namespace chestnut::engine::debug
             for(const auto& [animName, _] : m_handle->animationResource->m_animationSet.mapAnimNameToAnimData)
             {
                 m_cachedAnimNames.push_back(animName.c_str());
+
+                if(m_handle->currentAnimName == animName)
+                {
+                    m_selectedAnimIdx = m_cachedAnimNames.size() - 1;
+                }
             }
         }
         else

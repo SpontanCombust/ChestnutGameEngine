@@ -18,6 +18,7 @@ namespace chestnut::engine
         // Could've used a pointer here, but like this all the memory for these colliders
         // is fully contiguous in the entity world
         VCollider2D colliderVariant;
+        bool colliderOutline = false;
 
         CCollision2DComponent() = default;
 

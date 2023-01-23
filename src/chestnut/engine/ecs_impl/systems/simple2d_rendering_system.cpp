@@ -269,28 +269,31 @@ namespace chestnut::engine
             m_colliderQuery->forEach<CCollision2DComponent>(std::function(
                 [this](CCollision2DComponent& collision)
                 {
-                    const auto& collider = collision.getBaseCollider();
+                    if(collision.colliderOutline)
+                    {
+                        const auto& collider = collision.getBaseCollider();
 
-                    std::visit([this, &collision](auto&& arg) {
-                        using T = std::decay_t<decltype(arg)>;
+                        std::visit([this, &collision](auto&& arg) {
+                            using T = std::decay_t<decltype(arg)>;
 
-                        if constexpr(std::is_same_v<T, CBoxCollider2D>)
-                        {
-                            vec2f size = arg.getSize();
-                            auto poly = colored_polygon_templates::coloredPolygonRectangle(size.x, size.y, true);
-                            poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
+                            if constexpr(std::is_same_v<T, CBoxCollider2D>)
+                            {
+                                vec2f size = arg.getSize();
+                                auto poly = colored_polygon_templates::coloredPolygonRectangle(size.x, size.y, true);
+                                poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
 
-                            m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
-                        }
-                        else if constexpr(std::is_same_v<T, CCircleCollider2D>)
-                        {
-                            auto poly = colored_polygon_templates::coloredPolygonCircle(arg.getRadius(), 100, true);
-                            poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
+                                m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
+                            }
+                            else if constexpr(std::is_same_v<T, CCircleCollider2D>)
+                            {
+                                auto poly = colored_polygon_templates::coloredPolygonCircle(arg.getRadius(), 100, true);
+                                poly.color = vec4f(1.f, 0.f, 0.f, 1.f);
 
-                            m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
-                        }
+                                m_polygonRenderer.submitPolygon(poly, arg.getPosition(), arg.getScale());
+                            }
 
-                    }, collision.colliderVariant);
+                        }, collision.colliderVariant);
+                    }
                 }
             ));
         }

@@ -47,28 +47,31 @@ namespace chestnut::engine
 
     void to_json(nlohmann::json& j, const CCollision2DComponent& c)
     {
-        std::visit([&j](auto&& arg) {
+        std::visit([&j, &c](auto&& arg) {
             using T = std::decay<decltype(arg)>::type;
 
             if constexpr(std::is_same_v<T, CPointCollider2D>)
             {
                 j = json {
                     {"variant", "point"},
-                    {"collider", arg}
+                    {"collider", arg},
+                    {"colliderOutline", c.colliderOutline}
                 };
             }
             else if constexpr(std::is_same_v<T, CBoxCollider2D>)
             {
                 j = json {
                     {"variant", "box"},
-                    {"collider", arg}
+                    {"collider", arg},
+                    {"colliderOutline", c.colliderOutline}
                 };
             }
             else if constexpr(std::is_same_v<T, CCircleCollider2D>)
             {
                 j = json {
-                    {"variant", "point"},
-                    {"collider", arg}
+                    {"variant", "circle"},
+                    {"collider", arg},
+                    {"colliderOutline", c.colliderOutline}
                 };
             }
 
@@ -79,6 +82,7 @@ namespace chestnut::engine
     {
         std::string variant;
         j.at("variant").get_to(variant);
+        j.at("colliderOutline").get_to(c.colliderOutline);
 
         if(variant == "point")
         {

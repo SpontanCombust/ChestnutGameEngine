@@ -4,61 +4,49 @@
             "chestnut::engine::CAnimation2DComponent": {
                 "animSpeedMultiplier": 1.0,
                 "animationResource": "testing\\animations\\player_sheet_orig.anim",
-                "currentAnimName": "",
-                "elapsedAnimTimeSec": 0.0,
+                "currentAnimName": "walk_right",
+                "elapsedAnimTimeSec": 0.2875101566314697,
                 "isAnimPaused": false,
-                "isAnimPlaying": false,
+                "isAnimPlaying": true,
                 "remainingAnimLoops": -1
             },
             "chestnut::engine::CCollision2DComponent": {
                 "collider": {
                     "activity": "DYNAMIC",
-                    "policyFlags": "AFFECTING",
+                    "policyFlags": [
+                        "AFFECTED",
+                        "AFFECTING"
+                    ],
                     "position": {
-                        "x": 479.9519958496094,
-                        "y": 99.00406646728516
+                        "x": 316.2569885253906,
+                        "y": 306.0
                     },
                     "scale": {
-                        "x": 1.0,
-                        "y": 1.0
+                        "x": 2.0,
+                        "y": 2.0
                     },
                     "size": {
-                        "x": 38.0,
-                        "y": 48.0
+                        "x": 19.0,
+                        "y": 36.0
                     }
                 },
-                "variant": "box"
+                "variant": "box",
+                "colliderOutline": true
             },
             "chestnut::engine::CIdentityComponent": {
                 "name": "ent1"
             },
             "chestnut::engine::CKinematics2DComponent": {
                 "angularAcceleration": 0.0,
-                "angularVelocity": 0.23000000417232513,
+                "angularVelocity": 0.0,
                 "linearAcceleration": {
                     "x": 0.0,
                     "y": 0.0
                 },
                 "linearVelocity": {
-                    "x": 5.0,
-                    "y": 5.0
+                    "x": 0.0,
+                    "y": 0.0
                 }
-            },
-            "chestnut::engine::CTransform2DComponent": {
-                "position": {
-                    "x": 479.9519958496094,
-                    "y": 99.00406646728516
-                },
-                "rotation": 21.1066951751709,
-                "scale": {
-                    "x": 1.0,
-                    "y": 1.0
-                }
-            }
-        },
-        {
-            "chestnut::engine::CIdentityComponent": {
-                "name": "ent2"
             },
             "chestnut::engine::CModel2DComponent": {
                 "origin": {
@@ -66,21 +54,18 @@
                     "y": 0.5
                 },
                 "size": {
-                    "x": 207.0,
-                    "y": 120.0
+                    "x": 30.0,
+                    "y": 30.0
                 }
-            },
-            "chestnut::engine::CRenderLayerComponent": {
-                "layer": 51
             },
             "chestnut::engine::CSpriteComponent": {
                 "adjust": "SCALED",
                 "sprite": {
                     "clipRect": {
-                        "h": 128.0,
-                        "w": 256.0,
-                        "x": 0.0,
-                        "y": 0.0
+                        "h": 32.0,
+                        "w": 32.0,
+                        "x": 64.5,
+                        "y": 96.5
                     },
                     "textureResource": "testing\\textures\\player_sheet_orig.texture",
                     "tint": {
@@ -93,30 +78,81 @@
             },
             "chestnut::engine::CTransform2DComponent": {
                 "position": {
-                    "x": 463.0,
-                    "y": 207.0
+                    "x": 316.2569885253906,
+                    "y": 306.0
+                },
+                "rotation": 0.0,
+                "scale": {
+                    "x": 2.0,
+                    "y": 2.0
+                }
+            }
+        },
+        {
+            "chestnut::engine::CCollision2DComponent": {
+                "collider": {
+                    "activity": "STATIC",
+                    "policyFlags": [
+                        "AFFECTED",
+                        "AFFECTING"
+                    ],
+                    "position": {
+                        "x": 613.24072265625,
+                        "y": 362.0
+                    },
+                    "radius": 53.0,
+                    "scale": {
+                        "x": 1.0,
+                        "y": 1.0
+                    }
+                },
+                "variant": "circle",
+                "colliderOutline": false
+            },
+            "chestnut::engine::CIdentityComponent": {
+                "name": "ent2"
+            },
+            "chestnut::engine::CModel2DComponent": {
+                "origin": {
+                    "x": 0.5,
+                    "y": 0.5
+                },
+                "size": {
+                    "x": 200.0,
+                    "y": 120.0
+                }
+            },
+            "chestnut::engine::CRenderLayerComponent": {
+                "layer": 51
+            },
+            "chestnut::engine::CSpriteComponent": {
+                "adjust": "SCALED",
+                "sprite": {
+                    "clipRect": {
+                        "h": 504.0,
+                        "w": 518.0,
+                        "x": 0.0,
+                        "y": 0.0
+                    },
+                    "textureResource": "testing\\images\\awesomeface.png",
+                    "tint": {
+                        "x": 1.0,
+                        "y": 1.0,
+                        "z": 1.0
+                    },
+                    "tintFactor": 0.0
+                }
+            },
+            "chestnut::engine::CTransform2DComponent": {
+                "position": {
+                    "x": 613.24072265625,
+                    "y": 362.0
                 },
                 "rotation": 0.0,
                 "scale": {
                     "x": 1.0,
                     "y": 1.0
                 }
-            },
-            "chestnut::engine::CCollision2DComponent": {
-                "collider": {
-                    "activity": "DYNAMIC",
-                    "policyFlags": "AFFECTED",
-                    "position": {
-                        "x": 479.9519958496094,
-                        "y": 99.00406646728516
-                    },
-                    "scale": {
-                        "x": 1.0,
-                        "y": 1.0
-                    },
-                    "radius": 60.0
-                },
-                "variant": "circle"
             }
         }
     ]
