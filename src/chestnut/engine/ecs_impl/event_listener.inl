@@ -5,8 +5,6 @@ namespace chestnut::engine
     {
         m_eventType = typeid(EventType);
 
-        m_isEnabled = true;
-
         m_handler = []( const EventType& ) -> event_function
         {
             //NOP
@@ -24,10 +22,7 @@ namespace chestnut::engine
     {
         m_eventType = typeid(EventType);
 
-        m_isEnabled = true;
-
         m_handler = handler;
-
         m_filter = []( const EventType& ) -> bool
         {
             // by default filter accepts anything
@@ -40,10 +35,7 @@ namespace chestnut::engine
     {
         m_eventType = typeid(EventType);
 
-        m_isEnabled = true;
-        
         m_handler = handler;
-
         m_filter = filter;
     }
 

@@ -14,13 +14,7 @@ namespace chestnut::engine
 	public:
 		std::type_index m_eventType = typeid(void);
 
-	protected:
-		bool m_isEnabled;
-
 	public:
-		void setEnabled( bool enable );
-		bool isEnabled() const;
-
 		virtual ~IEventListener() = default;
 	};
 

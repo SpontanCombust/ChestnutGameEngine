@@ -14,7 +14,6 @@
 #include "../src/chestnut/engine/ecs_impl/components/sprite_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/animation2d_component.hpp"
-#include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/init.hpp"
 
@@ -54,8 +53,6 @@ class CAnimationDemoSystem : public ILogicSystem
 {
 public:
     entityid_t ent;
-    CEventListenerGuard listenerGuard;
-
     int animType = WALK_UP;
 
     CAnimationDemoSystem(systempriority_t prio)
@@ -90,8 +87,7 @@ public:
             }
         );
 
-        CEngine::getInstance().getEventManager().registerListener(l);
-        listenerGuard.reset( l, &CEngine::getInstance().getEventManager() );
+        addEventListener("handleInput", l);
     }
 
     ~CAnimationDemoSystem()

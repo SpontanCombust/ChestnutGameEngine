@@ -2,7 +2,6 @@
 
 #include "../src/chestnut/engine/init.hpp"
 #include "../src/chestnut/engine/main/engine.hpp"
-#include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/systems/simple2d_rendering_system.hpp"
 #include "../src/chestnut/engine/ecs_impl/components/sprite_component.hpp"
@@ -34,8 +33,6 @@ const char *adjustToString( ESpriteToModel2DAdjust adjust )
 class CSpriteSteeringSystem : public ILogicSystem
 {
 private:
-    CEventListenerGuard inputListenerGuard;
-
     ecs::entityid_t player;
     vec2f sizeDelta;
     vec2f posDelta;
@@ -48,9 +45,7 @@ public:
     {
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &CSpriteSteeringSystem::handleInput, this );
-        CEngine::getInstance().getEventManager().registerListener(l);
-
-        inputListenerGuard.reset( l, &CEngine::getInstance().getEventManager() );
+        addEventListener("handleInput", l);
 
         player = CEngine::getInstance().getEntityWorld().createEntity();
         CEngine::getInstance().getEntityWorld().createComponent<CTransform2DComponent>( player );
@@ -243,7 +238,6 @@ class COrderingDemonstationSystem : public ILogicSystem
 public:
     std::vector< ecs::entityid_t > ents;
     EDefaultRenderOrder order;
-    CEventListenerGuard listenerGuard;
 
     COrderingDemonstationSystem(systempriority_t prio) : ILogicSystem(prio) 
     {
@@ -294,8 +288,7 @@ public:
         {
             return e.type == SDL_KEYDOWN && e.keysym.sym == SDLK_f;
         });
-        CEngine::getInstance().getEventManager().registerListener(l);
-        listenerGuard.reset( l, &CEngine::getInstance().getEventManager() );
+        addEventListener("handleInput", l);
 
         order = EDefaultRenderOrder::BOTTOM_TO_TOP;
     }
@@ -376,7 +369,6 @@ class CLayeringDemonstrationSystem : public ILogicSystem
 {
 public:
     std::vector< ecs::entityid_t > ents;
-    CEventListenerGuard listenerGuard;
 
     CLayeringDemonstrationSystem(systempriority_t prio) : ILogicSystem(prio)
     {
@@ -418,8 +410,7 @@ public:
         {
             return e.type == SDL_KEYDOWN;
         });
-        CEngine::getInstance().getEventManager().registerListener(l);
-        listenerGuard.reset( l, &CEngine::getInstance().getEventManager() );
+        addEventListener("handleInput", l);
     }
 
     ~CLayeringDemonstrationSystem()
@@ -505,7 +496,6 @@ class CCameraDemonstrationSystem : public ILogicSystem
 {
 public:
     ecs::entityid_t ent;
-    CEventListenerGuard listenerGuard;
 
     vec2f posDelta;
     vec2f dimDelta;
@@ -535,8 +525,7 @@ public:
 
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &CCameraDemonstrationSystem::handleInput, this );
-        CEngine::getInstance().getEventManager().registerListener(l);
-        listenerGuard.reset( l, &CEngine::getInstance().getEventManager() );
+        addEventListener("handleInput", l);
     }
 
     ~CCameraDemonstrationSystem()

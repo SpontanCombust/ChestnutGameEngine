@@ -12,13 +12,10 @@ namespace chestnut::engine
             // iterate using iterator type so we can erase a listener if its pointer is exprired
             for( const auto& node : listNodes )
             {
-                if( node.listener->isEnabled() )
-                {
-                    // we can use static cast as we store the type data in the listener itself
-                    CEventListener<EventType> *listenerCasted = static_cast< CEventListener<EventType> * >( node.listener );
+                // we can use static cast as we store the type data in the listener itself
+                CEventListener<EventType> *listenerCasted = static_cast< CEventListener<EventType> * >( node.listener );
 
-                    listenerCasted->invokeHandlerIfFilterAccepts( event );
-                }
+                listenerCasted->invokeHandlerIfFilterAccepts( event );
             }
         }
     }

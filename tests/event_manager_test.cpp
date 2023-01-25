@@ -1,7 +1,6 @@
 #include <catch2/catch.hpp>
 
 #include "../src/chestnut/engine/ecs_impl/event_manager.hpp"
-#include "../src/chestnut/engine/ecs_impl/event_listener_guard.hpp"
 
 #include <string>
 
@@ -163,33 +162,4 @@ TEST_CASE( "Events - Event manager test - listener priority order" )
     delete la;
     delete lb;
     delete lc;
-}
-
-
-TEST_CASE( "Events - Event listener guard test" )
-{
-    CEventManager manager;
-
-    int i = 0;
-    {
-        auto l = new CEventListener<MyEvent>(
-            [&i]( const MyEvent& e )
-            {
-                i += e.i;
-            }
-        );
-
-        manager.registerListener(l);
-
-        CEventListenerGuard guard( l, &manager );
-
-
-        manager.raiseEvent( MyEvent{2} );
-
-        REQUIRE( i == 2 );
-    }
-
-    manager.raiseEvent( MyEvent{2} );
-
-    REQUIRE( i == 2 );
 }

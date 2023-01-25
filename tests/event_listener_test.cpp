@@ -43,10 +43,6 @@ TEST_CASE( "Events - Event listener test" )
     {
         CEventListener<SNumSwitchEvent> l1, l2( lambdaFunc ), l3( lambdaFunc, filter );
 
-        REQUIRE( l1.isEnabled() );
-        REQUIRE( l2.isEnabled() );
-        REQUIRE( l3.isEnabled() );
-
         REQUIRE( l1.m_eventType == typeid(SNumSwitchEvent) );
         REQUIRE( l2.m_eventType == typeid(SNumSwitchEvent) );
         REQUIRE( l3.m_eventType == typeid(SNumSwitchEvent) );
