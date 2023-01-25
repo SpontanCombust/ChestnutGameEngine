@@ -221,7 +221,7 @@ namespace chestnut::engine
         m_spriteQuery->forEach(std::function(
             [this]( CTransform2DComponent& transform, CSpriteComponent& texture )
             {
-                m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, {0.5f, 0.5f}, transform.scale, transform.rotation );
             }
         ));
         
@@ -244,7 +244,7 @@ namespace chestnut::engine
         m_layerSpriteQuery->forEach(std::function(
             [this]( CTransform2DComponent& transform, CSpriteComponent& texture, CRenderLayerComponent& layer )
             {
-                m_spriteRenderer.submitSprite( texture.sprite, transform.position, vec2f{ 0.f }, transform.scale, transform.rotation );
+                m_spriteRenderer.submitSprite( texture.sprite, transform.position, {0.5f, 0.5f}, transform.scale, transform.rotation );
             }
         ));
 
