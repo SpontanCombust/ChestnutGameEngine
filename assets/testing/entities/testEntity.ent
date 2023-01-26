@@ -1,0 +1,34 @@
+{
+    "chestnut::engine::CIdentityComponent": {
+        "name": "ent"
+    },
+    "chestnut::engine::CSpriteComponent": {
+        "adjust": "SCALED",
+        "sprite": {
+            "clipRect": {
+                "h": 32.0,
+                "w": 32.0,
+                "x": 64.5,
+                "y": 96.5
+            },
+            "textureResource": "testing\\textures\\player_sheet_orig.texture",
+            "tint": {
+                "x": 1.0,
+                "y": 1.0,
+                "z": 1.0
+            },
+            "tintFactor": 0.0
+        }
+    },
+    "chestnut::engine::CTransform2DComponent": {
+        "position": {
+            "x": 316.2569885253906,
+            "y": 306.0
+        },
+        "rotation": 0.0,
+        "scale": {
+            "x": 2.0,
+            "y": 2.0
+        }
+    }
+}

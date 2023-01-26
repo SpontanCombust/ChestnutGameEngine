@@ -2,6 +2,7 @@
 
 #include "chestnut/engine/init.hpp"
 #include "chestnut/engine/main/window.hpp"
+#include "chestnut/engine/main/engine.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
 #include "chestnut/engine/resources/image_data_resource.hpp"
 #include "chestnut/engine/resources/texture2d_resource.hpp"
@@ -10,6 +11,10 @@
 #include "chestnut/engine/resources/font_resource.hpp"
 #include "chestnut/engine/resources/music_resource.hpp"
 #include "chestnut/engine/resources/sound_bank_resource.hpp"
+#include "chestnut/engine/resources/entity_template_resource.hpp"
+#include "chestnut/engine/ecs_impl/components/identity_component.hpp"
+#include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
 #include "chestnut/engine/resources/scene_resource.hpp"
 
 using namespace chestnut::engine;
@@ -149,7 +154,34 @@ TEST_CASE("Resources - soundbank resource test")
     chestnutQuit();
 }
 
+TEST_CASE("Resources - entity template resource test")
+{
+    chestnutInit();
+    CWindow window(CWindowAttribs("").show(false));
+    CEngine::createInstance(window);
+    {
+        auto p = assetPathToAbsolute("testing/entities/testEntity.ent");
+        auto exp = CEntityTemplateResource::load(p);
+        REQUIRE(exp.has_value());
+
+        auto r = *exp;
+        REQUIRE(r->m_location == p);
+        
+
+        auto expEnt = r->createEntity();
+        REQUIRE(expEnt.has_value());
+
+        auto ent = *expEnt;
+        auto& w = CEngine::getInstance().getEntityWorld();
+        REQUIRE(w.hasComponent<CIdentityComponent>(ent));
+        REQUIRE(w.hasComponent<CTransform2DComponent>(ent));
+        REQUIRE(w.hasComponent<CSpriteComponent>(ent));
+    }
+    CEngine::deleteInstance();
+    chestnutQuit();
+}
+
 TEST_CASE("Resources - scene resource test")
 {
-    //TODO scene resource test
+    //TODO TEST scene resource test
 }
