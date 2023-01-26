@@ -7,6 +7,7 @@
 #include "chestnut/engine/ecs_impl/components/model2d_component.hpp"
 #include "chestnut/engine/ecs_impl/components/render_layer_component.hpp"
 #include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
+#include "chestnut/engine/ecs_impl/components/tag_component.hpp"
 #include "chestnut/engine/ecs_impl/components/timer_component.hpp"
 #include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
 #include "chestnut/engine/serialization/serializers_math.hpp"
@@ -181,6 +182,18 @@ namespace chestnut::engine
     {
         j.at("sprite").get_to(c.sprite);
         j.at("adjust").get_to(c.adjust);
+    }
+
+
+
+    void to_json(nlohmann::json& j, const CTagComponent& c)
+    {
+        j = {};
+    }
+
+    void from_json(const nlohmann::json& j, CTagComponent& c)
+    {
+        //NOP
     }
 
 

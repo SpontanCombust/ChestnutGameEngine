@@ -16,6 +16,7 @@ namespace chestnut::engine
     struct CRenderLayerComponent;
     struct CSpriteComponent;
     enum class ESpriteToModel2DAdjust;
+    struct CTagComponent;
     struct CTimerComponent;
     struct CTransform2DComponent;
 
@@ -47,6 +48,9 @@ namespace chestnut::engine
 
     void CHESTNUT_API to_json(nlohmann::json& j, const CSpriteComponent& c);
     void CHESTNUT_API from_json(const nlohmann::json& j, CSpriteComponent& c);
+
+    void CHESTNUT_API to_json(nlohmann::json& j, const CTagComponent& c);
+    void CHESTNUT_API from_json(const nlohmann::json& j, CTagComponent& c);
 
     void CHESTNUT_API to_json(nlohmann::json& j, const CTransform2DComponent& c);
     void CHESTNUT_API from_json(const nlohmann::json& j, CTransform2DComponent& c);

@@ -3,6 +3,16 @@
 #include "chestnut/engine/debug/log.hpp"
 #include "chestnut/engine/resources/resource_manager.hpp"
 #include "chestnut/engine/debug/component_rtti.hpp"
+#include "chestnut/engine/ecs_impl/components/animation2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/collision2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/identity_component.hpp"
+#include "chestnut/engine/ecs_impl/components/kinematics2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/model2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/render_layer_component.hpp"
+#include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
+#include "chestnut/engine/ecs_impl/components/tag_component.hpp"
+#include "chestnut/engine/ecs_impl/components/timer_component.hpp"
+#include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
 #include "chestnut/engine/serialization/serializers_ecs_impl/serializers_components.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_animation2d_component_view.hpp"
 #include "chestnut/engine/debug/editor/component_views/gui_collision2d_component_view.hpp"
@@ -112,6 +122,7 @@ namespace chestnut::engine
         debug::registerComponentRTTI<CModel2DComponent>();
         debug::registerComponentRTTI<CRenderLayerComponent>();
         debug::registerComponentRTTI<CSpriteComponent>();
+        debug::registerComponentRTTI<CTagComponent>();
         debug::registerComponentRTTI<CTransform2DComponent>();
 
         wasInit = true;
