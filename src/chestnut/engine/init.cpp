@@ -103,7 +103,6 @@ namespace chestnut::engine
         }
 
 
-#ifdef CHESTNUT_DEBUG
         LOG_INFO("Preparing debug RTTI...");
 
         debug::registerComponentRTTI<CAnimation2DComponent>();
@@ -114,7 +113,6 @@ namespace chestnut::engine
         debug::registerComponentRTTI<CRenderLayerComponent>();
         debug::registerComponentRTTI<CSpriteComponent>();
         debug::registerComponentRTTI<CTransform2DComponent>();
-#endif
 
         wasInit = true;
 

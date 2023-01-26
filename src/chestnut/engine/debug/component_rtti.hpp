@@ -10,7 +10,7 @@
 
 namespace chestnut::engine::debug
 {
-    struct SComponentDebugTraits
+    struct SComponentRTTI
     {
         const char *name;
         ComponentFactoryCreateCallback factoryCreate;
@@ -21,9 +21,9 @@ namespace chestnut::engine::debug
     };
 
     
-    const std::unordered_map<std::type_index, SComponentDebugTraits>& getComponentRTTIRegistry();
+    const std::unordered_map<std::type_index, SComponentRTTI>& getComponentRTTIRegistry();
 
-    void registerComponentRTTI(std::type_index typeIndex, SComponentDebugTraits&& traits);
+    void registerComponentRTTI(std::type_index typeIndex, SComponentRTTI&& traits);
 
     // For this automated registration to work you have to beforehand include headers
     // with serializer functions (to_json and from_json) and component-to-guiview mappings
@@ -31,9 +31,9 @@ namespace chestnut::engine::debug
     void registerComponentRTTI();
 
     // Return null on error
-    SComponentDebugTraits* getComponentRTTIByTypeIndex(std::type_index typeIndex);
+    SComponentRTTI* getComponentRTTIByTypeIndex(std::type_index typeIndex);
     // Return null on error
-    SComponentDebugTraits* getComponentRTTIByTypeName(const char *typeName);
+    SComponentRTTI* getComponentRTTIByTypeName(const char *typeName);
 
 } // namespace chestnut::engine::debug
 
