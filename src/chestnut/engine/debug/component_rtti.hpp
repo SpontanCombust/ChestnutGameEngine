@@ -1,6 +1,7 @@
 #pragma once
 
 
+#include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/debug/ecs_lifetime/component_factory.hpp"
 #include "chestnut/engine/debug/ecs_lifetime/component_serializer_provider.hpp"
 #include "chestnut/engine/debug/editor/component_views/i_gui_component_view.hpp"
@@ -21,9 +22,9 @@ namespace chestnut::engine::debug
     };
 
     
-    const std::unordered_map<std::type_index, SComponentRTTI>& getComponentRTTIRegistry();
+    CHESTNUT_API const std::unordered_map<std::type_index, SComponentRTTI>& getComponentRTTIRegistry();
 
-    void registerComponentRTTI(std::type_index typeIndex, SComponentRTTI&& traits);
+    CHESTNUT_API void registerComponentRTTI(std::type_index typeIndex, SComponentRTTI&& traits);
 
     // For this automated registration to work you have to beforehand include headers
     // with serializer functions (to_json and from_json) and component-to-guiview mappings
@@ -31,9 +32,9 @@ namespace chestnut::engine::debug
     void registerComponentRTTI();
 
     // Return null on error
-    SComponentRTTI* getComponentRTTIByTypeIndex(std::type_index typeIndex);
+    CHESTNUT_API SComponentRTTI* getComponentRTTIByTypeIndex(std::type_index typeIndex);
     // Return null on error
-    SComponentRTTI* getComponentRTTIByTypeName(const char *typeName);
+    CHESTNUT_API SComponentRTTI* getComponentRTTIByTypeName(const char *typeName);
 
 } // namespace chestnut::engine::debug
 

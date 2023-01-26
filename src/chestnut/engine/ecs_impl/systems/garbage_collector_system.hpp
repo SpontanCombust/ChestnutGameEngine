@@ -6,7 +6,7 @@
 
 namespace chestnut::engine
 {
-    class CGarbageCollectorSystem : public ILogicSystem
+    class CHESTNUT_API CGarbageCollectorSystem : public ILogicSystem
     {
     private:
         CLockedManualTimer m_timer;

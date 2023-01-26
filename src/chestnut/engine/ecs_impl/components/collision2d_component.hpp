@@ -23,9 +23,9 @@ namespace chestnut::engine
         CCollision2DComponent() = default;
 
         // Returns the value of the colliderVariant, but casted onto base class
-        CCollider2D& getBaseCollider();
+        CHESTNUT_API CCollider2D& getBaseCollider();
         // Returns the value of the colliderVariant, but casted onto base class
-        const CCollider2D& getBaseCollider() const;
+        CHESTNUT_API const CCollider2D& getBaseCollider() const;
     };
 
 } // namespace chestnut::engine
