@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/physics/collider_attributes.hpp"
 #include "chestnut/engine/physics/collider2d.hpp"
 
@@ -18,13 +19,13 @@ namespace chestnut::engine
         {ECollisionPolicy::TRIGGER, "TRIGGER"}
     });
 
-    void to_json(nlohmann::json& j, const CPointCollider2D& p);
-    void from_json(const nlohmann::json& j, CPointCollider2D& p);
+    void CHESTNUT_API to_json(nlohmann::json& j, const CPointCollider2D& p);
+    void CHESTNUT_API from_json(const nlohmann::json& j, CPointCollider2D& p);
 
-    void to_json(nlohmann::json& j, const CBoxCollider2D& b);
-    void from_json(const nlohmann::json& j, CBoxCollider2D& b);
+    void CHESTNUT_API to_json(nlohmann::json& j, const CBoxCollider2D& b);
+    void CHESTNUT_API from_json(const nlohmann::json& j, CBoxCollider2D& b);
 
-    void to_json(nlohmann::json& j, const CCircleCollider2D& c);
-    void from_json(const nlohmann::json& j, CCircleCollider2D& c);
+    void CHESTNUT_API to_json(nlohmann::json& j, const CCircleCollider2D& c);
+    void CHESTNUT_API from_json(const nlohmann::json& j, CCircleCollider2D& c);
         
 } // namespace chestnut::engine

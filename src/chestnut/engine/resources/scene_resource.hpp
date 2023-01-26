@@ -10,7 +10,7 @@
 
 namespace chestnut::engine
 {
-    class CSceneResource : public IResource
+    class CHESTNUT_API CSceneResource : public IResource
     {
     public:
         inline static const std::vector<std::string> SUPPORTED_FILE_EXTENSIONS = {

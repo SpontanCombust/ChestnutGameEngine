@@ -51,6 +51,11 @@ namespace chestnut::engine
         resource_from_json(j, r);
     }
 
+    void from_json(const nlohmann::json& j, std::shared_ptr<CEntityTemplateResource>& r)
+    {
+        resource_from_json(j, r);
+    }
+
     void from_json(const nlohmann::json& j, std::shared_ptr<CFontResource>& r)
     {
         resource_from_json(j, r);

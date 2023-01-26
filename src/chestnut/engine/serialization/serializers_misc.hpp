@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include "chestnut/engine/macros.hpp"
 #include "chestnut/engine/misc/flags.hpp"
 
 namespace chestnut::engine
