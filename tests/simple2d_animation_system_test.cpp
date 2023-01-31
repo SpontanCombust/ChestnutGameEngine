@@ -1,7 +1,6 @@
 #include <catch2/catch.hpp>
 
 #include "test_utils.hpp"
-#include "system_test_utils.hpp"
 
 #include "../src/chestnut/engine/main/engine.hpp"
 #include "../src/chestnut/engine/debug/log.hpp"
@@ -143,7 +142,6 @@ TEST_CASE( "Systems - Simple2D animation system test", "[manual][demo]" )
     CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
-    CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
     CEngine::getInstance().attachSystem( new CSimple2DAnimationSystem(SYSTEM_PRIORITY_HIGHEST + 2) );
     CEngine::getInstance().attachSystem( new CAnimationDemoSystem(SYSTEM_PRIORITY_HIGHEST + 3) );
     CEngine::getInstance().attachSystem( new CSimple2DRenderingSystem(SYSTEM_PRIORITY_HIGHEST) );

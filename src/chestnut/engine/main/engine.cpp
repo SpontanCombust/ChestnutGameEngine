@@ -4,6 +4,7 @@
 #include "chestnut/engine/misc/exception.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
 #include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/ecs_impl/systems/default_exit_system.hpp"
 
 #include <imgui.h>
 #include <imgui_impl_sdl.h>
@@ -18,8 +19,9 @@ namespace chestnut::engine
     CEngine *CEngine::sm_instance = nullptr;
 
 
-    CEngine::CEngine(CWindow& window, float updateInterval )
-    : m_window(window)
+    CEngine::CEngine(CWindow& window, float updateInterval, bool defaultExitBehaviour)
+    : m_defaultExitBehaviour(defaultExitBehaviour),
+      m_window(window)
     {
         if( updateInterval <= 0 )
         {
@@ -43,14 +45,14 @@ namespace chestnut::engine
 
 
 
-    CEngine& CEngine::createInstance(CWindow& window, float updateInterval)
+    CEngine& CEngine::createInstance(CWindow& window, float updateInterval, bool defaultExitBehaviour)
     {
         if(sm_instance != nullptr)
         {
             delete sm_instance;
         }
 
-        sm_instance = new CEngine(window, updateInterval);
+        sm_instance = new CEngine(window, updateInterval, defaultExitBehaviour);
         return *sm_instance;
     }
 
@@ -233,6 +235,11 @@ namespace chestnut::engine
         if( m_listLogicSystems.empty() )
         {
             throw ChestnutException( "Engine needs at least one logic system to control it!");
+        }
+
+        if(m_defaultExitBehaviour)
+        {
+            attachSystem(new CDefaultExitSystem(SYSTEM_PRIORITY_HIGHEST));
         }
 
         m_isRunning = true;

@@ -11,8 +11,9 @@
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/maths/vector_cast.hpp"
 
-#include "system_test_utils.hpp"
 #include "test_utils.hpp"
+
+#include <SDL_events.h>
 
 
 using namespace chestnut;
@@ -195,7 +196,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - general", "[manual][demo]
     CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
-    CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
     CEngine::getInstance().attachSystem( new CSpriteSteeringSystem(SYSTEM_PRIORITY_HIGHEST + 2) );
     CEngine::getInstance().attachSystem( new CSimple2DRenderingSystem(SYSTEM_PRIORITY_HIGHEST) );
 
@@ -347,7 +347,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - default ordering", "[manu
     CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
-    CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
     CEngine::getInstance().attachSystem( new COrderingDemonstationSystem(SYSTEM_PRIORITY_HIGHEST + 2) );
     CEngine::getInstance().attachSystem( new CSimple2DRenderingSystem(SYSTEM_PRIORITY_HIGHEST) );
 
@@ -471,7 +470,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - layering", "[manual][demo
     CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
-    CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
     CEngine::getInstance().attachSystem( new CLayeringDemonstrationSystem(SYSTEM_PRIORITY_HIGHEST + 2) );
     CEngine::getInstance().attachSystem( new CSimple2DRenderingSystem(SYSTEM_PRIORITY_HIGHEST) );
 
@@ -625,7 +623,6 @@ TEST_CASE( "Systems - Simple2D rendering system test - camera", "[manual][demo]"
     CEngine::createInstance( window, 1.f / 60.f );
 
     CEngine::getInstance().attachSystem( new CInputEventDispatchSystem(SYSTEM_PRIORITY_HIGHEST) );
-    CEngine::getInstance().attachSystem( new CCloseWindowListeningSystem(SYSTEM_PRIORITY_HIGHEST + 1) );
     CEngine::getInstance().attachSystem( new CCameraDemonstrationSystem(SYSTEM_PRIORITY_HIGHEST + 2) );
     CEngine::getInstance().attachSystem( new CSimple2DRenderingSystem(SYSTEM_PRIORITY_HIGHEST) );
 

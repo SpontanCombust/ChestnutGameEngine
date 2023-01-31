@@ -1,6 +1,4 @@
 set(COMMON_SOURCES
-    ${CMAKE_CURRENT_SOURCE_DIR}/system_test_utils.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/system_test_utils.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/test_utils.hpp 
     ${CMAKE_CURRENT_SOURCE_DIR}/test_main.cpp
 )

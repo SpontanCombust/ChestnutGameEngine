@@ -22,14 +22,12 @@ namespace chestnut::engine
     {
     private:
         static CEngine *sm_instance;
-
+        bool m_defaultExitBehaviour;
 
         bool m_isRunning;
-
         CAutoTimer *m_updateTimer;
 
         CWindow& m_window;
-
         ecs::CEntityWorld m_entityWorld;
         CEventManager m_eventManager;
         CAudioManager m_audioManager;
@@ -49,7 +47,7 @@ namespace chestnut::engine
         
         ~CEngine();
 
-        static CEngine& createInstance(CWindow& window, float updateInterval = -1);
+        static CEngine& createInstance(CWindow& window, float updateInterval = -1, bool defaultExitBehaviour = true);
         static CEngine& getInstance();
         static void deleteInstance();
 
@@ -102,7 +100,7 @@ namespace chestnut::engine
         // updateInterval:
         //      <= 0 unlocked update rate
         //       > 0 update rate locked to specified interval in seconds
-        CEngine(CWindow& window, float updateInterval = -1 );
+        CEngine(CWindow& window, float updateInterval, bool defaultExitBehaviour);
 
         void gameLoop();
     };
