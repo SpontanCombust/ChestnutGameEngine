@@ -58,6 +58,18 @@ TEST_CASE( "Math - N-size vector test" )
         REQUIRE( u.elements[0] == Approx( 1.f / std::sqrt(14.f) ).margin(0.001) );
         REQUIRE( u.elements[1] == Approx( 2.f / std::sqrt(14.f) ).margin(0.001) );
         REQUIRE( u.elements[2] == Approx( 3.f / std::sqrt(14.f) ).margin(0.001) );
+
+
+        v.elements[0] = 0.f;
+        v.elements[1] = 0.f;
+        v.elements[2] = 0.f;
+
+        u = vecNormalized(v);
+
+        REQUIRE( vecMagnitude(u) == Approx(0.f) );
+        REQUIRE( u.elements[0] == Approx(0.f) );
+        REQUIRE( u.elements[1] == Approx(0.f) );
+        REQUIRE( u.elements[2] == Approx(0.f) );
     }
 
     SECTION( "Negation" )

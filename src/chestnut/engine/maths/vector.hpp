@@ -27,6 +27,9 @@ namespace chestnut::engine
 
 
     template< typename T, size_t n >
+    T vecMagnitudeSquared( const Vector<T,n>& v );
+
+    template< typename T, size_t n >
     T vecMagnitude( const Vector<T,n>& v );
 
 

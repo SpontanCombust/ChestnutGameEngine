@@ -76,7 +76,7 @@ namespace chestnut::engine
 
 
     template< typename T, size_t n >
-    T vecMagnitude( const Vector<T,n>& v )
+    T vecMagnitudeSquared( const Vector<T,n>& v )
     {
         T prod = 0;
         const T *dat = v.data();
@@ -86,13 +86,24 @@ namespace chestnut::engine
             prod += dat[i] * dat[i];
         }
         
-        return std::sqrt( prod );
+        return prod;
+    }
+
+    template< typename T, size_t n >
+    T vecMagnitude( const Vector<T,n>& v )
+    {
+        return (T)std::sqrt(vecMagnitudeSquared<T,n>(v));
     }
 
     template< typename T, size_t n >
     Vector<T,n> vecNormalized( const Vector<T,n>& v )
     {
         T mag = vecMagnitude<T,n>(v);
+
+        if(mag == (T)0)
+        {
+            return Vector<T,n>(0);
+        }
 
         Vector<T,n> other;
         const T *dat = v.data();
