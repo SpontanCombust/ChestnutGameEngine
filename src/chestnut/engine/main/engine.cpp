@@ -111,7 +111,19 @@ namespace chestnut::engine
         }
 
         m_listLogicSystems.insert( it, system );
-        system->onAttach();
+
+        try
+        {
+            system->onAttach();
+        }
+        catch(const std::exception& e)
+        {
+            LOG_ERROR("System attachment error: " << e.what());
+            if(messageBoxYesNo("Error occured while attaching a system:\n" + std::string(e.what()) + "\nAbort the program?", "Error"))
+            {
+                exit(1);
+            }
+        }
     }
 
     void CEngine::attachSystem(IRenderingSystem *system)
@@ -127,7 +139,19 @@ namespace chestnut::engine
         }
 
         m_listRenderingSystems.insert( it, system );
-        system->onAttach();
+        
+        try
+        {
+            system->onAttach();
+        }
+        catch(const std::exception& e)
+        {
+            LOG_ERROR("System attachment error: " << e.what());
+            if(messageBoxYesNo("Error occured while attaching a system:\n" + std::string(e.what()) + "\nAbort the program?", "Error"))
+            {
+                exit(1);
+            }
+        }
     }
 
     void CEngine::detachSystem(ILogicSystem *system)
@@ -136,7 +160,19 @@ namespace chestnut::engine
         {
             if(*it == system)
             {
-                system->onDetach();
+                try
+                {
+                    system->onDetach();
+                }
+                catch(const std::exception& e)
+                {
+                    LOG_ERROR("System detachment error: " << e.what());
+                    if(messageBoxYesNo("Error occured while detaching a system:\n" + std::string(e.what()) + "\nAbort the program?", "Error"))
+                    {
+                        exit(1);
+                    }
+                }
+
                 m_listLogicSystems.erase(it);
                 return;
             }
@@ -149,7 +185,19 @@ namespace chestnut::engine
         {
             if(*it == system)
             {
-                system->onDetach();
+                try
+                {
+                    system->onDetach();
+                }
+                catch(const std::exception& e)
+                {
+                    LOG_ERROR("System detachment error: " << e.what());
+                    if(messageBoxYesNo("Error occured while detaching a system:\n" + std::string(e.what()) + "\nAbort the program?", "Error"))
+                    {
+                        exit(1);
+                    }
+                }
+                
                 m_listRenderingSystems.erase(it);
                 return;
             }
@@ -234,7 +282,7 @@ namespace chestnut::engine
                 LOG_ERROR("Uncaught error in the engine: " << e.what());
                 if(messageBoxYesNo("Unexpected error occured:\n" + std::string(e.what()) + "\nAbort the program?", "Error"))
                 {
-                    m_isRunning = false;
+                    exit(1);
                 }
             }
         }
