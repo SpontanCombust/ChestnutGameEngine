@@ -1,4 +1,4 @@
-target_sources(${PROJECT_NAME} PRIVATE
+target_sources(ChestnutGameEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/auto_timer.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/auto_timer.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/exception.hpp

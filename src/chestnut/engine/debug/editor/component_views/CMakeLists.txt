@@ -1,4 +1,4 @@
-target_sources(${PROJECT_NAME} PRIVATE
+target_sources(ChestnutGameEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/gui_animation2d_component_view.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gui_animation2d_component_view.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/gui_collision2d_component_view.hpp

@@ -1,7 +1,4 @@
-add_subdirectory(opengl)
-add_subdirectory(renderers)
-
-target_sources(${PROJECT_NAME} PRIVATE   
+target_sources(ChestnutGameEngine PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/animation2d.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/camera2d.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/camera2d.cpp
@@ -12,3 +9,6 @@ target_sources(${PROJECT_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/text.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/text.cpp
 )
+
+add_subdirectory(opengl)
+add_subdirectory(renderers)

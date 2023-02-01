@@ -1,4 +1,4 @@
-target_sources(${PROJECT_NAME} PRIVATE   
+target_sources(ChestnutGameEngine PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/debug_gui_rendering_system.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/debug_gui_rendering_system.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/default_exit_system.hpp

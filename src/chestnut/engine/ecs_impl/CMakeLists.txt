@@ -1,4 +1,4 @@
-target_sources(${PROJECT_NAME} PRIVATE   
+target_sources(ChestnutGameEngine PRIVATE   
     ${CMAKE_CURRENT_SOURCE_DIR}/event_listener.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/event_listener.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/event_manager.hpp

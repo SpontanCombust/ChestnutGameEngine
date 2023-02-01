@@ -1,4 +1,4 @@
-target_sources(${PROJECT_NAME} PRIVATE
+target_sources(ChestnutGameEngine PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}/component_rtti.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/component_rtti.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/component_rtti.cpp
