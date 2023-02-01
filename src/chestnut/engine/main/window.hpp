@@ -84,9 +84,12 @@ namespace chestnut::engine
         void setResizable( bool resizable );
         bool isResizable() const;
 
-        void setSize( int w, int h );
-        int getSizeWidth() const;
-        int getSizeHeight() const;
+        int getWidth() const;
+        void setWidth(int w);
+        int getHeight() const;
+        void setHeight(int h);
+        vec2i getSize() const;
+        void setSize(vec2i size);
 
         void setPosition( int x, int y );
         int getPositionX() const;

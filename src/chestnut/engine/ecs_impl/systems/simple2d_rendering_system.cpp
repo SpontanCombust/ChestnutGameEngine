@@ -23,7 +23,7 @@ namespace chestnut::engine
         m_textRenderer.init();
 
         const CWindow& win = CEngine::getInstance().getWindow();
-        m_camera.m_dimensions = { (float)win.getSizeWidth(), (float)win.getSizeHeight() };
+        m_camera.m_dimensions = vecCastType<float>(win.getSize());
     }
 
     CSimple2DRenderingSystem::CSimple2DRenderingSystem()

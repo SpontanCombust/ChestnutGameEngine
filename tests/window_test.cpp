@@ -14,8 +14,8 @@ TEST_CASE( "Window - Default state" )
 
     REQUIRE( window.getTitle() == std::string( "Window test - Default state" ) );
     REQUIRE( window.getDisplayMode() == EWindowDisplayMode::WINDOWED );
-    REQUIRE( window.getSizeWidth() == 800 );
-    REQUIRE( window.getSizeHeight() == 600 );
+    REQUIRE( window.getWidth() == 800 );
+    REQUIRE( window.getHeight() == 600 );
     REQUIRE( window.getPositionX() == 500 );
     REQUIRE( window.getPositionY() == 400 );
     REQUIRE( window.isResizable() == false );
@@ -117,12 +117,12 @@ TEST_CASE( "Window - Changing window size", "[manual]" )
 
     showInfoMessageBox( testName, "Click to make the window 2 times smaller" );
 
-    int w = window.getSizeWidth();
-    int h = window.getSizeHeight();
+    int w = window.getWidth();
+    int h = window.getHeight();
     
-    window.setSize( w / 2, h / 2 );
-    REQUIRE( window.getSizeWidth() == w / 2 );
-    REQUIRE( window.getSizeHeight() == h / 2 );
+    window.setSize( {w / 2, h / 2} );
+    REQUIRE( window.getWidth() == w / 2 );
+    REQUIRE( window.getHeight() == h / 2 );
 
     REQUIRE( showConfirmMessageBox( testName ) );
 

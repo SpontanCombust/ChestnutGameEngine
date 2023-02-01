@@ -15,6 +15,7 @@
 #include "../src/chestnut/engine/ecs_impl/components/animation2d_component.hpp"
 #include "../src/chestnut/engine/macros.hpp"
 #include "../src/chestnut/engine/init.hpp"
+#include "../src/chestnut/engine/maths/vector_cast.hpp"
 
 #include <SDL_events.h>
 
@@ -62,7 +63,7 @@ public:
         ent = engine.getEntityWorld().createEntity();
 
         auto transformHandle = engine.getEntityWorld().createComponent<CTransform2DComponent>( ent );
-        transformHandle->position = vec2f{ engine.getWindow().getSizeWidth() / 2.f, engine.getWindow().getSizeHeight() / 2.f };
+        transformHandle->position = vecCastType<float>(engine.getWindow().getSize()) / 2.f;
 
         auto modelHandle = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
         modelHandle->size = vec2f{ 200.f, 200.f };

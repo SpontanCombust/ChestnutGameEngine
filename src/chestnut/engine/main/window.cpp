@@ -211,21 +211,42 @@ namespace chestnut::engine
         return ( flags & SDL_WINDOW_RESIZABLE ) > 0;
     }
 
-    void CWindow::setSize( int w, int h ) 
+    int CWindow::getWidth() const
     {
-        SDL_SetWindowSize( m_sdlWindow, w, h );
-        *m_framebuffer = std::move( CFramebuffer( w, h ) );
-    }
-
-    int CWindow::getSizeWidth() const
-    {
-        // might as well use framebuffer as it has the same size
         return m_framebuffer->getWidth();
     }
 
-    int CWindow::getSizeHeight() const
+    void CWindow::setWidth(int w) 
+    {
+        int h = getHeight();
+        SDL_SetWindowSize(m_sdlWindow, w, h);
+        *m_framebuffer = std::move(CFramebuffer(w, h));
+    }
+
+    int CWindow::getHeight() const
     {
         return m_framebuffer->getHeight();
+    }
+
+    void CWindow::setHeight(int h) 
+    {
+        int w = getWidth();
+        SDL_SetWindowSize(m_sdlWindow, w, h);
+        *m_framebuffer = std::move(CFramebuffer(w, h));
+    }
+
+    vec2i CWindow::getSize() const
+    {
+        return {
+            m_framebuffer->getWidth(),
+            m_framebuffer->getHeight()
+        };
+    }
+
+    void CWindow::setSize(vec2i size) 
+    {
+        SDL_SetWindowSize(m_sdlWindow, size.x, size.y);
+        *m_framebuffer = std::move(CFramebuffer(size.x, size.y));
     }
 
     void CWindow::setPosition( int x, int y ) 

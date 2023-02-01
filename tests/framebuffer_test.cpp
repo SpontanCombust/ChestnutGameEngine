@@ -22,12 +22,12 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
     CTextRenderer textRenderer;
     REQUIRE_NOTHROW( textRenderer.init() );
     textRenderer.setViewMatrix( mat4f() );
-    textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, (float)window.getSizeWidth(), (float)window.getSizeHeight(), 0, -1, 1 ) ); 
+    textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, (float)window.getWidth(), (float)window.getHeight(), 0, -1, 1 ) ); 
 
     CSpriteRenderer spriteRenderer;
     REQUIRE_NOTHROW( spriteRenderer.init() );
     spriteRenderer.setViewMatrix( mat4f() );
-    spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, (float)window.getSizeWidth(), (float)window.getSizeHeight(), 0, -1, 1 ) ); 
+    spriteRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, (float)window.getWidth(), (float)window.getHeight(), 0, -1, 1 ) ); 
 
     CText text;
     REQUIRE_NOTHROW( text = CText( CFontResource::load( CHESTNUT_ENGINE_ASSETS_DIR_PATH"/testing/fonts/arial.ttf" ).value(), 32 ) );
@@ -49,7 +49,7 @@ TEST_CASE( "Renderers - Framebuffer test", "[manual]" )
 
 
     CTexture2D blank;
-    REQUIRE_NOTHROW( blank = CTexture2D( *CTexture2DResource::loadFromPixels( nullptr, window.getSizeWidth(), window.getSizeHeight(), 4) ) );
+    REQUIRE_NOTHROW( blank = CTexture2D( *CTexture2DResource::loadFromPixels( nullptr, window.getWidth(), window.getHeight(), 4) ) );
     CFramebuffer blankFramebuffer( blank );
     blankFramebuffer.setClearColor( vec4f( 0.f ) ); 
     blankFramebuffer.bind();

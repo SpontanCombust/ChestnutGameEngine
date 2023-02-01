@@ -248,8 +248,7 @@ public:
         ecs::CComponentHandle< CSpriteComponent > sprite;
         ecs::CComponentHandle< CModel2DComponent > model;
 
-        const float w = (float)CEngine::getInstance().getWindow().getSizeWidth();
-        const float h = (float)CEngine::getInstance().getWindow().getSizeHeight();
+        const vec2f size = vecCastType<float>(CEngine::getInstance().getWindow().getSize());
 
         for(int i = 0; i < 9; i++)
         {
@@ -264,23 +263,23 @@ public:
         }
 
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
-        transform->position = vec2f{ w / 2, h / 2 };
+        transform->position = vec2f{ size.x / 2, size.y / 2 };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[1] );
-        transform->position = vec2f{ w / 2, h / 2 - 75.f };
+        transform->position = vec2f{ size.x / 2, size.y / 2 - 75.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[2] );
-        transform->position = vec2f{ w / 2, h / 2 - 150.f };
+        transform->position = vec2f{ size.x / 2, size.y / 2 - 150.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[3] );
-        transform->position = vec2f{ w / 2, h / 2 + 75.f };
+        transform->position = vec2f{ size.x / 2, size.y / 2 + 75.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[4] );
-        transform->position = vec2f{ w / 2, h / 2 + 150.f };
+        transform->position = vec2f{ size.x / 2, size.y / 2 + 150.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[5] );
-        transform->position = vec2f{ w / 2 - 75.f, h / 2 };
+        transform->position = vec2f{ size.x / 2 - 75.f, size.y / 2 };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[6] );
-        transform->position = vec2f{ w / 2 - 150.f, h / 2 };
+        transform->position = vec2f{ size.x / 2 - 150.f, size.y / 2 };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[7] );
-        transform->position = vec2f{ w / 2 + 75.f, h / 2 };
+        transform->position = vec2f{ size.x / 2 + 75.f, size.y / 2 };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[8] );
-        transform->position = vec2f{ w / 2 + 150.f, h / 2 };
+        transform->position = vec2f{ size.x / 2 + 150.f, size.y / 2 };
 
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &COrderingDemonstationSystem::handleInput, this );
@@ -379,8 +378,7 @@ public:
         ecs::CComponentHandle< CModel2DComponent > model;
         ecs::CComponentHandle< CRenderLayerComponent > layer;
 
-        const float w = (float)CEngine::getInstance().getWindow().getSizeWidth();
-        const float h = (float)CEngine::getInstance().getWindow().getSizeHeight();
+        const vec2f size = vecCastType<float>(CEngine::getInstance().getWindow().getSize());
 
         for(int i = 0; i < 3; i++)
         {
@@ -396,11 +394,11 @@ public:
         }  
 
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
-        transform->position = vec2f{ w / 2 - 75.f, h / 2 }; 
+        transform->position = vec2f{ size.x / 2 - 75.f, size.y / 2 }; 
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[1] );
-        transform->position = vec2f{ w / 2, h / 2 };
+        transform->position = vec2f{ size.x / 2, size.y / 2 };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[2] );
-        transform->position = vec2f{ w / 2 + 75.f, h / 2 }; 
+        transform->position = vec2f{ size.x / 2 + 75.f, size.y / 2 }; 
 
 
         auto l = new CEventListener<SDL_KeyboardEvent>();
@@ -514,7 +512,7 @@ public:
         ent = engine.getEntityWorld().createEntity();
 
         transform = engine.getEntityWorld().createComponent<CTransform2DComponent>( ent );
-        transform->position = { engine.getWindow().getSizeWidth() / 2.f, engine.getWindow().getSizeHeight() / 2.f };
+        transform->position = { engine.getWindow().getWidth() / 2.f, engine.getWindow().getHeight() / 2.f };
         model = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
         model->size = { 100.f, 100.f };
         sprite = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );
