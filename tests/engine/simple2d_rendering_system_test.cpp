@@ -512,7 +512,6 @@ public:
         ent = engine.getEntityWorld().createEntity();
 
         transform = engine.getEntityWorld().createComponent<CTransform2DComponent>( ent );
-        transform->position = { engine.getWindow().getWidth() / 2.f, engine.getWindow().getHeight() / 2.f };
         model = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
         model->size = { 100.f, 100.f };
         sprite = engine.getEntityWorld().createComponent<CSpriteComponent>( ent );

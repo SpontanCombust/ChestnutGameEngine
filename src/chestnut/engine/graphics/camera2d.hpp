@@ -14,8 +14,11 @@ namespace chestnut::engine
         mat4f m_projMatrix;
 
     public:
+        // Position of the center of the camera
         vec2f m_position;
+        // Size of virtual camera screen
         vec2f m_dimensions;
+        // The greater the bigger are objects on screen
         float m_zoom;
 
 
