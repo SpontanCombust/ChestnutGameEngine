@@ -22,7 +22,7 @@ FetchContent_DisconnectedIfOffline()
 FetchContent_Declare(
     chestnut-ecs
     GIT_REPOSITORY https://github.com/SpontanCombust/chestnut-ecs
-    GIT_TAG v1.2.0
+    GIT_TAG v1.2.1
 )
 FetchContent_Declare(
     SDL2
