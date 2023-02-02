@@ -10,6 +10,10 @@ target_compile_options(ChestnutGameEngine_Test PRIVATE
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
 )
 
+set_target_properties(ChestnutGameEngine_Test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 catch_discover_tests(ChestnutGameEngine_Test)
 
 
@@ -20,6 +24,7 @@ if(WIN32)
         SDL2_ttf
         SDL2_mixer
         freetype
+        ChestnutGameEngine
     )
 endif()
 

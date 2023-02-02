@@ -10,6 +10,10 @@ target_compile_options(ChestnutGameEngine_Graphics3D_Test PRIVATE
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
 )
 
+set_target_properties(ChestnutGameEngine_Graphics3D_Test PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 catch_discover_tests(ChestnutGameEngine_Graphics3D_Test)
 
 
@@ -21,6 +25,8 @@ if(WIN32)
         SDL2_mixer
         freetype
         assimp
+        ChestnutGameEngine
+        ChestnutGameEngine_Graphics3D
     )
 endif()
 
