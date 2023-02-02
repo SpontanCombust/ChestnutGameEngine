@@ -5,7 +5,7 @@ target_link_libraries(ChestnutGameEngineEditor
 )
 
 target_include_directories(ChestnutGameEngineEditor PRIVATE
-    ${CHESTNUT_LIB_INCLUDE_DIR}
+    ${CHESTNUT_ENGINE_LIB_INCLUDE_DIR}
 )
 
 
@@ -15,7 +15,7 @@ target_compile_options(ChestnutGameEngineEditor PRIVATE
 )
 
 set_target_properties(ChestnutGameEngineEditor PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+    RUNTIME_OUTPUT_DIRECTORY ${CHESTNUT_ENGINE_BIN_DIR}
 )
 
 copy_shared_libs(TARGET ChestnutGameEngineEditor DEPENDENCIES

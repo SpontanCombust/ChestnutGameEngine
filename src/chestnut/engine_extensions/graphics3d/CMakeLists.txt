@@ -1,7 +1,7 @@
 add_library(ChestnutGameEngine_Graphics3D SHARED)
 
 target_include_directories(ChestnutGameEngine_Graphics3D PUBLIC 
-    ${CHESTNUT_LIB_INCLUDE_DIR}
+    ${CHESTNUT_ENGINE_LIB_INCLUDE_DIR}
 )
 
 target_link_libraries(ChestnutGameEngine_Graphics3D PUBLIC 
@@ -27,9 +27,6 @@ target_compile_options(ChestnutGameEngine_Graphics3D PRIVATE
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
 )
 
-set_target_properties(ChestnutGameEngine PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
 
 
 target_sources(ChestnutGameEngine_Graphics3D PRIVATE

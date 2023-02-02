@@ -33,8 +33,8 @@ set(CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU     -Wall -Wpedantic -Wno-unused-variabl
 # 4834 - ignored [[nodiscard]] - this comes from tl::typelist
 set(CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC    /W3 /wd4100 /wd4101 /wd4834 /wd4251)
 
-set(CHESTNUT_LIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
-# set(CHESTNUT_BUILD_DIR_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/build/Debug)
+set(CHESTNUT_ENGINE_LIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(CHESTNUT_ENGINE_BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -50,10 +50,10 @@ option(CHESTNUT_BUILD_TESTS "Build ChestnutGameEngine project tests" ${CHESTNUT_
 
 
 
-# =================================== DEPENDENCIES ===================================
+# =============================== DEPENDENCIES & UTILS ================================
 
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/dependencies")
-include(Dependencies)
+include(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Dependencies.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Utilities.cmake)
 
 
 

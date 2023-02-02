@@ -1,7 +1,7 @@
 add_library(ChestnutGameEngine SHARED)
 
 target_include_directories(ChestnutGameEngine PUBLIC 
-    ${CHESTNUT_LIB_INCLUDE_DIR}
+    ${CHESTNUT_ENGINE_LIB_INCLUDE_DIR}
     ${OPENGL_INCLUDE_DIR}
 )
 
@@ -25,9 +25,6 @@ target_compile_options(ChestnutGameEngine PRIVATE
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
 )
 
-set_target_properties(ChestnutGameEngine PROPERTIES
-    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
-)
 
 
 
