@@ -5,6 +5,7 @@
 #include "chestnut/engine/ecs_impl/components/identity_component.hpp"
 #include "chestnut/engine/resources/scene_resource.hpp"
 #include "chestnut/engine/misc/utility_functions.hpp"
+#include "chestnut/engine/maths/vector_cast.hpp"
 
 #include <chestnut/ecs/constants.hpp>
 #include <imgui.h>
@@ -20,19 +21,21 @@ namespace chestnut::engine::debug
     bool s_viewEntityList = true;
     bool s_viewComponentInspector = true;
 
-    //TODO entity deletion
     bool guiEntityListPanel(entityid_t& selectedEnt)
     {
         static const int ENTITY_NAME_LENGTH = IM_ARRAYSIZE(CIdentityComponent::name);
         static char entityNameInput[ENTITY_NAME_LENGTH] = "";
 
         bool entityChanged = false;
-        auto& world = CEngine::getInstance().getEntityWorld();
 
-        ImGui::SetNextWindowPos({0, 0}, ImGuiCond_FirstUseEver);
-        ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
         if(s_viewEntityList)
         {
+            auto& world = CEngine::getInstance().getEntityWorld();
+
+            auto winSize = vecCastType<float>(CEngine::getInstance().getWindow().getSize());
+            ImGui::SetNextWindowPos({0, 20}, ImGuiCond_Once);
+            ImGui::SetNextWindowSize({200, winSize.y - 20}, ImGuiCond_Once);
+
             if(ImGui::Begin("Entities", &s_viewEntityList))
             {
                 bool confirmedAdd = ImGui::InputText("##createEntity", entityNameInput, ENTITY_NAME_LENGTH, ImGuiInputTextFlags_EnterReturnsTrue);
@@ -99,8 +102,10 @@ namespace chestnut::engine::debug
 
         if(s_viewComponentInspector)
         {
-            ImGui::SetNextWindowPos({600, 0}, ImGuiCond_FirstUseEver);
-            ImGui::SetNextWindowSize({200, 600}, ImGuiCond_FirstUseEver);
+            auto winSize = vecCastType<float>(CEngine::getInstance().getWindow().getSize());
+            ImGui::SetNextWindowPos({winSize.x - 300, 20}, ImGuiCond_Once);
+            ImGui::SetNextWindowSize({300, winSize.y - 20}, ImGuiCond_Once);
+
             if(ImGui::Begin("Inspector", &s_viewComponentInspector))
             {
                 const auto& world = CEngine::getInstance().getEntityWorld();
@@ -116,9 +121,8 @@ namespace chestnut::engine::debug
                             ImGui::PushID(traitsIt->second.name);
 
                             // HEADER //
-                            ImGui::NewLine();
-                            ImGui::SameLine(ImGui::GetWindowWidth() - 20);
-                            bool didDelete = ImGui::Button("X##DeleteComponent");
+                            ImGui::SetCursorPosX(ImGui::GetCursorPosX() + ImGui::GetContentRegionAvail().x - 20);
+                            bool didDelete = ImGui::Button("X##DeleteComponent", {20, 20});
                             
                             // ACTUAL COMPONENT CONTENT//
                             if(traitsIt->second.guiView)
