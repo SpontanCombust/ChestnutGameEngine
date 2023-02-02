@@ -57,7 +57,7 @@ namespace chestnut::engine
                     
                     if(baseCollider1.getActivity() == EColliderActivity::STATIC && baseCollider2.getActivity() == EColliderActivity::STATIC)
                     {
-                        return;
+                        continue;
                     }
 
 
