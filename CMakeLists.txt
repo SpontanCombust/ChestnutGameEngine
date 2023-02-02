@@ -34,6 +34,7 @@ set(CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU     -Wall -Wpedantic -Wno-unused-variabl
 set(CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC    /W3 /wd4100 /wd4101 /wd4834 /wd4251)
 
 set(CHESTNUT_LIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+# set(CHESTNUT_BUILD_DIR_DEBUG ${CMAKE_CURRENT_SOURCE_DIR}/build/Debug)
 
 
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -44,6 +45,7 @@ endif()
 
 option(CHESTNUT_BUILD_ENGINE "Build ChestnutGameEngine library" ON)
 option(CHESTNUT_BUILD_ENGINE_EXTENSIONS "Build ChestnutGameEngine extension libraries" OFF)
+option(CHESTNUT_BUILD_ENGINE_EDITOR "Build ChestnutGameEngineEditor" ON)
 option(CHESTNUT_BUILD_TESTS "Build ChestnutGameEngine project tests" ${CHESTNUT_IS_MAIN_PROJECT})
 
 
@@ -55,7 +57,7 @@ include(Dependencies)
 
 
 
-# ====================================== CGE LIBRARIES ======================================
+# ====================================== TARGETS ======================================
 
 
 # ChestnutGameEngine
@@ -70,8 +72,13 @@ if(CHESTNUT_BUILD_ENGINE_EXTENSIONS)
 endif()
 
 
-# ========================================= TESTS ======================================
+# ChestnutGameEngine
+if(CHESTNUT_BUILD_ENGINE_EDITOR)
+    add_subdirectory(src/chestnut/engine_editor)
+endif()
 
+
+# ChestnutGameEngine_Test, ChestnutGameEngine_Graphics3D_Test
 if(CHESTNUT_BUILD_TESTS)
     add_subdirectory(tests)
 endif()

@@ -21,9 +21,14 @@ target_link_libraries(ChestnutGameEngine_Graphics3D PUBLIC
     assimp
 )
 
+
 target_compile_options(ChestnutGameEngine_Graphics3D PRIVATE
     $<$<CXX_COMPILER_ID:MSVC>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC}>
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
+)
+
+set_target_properties(ChestnutGameEngine PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
 )
 
 

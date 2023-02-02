@@ -4,9 +4,3 @@ bin
 build
 out
 TODO.md
-
-# halt development on extension
-src/chestnut/engine_extensions/*
-tests/camera3d_test.cpp
-tests/extrude_profile_test.cpp
-tests/phong_renderer_test.cpp

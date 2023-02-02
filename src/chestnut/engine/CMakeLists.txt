@@ -25,6 +25,10 @@ target_compile_options(ChestnutGameEngine PRIVATE
     $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:${CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU}>
 )
 
+set_target_properties(ChestnutGameEngine PROPERTIES
+    LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}
+)
+
 
 
 target_sources(ChestnutGameEngine PRIVATE
