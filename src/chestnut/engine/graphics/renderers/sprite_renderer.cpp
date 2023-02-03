@@ -1,10 +1,10 @@
-#include "sprite_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/sprite_renderer.hpp"
 
-#include "../../debug/log.hpp"
-#include "../../macros.hpp"
-#include "../../resources/resource_manager.hpp"
-#include "../../resources/shader_program_resource.hpp"
-#include "../opengl/vertex_attribute_array.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
 namespace chestnut::engine
 {   
@@ -25,10 +25,7 @@ namespace chestnut::engine
 
     bool CSpriteRenderer::setShaderProgram()
     {
-        auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.vert", 
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/sprite.frag"
-        );
+        auto shader = CShaderProgramResource::load(assetPathToAbsolute("shaders/sprite.shader"));
 
         if(shader) {
             m_shader = CShaderProgram(shader.value());
@@ -115,7 +112,7 @@ namespace chestnut::engine
         m_spriteCapacity = 0;
         reserveBufferSpace( CHESTNUT_SPRITE_RENDERER_INIT_SPRITE_CAPACITY );
 
-        m_missingTexturePlaceholder = CSprite( *CTexture2DResource::loadFromPixels( (void *)missingTextureBytes, 8, 8, GL_RGB, true ) );
+        m_missingTexturePlaceholder = CSprite( *CTexture2DResource::loadFromPixels(missingTextureBytes, 8, 8, 3) );
         m_missingTexturePlaceholder.setFiltering( GL_NEAREST, GL_NEAREST );
     }
 

@@ -1,6 +1,6 @@
-#include "event_manager.hpp"
+#include "chestnut/engine/ecs_impl/event_manager.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 namespace chestnut::engine
 {        

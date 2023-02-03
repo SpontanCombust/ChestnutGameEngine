@@ -1,29 +1,28 @@
-#include "kinematics2d_system.hpp"
+#include "chestnut/engine/ecs_impl/systems/kinematics2d_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/transform2d_component.hpp"
-#include "../components/kinematics2d_component.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/transform2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/kinematics2d_component.hpp"
 
 namespace chestnut::engine
 {
-    CKinematics2DSystem::CKinematics2DSystem( CEngine& engine ) 
-    : ISystem( engine ) 
+    void CKinematics2DSystem::onAttach() 
     {
-        m_kinematicQueryID = getEngine().getEntityWorld().createQuery( 
-            ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >(), 
-            ecs::CEntitySignature() );
+        m_kinematicQuery = CEngine::getInstance().getEntityWorld().createQuery( 
+            ecs::makeEntitySignature< CTransform2DComponent, CKinematics2DComponent >()
+        );
     }
 
-    CKinematics2DSystem::~CKinematics2DSystem() 
+    void CKinematics2DSystem::onDetach() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_kinematicQueryID );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_kinematicQuery );
     }
 
     void CKinematics2DSystem::update( float deltaTime ) 
     {
-        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_kinematicQueryID );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_kinematicQuery );
 
-        query->forEachEntityWith< CTransform2DComponent, CKinematics2DComponent >(
+        m_kinematicQuery->forEach(std::function(
             [deltaTime]( CTransform2DComponent& transform, CKinematics2DComponent& kinematic )
             {
                 kinematic.linearVelocity  += deltaTime * kinematic.linearAcceleration;
@@ -32,7 +31,7 @@ namespace chestnut::engine
                 transform.position += deltaTime * kinematic.linearVelocity;
                 transform.rotation += deltaTime * kinematic.angularVelocity; 
             }
-        );
+        ));
     }
 
 } // namespace chestnut::engine

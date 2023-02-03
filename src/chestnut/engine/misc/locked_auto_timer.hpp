@@ -1,7 +1,8 @@
-#ifndef __CHESTNUT_ENGINE_LOCKED_AUTO_TIMER_H__
-#define __CHESTNUT_ENGINE_LOCKED_AUTO_TIMER_H__
+#pragma once
 
-#include "auto_timer.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/misc/auto_timer.hpp"
 
 namespace chestnut::engine
 {
@@ -15,7 +16,7 @@ namespace chestnut::engine
      * 
      * toggleThreadWaitingForTimerInterval() allows for automatic thread sleeping until the full interval has passed when calling tick()
      */
-    class CLockedAutoTimer : public CAutoTimer
+    class CHESTNUT_API CLockedAutoTimer : public CAutoTimer
     {
     protected:
         // planned next interval tick of the timer
@@ -64,4 +65,3 @@ namespace chestnut::engine
     
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_LOCKED_AUTO_TIMER_H__

@@ -1,29 +1,28 @@
 #include "timer_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/timer_component.hpp"
-#include "../events/timer_event.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/timer_component.hpp"
+#include "chestnut/engine/ecs_impl/events/timer_event.hpp"
 
 namespace chestnut::engine
 {
-    CTimerSystem::CTimerSystem( CEngine& engine ) : ISystem( engine )
+    void CTimerSystem::onAttach() 
     {
-        m_timerQueryID = getEngine().getEntityWorld().createQuery(
-            ecs::makeEntitySignature<CTimerComponent>(),
-            ecs::makeEntitySignature()
+        m_timerQuery = CEngine::getInstance().getEntityWorld().createQuery(
+            ecs::makeEntitySignature<CTimerComponent>()
         );
     }
 
-    CTimerSystem::~CTimerSystem() 
+    void CTimerSystem::onDetach() 
     {
-        getEngine().getEntityWorld().destroyQuery( m_timerQueryID );
+        CEngine::getInstance().getEntityWorld().destroyQuery( m_timerQuery );
     }
 
     void CTimerSystem::update( float deltaTime ) 
     {
-        const ecs::CEntityQuery* query = getEngine().getEntityWorld().queryEntities( m_timerQueryID );
+        CEngine::getInstance().getEntityWorld().queryEntities( m_timerQuery );
 
-        query->forEachEntityWith< CTimerComponent >(
+        m_timerQuery->forEach(std::function(
             [deltaTime, this]( CTimerComponent& timerComp )
             {
                 for( CLockedManualTimer& timer : timerComp.vTimers )
@@ -35,7 +34,7 @@ namespace chestnut::engine
                         event.timerTimeInSeconds = timer.getElapsedTimeInSeconds();
                         event.timerIntervalInSeconds = timer.getUpdateIntervalInSeconds();
                         event.isTimerRepeating = timer.getIsRepeating();
-                        getEngine().getEventManager().raiseEvent( event );
+                        CEngine::getInstance().getEventManager().raiseEvent( event );
 
                         // if a timer is supposed to tick only once
                         if( !timer.getIsRepeating() )
@@ -45,7 +44,7 @@ namespace chestnut::engine
                     }
                 }
             }
-        );
+        ));
     }
 
 } // namespace chestnut::engine

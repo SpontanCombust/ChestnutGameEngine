@@ -1,7 +1,7 @@
-#ifndef __CHESTNUT_ENGINE_MATRIX3_H__
-#define __CHESTNUT_ENGINE_MATRIX3_H__
+#pragma once
 
-#include "matrix.hpp"
+
+#include "chestnut/engine/maths/matrix.hpp"
 
 #include <string>
 
@@ -22,7 +22,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "matrix3.tpp"
+#include "matrix3.inl"
 
 
-#endif // __CHESTNUT_ENGINE_MATRIX3_H__

@@ -1,14 +1,15 @@
-#ifndef __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
-#define __CHESTNUT_ENGINE_SHADER_PROGRAM_H__
+#pragma once
 
-#include "../../maths/vector2.hpp"
-#include "../../maths/vector3.hpp"
-#include "../../maths/vector4.hpp"
-#include "../../maths/matrix3.hpp"
-#include "../../maths/matrix4.hpp"
-#include "../../resources/shader_program_resource.hpp"
-#include "vertex_attribute.hpp"
-#include "uniform.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
+#include "chestnut/engine/maths/matrix3.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute.hpp"
+#include "chestnut/engine/graphics/opengl/uniform.hpp"
 
 #include <tl/optional.hpp>
 
@@ -17,7 +18,7 @@
 
 namespace chestnut::engine
 {
-    class CShaderProgram
+    class CHESTNUT_API CShaderProgram
     {
     private:
         std::shared_ptr<CShaderProgramResource> m_shaderResource;
@@ -47,4 +48,3 @@ namespace chestnut::engine
 #include "shader_program.inl"
 
 
-#endif // __CHESTNUT_ENGINE_SHADER_PROGRAM_H__

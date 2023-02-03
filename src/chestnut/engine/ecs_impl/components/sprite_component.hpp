@@ -1,11 +1,13 @@
-#ifndef __CHESTNUT_ENGINE_SPRITE_COMPONENT_H__
-#define __CHESTNUT_ENGINE_SPRITE_COMPONENT_H__
+#pragma once
 
-#include "../../maths/vector2.hpp"
-#include "../../graphics/sprite.hpp"
+
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/graphics/sprite.hpp"
 
 namespace chestnut::engine
 {
+    //TODO maybe it'd be better to move it to Model2DComponent and make it more general 
+    // for all components that have to adjust to model size in some way
     enum class ESpriteToModel2DAdjust
     {
         NONE, // texture doesn't adjust to the model
@@ -17,11 +19,7 @@ namespace chestnut::engine
     struct CSpriteComponent
     {
         CSprite sprite;
-        ESpriteToModel2DAdjust adjust;
-
-        CSpriteComponent();
+        ESpriteToModel2DAdjust adjust = ESpriteToModel2DAdjust::SCALED;
     };
 
 } // namespace chestnut::engine 
-
-#endif // __CHESTNUT_ENGINE_SPRITE_COMPONENT_H__

@@ -1,24 +1,27 @@
-#ifndef __CHESTNUT_ENGINE_KINEMATICS2D_SYSTEM_H__
-#define __CHESTNUT_ENGINE_KINEMATICS2D_SYSTEM_H__
+#pragma once
 
-#include "../system.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/ecs_impl/logic_system.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
 namespace chestnut::engine
 {
-    class CKinematics2DSystem : public ISystem
+    class CHESTNUT_API CKinematics2DSystem : public ILogicSystem
     {
     private:
-        ecs::queryid_t m_kinematicQueryID;
+        ecs::CEntityQuery *m_kinematicQuery;
         
     public:
-        CKinematics2DSystem( CEngine& engine );
-        ~CKinematics2DSystem();
+        CKinematics2DSystem() : ILogicSystem() {}
+        CKinematics2DSystem(systempriority_t priority) : ILogicSystem(priority) {}
+        
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float deltaTime ) override;
     };
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_KINEMATICS2D_SYSTEM_H__

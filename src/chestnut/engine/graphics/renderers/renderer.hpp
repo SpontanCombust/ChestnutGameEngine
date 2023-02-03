@@ -1,17 +1,18 @@
-#ifndef __CHESTNUT_ENGINE_RENDERER_H__
-#define __CHESTNUT_ENGINE_RENDERER_H__
+#pragma once
 
-#include "../../maths/matrix4.hpp"
-#include "../opengl/shader_program.hpp"
-#include "../opengl/uniform.hpp"
-#include "../opengl/framebuffer.hpp"
 
-#include <GL/glew.h>
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/maths/matrix4.hpp"
+#include "chestnut/engine/graphics/opengl/shader_program.hpp"
+#include "chestnut/engine/graphics/opengl/uniform.hpp"
+#include "chestnut/engine/graphics/opengl/framebuffer.hpp"
+
+#include <glad/glad.h>
 
 
 namespace chestnut::engine
 {
-    class IRenderer
+    class CHESTNUT_API IRenderer
     {
     protected:
         CShaderProgram m_shader;
@@ -50,4 +51,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_RENDERER_H__

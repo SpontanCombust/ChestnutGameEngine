@@ -1,5 +1,7 @@
-#ifndef __CHESTNUT_ENGINE_EXCEPTION_H__
-#define __CHESTNUT_ENGINE_EXCEPTION_H__
+#pragma once
+
+
+#include "chestnut/engine/macros.hpp"
 
 #include <exception>
 #include <string>
@@ -23,4 +25,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_EXCEPTION_H__

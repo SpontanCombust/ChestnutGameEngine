@@ -1,7 +1,8 @@
-#ifndef __CHESTNUT_ENGINE_LOCKED_MANUAL_TIMER_H__
-#define __CHESTNUT_ENGINE_LOCKED_MANUAL_TIMER_H__
+#pragma once
 
-#include "manual_timer.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/misc/manual_timer.hpp"
 
 namespace chestnut::engine
 {
@@ -13,7 +14,7 @@ namespace chestnut::engine
      * and pass it the elapsed time value. If it returns true, timer time reached the next interval and timer ticked.
      * Timer time here is a multiple of timer interval (until reset() is called).
      */
-    class CLockedManualTimer : public CManualTimer
+    class CHESTNUT_API CLockedManualTimer : public CManualTimer
     {
     protected:
         // planned next interval tick of the timer
@@ -54,4 +55,3 @@ namespace chestnut::engine
     
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_LOCKED_MANUAL_TIMER_H__

@@ -1,6 +1,6 @@
-#include "renderer.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
 
-#include "../../misc/exception.hpp"
+#include "chestnut/engine/misc/exception.hpp"
 
 namespace chestnut::engine
 {    

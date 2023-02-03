@@ -1,25 +1,20 @@
-#ifndef __CHESTNUT_ENGINE_EVENT_LISTENER_H__
-#define __CHESTNUT_ENGINE_EVENT_LISTENER_H__
+#pragma once
 
-#include "../types.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/types.hpp"
 
 #include <typeindex>
 #include <functional>
 
 namespace chestnut::engine
 {
-	class IEventListener
+	class CHESTNUT_API IEventListener
 	{
 	public:
 		std::type_index m_eventType = typeid(void);
 
-	protected:
-		bool m_isEnabled;
-
 	public:
-		void setEnabled( bool enable );
-		bool isEnabled() const;
-
 		virtual ~IEventListener() = default;
 	};
 
@@ -54,7 +49,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "event_listener.tpp"
+#include "event_listener.inl"
 
 
-#endif // __CHESTNUT_ENGINE_EVENT_LISTENER_H__

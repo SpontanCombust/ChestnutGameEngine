@@ -1,9 +1,10 @@
-#ifndef __CHESTNUT_ENGINE_EVENT_MANAGER_H__
-#define __CHESTNUT_ENGINE_EVENT_MANAGER_H__
+#pragma once
 
-#include "../types.hpp"
-#include "../constants.hpp"
-#include "event_listener.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/types.hpp"
+#include "chestnut/engine/constants.hpp"
+#include "chestnut/engine/ecs_impl/event_listener.hpp"
 
 #include <list>
 #include <typeindex>
@@ -11,7 +12,7 @@
 
 namespace chestnut::engine
 {
-    class CEventManager
+    class CHESTNUT_API CEventManager
     {
     private:
         struct SEventListenerNode
@@ -37,7 +38,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "event_manager.tpp"
+#include "event_manager.inl"
 
 
-#endif // __CHESTNUT_ENGINE_EVENT_MANAGER_H__

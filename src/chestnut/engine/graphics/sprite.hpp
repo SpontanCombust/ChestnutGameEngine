@@ -1,14 +1,15 @@
-#ifndef __CHESTNUT_ENGINE_SPRITE_H__
-#define __CHESTNUT_ENGINE_SPRITE_H__
+#pragma once
 
-#include "opengl/texture2d.hpp"
-#include "../maths/rectangle.hpp"
-#include "../maths/vector2.hpp"
-#include "../maths/vector3.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/graphics/opengl/texture2d.hpp"
+#include "chestnut/engine/maths/rectangle.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 namespace chestnut::engine
 {
-    class CSprite : public CTexture2D
+    class CHESTNUT_API CSprite : public CTexture2D
     {
     protected:
         SRectangle m_clipRect;
@@ -18,6 +19,9 @@ namespace chestnut::engine
     public:
         CSprite();
         explicit CSprite(std::shared_ptr<CTexture2DResource> resource);
+        explicit CSprite(std::shared_ptr<CImageDataResource> resource);
+
+        void setResource(const std::shared_ptr<CTexture2DResource>& resource) override;
 
         // Coordinates and dimensions in pixels
         SRectangle getClippingRect() const;
@@ -33,4 +37,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_SPRITE_H__

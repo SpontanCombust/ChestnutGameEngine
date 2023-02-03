@@ -1,145 +1,84 @@
-cmake_minimum_required(VERSION 3.0.0)
+# =================================== PREAMBULE ===================================
+
+cmake_minimum_required(VERSION 3.11.0)
 project(ChestnutGameEngine VERSION 0.1.0)
+
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
-# =================================== Library dependencies ===================================
-
-include(FetchContent)
-
-FetchContent_Declare(
-    FetchContentOffline
-    GIT_REPOSITORY https://github.com/SpontanCombust/cmake-fetchcontent-offline
-)
-set(FETCHCONTENT_UPDATES_DISCONNECTED_FETCHCONTENTOFFLINE ON)
-FetchContent_MakeAvailable(FetchContentOffline)
-
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${fetchcontentoffline_SOURCE_DIR}")
-include(fetchcontent-offline)
-
-FetchContent_DisconnectedIfOffline()
-
-
-FetchContent_Declare(
-    ChestnutECSCore
-    GIT_REPOSITORY https://github.com/SpontanCombust/ChestnutECSCore
-    GIT_TAG master #TODO will need version tag for ECS library!
-)
-FetchContent_Declare(
-    SDL2
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL
-    GIT_TAG release-2.0.16
-)
-FetchContent_Declare(
-    SDL2_image
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL_image
-    GIT_TAG release-2.0.5
-)
-FetchContent_Declare(
-    SDL2_ttf
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf
-    GIT_TAG release-2.0.15
-)
-FetchContent_Declare(
-    SDL2_mixer
-    GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer
-    GIT_TAG release-2.0.4
-)
-FetchContent_Declare(
-    tl_optional
-    GIT_REPOSITORY https://github.com/TartanLlama/optional
-    GIT_TAG master # the latest version tags for tl's libraries link to very old commits with bad CMakeLists.txt
-)
-FetchContent_Declare(
-    tl_expected
-    GIT_REPOSITORY https://github.com/TartanLlama/expected
-    GIT_TAG master
-)
-FetchContent_Declare(
-    Assimp
-    GIT_REPOSITORY https://github.com/assimp/assimp
-    GIT_TAG v5.2.3
-)
-
-FetchContent_MakeAvailable(
-    ChestnutECSCore 
-    SDL2 
-    SDL2_image 
-    SDL2_ttf 
-    SDL2_mixer
-    tl_optional
-    tl_expected
-    Assimp
-)
-
-
-# findOpenGL and findGLEW should come with CMake installation
-if(UNIX)
-    set(OpenGL_GL_PREFERENCE GLVND)
+if(MSVC)
+    include(GenerateExportHeader)
 endif()
 
-find_package(OpenGL REQUIRED)
 
-find_package(GLEW REQUIRED)
+# ========================== PROJECT OPTIONS AND VARIABLES ============================
 
-
-# configure libs
-set(OPTIONAL_BUILD_TESTS OFF)
-set(EXPECTED_BUILD_TESTS OFF)
-set(ASSIMP_BUILD_TESTS OFF)
-
-# ====================================== CGE library ======================================
-
-add_library(${PROJECT_NAME} SHARED)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src )
-add_subdirectory(src/chestnut/engine)
-
-target_compile_options(${PROJECT_NAME} PUBLIC $<$<CONFIG:DEBUG>:-Wall -Wpedantic -DCHESTNUT_DEBUG>)
+# add debug define
+if(MSVC)
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /DCHESTNUT_DEBUG")
+else()
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DCHESTNUT_DEBUG")
+endif()
 
 
-target_link_libraries(${PROJECT_NAME} 
-    ChestnutECSCore
-    SDL2
-    SDL2_image
-    SDL2_ttf
-    SDL2_mixer
-    optional
-    expected
-    assimp
-)
+set(CHESTNUT_ENGINE_COMPILE_OPTIONS_GNU     -Wall -Wpedantic -Wno-unused-variable)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${OPENGL_INCLUDE_DIR})
-target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES})
+# 4100, 4101 - unused variables
+# 4251 - x needs to have dll interface
+#   This shows up even for private members which just happened to be STL objects
+#   You can make the warning go away by exporting individual methods instead of the entire class,
+#   but this lib is not intended to be C-compatible, so these warnings should be ignored.
+# 4834 - ignored [[nodiscard]] - this comes from tl::typelist
+set(CHESTNUT_ENGINE_COMPILE_OPTIONS_MSVC    /W3 /wd4100 /wd4101 /wd4834 /wd4251)
 
-target_include_directories(${PROJECT_NAME} PUBLIC ${GLEW_INCLUDE_DIRS})
-target_link_libraries(${PROJECT_NAME} ${GLEW_LIBRARIES})
+set(CHESTNUT_ENGINE_LIB_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+set(CHESTNUT_ENGINE_BIN_DIR ${CMAKE_CURRENT_SOURCE_DIR}/bin)
 
 
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    set(CHESTNUT_IS_MAIN_PROJECT TRUE)
+else()
+    set(CHESTNUT_IS_MAIN_PROJECT FALSE)
+endif()
+
+option(CHESTNUT_BUILD_ENGINE "Build ChestnutGameEngine library" ON)
+option(CHESTNUT_BUILD_ENGINE_EXTENSIONS "Build ChestnutGameEngine extension libraries" OFF)
+option(CHESTNUT_BUILD_ENGINE_EDITOR "Build ChestnutGameEngineEditor" ON)
+option(CHESTNUT_BUILD_TESTS "Build ChestnutGameEngine project tests" ${CHESTNUT_IS_MAIN_PROJECT})
 
 
-# ====================================== Tests executable ======================================
 
-add_executable(${PROJECT_NAME}_Test)
-add_subdirectory(tests)
+# =============================== DEPENDENCIES & UTILS ================================
 
-include(FetchContent)
+include(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Dependencies.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/Utilities.cmake)
 
-FetchContent_Declare(
-    catch2
-    GIT_REPOSITORY https://github.com/catchorg/Catch2
-    GIT_TAG v2.13.7
-)
 
-FetchContent_MakeAvailable(catch2)
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/contrib)
-    
-    
-target_link_libraries(${PROJECT_NAME}_Test ${PROJECT_NAME})
-target_link_libraries(${PROJECT_NAME}_Test Catch2::Catch2)
 
-include(CTest)
-include(Catch)
-catch_discover_tests(${PROJECT_NAME}_Test)
+# ====================================== TARGETS ======================================
 
+
+# ChestnutGameEngine
+if(CHESTNUT_BUILD_ENGINE)
+    add_subdirectory(src/chestnut/engine)
+endif()
+
+
+# ChestnutGameEngine_Graphics3D
+if(CHESTNUT_BUILD_ENGINE_EXTENSIONS)
+    add_subdirectory(src/chestnut/engine_extensions/graphics3d)
+endif()
+
+
+# ChestnutGameEngine
+if(CHESTNUT_BUILD_ENGINE_EDITOR)
+    add_subdirectory(src/chestnut/engine_editor)
+endif()
+
+
+# ChestnutGameEngine_Test, ChestnutGameEngine_Graphics3D_Test
+if(CHESTNUT_BUILD_TESTS)
+    add_subdirectory(tests)
+endif()

@@ -1,7 +1,8 @@
-#ifndef __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
-#define __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__
+#pragma once
 
-#include "../misc/flags.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/misc/flags.hpp"
 
 namespace chestnut::engine
 {
@@ -13,24 +14,19 @@ namespace chestnut::engine
     };
 
     // Flags describing how a collider object should interact with other objects
-    enum class ECollisionPolicyFlags
+    enum class ECollisionPolicy
     {
-        // do nothing about the collision
-        NONE        = 1,
         // if object's position can be affected by the other collider
         // used for objects that are meant to move around frequently
-        AFFECTED    = 2,
+        AFFECTED,
         // disallows object's position to be affected during collision
         // used for objects that move rarely, not at all or those which should follow very specific path
         // note that if both objects are blocking none of them will be adjusted and they'll clip through each other
-        AFFECTING   = 4, 
+        AFFECTING, 
         // if should raise and event about the collision if it happens
-        TRIGGER     = 8
+        TRIGGER
     };
-
-    DECLARE_ENUM_FLAG_OPERATORS( ECollisionPolicyFlags )
 
 } // namespace chestnut::engine
 
 
-#endif // __CHESTNUT_ENGINE_COLLIDER_ATTRIBUTES_H__

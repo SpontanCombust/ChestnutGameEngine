@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_TYPES_H__
-#define __CHESTNUT_ENGINE_TYPES_H__
+#pragma once
+
 
 #include <cstdint>
 #include <typeindex>
@@ -20,4 +20,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_TYPES_H__

@@ -1,10 +1,11 @@
-#ifndef __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
-#define __CHESTNUT_ENGINE_VERTEX_ARRAY_H__
+#pragma once
 
-#include "buffer.hpp"
-#include "vertex_attribute_array.hpp"
 
-#include <GL/glew.h>
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
+
+#include <glad/glad.h>
 #include <tl/optional.hpp>
 
 #include <memory>
@@ -13,7 +14,7 @@
 
 namespace chestnut::engine
 {
-    class CVertexArray
+    class CHESTNUT_API CVertexArray
     {
     private:
         struct SBufferBinding
@@ -52,4 +53,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_VERTEX_ARRAY_H__

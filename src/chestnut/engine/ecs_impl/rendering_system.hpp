@@ -1,19 +1,29 @@
-#ifndef __CHESTNUT_ENGINE_RENDERING_SYSTEM_H__
-#define __CHESTNUT_ENGINE_RENDERING_SYSTEM_H__
+#pragma once
 
-#include "system.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/ecs_impl/system.hpp"
 
 namespace chestnut::engine
 {
-    class IRenderingSystem : public ISystem
+    class CHESTNUT_API IRenderingSystem : public ISystem
     {
     public:
-        IRenderingSystem( CEngine& engine );
+        IRenderingSystem() : ISystem() 
+        {
+
+        }
+
+        IRenderingSystem(systempriority_t priority) : ISystem(priority)
+        {
+
+        }
+
         virtual ~IRenderingSystem() = default;
+
 
         virtual void render() = 0;
     };
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_RENDERING_SYSTEM_H__

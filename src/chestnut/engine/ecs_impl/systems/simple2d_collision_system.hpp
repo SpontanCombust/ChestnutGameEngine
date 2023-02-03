@@ -1,24 +1,27 @@
-#ifndef __CHESTNUT_ENGINE_COLLISION_SYSTEM_H__
-#define __CHESTNUT_ENGINE_COLLISION_SYSTEM_H__
+#pragma once
 
-#include "../system.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/ecs_impl/logic_system.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
 namespace chestnut::engine
 {
-    class CSimple2DCollisionSystem : public ISystem
+    class CHESTNUT_API CSimple2DCollisionSystem : public ILogicSystem
     {
     private:
-        ecs::queryid_t m_collisionQueryID;
+        ecs::CEntityQuery *m_collisionQuery;
 
     public:
-        CSimple2DCollisionSystem( CEngine& engine );
-        ~CSimple2DCollisionSystem();
+        CSimple2DCollisionSystem() : ILogicSystem() {}
+        CSimple2DCollisionSystem(systempriority_t priority) : ILogicSystem(priority) {}
+        
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float dt ) override;
     };
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_COLLISION_SYSTEM_H__

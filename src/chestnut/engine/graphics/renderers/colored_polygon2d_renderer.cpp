@@ -1,18 +1,15 @@
-#include "colored_polygon2d_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/colored_polygon2d_renderer.hpp"
 
-#include "../../debug/log.hpp"
-#include "../../macros.hpp"
-#include "../../resources/resource_manager.hpp"
-#include "../../resources/shader_program_resource.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
 
 namespace chestnut::engine
 {
     bool CColoredPolygon2DRenderer::setShaderProgram()
     {
-        auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.vert", 
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/coloredPolygon2D.frag"
-        );
+        auto shader = CShaderProgramResource::load(assetPathToAbsolute("shaders/coloredPolygon2D.shader"));
 
         if(shader) {
             m_shader = CShaderProgram(shader.value());

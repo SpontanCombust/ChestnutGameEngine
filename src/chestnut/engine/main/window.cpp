@@ -1,28 +1,26 @@
-#include "window.hpp"
+#include "chestnut/engine/main/window.hpp"
 
-#include "../debug/log.hpp"
-#include "../init.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/misc/exception.hpp"
+#include "chestnut/engine/init.hpp"
 
-#include <SDL2/SDL.h>
-#include <GL/glew.h>
-#include <SDL2/SDL_opengl.h>
+#include <imgui.h>
+#include <imgui_impl_sdl.h>
+#include <imgui_impl_opengl3.h>
+#include <SDL.h>
+#include <glad/glad.h>
+#include <SDL_opengl.h>
+
+#include <cassert>
 
 namespace chestnut::engine
 {
+    static unsigned char s_activeCount = 0;
+
+
     CWindow::CWindow( const char *title, int width, int height, EWindowDisplayMode displayMode, int x, int y, bool showAfterCreating, bool useVsync ) 
     {
-        m_sdlWindow = nullptr;
-        m_sdlGLContext = nullptr;
-        m_framebuffer = nullptr;
-
-
-        if( !chestnutWasInit() )
-        {
-            LOG_ERROR( "Can't create a window without first initializing the dependency libraries! Use chestnutInit() first!" );
-            return;
-        }
-
-
+        assert(chestnutWasInit() && "Can't create a window without first initializing the dependency libraries! Use chestnutInit() first!");
 
         // ========= Create window and context ========= //
 
@@ -45,32 +43,39 @@ namespace chestnut::engine
         x = ( x < 0 ) ? SDL_WINDOWPOS_CENTERED : x;
         y = ( y < 0 ) ? SDL_WINDOWPOS_CENTERED : y;
 
+
+        LOG_INFO("Creating the window...");
+
         SDL_Window *window = SDL_CreateWindow( title, x, y, width, height, windowFlags );
         if( !window )
         {
             LOG_ERROR( "Failed to create window. Error: " << SDL_GetError() );
-            return;
+            throw ChestnutException("SDL_CreateWindow() failure");
         }
+
+
+        LOG_INFO("Creating OpenGL context for the window...");
 
         SDL_GLContext context = SDL_GL_CreateContext( window );
         if( !context )
         {
             LOG_ERROR( "Failed to create OpenGL context for the window. Error: " << SDL_GetError() );
             SDL_DestroyWindow( window );
-            return;
+            throw ChestnutException("SDL_GL_CreateContext() failure");
         }
 
 
 
         // ========= Init OpenGL ========= //
 
-        GLenum err = glewInit();
-        if( err != GLEW_OK )
+        LOG_INFO("Initializing GLAD...");
+
+        if(gladLoadGLLoader(SDL_GL_GetProcAddress) == 0)
         {
-            LOG_ERROR( "Failed to initialize GLEW! Error: " << (const char *)glewGetErrorString( err ) );
+            LOG_ERROR( "Failed to initialize GLAD!" );
             SDL_GL_DeleteContext( context );
             SDL_DestroyWindow( window );
-            return;
+            throw ChestnutException("gladLoadGLLoader() failure");
         }
 
         glViewport( 0, 0, width, height );
@@ -78,11 +83,28 @@ namespace chestnut::engine
         glEnable( GL_TEXTURE_2D );
         glEnable( GL_BLEND );
         glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-        //TODO GL config on init with features to be enabled
-        glEnable( GL_DEPTH_TEST );
+        //disabled until actually needed
+        //glEnable( GL_DEPTH_TEST );
 
         int interval = useVsync ? 1 : 0;
-        SDL_GL_SetSwapInterval( interval );        
+        SDL_GL_SetSwapInterval( interval );
+
+
+
+    #ifdef CHESTNUT_DEBUG
+        // ========= Init ImGui ========= //
+
+        LOG_INFO("Initializing ImGui...");
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+
+        ImGui::StyleColorsDark();
+
+        ImGui_ImplSDL2_InitForOpenGL(window, context);
+        ImGui_ImplOpenGL3_Init("#version 330");
+    #endif      
 
 
 
@@ -91,23 +113,37 @@ namespace chestnut::engine
 
         m_framebuffer = new CFramebuffer( width, height );
         m_framebuffer->setClearColor( vec4f{ 0.f, 0.f, 0.f, 1.f } );
+
+        s_activeCount++;
+    }
+
+    CWindow::CWindow(CWindowAttribs attribs)
+    : CWindow(
+        attribs.m_title.c_str(),
+        attribs.m_width,
+        attribs.m_height,
+        attribs.m_displayMode,
+        attribs.m_position.x,
+        attribs.m_position.y,
+        attribs.m_show,
+        attribs.m_vsync)
+    {
+
     }
 
     CWindow::~CWindow() 
     {
+    #ifdef CHESTNUT_DEBUG
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplSDL2_Shutdown();
+        ImGui::DestroyContext();
+    #endif
+
+        delete m_framebuffer;
         SDL_GL_DeleteContext( m_sdlGLContext );
         SDL_DestroyWindow( m_sdlWindow );
-        delete m_framebuffer;
-    }
 
-    bool CWindow::isValid() const
-    {
-        if( m_sdlWindow && m_sdlGLContext && m_framebuffer )
-        {
-            return true;
-        }
-
-        return false;
+        s_activeCount--;
     }
 
     void CWindow::setTitle( const std::string& title ) 
@@ -175,21 +211,42 @@ namespace chestnut::engine
         return ( flags & SDL_WINDOW_RESIZABLE ) > 0;
     }
 
-    void CWindow::setSize( int w, int h ) 
+    int CWindow::getWidth() const
     {
-        SDL_SetWindowSize( m_sdlWindow, w, h );
-        *m_framebuffer = std::move( CFramebuffer( w, h ) );
-    }
-
-    int CWindow::getSizeWidth() const
-    {
-        // might as well use framebuffer as it has the same size
         return m_framebuffer->getWidth();
     }
 
-    int CWindow::getSizeHeight() const
+    void CWindow::setWidth(int w) 
+    {
+        int h = getHeight();
+        SDL_SetWindowSize(m_sdlWindow, w, h);
+        *m_framebuffer = std::move(CFramebuffer(w, h));
+    }
+
+    int CWindow::getHeight() const
     {
         return m_framebuffer->getHeight();
+    }
+
+    void CWindow::setHeight(int h) 
+    {
+        int w = getWidth();
+        SDL_SetWindowSize(m_sdlWindow, w, h);
+        *m_framebuffer = std::move(CFramebuffer(w, h));
+    }
+
+    vec2i CWindow::getSize() const
+    {
+        return {
+            m_framebuffer->getWidth(),
+            m_framebuffer->getHeight()
+        };
+    }
+
+    void CWindow::setSize(vec2i size) 
+    {
+        SDL_SetWindowSize(m_sdlWindow, size.x, size.y);
+        *m_framebuffer = std::move(CFramebuffer(size.x, size.y));
     }
 
     void CWindow::setPosition( int x, int y ) 
@@ -290,6 +347,64 @@ namespace chestnut::engine
     void CWindow::flipBuffer() 
     {
         SDL_GL_SwapWindow( m_sdlWindow );
+    }
+
+    bool CWindow::isAnyActive()
+    {
+        return s_activeCount > 0;
+    }
+
+
+
+
+
+
+    CWindowAttribs::CWindowAttribs(const std::string& title) noexcept
+    : m_title(title)
+    {
+
+    }
+    
+    CWindowAttribs& CWindowAttribs::title(const std::string& t) noexcept
+    {
+        m_title = t;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::width(int w) noexcept
+    {
+        m_width = w;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::height(int h) noexcept
+    {
+        m_height = h;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::displayMode(EWindowDisplayMode mode) noexcept
+    {
+        m_displayMode = mode;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::position(vec2i p) noexcept
+    {
+        m_position = p;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::show(bool b) noexcept
+    {
+        m_show = b;
+        return *this;
+    }
+
+    CWindowAttribs& CWindowAttribs::vsync(bool b) noexcept
+    {
+        m_vsync = b;
+        return *this;
     }
 
 } // namespace chestnut::engine

@@ -1,8 +1,9 @@
-#ifndef __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_ARRAY_H__
-#define __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_ARRAY_H__
+#pragma once
 
-#include "vertex_attribute.hpp"
-#include "buffer.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
 
 #include <initializer_list>
 #include <vector>
@@ -10,7 +11,7 @@
 
 namespace chestnut::engine
 {
-    class CVertexAttributeArray
+    class CHESTNUT_API CVertexAttributeArray
     {
     private:
         std::vector<CVertexAttribute> m_vecAttributes;
@@ -33,4 +34,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_VERTEX_ATTRIBUTE_ARRAY_H__

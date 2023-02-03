@@ -1,10 +1,11 @@
-#ifndef __CHESTNUT_ENGINE_FONT_RESOURCE_H__
-#define __CHESTNUT_ENGINE_FONT_RESOURCE_H__
+#pragma once
 
-#include "resource.hpp"
-#include "texture2d_resource.hpp"
-#include "../maths/rectangle.hpp"
-#include "../misc/flags.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/resource.hpp"
+#include "chestnut/engine/resources/texture2d_resource.hpp"
+#include "chestnut/engine/maths/rectangle.hpp"
+#include "chestnut/engine/misc/flags.hpp"
 
 #include <string>
 #include <map>
@@ -22,9 +23,6 @@ namespace chestnut::engine
         STRIKETHROUGH
     };
 
-    DECLARE_ENUM_FLAG_OPERATORS(EFontStyle)
-
-
     struct SGlyphMetrics
     {
         int width;
@@ -39,7 +37,7 @@ namespace chestnut::engine
     struct SFontConfig
     {
         int pointSize;
-        EFontStyle styleMask;
+        CFlags<EFontStyle> styleMask;
         int ascent;
         int descent;
         int height;
@@ -48,33 +46,28 @@ namespace chestnut::engine
         std::unordered_map<wchar_t, SGlyphMetrics> mapGlyphMetrics;
     };
 
-    class CFontResource : public IResource
+    class CHESTNUT_API CFontResource : public IResource
     {
     public:
-        std::string m_fontPath;
-        
         std::unordered_map< size_t, SFontConfig > m_mapConfigHashToConfig;
 
     public:
-        CFontResource() noexcept;
+        bool loadConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
+
+        bool hasConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
         
-        ~CFontResource() noexcept;
+        const SFontConfig& getConfig( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
 
-
-        bool loadConfig( int pointSize, EFontStyle styleMask ) noexcept;
-
-        bool hasConfig( int pointSize, EFontStyle styleMask ) noexcept;
-        
-        // TODO optional reference wrapper
-        const SFontConfig& getConfig( int pointSize, EFontStyle styleMask ) noexcept;
-
-        size_t getConfigHash( int pointSize, EFontStyle styleMask ) noexcept;
+        size_t getConfigHash( int pointSize, CFlags<EFontStyle> styleMask ) noexcept;
 
 
         // fontPath - path to .ttf file
-        static tl::expected<std::shared_ptr<CFontResource>, const char *> loadFromFile( const char *fontPath ) noexcept;
+        static tl::expected<std::shared_ptr<CFontResource>, std::string> 
+        load(std::filesystem::path fontPath) noexcept;
+
+    private:
+        CFontResource(std::filesystem::path location) noexcept;
     };
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_FONT_RESOURCE_H__

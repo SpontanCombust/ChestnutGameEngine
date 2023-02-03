@@ -1,28 +1,21 @@
-#include "animation2d_component.hpp"
+#include "chestnut/engine/ecs_impl/components/animation2d_component.hpp"
 
 namespace chestnut::engine
 {    
-    CAnimation2DComponent::CAnimation2DComponent() 
+    void CAnimation2DComponent::playAnimation( const char *animationName) 
     {
-        isAnimPlaying = false;
-        isAnimPaused = false;
-        currentAnimName = "";
-        elapsedAnimTimeSec = 0.f;
-        remainingAnimLoops = 0;
-        animSpeedMultiplier = 1.f;
-    }
+        if(!animationResource)
+        {
+            return;
+        }
 
-    void CAnimation2DComponent::playAnimation( const char *animationName, int loops, float speedMult ) 
-    {
-        auto it = animSet.mapAnimNameToAnimData.find( animationName );
-        if( it != animSet.mapAnimNameToAnimData.end() )
+        auto it = animationResource->m_animationSet.mapAnimNameToAnimData.find( animationName );
+        if( it != animationResource->m_animationSet.mapAnimNameToAnimData.end() )
         {
             isAnimPlaying = true;
             isAnimPaused = false;
             currentAnimName = animationName;
             elapsedAnimTimeSec = 0.f;
-            remainingAnimLoops = loops;
-            animSpeedMultiplier = speedMult;
         }
     }
 
@@ -42,7 +35,11 @@ namespace chestnut::engine
         isAnimPaused = false;
         currentAnimName = "";
         elapsedAnimTimeSec = 0.f;
-        remainingAnimLoops = 0;
-        animSpeedMultiplier = 1.f;
+
+        if(remainingAnimLoops > 0)
+        {
+            remainingAnimLoops = 0;
+        }
     }
+
 } // namespace chestnut::engine

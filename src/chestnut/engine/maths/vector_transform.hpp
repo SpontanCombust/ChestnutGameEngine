@@ -1,11 +1,11 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR_TRANSFORM_H__
-#define __CHESTNUT_ENGINE_VECTOR_TRANSFORM_H__
+#pragma once
 
-#include "vector.hpp"
-#include "matrix.hpp"
-#include "vector2.hpp"
-#include "vector3.hpp"
-#include "vector4.hpp"
+
+#include "chestnut/engine/maths/vector.hpp"
+#include "chestnut/engine/maths/matrix.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
 
 namespace chestnut::engine
 {
@@ -21,8 +21,8 @@ namespace chestnut::engine
     template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
     Vector<T,vn> vecLeftMultiplyByMatrix( const Matrix<T,mn>& m, const Vector<T,vn>& v );
 
-    template< typename T, size_t mn, size_t vn, typename = typename std::enable_if<( mn >= vn )>::type >
-    Vector<T,vn> operator*( const Matrix<T,mn>& m, const Vector<T,vn>& v );
+    template< typename T, size_t mn, size_t vn >
+    inline Vector<T,vn> operator*( const Matrix<T,mn>& m, const Vector<T,vn>& v ) { return vecLeftMultiplyByMatrix( m, v ); }
 
 
     template< typename T >
@@ -57,7 +57,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector_transform.tpp"
+#include "vector_transform.inl"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR_TRANSFORM_H__

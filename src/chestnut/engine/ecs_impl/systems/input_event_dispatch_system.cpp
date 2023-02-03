@@ -1,19 +1,23 @@
-#include "input_event_dispatch_system.hpp"
+#include "chestnut/engine/ecs_impl/systems/input_event_dispatch_system.hpp"
 
-#include "../../main/engine.hpp"
+#include "chestnut/engine/main/engine.hpp"
 
-#include <SDL2/SDL_events.h>
+#include <imgui.h>
+#include <imgui_impl_sdl.h>
+#include <imgui_impl_opengl3.h>
+#include <SDL_events.h>
 
 namespace chestnut::engine
 {      
-    CInputEventDispatchSystem::CInputEventDispatchSystem( CEngine& engine ) : ISystem( engine )
+    CInputEventDispatchSystem::CInputEventDispatchSystem(systempriority_t priority)
+    : ILogicSystem(priority)
     {
 
     }
 
     void CInputEventDispatchSystem::update( float deltaTime ) 
     {
-        CEventManager& eventManager = getEngine().getEventManager();
+        CEventManager& eventManager = CEngine::getInstance().getEventManager();
 
         SDL_Event sdlEvent;
 
@@ -51,7 +55,12 @@ namespace chestnut::engine
                 default:
                     break;
             }
+            
+        #ifdef CHESTNUT_DEBUG
+            ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+        #endif
         }
+
     }
 
 

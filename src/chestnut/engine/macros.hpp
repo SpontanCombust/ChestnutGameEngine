@@ -1,6 +1,15 @@
-#ifndef __CHESTNUT_ENGINE_MACROS_H__
-#define __CHESTNUT_ENGINE_MACROS_H__
+#pragma once
 
+
+#ifdef _WIN32
+    #ifdef ChestnutGameEngine_EXPORTS
+        #define CHESTNUT_API __declspec(dllexport)
+    #else
+        #define CHESTNUT_API __declspec(dllimport)
+    #endif
+#else
+    #define CHESTNUT_API
+#endif
 
 // initial vertex capacity of the (colored) polygon renderer
 #define CHESTNUT_POLYGON_RENDERER_INIT_VERTEX_CAPACITY 100 
@@ -31,7 +40,9 @@
 #define CHESTNUT_SIMPLE2D_RENDERING_SYSTEM_FORCE_GPU_SYNCHRONIZATION 1
 
 
-#define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../assets"
+#ifdef _WIN32
+    #define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../../assets"
+#else
+    #define CHESTNUT_ENGINE_ASSETS_DIR_PATH "../assets"
+#endif
 
-
-#endif // __CHESTNUT_ENGINE_MACROS_H__

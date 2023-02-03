@@ -1,14 +1,15 @@
-#ifndef __CHESTNUT_ENGINE_TEXTURE2D_H__
-#define __CHESTNUT_ENGINE_TEXTURE2D_H__
+#pragma once
 
-#include "../../resources/texture2d_resource.hpp"
-#include "../../maths/rectangle.hpp"
-#include "../../maths/vector2.hpp"
-#include "../../maths/vector3.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/texture2d_resource.hpp"
+#include "chestnut/engine/maths/rectangle.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 namespace chestnut::engine
 {
-    class CTexture2D
+    class CHESTNUT_API CTexture2D
     {
     protected:
         std::shared_ptr<CTexture2DResource> m_texResource;
@@ -16,7 +17,9 @@ namespace chestnut::engine
     public:
         CTexture2D() = default;
         explicit CTexture2D( std::shared_ptr<CTexture2DResource> resource );
+        explicit CTexture2D( const std::shared_ptr<CImageDataResource>& resource );
 
+        virtual void setResource(const std::shared_ptr<CTexture2DResource>& resource);
         const std::shared_ptr<CTexture2DResource>& getResource() const;
         bool isValid() const;
 
@@ -31,9 +34,10 @@ namespace chestnut::engine
         vec2i getSize() const;
 
         void setFiltering( GLint minifyingFilter, GLint magnifyingFilter );
+        void getFiltering( GLint *minifyingFilter, GLint *magnifyingFilter );
         void setWrapping( GLint wrapS, GLint wrapT );
+        void getWrapping( GLint *wrapS, GLint *wrapT );
     };   
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_TEXTURE2D_H__

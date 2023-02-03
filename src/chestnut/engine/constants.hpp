@@ -1,13 +1,14 @@
-#ifndef __CHESTNUT_ENGINE_CONSTANTS_H__
-#define __CHESTNUT_ENGINE_CONSTANTS_H__
+#pragma once
 
-#include "types.hpp"
+
+#include "chestnut/engine/types.hpp"
 
 #include <limits>
 
 namespace chestnut::engine
 {
     constexpr double CHESTNUT_PI = 3.14159265359;
+    constexpr float CHESTNUT_PI_F = (float)CHESTNUT_PI;
 
 
     const listenerpriority_t LISTENER_PRIORITY_HIGHEST = std::numeric_limits<listenerpriority_t>::min();
@@ -34,4 +35,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_CONSTANTS_H__

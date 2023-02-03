@@ -1,14 +1,16 @@
-#ifndef __CHESTNUT_ENGINE_ENGINE_H__
-#define __CHESTNUT_ENGINE_ENGINE_H__
+#pragma once
 
-#include "window.hpp"
-#include "../types.hpp"
-#include "../constants.hpp"
-#include "../misc/auto_timer.hpp"
-#include "../ecs_impl/event_manager.hpp"
-#include "../audio/audio_manager.hpp"
-#include "../ecs_impl/system.hpp"
-#include "../ecs_impl/rendering_system.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/types.hpp"
+#include "chestnut/engine/constants.hpp"
+#include "chestnut/engine/main/window.hpp"
+#include "chestnut/engine/resources/resource_manager.hpp"
+#include "chestnut/engine/ecs_impl/event_manager.hpp"
+#include "chestnut/engine/ecs_impl/logic_system.hpp"
+#include "chestnut/engine/ecs_impl/rendering_system.hpp"
+#include "chestnut/engine/misc/auto_timer.hpp"
+#include "chestnut/engine/audio/audio_manager.hpp"
 
 #include <chestnut/ecs/entity_world.hpp>
 
@@ -16,42 +18,38 @@
 
 namespace chestnut::engine
 {
-    class CEngine
+    class CHESTNUT_API CEngine
     {
     private:
-        bool m_isRunning;
+        static CEngine *sm_instance;
+        bool m_defaultExitBehaviour;
 
+        bool m_isRunning;
         CAutoTimer *m_updateTimer;
 
-        CWindow* m_window;
-
+        CWindow& m_window;
         ecs::CEntityWorld m_entityWorld;
         CEventManager m_eventManager;
         CAudioManager m_audioManager;
+        CResourceManager m_resourceManager;
 
 
-
-        struct SLogicSystemNode
-        {
-            ISystem *system;
-            systempriority_t priority;
-        };
-        struct SRenderingSystemNode
-        {
-            IRenderingSystem *system;
-            systempriority_t priority;
-        };
-
-        std::list< SLogicSystemNode > m_listLogicSystemNodes;
-        std::list< SRenderingSystemNode > m_listRenderingSystemNodes;
+        std::list<ILogicSystem *> m_listLogicSystems;
+        std::list<IRenderingSystem *> m_listRenderingSystems;
 
 
     public:
-        // updateInterval:
-        //      <= 0 unlocked update rate
-        //       > 0 update rate locked to specified interval in seconds
-        CEngine( CWindow* window, float updateInterval = -1 );
+        // No copying or moving
+        CEngine(const CEngine&) = delete;
+        CEngine& operator=(const CEngine&) = delete;
+        CEngine(CEngine&&) = delete;
+        CEngine& operator=(CEngine&&) = delete;
+        
         ~CEngine();
+
+        static CEngine& createInstance(CWindow& window, float updateInterval = -1, bool defaultExitBehaviour = true);
+        static CEngine& getInstance();
+        static void deleteInstance();
 
 
         CWindow& getWindow();
@@ -62,31 +60,29 @@ namespace chestnut::engine
 
         CAudioManager& getAudioManager();
 
+        CResourceManager& getResourceManager();
 
 
-        // System execution is ordered by ascending priority (the bigger the number the later in order system is updated)
-        // Doesn't allow system duplicates
-        template< typename SystemType, typename ...Args >
-        void attachLogicSystem( systempriority_t priority, Args&&... args );
 
-        // System execution is ordered by ascending priority (the bigger the number the later in order system is updated)
-        // Doesn't allow system duplicates
-        template< typename SystemType, typename ...Args >
-        void attachRenderingSystem( systempriority_t priority, Args&&... args );
+        // System execution is ordered by ascending priority (the bigger the number the later in order system is processed)
+        void attachSystem(ILogicSystem *system);
+        void attachSystem(IRenderingSystem *system);
 
-        template< typename SystemType >
-        bool hasSystem() const;
-
+        // Doesn't free the memory from detached systems
+        void detachSystem(ILogicSystem *system);
+        void detachSystem(IRenderingSystem *system);
+        
+        // Returns the first found system of that type
         // If doesn't find the system returns nullptr
         template< typename SystemType >
-        SystemType *getSystem() const;
+        SystemType *getLogicSystem() const;
 
-        // If doesn't find the system returns SYSTEM_PRIORITY_INVALID
+        // Returns the first found system of that type
+        // If doesn't find the system returns nullptr
         template< typename SystemType >
-        systempriority_t getSystemPriority() const;
+        SystemType *getRenderingSystem() const;
 
-        template< typename SystemType >
-        void detachSystem();
+        void reorderSystems();
 
 
 
@@ -101,13 +97,17 @@ namespace chestnut::engine
         void stop();
 
     private:
+        // updateInterval:
+        //      <= 0 unlocked update rate
+        //       > 0 update rate locked to specified interval in seconds
+        CEngine(CWindow& window, float updateInterval, bool defaultExitBehaviour);
+
         void gameLoop();
     };
     
 } // namespace chestnut::engine
 
 
-#include "engine.tpp"
+#include "engine.inl"
 
 
-#endif // __CHESTNUT_ENGINE_ENGINE_H__

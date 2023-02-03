@@ -1,12 +1,14 @@
-#ifndef __CHESTNUT_ENGINE_BUFFER_H__
-#define __CHESTNUT_ENGINE_BUFFER_H__
+#pragma once
 
-#include <GL/glew.h>
+
+#include "chestnut/engine/macros.hpp"
+
+#include <glad/glad.h>
 
 
 namespace chestnut::engine
 {
-    class CBuffer
+    class CHESTNUT_API CBuffer
     {
     public:
         enum EType
@@ -68,4 +70,3 @@ namespace chestnut::engine
     
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_BUFFER_H__

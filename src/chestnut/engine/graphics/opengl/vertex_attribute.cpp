@@ -1,4 +1,4 @@
-#include "vertex_attribute.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute.hpp"
 
 namespace chestnut::engine
 {

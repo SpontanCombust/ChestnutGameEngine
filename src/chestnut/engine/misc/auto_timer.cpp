@@ -1,6 +1,6 @@
-#include "auto_timer.hpp"
+#include "chestnut/engine/misc/auto_timer.hpp"
 
-#include "../debug/log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #include <chrono>
 
@@ -14,7 +14,7 @@ namespace chestnut::engine
 
     uint64_t CAutoTimer::getAbsoluteTimeInMicroseconds() const
     {
-        return static_cast<uint64_t>( std::chrono::duration_cast< std::chrono::microseconds >( std::chrono::steady_clock::now().time_since_epoch() ).count() );
+        return static_cast<uint64_t>( std::chrono::duration_cast< std::chrono::microseconds >( std::chrono::high_resolution_clock::now().time_since_epoch() ).count() );
     }
 
     void CAutoTimer::reset()

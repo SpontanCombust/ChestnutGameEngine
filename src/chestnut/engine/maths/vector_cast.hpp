@@ -1,7 +1,7 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR_CAST_H__
-#define __CHESTNUT_ENGINE_VECTOR_CAST_H__
+#pragma once
 
-#include "vector.hpp"
+
+#include "chestnut/engine/maths/vector.hpp"
 
 #include <type_traits>
 
@@ -82,7 +82,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector_cast.tpp"
+#include "vector_cast.inl"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR_CAST_H__

@@ -1,19 +1,24 @@
-#ifndef __CHESTNUT_ENGINE_SIMPLE2D_ANIMATION_SYSTEM_H__
-#define __CHESTNUT_ENGINE_SIMPLE2D_ANIMATION_SYSTEM_H__
+#pragma once
 
-#include "../system.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/ecs_impl/logic_system.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
 namespace chestnut::engine
 {
-    class CSimple2DAnimationSystem : public ISystem
+    class CHESTNUT_API CSimple2DAnimationSystem : public ILogicSystem
     {
     private:
-        ecs::queryid_t m_animatedTextureQueryID;
+        ecs::CEntityQuery *m_animatedTextureQuery;
 
     public:
-        CSimple2DAnimationSystem( CEngine& engine );
+        CSimple2DAnimationSystem() : ILogicSystem() {}
+        CSimple2DAnimationSystem(systempriority_t priority) : ILogicSystem(priority) {}
+
+        void onAttach() override;
+        void onDetach() override;
 
         void update( float dt ) override;
     };
@@ -21,4 +26,3 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#endif // __CHESTNUT_ENGINE_SIMPLE2D_ANIMATION_SYSTEM_H__

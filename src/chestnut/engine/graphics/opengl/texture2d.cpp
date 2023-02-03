@@ -1,4 +1,7 @@
-#include "texture2d.hpp"
+#include "chestnut/engine/graphics/opengl/texture2d.hpp"
+
+#include "chestnut/engine/debug/log.hpp"
+
 
 namespace chestnut::engine 
 {
@@ -6,6 +9,22 @@ namespace chestnut::engine
     : m_texResource(resource) 
     {
         
+    }
+
+    CTexture2D::CTexture2D(const std::shared_ptr<CImageDataResource>& resource) 
+    {
+        auto texResource = CTexture2DResource::loadFromImageData(resource);
+        if(texResource) {
+            m_texResource = *texResource;
+        } else {
+            LOG_ERROR("Failed to load texture resource from image data");
+            m_texResource = nullptr;
+        }
+    }
+
+    void CTexture2D::setResource(const std::shared_ptr<CTexture2DResource>& resource) 
+    {
+        m_texResource = resource;
     }
 
     const std::shared_ptr<CTexture2DResource>& CTexture2D::getResource() const
@@ -72,11 +91,37 @@ namespace chestnut::engine
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter );
     }
 
+    void CTexture2D::getFiltering(GLint *minifyingFilter, GLint *magnifyingFilter) 
+    {
+        bind();
+        if(minifyingFilter)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minifyingFilter);
+        }
+        if(magnifyingFilter)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magnifyingFilter);
+        }
+    }
+
     void CTexture2D::setWrapping( GLint wrapS, GLint wrapT )
     {
         bind();
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS );
         glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT );
+    }
+
+    void CTexture2D::getWrapping(GLint *wrapS, GLint *wrapT) 
+    {
+        bind();
+        if(wrapS)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+        }
+        if(wrapT)
+        {
+            glGetTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+        }
     }
 
 } // namespace chestnut::engine

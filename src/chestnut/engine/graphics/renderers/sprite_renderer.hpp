@@ -1,16 +1,17 @@
 //TODO at least allowing to not group render calls by texture ID - maybe use 3D texture?
 
-#ifndef __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
-#define __CHESTNUT_ENGINE_SPRITE_RENDERER_H__
+#pragma once
 
-#include "renderer.hpp"
-#include "../opengl/buffer.hpp"
-#include "../opengl/uniform.hpp"
-#include "../opengl/vertex_array.hpp"
-#include "../../maths/vector2.hpp"
-#include "../../maths/vector3.hpp"
-#include "../../maths/vector4.hpp"
-#include "../sprite.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/uniform.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
+#include "chestnut/engine/graphics/sprite.hpp"
 
 #include <memory>
 #include <vector>
@@ -49,7 +50,7 @@ namespace chestnut::engine
      * is also texture ID and texture size, which are set before rendering a batch.
      * For each batch three operations are performed: binding the texture, setting texture size uniform and finally drawing instances using instance amount and offset.
      */
-    class CSpriteRenderer : public IRenderer
+    class CHESTNUT_API CSpriteRenderer : public IRenderer
     {
         struct SSpriteRender_Instance
         {
@@ -119,4 +120,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_SPRITE_RENDERER_H__

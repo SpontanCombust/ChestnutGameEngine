@@ -1,7 +1,9 @@
-#ifndef __CHESTNUT_ENGINE_WINDOW_H__
-#define __CHESTNUT_ENGINE_WINDOW_H__
+#pragma once
 
-#include "../graphics/opengl/framebuffer.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/graphics/opengl/framebuffer.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
 
 #include <string>
 
@@ -17,7 +19,32 @@ namespace chestnut::engine
         FULLSCREEN
     };
 
-    class CWindow
+
+    class CHESTNUT_API CWindowAttribs
+    {
+    public:
+        std::string m_title;
+        int m_width = 800;
+        int m_height = 600;
+        EWindowDisplayMode m_displayMode = EWindowDisplayMode::WINDOWED;
+        vec2i m_position = {0, 0};
+        bool m_show = true;
+        bool m_vsync = false;
+
+    public:
+        CWindowAttribs(const std::string& title) noexcept;
+
+        CWindowAttribs& title(const std::string& t) noexcept;
+        CWindowAttribs& width(int w) noexcept;
+        CWindowAttribs& height(int h) noexcept;
+        CWindowAttribs& displayMode(EWindowDisplayMode mode) noexcept;
+        CWindowAttribs& position(vec2i p) noexcept;
+        CWindowAttribs& show(bool b) noexcept;
+        CWindowAttribs& vsync(bool b) noexcept;
+    };
+
+
+    class CHESTNUT_API CWindow
     {
     private:
         SDL_Window *m_sdlWindow;
@@ -25,6 +52,11 @@ namespace chestnut::engine
         CFramebuffer *m_framebuffer; // for now just a dummy with no texture bound
 
     public:
+        // Says whether any window is running in the program
+        // If so this means, among other things, that an OpenGL context is available
+        static bool isAnyActive();
+
+
         // Make sure to call chestnutInit() before creating a window
         // To configure more aspects of how OpenGL will behave use SDL_GL_SetAttribute() after chestnutInit()
         // See https://wiki.libsdl.org/SDL_GL_SetAttribute
@@ -38,9 +70,9 @@ namespace chestnut::engine
                  bool showAfterCreating = true, 
                  bool useVsync = false );
 
-        ~CWindow();
+        CWindow(CWindowAttribs attribs);
 
-        bool isValid() const;
+        ~CWindow();
 
         void setTitle( const std::string& title );
         void setTitle( const char *title );
@@ -52,9 +84,12 @@ namespace chestnut::engine
         void setResizable( bool resizable );
         bool isResizable() const;
 
-        void setSize( int w, int h );
-        int getSizeWidth() const;
-        int getSizeHeight() const;
+        int getWidth() const;
+        void setWidth(int w);
+        int getHeight() const;
+        void setHeight(int h);
+        vec2i getSize() const;
+        void setSize(vec2i size);
 
         void setPosition( int x, int y );
         int getPositionX() const;
@@ -81,4 +116,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_WINDOW_H__

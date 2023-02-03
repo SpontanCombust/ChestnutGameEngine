@@ -1,4 +1,4 @@
-#include "sprite.hpp"
+#include "chestnut/engine/graphics/sprite.hpp"
 
 namespace chestnut::engine
 {    
@@ -15,6 +15,18 @@ namespace chestnut::engine
         m_clipRect = { 0.f, 0.f, (float)resource->m_width, (float)resource->m_height };
         m_tint = { 1.f, 1.f, 1.f };
         m_tintFactor = 0.f;
+    }
+
+    CSprite::CSprite(std::shared_ptr<CImageDataResource> resource)
+    : CTexture2D(resource)
+    {
+
+    }
+
+    void CSprite::setResource(const std::shared_ptr<CTexture2DResource>& resource) 
+    {
+        m_texResource = resource;
+        m_clipRect = { 0.f, 0.f, (float)resource->m_width, (float)resource->m_height };
     }
 
     SRectangle CSprite::getClippingRect() const

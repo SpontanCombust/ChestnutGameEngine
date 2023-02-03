@@ -1,14 +1,16 @@
-#ifndef __CHESTNUT_ENGINE_LOG_H__
-#define __CHESTNUT_ENGINE_LOG_H__
+#pragma once
+
+#include "chestnut/engine/macros.hpp"
 
 #include <ostream>
 
-namespace chestnut::engine
+
+namespace chestnut::engine::debug
 {
-    class CLogger
+    class CHESTNUT_API CLogger
     {
     public:
-        static std::ostream *streamPtr;
+        static std::ostream *getStreamPtr();
 
         static void setToCout();
         static void setToCerr();
@@ -21,20 +23,24 @@ namespace chestnut::engine
         static std::string getCurrentDateString();
 
     private:
-        static bool hasFileOpened;
         static void closeFileIfIsOpened();
     };
 
-} // namespace chestnut::engine
+} // namespace chestnut::engine::debug
 
 #ifdef CHESTNUT_DEBUG
-    #define LOG_INFO(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [INFO] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }
-    #define LOG_WARNING(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [WARNING] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }
-    #define LOG_ERROR(s) { *CLogger::streamPtr << CLogger::getCurrentDateString() << " [ERROR] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl; }
+    #define LOG(s, lvl) {\
+        *chestnut::engine::debug::CLogger::getStreamPtr() <<\
+        chestnut::engine::debug::CLogger::getCurrentDateString() <<\
+        " [" << lvl << "] " << "[ " << __FILE__ << " (" << __LINE__ << ") ] : " << s << std::endl;\
+    }
+
+    #define LOG_INFO(s)     LOG(s, "INFO")
+    #define LOG_WARNING(s)  LOG(s, "WARNING")
+    #define LOG_ERROR(s)    LOG(s, "ERROR")
 #else
+    #define LOG(s, lvl)
     #define LOG_INFO(s)
     #define LOG_WARNING(s)
     #define LOG_ERROR(s)
 #endif
-
-#endif // __CHESTNUT_ENGINE_LOG_H__

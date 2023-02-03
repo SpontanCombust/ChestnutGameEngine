@@ -1,8 +1,8 @@
-#ifndef __CHESTNUT_ENGINE_MATRIX4_H__
-#define __CHESTNUT_ENGINE_MATRIX4_H__
+#pragma once
 
-#include "matrix.hpp"
-#include "vector3.hpp"
+
+#include "chestnut/engine/maths/matrix.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
 
 #include <string>
 
@@ -47,7 +47,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "matrix4.tpp"
+#include "matrix4.inl"
 
 
-#endif // __CHESTNUT_ENGINE_MATRIX4_H__

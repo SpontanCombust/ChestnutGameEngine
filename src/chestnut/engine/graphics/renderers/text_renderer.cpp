@@ -1,11 +1,11 @@
-#include "text_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/text_renderer.hpp"
 
-#include "../../maths/vector_cast.hpp"
-#include "../../debug/log.hpp"
-#include "../../macros.hpp"
-#include "../../resources/resource_manager.hpp"
-#include "../../resources/shader_program_resource.hpp"
-#include "../opengl/vertex_attribute_array.hpp"
+#include "chestnut/engine/maths/vector_cast.hpp"
+#include "chestnut/engine/debug/log.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+#include "chestnut/engine/misc/utility_functions.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_attribute_array.hpp"
 
 #include <unordered_map>
 
@@ -13,10 +13,7 @@ namespace chestnut::engine
 {
     bool CTextRenderer::setShaderProgram()
     {
-        auto shader = CResourceManager::getOrLoadResource<CShaderProgramResource>(
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.vert", 
-            CHESTNUT_ENGINE_ASSETS_DIR_PATH"/shaders/text.frag"
-        );
+        auto shader = CShaderProgramResource::load(assetPathToAbsolute("shaders/text.shader"));
 
         if(shader) {
             m_shader = CShaderProgram(shader.value());

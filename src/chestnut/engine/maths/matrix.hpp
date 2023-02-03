@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_MATRIX_H__
-#define __CHESTNUT_ENGINE_MATRIX_H__
+#pragma once
+
 
 #include <string>
 
@@ -52,38 +52,38 @@ namespace chestnut::engine
     Matrix<T,n> matNegated( const Matrix<T,n>& m );
 
     template< typename T, size_t n >
-    Matrix<T,n> operator-( const Matrix<T,n>& m );
+    inline Matrix<T,n> operator-( const Matrix<T,n>& m ) { return matNegated( m ); }
 
 
     template< typename T, size_t n >
     Matrix<T,n> matSum( const Matrix<T,n>& m1, const Matrix<T,n>& m2 );
 
     template< typename T, size_t n >
-    Matrix<T,n> operator+( const Matrix<T,n>& m1, const Matrix<T,n>& m2 );
+    inline Matrix<T,n> operator+( const Matrix<T,n>& m1, const Matrix<T,n>& m2 ) { return matSum( m1, m2 ); }
 
 
     template< typename T, size_t n >
     Matrix<T,n> matDifference( const Matrix<T,n>& m1, const Matrix<T,n>& m2 );
 
     template< typename T, size_t n >
-    Matrix<T,n> operator-( const Matrix<T,n>& m1, const Matrix<T,n>& m2 );
+    inline Matrix<T,n> operator-( const Matrix<T,n>& m1, const Matrix<T,n>& m2 ) { return matDifference( m1, m2 ); }
 
 
     template< typename T, size_t n >
     Matrix<T,n> matProduct( const Matrix<T,n>& m1, const Matrix<T,n>& m2 );
 
     template< typename T, size_t n >
-    Matrix<T,n> operator*( const Matrix<T,n>& m1, const Matrix<T,n>& m2 );
+    inline Matrix<T,n> operator*( const Matrix<T,n>& m1, const Matrix<T,n>& m2 ) { return matProduct( m1, m2 ); }
 
     
     template< typename T, size_t n >
     Matrix<T,n> matScalarProduct( const Matrix<T,n>& m, T s );
 
     template< typename T, size_t n >
-    Matrix<T,n> operator*( const Matrix<T,n>& m, T s );
+    inline Matrix<T,n> operator*( const Matrix<T,n>& m, T s ) { return matScalarProduct( m, s ); }
 
     template< typename T, size_t n >
-    Matrix<T,n> operator*( T s, const Matrix<T,n>& m );
+    inline Matrix<T,n> operator*( T s, const Matrix<T,n>& m ) { return matScalarProduct( m, s ); }
 
 
     template< typename T, size_t n >
@@ -92,7 +92,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "matrix.tpp"
+#include "matrix.inl"
 
 
-#endif // __CHESTNUT_ENGINE_MATRIX_H__

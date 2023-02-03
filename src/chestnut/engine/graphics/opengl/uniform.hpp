@@ -1,9 +1,10 @@
-#ifndef __CHESTNUT_ENGINE_UNIFORM_H__
-#define __CHESTNUT_ENGINE_UNIFORM_H__
+#pragma once
 
-#include "../../resources/shader_program_resource.hpp"
 
-#include <GL/glew.h>
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/shader_program_resource.hpp"
+
+#include <glad/glad.h>
 
 #include <string>
 
@@ -36,4 +37,3 @@ namespace chestnut::engine
 #include "uniform.inl"
 
 
-#endif // __CHESTNUT_ENGINE_UNIFORM_H__

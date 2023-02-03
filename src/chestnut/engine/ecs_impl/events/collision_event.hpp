@@ -1,7 +1,6 @@
-#ifndef __CHESTNUT_ENGINE_COLLISION_EVENT_H__
-#define __CHESTNUT_ENGINE_COLLISION_EVENT_H__
+#pragma once
 
-#include "../../physics/collider2d.hpp"
+#include "chestnut/engine/physics/collider2d.hpp"
 
 #include <chestnut/ecs/types.hpp>
 
@@ -15,5 +14,3 @@ namespace chestnut::engine
     };
 
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_COLLISION_EVENT_H__

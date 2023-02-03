@@ -1,14 +1,15 @@
-#ifndef __CHESTNUT_ENGINE_TIMER_H__
-#define __CHESTNUT_ENGINE_TIMER_H__
+#pragma once
 
-#include "../types.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/types.hpp"
 
 #include <cstdint>
 
 namespace chestnut::engine
 {
     // A timer interface
-    class ITimer
+    class CHESTNUT_API ITimer
     {
     protected:
         // inner state vars //
@@ -51,4 +52,3 @@ namespace chestnut::engine
     
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_TIMER_H__

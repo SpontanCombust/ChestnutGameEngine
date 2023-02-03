@@ -1,11 +1,12 @@
-#ifndef __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
-#define __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__
+#pragma once
 
-#include "../rendering_system.hpp"
-#include "../../graphics/renderers/sprite_renderer.hpp"
-#include "../../graphics/renderers/colored_polygon2d_renderer.hpp"
-#include "../../graphics/renderers/text_renderer.hpp"
-#include "../../graphics/camera2d.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/ecs_impl/rendering_system.hpp"
+#include "chestnut/engine/graphics/renderers/sprite_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/colored_polygon2d_renderer.hpp"
+#include "chestnut/engine/graphics/renderers/text_renderer.hpp"
+#include "chestnut/engine/graphics/camera2d.hpp"
 
 #include <chestnut/ecs/entity_query.hpp>
 
@@ -21,13 +22,14 @@ namespace chestnut::engine
         RIGHT_TO_LEFT
     };
 
-    class CSimple2DRenderingSystem : public IRenderingSystem
+    class CHESTNUT_API CSimple2DRenderingSystem : public IRenderingSystem
     {
     private:
-        ecs::queryid_t m_spriteQueryID;
-        ecs::queryid_t m_layerSpriteQueryID;
-        ecs::queryid_t m_spriteModelQueryID;
-        ecs::queryid_t m_layerSpriteModelQueryID;
+        ecs::CEntityQuery *m_spriteQuery;
+        ecs::CEntityQuery *m_layerSpriteQuery;
+        ecs::CEntityQuery *m_spriteModelQuery;
+        ecs::CEntityQuery *m_layerSpriteModelQuery;
+        ecs::CEntityQuery *m_colliderQuery;
 
         CSpriteRenderer m_spriteRenderer;
         CColoredPolygon2DRenderer m_polygonRenderer;
@@ -39,10 +41,16 @@ namespace chestnut::engine
 
 
     public:
-        CSimple2DRenderingSystem( CEngine& engine );
-        ~CSimple2DRenderingSystem();
+        //TODO make configurable in debug gui
+        bool renderCollidersBounds = true;
 
-        void update( float deltaTime ) override;
+
+    public:
+        CSimple2DRenderingSystem();
+        CSimple2DRenderingSystem(systempriority_t priority);
+
+        void onAttach() override;
+        void onDetach() override;
 
         void render() override;
 
@@ -60,8 +68,10 @@ namespace chestnut::engine
 
         const CCamera2D& getCamera() const;
         CCamera2D& getCamera();
+
+    private:
+        void updateQueries();
     };
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_SIMPLE2D_RENDERING_SYSTEM_H__

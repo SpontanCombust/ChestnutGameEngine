@@ -1,74 +1,106 @@
 #include "simple2d_animation_system.hpp"
 
-#include "../../main/engine.hpp"
-#include "../components/sprite_component.hpp"
-#include "../components/animation2d_component.hpp"
-#include "../events/animation_finish_event.hpp"
+#include "chestnut/engine/main/engine.hpp"
+#include "chestnut/engine/ecs_impl/components/sprite_component.hpp"
+#include "chestnut/engine/ecs_impl/components/animation2d_component.hpp"
+#include "chestnut/engine/ecs_impl/events/animation_finish_event.hpp"
 
 #include <cmath>
 
 namespace chestnut::engine
 {
-    CSimple2DAnimationSystem::CSimple2DAnimationSystem( CEngine& engine )
-    : ISystem( engine ) 
+    void CSimple2DAnimationSystem::onAttach() 
     {
-        m_animatedTextureQueryID = engine.getEntityWorld().createQuery(
-            ecs::makeEntitySignature<CSpriteComponent, CAnimation2DComponent>(),
-            ecs::makeEntitySignature()
+        m_animatedTextureQuery = CEngine::getInstance().getEntityWorld().createQuery(
+            ecs::makeEntitySignature<CSpriteComponent, CAnimation2DComponent>()
         );
+    }
+
+    void CSimple2DAnimationSystem::onDetach() 
+    {
+        CEngine::getInstance().getEntityWorld().destroyQuery(m_animatedTextureQuery);
     }
 
     void CSimple2DAnimationSystem::update( float dt ) 
     {
-        ecs::CEntityQuery *query = getEngine().getEntityWorld().queryEntities( m_animatedTextureQueryID );
-        query->forEachEntityWith<CSpriteComponent, CAnimation2DComponent>( 
-            [dt, this]( ecs::entityid_t id, CSpriteComponent& texture, CAnimation2DComponent& animation )
+        CEngine::getInstance().getEntityWorld().queryEntities( m_animatedTextureQuery );
+
+        auto it = m_animatedTextureQuery->begin<CSpriteComponent, CAnimation2DComponent>();
+        auto end = m_animatedTextureQuery->end<CSpriteComponent, CAnimation2DComponent>();
+        for(; it != end; it++)
+        {
+            auto [texture, animation] = *it;
+
+            if(!animation.animationResource)
             {
-                SRectangle clipRect;
+                continue;
+            }
 
-                if( animation.isAnimPlaying )
+            SAnimation2DSet& animSet = animation.animationResource->m_animationSet;
+
+            if(animSet.vecKeyFrameClipRects.empty())
+            {
+                continue;
+            }
+
+            auto animDataIt = animSet.mapAnimNameToAnimData.find(animation.currentAnimName);
+            SRectangle clipRect;
+
+            if(animDataIt == animSet.mapAnimNameToAnimData.end() || !animation.isAnimPlaying)
+            {
+                clipRect = animSet.vecKeyFrameClipRects[ animSet.defaultAnimFrameIndex ];
+            }
+            else
+            {
+                const SAnimation2DDefinition& animData = animDataIt->second;
+
+                float animProgression = animation.elapsedAnimTimeSec / animData.duration;
+                int loopsDone = (int)animProgression;
+
+                animation.elapsedAnimTimeSec = std::fmod(animation.elapsedAnimTimeSec, animData.duration);
+                animProgression -= loopsDone;
+                
+                // index in the vector of indices inside animation data, couldn't come up with a better name :)
+                unsigned int frameIndexIndex = std::clamp(
+                    (unsigned int)( animProgression * (float)animData.vecFrameIndices.size() ),
+                    0U,
+                    (unsigned int)animData.vecFrameIndices.size() - 1
+                );
+
+                unsigned int frameIndex = std::clamp(
+                    animData.vecFrameIndices[ frameIndexIndex ],
+                    0U,
+                    (unsigned int)animSet.vecKeyFrameClipRects.size() - 1
+                );
+
+                // update loops to be done only if they're not specified to be infinite
+                if(!animation.isAnimPaused && animation.remainingAnimLoops != 0)
                 {
-                    const SAnimationData2D& animData = animation.animSet.mapAnimNameToAnimData[ animation.currentAnimName ];
+                    animation.elapsedAnimTimeSec += dt * animation.animSpeedMultiplier;
 
-                    if( !animation.isAnimPaused )
-                    {
-                        animation.elapsedAnimTimeSec += dt * animation.animSpeedMultiplier;
-                    }
-
-                    float frameDuration = 1.f / animData.framesPerSec;
-
-                    // index in the vector of indices inside animation data, couldn't come up with a better name :)
-                    unsigned int frameIndexIndex = (unsigned int)( animation.elapsedAnimTimeSec / frameDuration );
-                    int loopsDone = frameIndexIndex / std::max( 1UL, animData.vecFrameIndices.size() );
-                    frameIndexIndex = frameIndexIndex % std::max( 1UL, animData.vecFrameIndices.size() );
-
-                    // update loops to be done only if they're not specified to be infinite
-                    if( animation.remainingAnimLoops > 0 )
+                    if(animation.remainingAnimLoops > 0)
                     {
                         // even if animation is paused loopsDone should be 0 then, so it won't change the count
-                        animation.remainingAnimLoops = std::max( 0, animation.remainingAnimLoops - loopsDone );
+                        animation.remainingAnimLoops = std::max(0, animation.remainingAnimLoops - loopsDone);
 
-                        if( animation.remainingAnimLoops == 0 )
-                        {
-                            SAnimationFinishEvent event;
-                            event.animName = animation.currentAnimName;
-                            event.entity = id;
-                            getEngine().getEventManager().raiseEvent( event );
-
-                            animation.stopAnimation();
-                        }
                     }
-
-                    clipRect = animation.animSet.vecKeyFrameClipRects[ animData.vecFrameIndices[ frameIndexIndex ] ];
                 }
-                else
+                
+                if( animation.remainingAnimLoops == 0 )
                 {
-                    clipRect = animation.animSet.vecKeyFrameClipRects[ animation.animSet.defaultAnimFrameIndex ];
+                    SAnimationFinishEvent event;
+                    event.animName = animation.currentAnimName;
+                    event.entity = it.entityId();
+                    CEngine::getInstance().getEventManager().raiseEvent( event );
+
+                    animation.stopAnimation();
                 }
 
-                texture.sprite.setClippingRect( clipRect );
+                clipRect = animSet.vecKeyFrameClipRects[frameIndex];
             }
-        );
+
+            texture.sprite.setClippingRect( clipRect );
+        }
     }
     
 } // namespace chestnut::engine

@@ -1,7 +1,7 @@
-#ifndef __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
-#define __CHESTNUT_ENGINE_TIMER_COMPONENT_H__
+#pragma once
 
-#include "../../misc/locked_manual_timer.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/misc/locked_manual_timer.hpp"
 
 #include <vector>
 
@@ -11,16 +11,9 @@ namespace chestnut::engine
     {
         std::vector< CLockedManualTimer > vTimers;
 
-        ~CTimerComponent();
-
-        timerid_t addTimer( float updateIntervalSec, bool isRepeating = false );
-        bool removeTimer( timerid_t id );
-        void removeTimers();
-
-    private:
-        static timerid_t m_timerIDAccumulator;
+        CHESTNUT_API timerid_t addTimer( float updateIntervalSec, bool isRepeating = false );
+        CHESTNUT_API bool removeTimer( timerid_t id );
+        CHESTNUT_API void removeTimers();
     };
 
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_TIMER_COMPONENT_H__

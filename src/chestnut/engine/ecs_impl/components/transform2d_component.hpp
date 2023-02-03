@@ -1,19 +1,15 @@
-#ifndef __CHESTNUT_ENGINE_TRANSFORM2D_COMPONENT_H__
-#define __CHESTNUT_ENGINE_TRANSFORM2D_COMPONENT_H__
+#pragma once
 
-#include "../../maths/vector2.hpp"
+
+#include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine
 {
     struct CTransform2DComponent
     {
-        vec2f position;
-        vec2f scale;
-        float rotation;
-
-        CTransform2DComponent();
+        vec2f position = {0.f, 0.f};
+        vec2f scale = {1.f, 1.f};
+        float rotation = 0.f;
     };
 
 } // namespace chestnut::engine 
-
-#endif // __CHESTNUT_ENGINE_TRANSFORM2D_COMPONENT_H__

@@ -1,19 +1,23 @@
-#ifndef __CHESTNUT_ENGINE_SOUND_MANAGER_H__
-#define __CHESTNUT_ENGINE_SOUND_MANAGER_H__
+#pragma once
 
-#include "../resources/audio_resource.hpp"
-#include "../types.hpp"
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/resources/music_resource.hpp"
+#include "chestnut/engine/resources/sound_bank_resource.hpp"
+#include "chestnut/engine/types.hpp"
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace chestnut::engine
 {
-    //TODO fade in, fade out
-    class CAudioManager
+    class CHESTNUT_API CAudioManager
     {
     private:
-        std::unordered_map< std::string, std::shared_ptr< CAudioResource > > m_mapAudioAliasToResource;
+        std::unordered_map<std::string, std::shared_ptr<CMusicResource>> m_mapNameToMusic;
+
+        std::unordered_map<std::string, std::shared_ptr<CSoundBankResource>> m_mapNameToSoundBank;
+        std::unordered_map<std::string, Mix_Chunk *> m_mapNameToSFXHandle;
 
         float m_globalVolume;
         std::unordered_map< audiochannel_t, float > m_mapChannelToSFXVolume;
@@ -24,9 +28,15 @@ namespace chestnut::engine
         CAudioManager();
         
 
-        void addAudio( std::shared_ptr< CAudioResource > audioResource, const char *alias );
-        std::shared_ptr< CAudioResource > getAudio( const char *alias ) const; // will return empty shared pointer if there's no such audio
-        void removeAudio( const char *alias );
+        bool addAudio(std::shared_ptr<CMusicResource> music);
+        bool addAudio(std::shared_ptr<CSoundBankResource> soundBank);
+
+        bool hasMusic(const char *musicName) const;
+        bool hasSoundBank(const char *soundBankName) const;
+        bool hasSFX(const char *sfxName) const;
+
+        bool removeMusic(const char *musicName);
+        bool removeSoundBank(const char *soundBankName);
 
 
         void allocateChannels( int channelQuantity );
@@ -35,44 +45,35 @@ namespace chestnut::engine
         void setGlobalVolume( float volume );
 
 
+        // times = -1 for infinite amount of times
         // channel = -1 for first available channel
-        // loops = -1 for infinite loops
         // Returns the channel SFX is played on or -1 on error
-        audiochannel_t playSFX( const char *sfxAlias, audiochannel_t channel = -1, int loops = 0 );
+        audiochannel_t playSFX(const char *sfxName, int times = 1, audiochannel_t channel = -1);
+        // times = -1 for infinite amount of times
         // channel = -1 for first available channel
-        // loops = -1 for infinite loops
         // Returns the channel SFX is played on or -1 on error
-        audiochannel_t playSFXFor( const char *sfxAlias, float seconds, audiochannel_t channel = -1, int loops = 0 );
+        audiochannel_t playSFXFor(const char *sfxName, float seconds, int times = 1, audiochannel_t channel = -1);
 
         // Volume should be between 0 (total silence) and 1 (max volume). Otherwise it'll get clamped to it.
         // channel = -1 to set it for all channels
         void setSFXVolume( audiochannel_t channel, float volume );
-
         // channel = -1 to pause all channels
         void pauseSFX( audiochannel_t channel );
-
         // channel = -1 to resume all channels
         void resumeSFX( audiochannel_t channel );
-
         // channel = -1 to stop on all channels
         void stopSFX( audiochannel_t channel );
 
 
         // loops = -1 for infinite loops
-        void playMusic( const char *musicAlias, int loops = 0 );
-
+        void playMusic( const char *musicName, int times = 1 );
         // loops = -1 for infinite loops
-        void playMusicFadeIn( const char *musicAlias, float fadeInSeconds, int loops = 0 );
-
+        void playMusicFadeIn( const char *musicName, float fadeInSeconds, int times = 1 );
         void fadeOutMusic( float fadeOutSeconds );
-
         // Volume should be between 0 (total silence) and 1 (max volume). Otherwise it'll get clamped to it.
         void setMusicVolume( float volume );
-
         void pauseMusic();
-
         void resumeMusic();
-
         void stopMusic();
 
 
@@ -81,5 +82,3 @@ namespace chestnut::engine
     };
     
 } // namespace chestnut::engine
-
-#endif // __CHESTNUT_ENGINE_SOUND_MANAGER_H__

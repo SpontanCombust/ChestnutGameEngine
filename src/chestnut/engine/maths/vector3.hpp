@@ -1,8 +1,8 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR3_H__
-#define __CHESTNUT_ENGINE_VECTOR3_H__
+#pragma once
 
-#include "vector.hpp"
-#include "vector2.hpp"
+
+#include "chestnut/engine/maths/vector.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine
 {
@@ -40,7 +40,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector3.tpp"
+#include "vector3.inl"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR3_H__

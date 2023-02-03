@@ -1,4 +1,4 @@
-#include "log.hpp"
+#include "chestnut/engine/debug/log.hpp"
 
 #include <ctime>
 #include <iomanip>
@@ -6,10 +6,16 @@
 #include <fstream>
 #include <sstream>
 
-namespace chestnut::engine
+namespace chestnut::engine::debug
 {   
-    std::ostream *CLogger::streamPtr = &std::cout;
-    bool CLogger::hasFileOpened = false;
+    std::ostream *streamPtr = &std::cout;
+    bool hasFileOpened = false;
+
+
+    std::ostream* CLogger::getStreamPtr() 
+    {
+        return streamPtr;
+    }
 
     void CLogger::setToCout() 
     {
@@ -62,11 +68,12 @@ namespace chestnut::engine
 
     std::string CLogger::getCurrentDateString() 
     {
+        std::tm tm;
         std::time_t t = std::time( nullptr );
-        std::tm *tm = std::localtime(&t);
+        localtime_s(&tm, &t);
 
         std::ostringstream oss;
-        oss << std::put_time( tm, "%d-%m-%Y %H:%M:%S" );
+        oss << std::put_time( &tm, "%d-%m-%Y %H:%M:%S" );
 
         return oss.str();
     }

@@ -1,8 +1,9 @@
-#ifndef __CHESTNUT_ENGINE_COLLIDER_H__
-#define __CHESTNUT_ENGINE_COLLIDER_H__
+#pragma once
 
-#include "collider_attributes.hpp"
-#include "../maths/vector2.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/physics/collider_attributes.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine
 {
@@ -14,11 +15,11 @@ namespace chestnut::engine
         vec2f obj2Displacement;
     };
 
-    class CCollider2D
+    class CHESTNUT_API CCollider2D
     {
     protected:
         EColliderActivity m_activity;
-        ECollisionPolicyFlags m_policyFlags;
+        CFlags<ECollisionPolicy> m_policyFlags;
 
         vec2f m_position;
         vec2f m_scale;
@@ -31,8 +32,8 @@ namespace chestnut::engine
         EColliderActivity getActivity() const;
         void setActivity( EColliderActivity activity );
         
-        ECollisionPolicyFlags getPolicyFlags() const;
-        void setPolicyFlags( ECollisionPolicyFlags policyFlags );
+        CFlags<ECollisionPolicy> getPolicyFlags() const;
+        void setPolicyFlags( CFlags<ECollisionPolicy> policyFlags );
 
         vec2f getPosition() const;
         void setPosition( vec2f position );
@@ -47,7 +48,7 @@ namespace chestnut::engine
 
 
 
-    class CPointCollider2D : public CCollider2D
+    class CHESTNUT_API CPointCollider2D : public CCollider2D
     {
     public:
         virtual ~CPointCollider2D() = default;
@@ -55,7 +56,7 @@ namespace chestnut::engine
         SCollisionResolutionData isColliding(const CCollider2D& other) const override;
     };
 
-    class CBoxCollider2D : public CCollider2D
+    class CHESTNUT_API CBoxCollider2D : public CCollider2D
     {
     private:
         vec2f m_size;
@@ -73,7 +74,7 @@ namespace chestnut::engine
         SCollisionResolutionData isColliding(const CCollider2D& other) const override;
     };
 
-    class CCircleCollider2D : public CCollider2D
+    class CHESTNUT_API CCircleCollider2D : public CCollider2D
     {
     private:
         float m_radius;
@@ -95,4 +96,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_COLLIDER_H__

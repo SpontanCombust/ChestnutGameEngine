@@ -1,9 +1,10 @@
-#ifndef __CHESTNUT_ENGINE_TEXT_H__
-#define __CHESTNUT_ENGINE_TEXT_H__
+#pragma once
 
-#include "../maths/vector2.hpp"
-#include "../maths/vector3.hpp"
-#include "../resources/font_resource.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector3.hpp"
+#include "chestnut/engine/resources/font_resource.hpp"
 
 #include <vector>
 
@@ -15,7 +16,7 @@ namespace chestnut::engine
         {   
             // debug
             wchar_t g;
-            EFontStyle styleMask;
+            CFlags<EFontStyle> styleMask;
 
             // data
             GLuint texID;
@@ -53,7 +54,7 @@ namespace chestnut::engine
         RIGHT
     };
 
-    class CText
+    class CHESTNUT_API CText
     {
     protected:
         std::shared_ptr<CFontResource> m_resource;
@@ -123,4 +124,3 @@ namespace chestnut::engine
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_TEXT_H__

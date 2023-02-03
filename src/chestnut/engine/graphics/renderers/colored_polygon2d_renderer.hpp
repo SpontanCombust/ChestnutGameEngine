@@ -1,10 +1,11 @@
-#ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
-#define __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__
+#pragma once
 
-#include "renderer.hpp"
-#include "../colored_polygon2d.hpp"
-#include "../opengl/buffer.hpp"
-#include "../opengl/vertex_array.hpp"
+
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/graphics/renderers/renderer.hpp"
+#include "chestnut/engine/graphics/colored_polygon2d.hpp"
+#include "chestnut/engine/graphics/opengl/buffer.hpp"
+#include "chestnut/engine/graphics/opengl/vertex_array.hpp"
 
 #include <unordered_map>
 #include <vector>
@@ -35,7 +36,7 @@ namespace chestnut::engine
      * in a single vertex and element buffer.
      * All is simply drawn at once using these indices.
      */
-    class CColoredPolygon2DRenderer : public IRenderer
+    class CHESTNUT_API CColoredPolygon2DRenderer : public IRenderer
     {
         struct SColoredPolygon2DRender_Vertex
         {
@@ -95,4 +96,3 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_RENDERER_H__

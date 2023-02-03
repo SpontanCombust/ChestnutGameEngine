@@ -1,27 +1,28 @@
-#include "collider2d_collision_detection.hpp"
+#include "chestnut/engine/physics/collider2d_collision_detection.hpp"
 
 #include <algorithm> // clamp
 
 namespace chestnut::engine
 {  
-    inline bool canAffect( ECollisionPolicyFlags policyFlags )
+    inline bool canAffect( CFlags<ECollisionPolicy> policyFlags )
     {
-        return ( policyFlags & ECollisionPolicyFlags::AFFECTING ) > 0;
+        return policyFlags & ECollisionPolicy::AFFECTING;
     }
 
-    inline bool canBeAffected( ECollisionPolicyFlags policyFlags )
+    inline bool canBeAffected( CFlags<ECollisionPolicy> policyFlags )
     {
-        return ( policyFlags & ECollisionPolicyFlags::AFFECTED ) > 0;
+        return policyFlags & ECollisionPolicy::AFFECTED;
     }
 
-    inline bool canAffectOrBeAffected( ECollisionPolicyFlags policyFlags )
+    inline bool canAffectOrBeAffected( CFlags<ECollisionPolicy> policyFlags )
     {
-        return ( policyFlags & ( ECollisionPolicyFlags::AFFECTING | ECollisionPolicyFlags::AFFECTED ) ) > 0;
+        return policyFlags & CFlags{ECollisionPolicy::AFFECTING, ECollisionPolicy::AFFECTED};
     }
 
-    inline bool canAffectAndBeAffected( ECollisionPolicyFlags policyFlags )
+    inline bool canAffectAndBeAffected( CFlags<ECollisionPolicy> policyFlags )
     {
-        return ( policyFlags & ( ECollisionPolicyFlags::AFFECTING | ECollisionPolicyFlags::AFFECTED ) ) == ( ECollisionPolicyFlags::AFFECTING | ECollisionPolicyFlags::AFFECTED );
+        CFlags f = {ECollisionPolicy::AFFECTING, ECollisionPolicy::AFFECTED};
+        return (policyFlags & f) == f;
     }
 
 

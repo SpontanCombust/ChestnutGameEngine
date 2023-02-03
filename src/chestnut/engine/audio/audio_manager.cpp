@@ -1,6 +1,8 @@
-#include "audio_manager.hpp"
+#include "chestnut/engine/audio/audio_manager.hpp"
 
-#include <SDL2/SDL_mixer.h>
+#include "chestnut/engine/debug/log.hpp"
+
+#include <SDL_mixer.h>
 
 #include <algorithm> // clamp
 
@@ -12,30 +14,93 @@ namespace chestnut::engine
         m_musicVolume = 1.f;
     }
 
-    void CAudioManager::addAudio( std::shared_ptr< CAudioResource > audioResource, const char *alias ) 
+    bool CAudioManager::addAudio(std::shared_ptr<CMusicResource> music) 
     {
-        if( audioResource )
+        auto name = music->m_location->stem().string();
+
+        auto it = m_mapNameToMusic.find(name);
+        if(it != m_mapNameToMusic.end())
         {
-            m_mapAudioAliasToResource[ alias ] = audioResource;
+            LOG_ERROR("Music with name " << name << " is already present in the manager! Make sure the file name is unique.");
+            return false;
         }
+
+        m_mapNameToMusic[name] = music;
+
+        return true;
     }
 
-    std::shared_ptr< CAudioResource > CAudioManager::getAudio( const char *alias ) const
+    bool CAudioManager::addAudio(std::shared_ptr<CSoundBankResource> soundBank) 
     {
-        auto it = m_mapAudioAliasToResource.find( alias );
-        if( it != m_mapAudioAliasToResource.end() )
+        auto bnkName = soundBank->m_location->stem().string();
+
+        if(m_mapNameToSoundBank.find(bnkName) != m_mapNameToSoundBank.end())
         {
-            return it->second;
+            LOG_ERROR("Soundbank with name " << bnkName << " is already present in the manager! Make sure the file name is unique.");
+            return false;
         }
-        
-        return std::shared_ptr< CAudioResource >();
+
+        m_mapNameToSoundBank[bnkName] = soundBank;
+
+        for(auto [sfxName, sfx] : soundBank->m_mapNameToSFXHandle)
+        {
+            if(m_mapNameToSFXHandle.find(sfxName) != m_mapNameToSFXHandle.end())
+            {
+                LOG_WARNING("Tried to add from sound bank " << bnkName << " sound with name " << sfxName << 
+                            " which is already present in the manager! Make sure the sound alias is unique.");
+            }
+            else
+            {
+                m_mapNameToSFXHandle[sfxName] = sfx;
+            }
+        }
+
+        return true;
     }
 
-    void CAudioManager::removeAudio( const char *alias ) 
+    bool CAudioManager::hasMusic(const char *musicName) const
     {
-        m_mapAudioAliasToResource.erase( alias );
+        return m_mapNameToMusic.find(musicName) != m_mapNameToMusic.end();
     }
 
+    bool CAudioManager::hasSoundBank(const char *soundBankName) const
+    {
+        return m_mapNameToSoundBank.find(soundBankName) != m_mapNameToSoundBank.end();
+    }
+
+    bool CAudioManager::hasSFX(const char *sfxName) const
+    {
+        return m_mapNameToSFXHandle.find(sfxName) != m_mapNameToSFXHandle.end();
+    }
+
+    bool CAudioManager::removeMusic(const char *musicName) 
+    {
+        auto it = m_mapNameToMusic.find(musicName);
+        if(it != m_mapNameToMusic.end())
+        {
+            m_mapNameToMusic.erase(it);
+            return true;
+        }
+
+        return false;
+    }
+
+    bool CAudioManager::removeSoundBank(const char *soundBankName) 
+    {
+        auto it = m_mapNameToSoundBank.find(soundBankName);
+        if(it != m_mapNameToSoundBank.end())
+        {
+            for(auto [sfxName, _] : it->second->m_mapNameToSFXHandle)
+            {
+                m_mapNameToSFXHandle.erase(sfxName);
+            }
+
+            m_mapNameToSoundBank.erase(it);
+            return true;
+        }
+
+        return false;
+    }
 
     void CAudioManager::allocateChannels( int channelQuantity ) 
     {
@@ -57,10 +122,10 @@ namespace chestnut::engine
     {
         m_globalVolume = std::clamp( volume, 0.f, 1.f );
 
-        for( auto& [ channel, volume ] : m_mapChannelToSFXVolume )
+        for( auto& [ ch, v ] : m_mapChannelToSFXVolume )
         {
             // invoking with the same data, because inside it'll account for the new global volume
-            setSFXVolume( channel, volume );
+            setSFXVolume( ch, v );
         }
 
         setMusicVolume( m_musicVolume );
@@ -71,33 +136,39 @@ namespace chestnut::engine
         return (int)( (float)MIX_MAX_VOLUME * volume );
     }
 
-    audiochannel_t CAudioManager::playSFX( const char *sfxAlias, audiochannel_t channel, int loops ) 
+    audiochannel_t CAudioManager::playSFX(const char *sfxName, int times, audiochannel_t channel) 
     {
-        audiochannel_t actualChannel = -1;
-
-        auto it = m_mapAudioAliasToResource.find( sfxAlias );
-        if( it != m_mapAudioAliasToResource.end() )
+        if(times == 0)
         {
-            if( it->second->m_type == EAudioResourceType::SFX )
-            {
-                actualChannel = Mix_PlayChannel( channel, it->second->m_uData.sfx, loops );
-            }
+            return -1;
+        }
+
+        audiochannel_t actualChannel = -1;
+        int loops = (times > 0) ? times - 1 : -1;
+
+        auto it = m_mapNameToSFXHandle.find( sfxName );
+        if( it != m_mapNameToSFXHandle.end() )
+        {
+            actualChannel = Mix_PlayChannel(channel, it->second, loops);
         }
 
         return actualChannel;
     }
 
-    audiochannel_t CAudioManager::playSFXFor( const char *sfxAlias, float seconds, audiochannel_t channel, int loops ) 
+    audiochannel_t CAudioManager::playSFXFor( const char *sfxName, float seconds, int times, audiochannel_t channel) 
     {
-        audiochannel_t actualChannel = -1;
-
-        auto it = m_mapAudioAliasToResource.find( sfxAlias );
-        if( it != m_mapAudioAliasToResource.end() )
+        if(times == 0)
         {
-            if( it->second->m_type == EAudioResourceType::SFX )
-            {
-                actualChannel = Mix_PlayChannelTimed( channel, it->second->m_uData.sfx, loops, (int)( seconds * 1000.f ) );
-            }
+            return -1;
+        }
+
+        audiochannel_t actualChannel = -1;
+        int loops = (times > 1) ? times - 1 : -1;
+
+        auto it = m_mapNameToSFXHandle.find( sfxName );
+        if( it != m_mapNameToSFXHandle.end() )
+        {
+            actualChannel = Mix_PlayChannelTimed( channel, it->second, loops, (int)( seconds * 1000.f ) );
         }
 
         return actualChannel;
@@ -126,27 +197,35 @@ namespace chestnut::engine
         Mix_HaltChannel( channel );
     }
 
-    void CAudioManager::playMusic( const char *musicAlias, int loops ) 
+    void CAudioManager::playMusic( const char *musicName, int times ) 
     {
-        auto it = m_mapAudioAliasToResource.find( musicAlias );
-        if( it != m_mapAudioAliasToResource.end() )
+        if(times == 0)
         {
-            if( it->second->m_type == EAudioResourceType::MUSIC )
-            {
-                Mix_PlayMusic( it->second->m_uData.music, loops );
-            }
+            return;
+        }
+
+        int loops = (times > 0) ? times - 1 : -1;
+
+        auto it = m_mapNameToMusic.find( musicName );
+        if( it != m_mapNameToMusic.end() )
+        {
+            Mix_PlayMusic( it->second->m_musicHandle, loops );
         }
     }
 
-    void CAudioManager::playMusicFadeIn( const char *musicAlias, float fadeInSeconds, int loops ) 
+    void CAudioManager::playMusicFadeIn( const char *musicName, float fadeInSeconds, int times ) 
     {
-        auto it = m_mapAudioAliasToResource.find( musicAlias );
-        if( it != m_mapAudioAliasToResource.end() )
+        if(times == 0)
         {
-            if( it->second->m_type == EAudioResourceType::MUSIC )
-            {
-                Mix_FadeInMusic( it->second->m_uData.music, loops, (int)( fadeInSeconds * 1000.f ) );
-            }
+            return;
+        }
+
+        int loops = (times > 0) ? times - 1 : -1;
+        
+        auto it = m_mapNameToMusic.find( musicName );
+        if( it != m_mapNameToMusic.end() )
+        {
+            Mix_FadeInMusic( it->second->m_musicHandle, loops, (int)( fadeInSeconds * 1000.f ) );
         }
     }
 

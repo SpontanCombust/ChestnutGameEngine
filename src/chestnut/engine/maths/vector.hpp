@@ -1,5 +1,5 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR_H__
-#define __CHESTNUT_ENGINE_VECTOR_H__
+#pragma once
+
 
 #include <string>
 
@@ -25,6 +25,9 @@ namespace chestnut::engine
         Vector& operator/=( T s );
     };
 
+
+    template< typename T, size_t n >
+    T vecMagnitudeSquared( const Vector<T,n>& v );
 
     template< typename T, size_t n >
     T vecMagnitude( const Vector<T,n>& v );
@@ -109,7 +112,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector.tpp"
+#include "vector.inl"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR_H__

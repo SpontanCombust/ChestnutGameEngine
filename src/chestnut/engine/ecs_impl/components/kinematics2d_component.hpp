@@ -1,20 +1,16 @@
-#ifndef __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__
-#define __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__
+#pragma once
 
-#include "../../maths/vector2.hpp"
+
+#include "chestnut/engine/maths/vector2.hpp"
 
 namespace chestnut::engine
 {
     struct CKinematics2DComponent
     {
-        vec2f linearVelocity;
-        vec2f linearAcceleration;
-        float angularVelocity;
-        float angularAcceleration;
-
-        CKinematics2DComponent();
+        vec2f linearVelocity = vec2f(0.f);
+        vec2f linearAcceleration = vec2f(0.f);
+        float angularVelocity = 0.f;
+        float angularAcceleration = 0.f;
     };
 
 } // namespace chestnut::engine 
-
-#endif // __CHESTNUT_ENGINE_KINEMATICS2D_COMPONENT_H__

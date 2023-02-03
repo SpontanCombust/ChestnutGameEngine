@@ -1,7 +1,7 @@
-#ifndef __CHESTNUT_ENGINE_VECTOR4_H__
-#define __CHESTNUT_ENGINE_VECTOR4_H__
+#pragma once
 
-#include "vector.hpp"
+
+#include "chestnut/engine/maths/vector.hpp"
 
 #include <string>
 
@@ -33,7 +33,6 @@ namespace chestnut::engine
 } // namespace chestnut::engine
 
 
-#include "vector4.tpp"
+#include "vector4.inl"
 
 
-#endif // __CHESTNUT_ENGINE_VECTOR4_H__

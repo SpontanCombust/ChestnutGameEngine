@@ -1,10 +1,11 @@
-#ifndef __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
-#define __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
+#pragma once
 
-#include "../maths/vector2.hpp"
-#include "../maths/vector4.hpp"
 
-#include <GL/glew.h>
+#include "chestnut/engine/macros.hpp"
+#include "chestnut/engine/maths/vector2.hpp"
+#include "chestnut/engine/maths/vector4.hpp"
+
+#include <glad/glad.h>
 
 #include <vector>
 
@@ -14,7 +15,10 @@ namespace chestnut::engine
     {
         vec2f pos;
 
-        SVertex2D( vec2f _pos );
+        SVertex2D( vec2f _pos )
+        {
+            pos = _pos;
+        }
     };
 
     struct SColoredVertex2D
@@ -22,7 +26,11 @@ namespace chestnut::engine
         vec2f pos;
         vec4f color;
 
-        SColoredVertex2D( vec2f _pos, vec4f _color );
+        SColoredVertex2D( vec2f _pos, vec4f _color )
+        {
+            pos = _pos;
+            color = _color;
+        }
     };
 
 
@@ -33,7 +41,11 @@ namespace chestnut::engine
         vec4f color;
         GLenum drawMode;
 
-        SColoredPolygon2D();
+        SColoredPolygon2D()
+        {
+            color = vec4f(1.f);
+            drawMode = GL_TRIANGLES;
+        }
     };
 
     struct SMulticoloredPolygon2D
@@ -42,25 +54,27 @@ namespace chestnut::engine
         std::vector< GLuint > vecIndices;
         GLenum drawMode;
 
-        SMulticoloredPolygon2D();
+        SMulticoloredPolygon2D()
+        {
+            drawMode = GL_TRIANGLES;
+        }
     };
 
 
     namespace colored_polygon_templates
     {
-        SColoredPolygon2D coloredPolygonTriangle( float a );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a, bool outlineOnly = false );
 
-        SColoredPolygon2D coloredPolygonTriangle( float a, float h );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonTriangle( float a, float h, bool outlineOnly = false );
 
-        SColoredPolygon2D coloredPolygonSquare( float a );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonSquare( float a, bool outlineOnly = false );
 
-        SColoredPolygon2D coloredPolygonRectangle( float a, float b );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonRectangle( float a, float b, bool outlineOnly = false );
 
-        SColoredPolygon2D coloredPolygonCircle( float r, unsigned int segments );
+        SColoredPolygon2D CHESTNUT_API coloredPolygonCircle( float r, unsigned int segments, bool outlineOnly = false );
 
     } // namespace coloredPolygonTemplates
     
 
 } // namespace chestnut::engine
 
-#endif // __CHESTNUT_ENGINE_COLORED_POLYGON2D_H__
