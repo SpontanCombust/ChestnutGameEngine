@@ -25,6 +25,7 @@ class CFramesPerSecondDisplaySystem : public ILogicSystem
 {
 public:
     CLockedManualTimer m_timer;
+    int m_frameCount;
 
     CFramesPerSecondDisplaySystem()
     : m_timer(0, 1.f, true)
@@ -35,20 +36,20 @@ public:
     void onAttach() override
     {
         m_timer.start();
+        m_frameCount = 0;
     }
 
     void update(float dt) override
     {
-        static auto& e = CEngine::getInstance();
-        static int frameCount = 0;
+        auto& e = CEngine::getInstance();
 
-        frameCount++;
+        m_frameCount++;
         if(m_timer.tick(dt))
         {
-            e.getWindow().setTitle("FPS: " + std::to_string(frameCount));
+            e.getWindow().setTitle("FPS: " + std::to_string(m_frameCount));
 
             m_timer.reset();
-            frameCount = 0;
+            m_frameCount = 0;
         }
     }
 };
@@ -58,7 +59,7 @@ std::mt19937 gen(rd());
 std::uniform_int_distribution<> distrx(0, 1280);
 std::uniform_int_distribution<> distry(0, 720);
 
-TEST_CASE("Engine - efficiency - sprite count")
+TEST_CASE("Engine - efficiency - sprite count", "manual")
 {
     chestnutInit();
     {
@@ -99,7 +100,7 @@ TEST_CASE("Engine - efficiency - sprite count")
 
 
 
-TEST_CASE("Engine - efficiency - collider count")
+TEST_CASE("Engine - efficiency - collider count", "manual")
 {
     chestnutInit();
     {

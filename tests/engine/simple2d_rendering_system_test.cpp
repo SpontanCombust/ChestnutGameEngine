@@ -248,8 +248,6 @@ public:
         ecs::CComponentHandle< CSpriteComponent > sprite;
         ecs::CComponentHandle< CModel2DComponent > model;
 
-        const vec2f size = vecCastType<float>(CEngine::getInstance().getWindow().getSize());
-
         for(int i = 0; i < 9; i++)
         {
             ecs::entityid_t ent = CEngine::getInstance().getEntityWorld().createEntity();
@@ -263,23 +261,23 @@ public:
         }
 
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
-        transform->position = vec2f{ size.x / 2, size.y / 2 };
+
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[1] );
-        transform->position = vec2f{ size.x / 2, size.y / 2 - 75.f };
+        transform->position = vec2f{ 0.f, -75.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[2] );
-        transform->position = vec2f{ size.x / 2, size.y / 2 - 150.f };
+        transform->position = vec2f{ 0.f, -150.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[3] );
-        transform->position = vec2f{ size.x / 2, size.y / 2 + 75.f };
+        transform->position = vec2f{ 0.f, 75.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[4] );
-        transform->position = vec2f{ size.x / 2, size.y / 2 + 150.f };
+        transform->position = vec2f{ 0.f, 150.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[5] );
-        transform->position = vec2f{ size.x / 2 - 75.f, size.y / 2 };
+        transform->position = vec2f{ -75.f, 0.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[6] );
-        transform->position = vec2f{ size.x / 2 - 150.f, size.y / 2 };
+        transform->position = vec2f{ -150.f, 0.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[7] );
-        transform->position = vec2f{ size.x / 2 + 75.f, size.y / 2 };
+        transform->position = vec2f{ 75.f, 0.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[8] );
-        transform->position = vec2f{ size.x / 2 + 150.f, size.y / 2 };
+        transform->position = vec2f{ 150.f, 0.f };
 
         auto l = new CEventListener<SDL_KeyboardEvent>();
         l->setHandler( &COrderingDemonstationSystem::handleInput, this );
@@ -394,11 +392,11 @@ public:
         }  
 
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[0] );
-        transform->position = vec2f{ size.x / 2 - 75.f, size.y / 2 }; 
+        transform->position = vec2f{ -75.f, 0.f }; 
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[1] );
-        transform->position = vec2f{ size.x / 2, size.y / 2 };
+        transform->position = vec2f{ 0.f, 0.f };
         transform = CEngine::getInstance().getEntityWorld().getComponent<CTransform2DComponent>( ents[2] );
-        transform->position = vec2f{ size.x / 2 + 75.f, size.y / 2 }; 
+        transform->position = vec2f{ 75.f, 0.f }; 
 
 
         auto l = new CEventListener<SDL_KeyboardEvent>();

@@ -112,16 +112,16 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
     textRenderer.setViewMatrix( mat4f() );
     textRenderer.setProjectionMatrix( matMakeOrthographic<float>( 0, 800, 600, 0, -1, 1 ) );
 
-
     CText text = CText( fontResource, 32 );
     text.setAligment( ETextAlignment::CENTER );
     text.append( "Wlazł ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
     text.append( "kotek\n", EFontStyle::BOLD, { 1.f, 1.f, 0.0 } );
     text.append( "na ", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
-    text.append( "płotek.", EFontStyle::ITALIC, { 0.f, 1.f, 0.f } );
+    text.append( "płotek ", EFontStyle::ITALIC, { 0.f, 1.f, 0.f } );
+    text.append( "i mruga.\n", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
     text.newline();
-    text.append( "Pierdolnął go\n", EFontStyle::NORMAL, { 1.f, 1.f, 1.f } );
-    text.append( "młotek.", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f } );
+    text.append( "Ładna to piosenka\n", EFontStyle::UNDERLINE, { 1.f, 0.f, 0.f } );
+    text.append( "niedługa.", EFontStyle::BOLD, { 0.f, 0.f, 1.f } );
 
 
     showInfoMessageBox( testName, "Click to render some text" );
@@ -134,9 +134,9 @@ TEST_CASE( "Renderers - Text renderer test - rendering text glyphs", "[manual]" 
 
         text.setAligment( ETextAlignment::RIGHT );
         text.setLineSpacing( 1.5f );
-        text.setMaxWidthPixels( 100 );
+        text.setMaxWidthPixels( 200 );
         text.generateData();
-        textRenderer.submitText( text, { 650.f, 50.f }, { 1.5f, 1.5f } );
+        textRenderer.submitText( text, { 450.f, 50.f }, { 1.5f, 1.5f } );
 
         textRenderer.render( window.getFramebuffer() );
     window.flipBuffer();

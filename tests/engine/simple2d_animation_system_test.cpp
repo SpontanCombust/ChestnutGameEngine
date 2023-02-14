@@ -63,7 +63,7 @@ public:
         ent = engine.getEntityWorld().createEntity();
 
         auto transformHandle = engine.getEntityWorld().createComponent<CTransform2DComponent>( ent );
-        transformHandle->position = vecCastType<float>(engine.getWindow().getSize()) / 2.f;
+        // transformHandle->position = vecCastType<float>(engine.getWindow().getSize()) / 2.f;
 
         auto modelHandle = engine.getEntityWorld().createComponent<CModel2DComponent>( ent );
         modelHandle->size = vec2f{ 200.f, 200.f };
