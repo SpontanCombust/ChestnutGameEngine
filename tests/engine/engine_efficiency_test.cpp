@@ -56,14 +56,15 @@ public:
 
 std::random_device rd;
 std::mt19937 gen(rd());
-std::uniform_int_distribution<> distrx(0, 1280);
-std::uniform_int_distribution<> distry(0, 720);
 
 TEST_CASE("Engine - efficiency - sprite count", "manual")
 {
+    std::uniform_int_distribution<> distrx(0, 1920);
+    std::uniform_int_distribution<> distry(0, 1000);
+
     chestnutInit();
     {
-        CWindow window("Efficiency test", 1280, 720);
+        CWindow window("Efficiency test", 1920, 1000);
         auto& engine = CEngine::createInstance(window);
         
         engine.attachSystem(new CInputEventDispatchSystem());
@@ -71,7 +72,7 @@ TEST_CASE("Engine - efficiency - sprite count", "manual")
         engine.attachSystem(new CFramesPerSecondDisplaySystem());
 
         auto renderingSys = new CSimple2DRenderingSystem();
-        renderingSys->getCamera().m_position = {640, 360};
+        renderingSys->getCamera().m_position = {960, 500};
         engine.attachSystem(renderingSys);
 
         auto entTemplExp = CEntityTemplateResource::load(assetPathToAbsolute("testing/entities/efficiencyTestCount.ent"));
@@ -102,9 +103,12 @@ TEST_CASE("Engine - efficiency - sprite count", "manual")
 
 TEST_CASE("Engine - efficiency - collider count", "manual")
 {
+    std::uniform_int_distribution<> distrx(0, 800);
+    std::uniform_int_distribution<> distry(0, 600);
+
     chestnutInit();
     {
-        CWindow window("Efficiency test", 1280, 720);
+        CWindow window("Efficiency test", 800, 600);
         auto& engine = CEngine::createInstance(window);
         
         engine.attachSystem(new CInputEventDispatchSystem());
@@ -113,7 +117,7 @@ TEST_CASE("Engine - efficiency - collider count", "manual")
         engine.attachSystem(new CSimple2DCollisionSystem());
         
         auto renderingSys = new CSimple2DRenderingSystem();
-        renderingSys->getCamera().m_position = {640, 360};
+        renderingSys->getCamera().m_position = {400, 300};
         engine.attachSystem(renderingSys);
 
 
